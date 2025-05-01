@@ -1,11 +1,11 @@
+import SaleItemList from "@/views/SaleItemList.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import demo1 from "../views/demo1.vue"
 const history = createWebHistory()
 const routes = [
     {
         path: '/sale-items',
         name: 'SaleItems',
-        component: demo1
+        component: SaleItemList
     }
 ]
 const router = createRouter({history,routes})
