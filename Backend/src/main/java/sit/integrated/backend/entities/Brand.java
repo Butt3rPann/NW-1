@@ -41,6 +41,6 @@ public class Brand {
     private Instant updatedOn;
 
     @OneToMany(mappedBy = "brand")
-    private Set<Saleitem> saleitems = new LinkedHashSet<>();
+    private Set<SaleItem> saleitems = new LinkedHashSet<>();
 
 }
