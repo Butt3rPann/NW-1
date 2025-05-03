@@ -7,7 +7,7 @@ const saleItems = ref([])
 
 onMounted(async () => {
     try {
-        saleItems.value = await getSaleItems(`${import.meta.env.VITE_APP_URL}/itb-mshop/v1/sale-items`)
+        saleItems.value = await getSaleItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
     } catch (error) {
         console.log(error);
     }
@@ -30,7 +30,7 @@ onMounted(async () => {
                 <div class="shadow-[0_0.03vw_0.2vw_0_rgba(0,0,0,0.15)] rounded-[0.4vw] py-[0.6vw] px-[1.5vw] w-fit">
                     <p class="text-[0.9vw] text-[#ABBCC9] font-medium flex items-center space-x-[0.7vw]">
                         <span>Sort by :</span>
-                        <span class="text-[#6F879C]">Brand</span>  
+                        <span class="text-[#6F879C]">Oldest</span>  
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="1.3vw" height="1.3vw" viewBox="0 0 24 24">
                             	<g fill="none" fill-rule="evenodd">

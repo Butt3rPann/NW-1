@@ -12,18 +12,19 @@ CREATE TABLE IF NOT EXISTS brand (
     updatedOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS saleItem (
+CREATE TABLE IF NOT EXISTS sale_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     model VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    brand_id INT NOT NULL,
+    brandId INT NOT NULL,
     description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, 
     price INT NOT NULL,
     ramGb INT,
-    screenSizeInch DECIMAL(2,1),
+    screenSizeInch DECIMAL(3,2),
     storageGb INT,
     color VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     quantity INT NOT NULL DEFAULT 1,
     createdOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (brand_id) REFERENCES brand(id)
+    FOREIGN KEY (brandId) REFERENCES brand(id)
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
