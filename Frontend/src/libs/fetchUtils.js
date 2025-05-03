@@ -8,4 +8,15 @@ async function getSaleItems(url) {
    }
 }
 
-export { getSaleItems }
+async function getSaleItemById(url, id) {
+     try {
+       const data = await fetch(`${url}/${id}`)
+       const item = await data.json()
+       return item
+     } catch (error) {
+       if (data.status === 404) return undefined
+       throw new Error('The requested sale item does not exist')
+     }
+   }
+
+export { getSaleItems, getSaleItemById }
