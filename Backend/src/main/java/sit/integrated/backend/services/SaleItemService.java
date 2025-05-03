@@ -2,6 +2,7 @@ package sit.integrated.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.repositories.SaleItemRepository;
@@ -14,6 +15,10 @@ public class SaleItemService {
     private SaleItemRepository saleItemRepository;
 
     public List<SaleItem> getSaleItems() {
-        return saleItemRepository.findAll(Sort.by(Sort.Direction.ASC, "createdOn"));
+        return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
+    }
+
+    public SaleItem getSaleIteDetail(Integer id) {
+        return saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("SaleItem not found for this id :: " + id));
     }
 }
