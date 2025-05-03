@@ -56,16 +56,18 @@ onMounted(async () => {
         <ListModel v-if="saleItems.length" :items="saleItems">
             <template #saleItem="slotProps">
                 <div class="p-[0.8vw] w-fit">
-                    <p class="Itbms-brand text-[#A4A4A3] font-light text-[0.8vw] ">{{ slotProps.itemInList.brandName }}</p>
+                    <p class="itbms-brand text-[#A4A4A3] font-light text-[0.8vw] ">{{ slotProps.itemInList.brandName }}</p>
                     <div class="font-bold mb-[1vw] text-[1vw] text-[#332A1E]">
-                        <p class="Itbms-model hover:text-[#6F879C]">{{ slotProps.itemInList.model }}</p>
+                        <router-link :to="{name: 'SaleItemsDetail', params: {saleItemId: slotProps.itemInList.id}}">
+                           <p class="itbms-model hover:text-[#6F879C]">{{ slotProps.itemInList.model }}</p> 
+                        </router-link>                  
                         <p>
-                            <span class="Itbms-ramGb ">{{ slotProps.itemInList.ramGb ?? '-' }}</span>/<span class="Itbms-storageGb">{{ slotProps.itemInList.storageGb ?? '-' }}</span>
-                            <span class="Itbms-storageGb-unit">GB</span>
+                            <span class="itbms-ramGb ">{{ slotProps.itemInList.ramGb ?? '-' }}</span>/<span class="itbms-storageGb">{{ slotProps.itemInList.storageGb ?? '-' }}</span>
+                            <span class="itbms-storageGb-unit">GB</span>
                         </p>
                     </div>
                     <p class=" text-[#6F879C] text-[1vw]">
-                        <span class="Itbms-price-unit">Baht</span> <span class="Itbms-price">{{ slotProps.itemInList.price.toLocaleString() }}</span>
+                        <span class="itbms-price-unit">Baht</span> <span class="itbms-price">{{ slotProps.itemInList.price.toLocaleString() }}</span>
                     </p>
                 </div>
                 

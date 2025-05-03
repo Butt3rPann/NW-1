@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e3334cb2-4609-461d-b281-69fdcb0dc0d6" name="Changes" comment="" />
+    <list default="true" id="53e3a00a-57c3-4a1d-b1f1-371d2cc8d3d4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +44,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.BackendApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "INT-27-Create-API-to-fetch-sale-item-detail",
     "last_opened_file_path": "/Users/butterpann/Documents/IT29/year2/Term2/INT221/NW-1/Backend",
