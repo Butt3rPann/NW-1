@@ -15,7 +15,7 @@ onMounted(async () => {
 </script>
  
 <template>
-    <div class="font-rubik mx-[10vw] my-[4vw] space-y-[2vw]">
+    <div class="font-rubik mx-[10vw] my-[4vw] space-y-[2vw] mt-[7vw]">
         <p class="text-[4vw] font-bold text-[#332A1E]">ITB MShop</p>
         <div class="flex justify-between items-center">
             <div class="relative flex items-center">
@@ -58,9 +58,7 @@ onMounted(async () => {
                 <div class="p-[0.8vw] w-fit">
                     <p class="itbms-brand text-[#A4A4A3] font-light text-[0.8vw] ">{{ slotProps.itemInList.brandName }}</p>
                     <div class="font-bold mb-[1vw] text-[1vw] text-[#332A1E]">
-                        <router-link :to="{name: 'SaleItemsDetail', params: {saleItemId: slotProps.itemInList.id}}">
-                           <p class="itbms-model hover:text-[#6F879C]">{{ slotProps.itemInList.model }}</p> 
-                        </router-link>                  
+                        <p class="itbms-model hover:text-[#6F879C]">{{ slotProps.itemInList.model }}</p>             
                         <p>
                             <span class="itbms-ramGb ">{{ slotProps.itemInList.ramGb ?? '-' }}</span>/<span class="itbms-storageGb">{{ slotProps.itemInList.storageGb ?? '-' }}</span>
                             <span class="itbms-storageGb-unit">GB</span>
