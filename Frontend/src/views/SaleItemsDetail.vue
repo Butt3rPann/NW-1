@@ -87,7 +87,7 @@ const phones = ref([
     </div>
 
 </div>
-<div v-else qclass="flex flex-col md:flex-row items-center justify-center min-h-screen bg-white px-[2vw] font-[Rubik]">
+<div v-else class="flex flex-col md:flex-row items-center justify-center h-screen bg-white px-[2vw] font-rubik">
     <img src="../assets/product-not-found.png" alt="Product Not Found" class="w-[48vw] h-auto mb-[4vw] md:mb-0 md:mr-[5vw]"/>
 
     <div class="text-center md:text-left">
@@ -119,5 +119,5 @@ const phones = ref([
 </template>
  
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap");
+
 </style>
