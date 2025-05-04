@@ -12,7 +12,7 @@ const routes = [
         path: '/sale-items/:saleItemId',
         name:'SaleItemsDetail',
         component: SaleItemsDetail
-    }
+    },
 ]
 const router = createRouter({history,routes})
 export default router
