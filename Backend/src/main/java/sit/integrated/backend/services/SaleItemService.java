@@ -21,4 +21,8 @@ public class SaleItemService {
     public SaleItem getSaleIteDetail(Integer id) {
         return saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("SaleItem not found for this id :: " + id));
     }
+
+    public void deleteAll() {
+        saleItemRepository.deleteAll();
+    }
 }

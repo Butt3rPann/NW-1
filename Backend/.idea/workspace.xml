@@ -5,27 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b481acac-81f1-4e56-88d8-e1f59fdc0db5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/BackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/BackendApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/controllers/SaleItemController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/controllers/SaleItemController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDetailDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDetailDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/Brand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/Brand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/SaleItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/SaleItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/repositories/SaleItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/repositories/SaleItemRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/utils/ListMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/utils/ListMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-3-msg.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-3-msg.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/Navbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/Navbar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/model/ListModel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/model/ListModel.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/model/MainPhone.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/views/SaleItemList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/views/SaleItemList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/views/SaleItemsDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/views/SaleItemsDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,8 +53,12 @@
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
-    "git-widget-placeholder": "INT-34-Fix-failing-test",
-    "node.js.selected.package.tslint": "(autodetect)"
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "INT-28-Create-API-to-delete-all-sale-items",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunManager">
@@ -86,7 +74,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e3334cb2-4609-461d-b281-69fdcb0dc0d6" name="Changes" comment="" />
+      <changelist id="b481acac-81f1-4e56-88d8-e1f59fdc0db5" name="Changes" comment="" />
       <created>1745528398124</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -105,6 +93,7 @@
       <workItem from="1746208306458" duration="1565000" />
       <workItem from="1746216037408" duration="3000" />
       <workItem from="1746216321077" duration="1785000" />
+      <workItem from="1746378509701" duration="1509000" />
     </task>
     <servers />
   </component>
