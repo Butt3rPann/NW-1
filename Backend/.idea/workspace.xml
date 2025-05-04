@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b481acac-81f1-4e56-88d8-e1f59fdc0db5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/controllers/SaleItemController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/controllers/SaleItemController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +54,7 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -93,7 +90,7 @@
       <workItem from="1746208306458" duration="1565000" />
       <workItem from="1746216037408" duration="3000" />
       <workItem from="1746216321077" duration="1785000" />
-      <workItem from="1746378509701" duration="1509000" />
+      <workItem from="1746378509701" duration="3744000" />
     </task>
     <servers />
   </component>
