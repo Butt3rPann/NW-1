@@ -35,7 +35,7 @@ const phones = ref([
 </script>
  
 <template>
-<div class="font-rubik p-[5vw]">
+<div v-if=" selectedItem?.id"class="font-rubik p-[5vw]">
     <button @click="goBack" class="flex items-center border-[0.17vw] border-[#6F879C] p-[1.3vw] w-fit rounded-md hover:scale-103 transition-scale ease-in-out duration-300 mb-[4vw]">
         <img src="@/assets/images/backArrow.png" alt="backArrow" class="w-[1.6vw] h-[1.3vw] mr-[0.8vw]">
         <p class="text-[#6F879C] font-semibold text-[1.3vw]">Back to product list</p>
@@ -87,8 +87,37 @@ const phones = ref([
     </div>
 
 </div>
+<div v-else qclass="flex flex-col md:flex-row items-center justify-center min-h-screen bg-white px-[2vw] font-[Rubik]">
+    <img src="../assets/product-not-found.png" alt="Product Not Found" class="w-[48vw] h-auto mb-[4vw] md:mb-0 md:mr-[5vw]"/>
+
+    <div class="text-center md:text-left">
+      <h1 class="text-[3.9vw] font-bold text-[#332A1E] leading-tight">
+        <span>Product</span><br />
+        <span>Not Found</span>
+      </h1>
+      <p class="itbms-message text-[1.65vw] text-[#332A1E] mt-[1.0vw]">The requested sale item does not exist.</p>
+
+      <div class="flex flex-col md:flex-row gap-[1.5vw] mt-[1.75vw]">
+        <button
+          @click="$router.push('/')"
+          class="itbms-button flex items-center border-[0.17vw] border-[#6F879C] bg-[#6F879C]  p-[0.8vw] w-fit rounded-lg hover:scale-103 transition-scale ease-in-out duration-300"
+        >
+          <img src="@/assets/images/home.png" alt="backArrow" class="w-[1.8vw] h-[1.9vw] mr-[0.5vw]"/>
+          <p class="text-[#F2EDEC] font-semibold text-[1.2vw]">Back to homepage</p>
+        </button>
+
+        <button
+          @click="$router.push('/sale-items')"
+          class="itbms-button flex items-center border-[0.15vw] border-[#6F879C] p-[1.2vw] w-fit rounded-lg hover:scale-103 transition-scale ease-in-out duration-300"
+        >
+          <img src="@/assets/images/backArrow.png" alt="home" class="w-[1.6vw] h-[1.3vw] mr-[0.8vw]"/>
+          <p class="text-[#6F879C] font-semibold text-[1.2vw]">Back to product list</p>
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
  
 <style scoped>
-
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap");
 </style>
