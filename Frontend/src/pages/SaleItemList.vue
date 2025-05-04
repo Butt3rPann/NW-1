@@ -1,5 +1,5 @@
 <script setup>
-import ListModel from '@/components/model/ListModel.vue';
+import SaleItemCard from '@/components/sale-item/SaleItemCard.vue';
 import { getSaleItems } from '@/libs/fetchUtils';
 import { onMounted, ref } from 'vue';
 
@@ -53,24 +53,7 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
-        <ListModel v-if="saleItems.length" :items="saleItems">
-            <template #saleItem="slotProps">
-                <div class="p-[0.8vw] w-fit">
-                    <p class="itbms-brand text-[#A4A4A3] font-light text-[0.8vw] ">{{ slotProps.itemInList.brandName }}</p>
-                    <div class="font-bold mb-[1vw] text-[1vw] text-[#332A1E]">
-                        <p class="itbms-model hover:text-[#6F879C]">{{ slotProps.itemInList.model }}</p>             
-                        <p>
-                            <span class="itbms-ramGb ">{{ slotProps.itemInList.ramGb ?? '-' }}</span>/<span class="itbms-storageGb">{{ slotProps.itemInList.storageGb ?? '-' }}</span>
-                            <span class="itbms-storageGb-unit">GB</span>
-                        </p>
-                    </div>
-                    <p class=" text-[#6F879C] text-[1vw]">
-                        <span class="itbms-price-unit">Baht</span> <span class="itbms-price">{{ slotProps.itemInList.price.toLocaleString() }}</span>
-                    </p>
-                </div>
-                
-            </template>
-        </ListModel>
+        <SaleItemCard v-if="saleItems.length" :saleItems="saleItems" view="gallery"/>
         <div v-else class="flex flex-col items-center space-y-3 py-[5vw]">
             <img src="../assets/images/emptySaleItems.png" alt="EmptySaleItems" class=" w-[10vw]">
             <p class="text-[1.5vw] text-[#ABBCC9]">no sale item</p>

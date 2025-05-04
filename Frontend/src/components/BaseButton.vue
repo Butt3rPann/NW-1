@@ -32,7 +32,7 @@ const handleClick = () => {
 
 <template>
     <button @click="handleClick" :class="[
-        'flex items-center p-[0.8vw] w-fit rounded-lg hover:scale-103 transition-scale ease-in-out duration-300',
+        'flex items-center p-[1vw] border-[0.15vw] w-fit rounded-[0.6vw] hover:scale-103 transition-scale ease-in-out duration-300',
         bgColor,
         borderColor,
     ]">
