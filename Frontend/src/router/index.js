@@ -1,8 +1,15 @@
-import SaleItemList from "@/views/SaleItemList.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import SaleItemsDetail from "@/views/SaleItemsDetail.vue";
+import SaleItemList from "@/pages/SaleItemList.vue";
+import SaleItemsDetail from "@/pages/SaleItemsDetail.vue";
+import Homepage from "@/pages/Homepage.vue";
+
 const history = createWebHistory()
 const routes = [
+    {
+        path: '/',
+        name: 'Homepage',
+        component: Homepage
+    },
     {
         path: '/sale-items',
         name: 'SaleItems',

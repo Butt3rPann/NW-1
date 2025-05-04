@@ -4,19 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="53e3a00a-57c3-4a1d-b1f1-371d2cc8d3d4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/29cec967-0aa5-4c52-8b67-a98f5cff3ffb.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/29cec967-0aa5-4c52-8b67-a98f5cff3ffb/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/29cec967-0aa5-4c52-8b67-a98f5cff3ffb/storage_v2/_src_/schema/itbms.fdz9BQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/29cec967-0aa5-4c52-8b67-a98f5cff3ffb/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/29cec967-0aa5-4c52-8b67-a98f5cff3ffb/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/29cec967-0aa5-4c52-8b67-a98f5cff3ffb/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f9d87a5e-9bce-4d37-bb50-03de2f13a006.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f9d87a5e-9bce-4d37-bb50-03de2f13a006/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f9d87a5e-9bce-4d37-bb50-03de2f13a006/storage_v2/_src_/schema/itbms.fdz9BQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f9d87a5e-9bce-4d37-bb50-03de2f13a006/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f9d87a5e-9bce-4d37-bb50-03de2f13a006/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f9d87a5e-9bce-4d37-bb50-03de2f13a006/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
+    <list default="true" id="b481acac-81f1-4e56-88d8-e1f59fdc0db5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/BackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/BackendApplication.class" afterDir="false" />
@@ -25,11 +16,14 @@
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/Brand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/Brand.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/SaleItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/SaleItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/repositories/SaleItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/repositories/SaleItemRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/utils/ListMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/utils/ListMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi1-view-sale-item-gallery/tc-pbi1-1.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi1-view-sale-item-gallery/tc-pbi1-1.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-3-msg.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-3-msg.cy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/Navbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/Navbar.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/src/components/model/ListModel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/model/ListModel.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/model/MainPhone.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/src/views/SaleItemList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/views/SaleItemList.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/src/views/SaleItemsDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/views/SaleItemsDetail.vue" afterDir="false" />
     </list>
@@ -49,12 +43,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Butt3rPann/NW-1.git",
-    "accountId": "fe770674-8803-4e13-9255-04daba720aab"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Butt3rPann/NW-1.git&quot;,
+    &quot;accountId&quot;: &quot;fe770674-8803-4e13-9255-04daba720aab&quot;
   }
-}]]></component>
+}</component>
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
@@ -75,27 +69,8 @@
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.BackendApplication.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "INT-33-Create-navbar-and-footer-for-webpage",
-    "last_opened_file_path": "/Users/butterpann/Documents/IT29/year2/Term2/INT221/NW-1/Backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
-  },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
-    ]
+    "git-widget-placeholder": "INT-34-Fix-failing-test",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
   <component name="RunManager">

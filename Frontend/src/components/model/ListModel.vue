@@ -20,7 +20,7 @@ const props = defineProps({
                 <router-link :to="{ name: 'SaleItemsDetail', params: { saleItemId: item.id } }"
                     class="block h-full w-full flex-col">
                     <div class="flex items-center justify-center bg-[#FAF6F5]">
-                        <img :src="'./saleItemImage/demoImg.png'" class="h-[8vw] my-[2vw]" />
+                        <img :src="'./saleItemImage/demoImg1.png'" class="h-[8.5vw] my-[2vw]" />
                     </div>
                     <slot name="saleItem" :itemInList="item" />
                 </router-link>

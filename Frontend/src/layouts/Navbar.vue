@@ -6,9 +6,9 @@ const route = useRoute()
 const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/sale-items' },
-    { name: 'Promotions', path: '/promotions' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Contact Us', path: '/contact' }
+    { name: 'Promotions', path: '' },
+    { name: 'About Us', path: '' },
+    { name: 'Contact Us', path: '' }
 ]
 </script>
 
