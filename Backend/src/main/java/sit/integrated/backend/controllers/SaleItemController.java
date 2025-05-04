@@ -34,4 +34,10 @@ public class SaleItemController {
         SaleItem saleItem = saleItemService.getSaleIteDetail(id);
         return ResponseEntity.ok(modelMapper.map(saleItem, SaleItemDetailDto.class));
     }
+
+    @DeleteMapping("/sale-items/empty")
+    public ResponseEntity<Object> deleteAllSaleItems() {
+        saleItemService.deleteAll();
+        return ResponseEntity.ok("All sale items have been deleted.");
+    }
 }
