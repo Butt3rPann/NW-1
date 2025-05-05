@@ -22,7 +22,9 @@ const props = defineProps({
                     <div class="flex items-center justify-center bg-[#FAF6F5]">
                         <img :src="'./saleItemImage/demoImg1.png'" class="h-[8.5vw] my-[2vw]" />
                     </div>
-                    <slot name="saleItem" :itemInList="item" />
+                    <div class="flex bg-white">
+                        <slot name="saleItem" :itemInList="item"/>
+                    </div>
                 </router-link>
             </li>
         </ul>

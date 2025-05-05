@@ -95,7 +95,7 @@ const changeMainImg = (index) => {
 
     </div>
     <div v-else class="flex flex-col md:flex-row items-center justify-center h-screen bg-white px-[2vw] font-rubik">
-        <img src="../assets/product-not-found.png" alt="Product Not Found"
+        <img src="../assets/images/product-not-found.png" alt="Product Not Found"
             class="w-[48vw] h-auto mb-[4vw] md:mb-0 md:mr-[5vw]" />
 
         <div class="text-center md:text-left">
