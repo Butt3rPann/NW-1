@@ -1,6 +1,6 @@
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
-import Bag from '@/assets/images/Bag.png'
+import Bag from '@/assets/images/bag.png'
 import ValueProps from '@/components/home/ValueProps.vue'
 import Genuine from '@/assets/images/genuine.png'
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'

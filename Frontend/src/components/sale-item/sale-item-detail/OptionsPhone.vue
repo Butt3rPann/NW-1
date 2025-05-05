@@ -15,8 +15,6 @@ const emit = defineEmits(['update:selectedIndex']);
 const updateSelected = (index) => {
   emit('update:selectedIndex', index);
 }
-
-console.log(props.phones)
 </script>
 
 <template>
