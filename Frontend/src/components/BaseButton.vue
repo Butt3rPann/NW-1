@@ -36,7 +36,7 @@ const handleClick = () => {
         bgColor,
         borderColor,
     ]">
-        <img :src="icon" :alt="alt" class="w-[1.5vw] h-[1.3vw] mr-[0.5vw]" />
+        <img :src="icon" :alt="alt" class="w-[1.5vw] mr-[0.5vw]" />
         <p :class="[textColor, 'font-semibold text-[1.2vw]']">{{ text }}</p>
     </button>
 </template>
