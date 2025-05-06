@@ -9,11 +9,11 @@ import sit.integrated.backend.dtos.SaleItemDto;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.SaleItemService;
 import java.util.List;
-//import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import sit.integrated.backend.utils.ListMapper;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/v1")
 public class SaleItemController {
     @Autowired
@@ -33,11 +33,5 @@ public class SaleItemController {
     public ResponseEntity<SaleItemDetailDto> getSaleItemDetail(@PathVariable Integer id) {
         SaleItem saleItem = saleItemService.getSaleIteDetail(id);
         return ResponseEntity.ok(modelMapper.map(saleItem, SaleItemDetailDto.class));
-    }
-
-    @DeleteMapping("/sale-items/empty")
-    public ResponseEntity<Object> deleteAllSaleItems() {
-        saleItemService.deleteAll();
-        return ResponseEntity.ok("All sale items have been deleted.");
     }
 }

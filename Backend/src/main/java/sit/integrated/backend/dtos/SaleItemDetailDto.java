@@ -3,6 +3,7 @@ package sit.integrated.backend.dtos;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Data
 public class SaleItemDetailDto {
@@ -16,4 +17,6 @@ public class SaleItemDetailDto {
     private Integer quantity;
     private Integer storageGb;
     private String color;
+    private Instant createdOn;
+    private Instant updatedOn;
 }
