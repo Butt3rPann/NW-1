@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sit.integrated.backend.dtos.BrandDto;
 import sit.integrated.backend.entities.Brand;
 import sit.integrated.backend.repositories.BrandRepository;
+import sit.integrated.backend.services.BrandService;
 import sit.integrated.backend.utils.ListMapper;
 
 import java.util.List;
@@ -17,13 +18,15 @@ import java.util.List;
 @RequestMapping("/v1")
 public class BrandController {
     @Autowired
-    private BrandRepository brandRepository;
+    private BrandService brandService;
     @Autowired
     private ListMapper listMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("/brands")
     public ResponseEntity<List<BrandDto>> getAllBrands() {
-        List<Brand> brands = brandRepository.findAll();
-        return ResponseEntity.ok(listMapper.mapList(brands,BrandDto.class,new ModelMapper()));
+        List<Brand> brands = brandService.getAllBrands();
+        return ResponseEntity.ok(listMapper.mapList(brands,BrandDto.class, modelMapper));
     }
 }
