@@ -14,13 +14,12 @@ const props = defineProps({
 
 <template>
     <div>
-        <ul :class="view === 'gallery' ? 'grid grid-cols-5 gap-[1.5vw] mx-auto' : ''">
+        <ul :class="view === 'gallery' ? 'grid grid-cols-5 gap-5 mx-auto' : ''">
             <li v-for="item in items" :key="item.id" class="itbms-row"
-                :class="view === 'gallery' ? 'shadow-[0_0.075vw_0.2vw_0_rgba(0,0,0,0.15)] rounded-[0.5vw] overflow-hidden hover:shadow-[0_0.1vw_0.5vw_rgba(0,0,0,0.15)] hover:scale-[1.01]' : ''">
-                <router-link :to="{ name: 'SaleItemsDetail', params: { saleItemId: item.id } }"
-                    class="block h-full w-full flex-col">
+                :class="view === 'gallery' ? 'shadow-[0_0.065rem_0.18rem_0_rgba(0,0,0,0.15)] rounded-md overflow-hidden hover:shadow-[0_0.08rem_0.4rem_rgba(0,0,0,0.15)] hover:scale-[1.01]' : ''">
+                <router-link :to="{ name: 'SaleItemsDetail', params: { saleItemId: item.id } }">
                     <div class="flex items-center justify-center bg-[#FAF6F5]">
-                        <img :src="'./saleItemImage/demoImg1.png'" class="h-[8.5vw] my-[2vw]" />
+                        <img :src="'./saleItemImage/demoImg1.png'" class="h-[7.5rem] my-8" />
                     </div>
                     <div class="flex bg-white">
                         <slot name="saleItem" :itemInList="item"/>

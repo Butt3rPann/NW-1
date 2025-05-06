@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sit.integrated.backend.dtos.BrandDto;
 import sit.integrated.backend.entities.Brand;
-import sit.integrated.backend.repositories.BrandRepository;
 import sit.integrated.backend.services.BrandService;
 import sit.integrated.backend.utils.ListMapper;
 
