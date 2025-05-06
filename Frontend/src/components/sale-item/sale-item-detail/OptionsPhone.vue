@@ -19,20 +19,20 @@ const updateSelected = (index) => {
 
 <template>
   <div>
-    <div class="flex mt-[1.3vw] items-center">
+    <div class="flex mt-4 items-center">
       <button @click="updateSelected(selectedIndex === 0 ? phones.length - 1 : selectedIndex - 1)"
-        class="text-[#6F879C] text-[2.5vw] w-[4vw] h-[4vw] rounded-full flex items-center justify-center transition duration-200 hover:bg-[#6F879C]/10">
+        class="text-[#6F879C] text-4xl w-14 h-14 rounded-full flex items-center justify-center transition duration-200 hover:bg-[#6F879C]/10">
       <
       </button>
-      <div class="flex w-[34vw] justify-around">
+      <div class="flex w-122 justify-around">
         <div v-for="(thumbnail, index) in phones" :key="index"
-          class="bg-[#F0EDEC] w-[7.5vw] h-[8.5vw] p-[1.3vw] m-[0.4vw] rounded-xl flex items-center justify-center"
+          class="bg-[#F0EDEC] w-27 h-31 p-4 m-1.5 rounded-xl flex items-center justify-center overflow-hidden"
           :class="{ 'border-[0.25vw] border-[#6F879C]': selectedIndex === index }" @click="updateSelected(index)">
-          <img :src="thumbnail" :alt="`Phone ${index}`" class="h-[4.3vw] object-cover scale-125" />
+          <img :src="thumbnail" :alt="`Phone ${index}`" class="h-15.5 object-cover scale-125" />
         </div>
       </div>
       <button @click="updateSelected(selectedIndex === phones.length - 1 ? 0 : selectedIndex + 1)"
-        class="text-[#6F879C] text-[2.5vw] w-[4vw] h-[4vw] rounded-full flex items-center justify-center transition duration-200 hover:bg-[#6F879C]/10">
+        class="text-[#6F879C] text-4xl w-14 h-14 rounded-full flex items-center justify-center transition duration-200 hover:bg-[#6F879C]/10">
       >
       </button>
     </div>

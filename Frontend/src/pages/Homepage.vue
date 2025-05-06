@@ -1,5 +1,5 @@
 <script setup>
-import BaseButton from '@/components/BaseButton.vue'
+import LinkButton from '@/components/elements/LinkButton.vue'
 import Bag from '@/assets/images/bag.png'
 import ValueProps from '@/components/home/ValueProps.vue'
 import Genuine from '@/assets/images/genuine.png'
@@ -34,7 +34,7 @@ onMounted(async () => {
                     <span>Shop a wide variety of items with special promotions and</span><br>
                     <span>free nationwide delivery.</span>
                 </p>
-                <BaseButton :icon="Bag" text="SHOP NOW" to="/sale-items" textColor="text-[#F0EDEC]" class="itbms-shopnow px-[2vw]"/>
+                <LinkButton :icon="Bag" text="SHOP NOW" to="/sale-items" textColor="text-[#F0EDEC]" class="itbms-shopnow px-[2vw]"/>
             </div>
             <div class="absolute bottom-[-7vw] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-[3vw] z-10">
                 <ValueProps :icon="Genuine"><template #text>Guaranteed 100% Genuine</template></ValueProps>
@@ -62,6 +62,6 @@ onMounted(async () => {
  
 <style scoped>
 .title-shadow {
-    text-shadow: 0 0.2vw 0.5vw rgba(0,0,0,0.5);
+    text-shadow: 0 0.1rem 0.2rem rgba(0,0,0,0.5);
 }
 </style>
