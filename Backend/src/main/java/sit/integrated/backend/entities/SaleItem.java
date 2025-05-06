@@ -53,6 +53,7 @@ public class SaleItem {
     private String color;
 
     @NotNull
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
@@ -62,7 +63,6 @@ public class SaleItem {
     private Instant createdOn;
 
     @NotNull
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
 

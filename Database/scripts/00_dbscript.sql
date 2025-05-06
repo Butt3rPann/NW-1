@@ -4,7 +4,7 @@ USE itbms;
 
 CREATE TABLE IF NOT EXISTS brand (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    name VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
     websiteUrl VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     isActive TINYINT(1) DEFAULT 1,
     countryOfOrigin VARCHAR(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS sale_item (
     storageGb INT,
     color VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     quantity INT NOT NULL DEFAULT 1,
+    CHECK (quantity >= 0),
     createdOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (brandId) REFERENCES brand(id)
