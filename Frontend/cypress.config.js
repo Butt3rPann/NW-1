@@ -4,7 +4,7 @@ export default defineConfig({
   e2e: {
     specPattern: 'cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     // baseUrl: 'http://ip24nw1.sit.kmutt.ac.th',
-    // baseAPI: 'http://ip24nw1.sit.kmutt.ac.th:8080/itb-mshop',
+    // baseAPI: 'http://ip24nw1.sit.kmutt.ac.th/itb-mshop',
     baseUrl: 'http://localhost:5173',
     baseAPI: 'http://localhost:8080/itb-mshop',
     setupNodeEvents(on, config) {
