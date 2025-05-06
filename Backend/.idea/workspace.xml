@@ -5,17 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b481acac-81f1-4e56-88d8-e1f59fdc0db5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/BrandController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/dtos/BrandDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/repositories/BrandRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/BrandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a6e4c23a-8ef0-4cc7-a59c-bb86549af5f1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a6e4c23a-8ef0-4cc7-a59c-bb86549af5f1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a6e4c23a-8ef0-4cc7-a59c-bb86549af5f1/storage_v2/_src_/schema/itbms.fdz9BQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a6e4c23a-8ef0-4cc7-a59c-bb86549af5f1/storage_v2/_src_/schema/itbms.fdz9BQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/Brand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/SaleItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/repositories/SaleItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/repositories/SaleItemRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Database/scripts/00_dbscript.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../Database/scripts/00_dbscript.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/cypress.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi1-view-sale-item-gallery/tc-pbi1-1.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi1-view-sale-item-gallery/tc-pbi1-1.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-2.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-2.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-3-msg.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/cypress/e2e/Sprint-1/tc-fe-pbi2-view-sale-item-detail/tc-pbi2-3-msg.cy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/SaleItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/SaleItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +29,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -33,12 +37,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Butt3rPann/NW-1.git&quot;,
-    &quot;accountId&quot;: &quot;fe770674-8803-4e13-9255-04daba720aab&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Naynay00066"
   }
-}</component>
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Butt3rPann/NW-1.git",
+    "accountId": "19949539-6cba-4c6b-9a6e-643fc8c7a942"
+  }
+}]]></component>
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
@@ -59,8 +69,10 @@
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
+    "Spring Boot.BackendApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "release/1.0.0",
+    "git-widget-placeholder": "INT-38-Create-API-to-get-all-brands",
+    "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -82,6 +94,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.387" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.387" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -107,6 +127,7 @@
       <workItem from="1746216321077" duration="1785000" />
       <workItem from="1746378509701" duration="3744000" />
       <workItem from="1746511716080" duration="123000" />
+      <workItem from="1746520685411" duration="3675000" />
     </task>
     <servers />
   </component>
