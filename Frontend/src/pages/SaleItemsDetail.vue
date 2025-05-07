@@ -7,6 +7,7 @@ import ItemDetailRow from '@/components/sale-item/sale-item-detail/ItemDetailRow
 import LinkButton from '@/components/elements/LinkButton.vue'
 import backArrow from '@/assets/images/backArrow.png'
 import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue'
+import { formatLocalTime } from '@/libs/datetimeUtils'
 
 const { params: { saleItemId } } = useRoute()
 
@@ -15,6 +16,8 @@ const selectedItem = ref({})
 async function getItemById() {
     try {
         selectedItem.value = await getSaleItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
+        selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn);
+        selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
     } catch (error) {
         console.log(error)
     }
@@ -48,7 +51,7 @@ const changeMainImg = (index) => {
         <LinkButton :icon="backArrow" alt="backArrow" text="Back to product list" :to="'/sale-items'"
             textColor="text-[#6F879C]" bgColor="bg-transparent"
             class="mb-7" />
-        <div class="itbms-row flex justify-between items-center">
+        <div class="itbms-row flex justify-between ">
             <div class="flex flex-col items-center mr-6">
                 <div class="bg-[#F0EDEC] w-119 h-129 rounded-2xl flex items-center justify-center overflow-hidden">
                     <img :src="phones.mainImage" alt="Selected Phone" class="h-87">
@@ -87,7 +90,16 @@ const changeMainImg = (index) => {
                     <ItemDetailRow label="ScreenSizeInch" :value="selectedItem.screenSizeInch" unit="Inches" valueClass="itbms-screenSizeInch" unitClass="itbms-screenSizeInch-unit" />
                     <ItemDetailRow label="Color" :value="selectedItem.color" valueClass="itbms-color" />
                 </div>
-                
+                <div class="text-sm space-y-1 flex justify-between mt-3">
+                    <div class="flex gap-1">
+                        <p class="font-semibold text-[#332A1E]/70 mr-3">Created On:</p>
+                        <p class="text-[#332A1E]/40">{{ selectedItem.createdOn }}</p>
+                    </div>
+                    <div class="flex gap-1">
+                        <p class="font-semibold text-[#332A1E]/70 mr-3">Updated On:</p>
+                        <p class="text-[#332A1E]/40">{{ selectedItem.updatedOn }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
