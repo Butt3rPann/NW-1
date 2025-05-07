@@ -9,11 +9,12 @@ defineProps({
     borderColor: String,
     hover: String,
     className: String,
+    disabled: Boolean
 })
 </script>
  
 <template>
-    <button :class="`${className} font-rubik font-medium rounded-xl text-lg cursor-pointer px-7 py-3 ${textColor} ${bgColor} ${borderColor} hover:scale-103 transition-scale ease-in-out duration-300 place-content-center w-fit`">
+    <button :disabled="disabled" :class="`${className} font-rubik font-medium rounded-xl text-lg cursor-pointer px-7 py-3 ${textColor} ${bgColor} ${borderColor} hover:scale-103 transition-scale ease-in-out duration-300 place-content-center w-fit`">
         {{ text }}
     </button>
 </template>

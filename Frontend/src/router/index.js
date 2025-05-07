@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import SaleItemList from "@/pages/SaleItemList.vue";
 import SaleItemsDetail from "@/pages/SaleItemsDetail.vue";
 import Homepage from "@/pages/Homepage.vue";
+import AddSaleItemForm from "@/components/form/AddSaleItemForm.vue";
 
 const history = createWebHistory()
 const routes = [
@@ -17,8 +18,13 @@ const routes = [
     },
     {
         path: '/sale-items/:saleItemId',
-        name:'SaleItemsDetail',
+        name: 'SaleItemsDetail',
         component: SaleItemsDetail
+    },
+    {
+        path: '/sale-items/add',
+        name: 'AddSaleItem',
+        component: AddSaleItemForm
     },
 ]
 const router = createRouter({history,routes})
