@@ -6,12 +6,14 @@ defineProps({
     },
     bgColor: String,
     textColor: String,
-    hover: String
+    borderColor: String,
+    hover: String,
+    className: String,
 })
 </script>
  
 <template>
-    <button :class="`font-rubik font-medium rounded-xl text-lg cursor-pointer px-7 py-3 ${textColor} ${bgColor} hover:${hover} place-content-center w-fit`">
+    <button :class="`${className} font-rubik font-medium rounded-xl text-lg cursor-pointer px-7 py-3 ${textColor} ${bgColor} ${borderColor} hover:scale-103 transition-scale ease-in-out duration-300 place-content-center w-fit`">
         {{ text }}
     </button>
 </template>

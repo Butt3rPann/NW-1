@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import sit.integrated.backend.dtos.SaleItemDetailDto;
 import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.entities.SaleItem;
-import sit.integrated.backend.repositories.BrandRepository;
 import sit.integrated.backend.repositories.SaleItemRepository;
 
 
@@ -18,9 +17,6 @@ import java.util.List;
 public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
-
-    @Autowired
-    private BrandRepository brandRepository;
 
     @Autowired
     ModelMapper modelMapper;
