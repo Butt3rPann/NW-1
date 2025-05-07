@@ -5,7 +5,9 @@ defineProps({
         required: true
     },
     options: Array,
-    placeholder : String
+    property: String,
+    placeholder : String,
+    className: String
 })
 
 const inputValue = defineModel()
@@ -17,10 +19,10 @@ const inputValue = defineModel()
             <span class="text-red-700">*</span>
         </label>
         <select v-model="inputValue" :value="inputValue"
-        class="h-[2.75rem] appearance-none w-full text-base text-[#332A1E]/80 bg-white border border-[#332A1E]/20 rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]"
+        :class="`${className} h-[2.75rem] appearance-none w-full text-base text-[#332A1E]/80 bg-white border border-[#332A1E]/20 rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]`"
         >
-            <option distabled value="">{{ placeholder || 'Please select' }}</option>
-            <option v-for="option in options" :key="option.value">{{ option }}</option>
+            <option disabled value="">{{ placeholder || 'Please select' }}</option>
+            <option v-for="option in options" :key="option.value" :value="option[property]">{{ option[property]}}</option>
         </select>
     </div>
 </template>

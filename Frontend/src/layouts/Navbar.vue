@@ -13,7 +13,7 @@ const navItems = [
 </script>
 
 <template>
-    <div class="fixed top-0 left-0 w-full z-50 font-rubik bg-[#6F879C] text-[#F0EDEC] h-fit flex items-center px-7 justify-between">
+    <div class="fixed top-0 left-0 w-full z-50 font-rubik bg-[#6F879C] text-[#F0EDEC] h-[5rem] flex items-center px-7 justify-between">
         <router-link to="/">
             <div class="flex items-center">
                 <img src="@/assets/images/logo.png" alt="logo" class="w-10">
@@ -22,9 +22,11 @@ const navItems = [
         </router-link>
         <div class="flex items-center text-lg font-medium">
             <router-link v-for="item in navItems" :key="item.path" :to="item.path"
-                class="m-6 p-1 transition-all duration-150" :class="route.path === item.path
-                    ? 'border-b-2'
-                    : 'hover:border-b-2'">
+                class="m-[2.5vw] p-[0.3vw] transition-all duration-150" 
+                :class="[route.path === item.path
+                    ? 'border-b-[0.18vw]'
+                    : 'hover:border-b-[0.18vw]',
+                    item.path === '/' ? 'itbms-home-button' : '']">
                 {{ item.name }}
             </router-link>
         </div>
