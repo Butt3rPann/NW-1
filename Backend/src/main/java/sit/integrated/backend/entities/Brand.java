@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.LinkedHashSet;
@@ -30,6 +32,7 @@ public class Brand {
     @Column(name = "websiteUrl", length = 40)
     private String websiteUrl;
 
+    @ColumnDefault("1")
     @Column(name = "isActive")
     private Boolean isActive;
 
@@ -37,14 +40,12 @@ public class Brand {
     @Column(name = "countryOfOrigin", length = 80)
     private String countryOfOrigin;
 
-    @NotNull
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "createdOn", nullable = false)
+    @CreationTimestamp
+    @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
     private Instant createdOn;
 
-    @NotNull
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "updatedOn", nullable = false)
+    @UpdateTimestamp
+    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
     private Instant updatedOn;
 
     @OneToMany(mappedBy = "brand")

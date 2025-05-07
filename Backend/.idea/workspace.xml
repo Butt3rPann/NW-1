@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b481acac-81f1-4e56-88d8-e1f59fdc0db5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/dtos/SaleItemFormDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a6e4c23a-8ef0-4cc7-a59c-bb86549af5f1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/BrandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/BrandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/controllers/SaleItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/Brand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/Brand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/SaleItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/entities/SaleItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sit/integrated/backend/services/SaleItemService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/BackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/BackendApplication.class" afterDir="false" />
@@ -18,20 +22,11 @@
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/BrandDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/BrandDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDetailDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDetailDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/dtos/SaleItemDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/Brand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/Brand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/SaleItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/entities/SaleItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/repositories/SaleItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/repositories/SaleItemRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/services/SaleItemService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/sit/integrated/backend/utils/ListMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sit/integrated/backend/utils/ListMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/BaseButton.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/home/ValueProps.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/home/ValueProps.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/model/ListModel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/model/ListModel.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/sale-item/SaleItemCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/sale-item/SaleItemCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/sale-item/sale-item-detail/ItemDetailRow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/sale-item/sale-item-detail/ItemDetailRow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/components/sale-item/sale-item-detail/OptionsPhone.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/components/sale-item/sale-item-detail/OptionsPhone.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/layouts/Footer.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/layouts/Footer.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/layouts/Navbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/layouts/Navbar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/pages/Homepage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/pages/Homepage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/pages/SaleItemList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/pages/SaleItemList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/src/pages/SaleItemsDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/pages/SaleItemsDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +38,8 @@
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="com.haulmont.jpb.JpaEntity" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -85,7 +80,7 @@
     "RequestMappingsPanelWidth1": "75",
     "Spring Boot.BackendApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "INT-37-Update-Database",
+    "git-widget-placeholder": "INT-38-Create-API-to-get-all-brands",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
