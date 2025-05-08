@@ -1,7 +1,9 @@
 <script setup>
+import LinkButton from '@/components/elements/LinkButton.vue';
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue';
 import { getSaleItems } from '@/libs/fetchUtils';
 import { onMounted, ref } from 'vue';
+import addIcon from '@/assets/images/add.png'
 
 const saleItems = ref([])
 
@@ -15,11 +17,14 @@ onMounted(async () => {
 </script>
  
 <template>
-    <div class="font-rubik mx-35 my-15 space-y-7 mt-30">
-        <p class="text-[3.5rem] font-bold text-[#332A1E]">Products</p>
+    <div class="font-rubik mx-35 mb-15 space-y-7 mt-30">
+        <div class="flex justify-between items-center">
+            <p class="text-[3.5rem] font-bold text-[#332A1E]">Products</p>
+            <LinkButton :icon="addIcon" text="Add Sale Item" to="/sale-items/add" class="itbms-sale-item-add h-13"/>
+        </div>
         <div class="flex justify-between items-center">
             <div class="relative flex items-center">
-                <input type="text" name="search" placeholder="Search..." class="shadow-[0_0.02rem_0.16rem_0_rgba(0,0,0,0.15)] rounded-md py-3 px-6 w-100 placeholder:text-[0.95rem] placeholder:text-[#6F879C] placeholder:font-light text-[#332A1E] text-[0.95rem]">
+                <input type="text" name="search" placeholder="Search..." class="shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-3 px-6 w-100 placeholder:text-[0.95rem] placeholder:text-[#6F879C] placeholder:font-light text-[#332A1E] text-[0.95rem]">
                 <span class="absolute right-6">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.3rem" height="1.3rem" viewBox="0 0 24 24">
                     	<path fill="#6F879C" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
@@ -27,7 +32,7 @@ onMounted(async () => {
                 </span>
             </div>
             <div class="flex space-x-5">
-                <div class="shadow-[0_0.02rem_0.16rem_0_rgba(0,0,0,0.15)] rounded-md py-3 px-5 w-fit">
+                <div class="shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-3 px-5 w-fit">
                     <p class="text-[0.95rem] text-[#ABBCC9] font-medium flex items-center space-x-[0.7vw]">
                         <span>Sort by :</span>
                         <span class="text-[#6F879C]">Oldest</span>  
@@ -41,7 +46,7 @@ onMounted(async () => {
                         </span>
                     </p>
                 </div>
-                <div class="shadow-[0_0.02rem_0.16rem_0_rgba(0,0,0,0.15)] rounded-md py-3 px-5 w-fit flex items-center space-x-1">
+                <div class="shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-3 px-5 w-fit flex items-center space-x-1">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.3rem" height="1.3rem" viewBox="0 0 24 24">
                         	<g class="filter-outline">
