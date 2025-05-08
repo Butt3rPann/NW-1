@@ -17,15 +17,19 @@ const addNewSaleItem = async (newSaleItemData) => {
 const disabled = ref(false)
 
 const handleNewSaleItem = async (newSaleItem) => {
-    await addNewSaleItem(newSaleItem);
-    disabled.value = true
-    router.push('/sale-items');
+    try {
+        await addNewSaleItem(newSaleItem);
+        disabled.value = true
+        router.push('/sale-items')
+    } catch (error) {
+        console.log(error)
+    }
 }
 </script>
 
 <template>
     <div>
-        <SaleItemForm @submitAction="handleNewSaleItem" :disabled="disabled"/>
+        <SaleItemForm @submitAction="handleNewSaleItem" path="/sale-items" :disabled="disabled" />
     </div>
 </template>
 

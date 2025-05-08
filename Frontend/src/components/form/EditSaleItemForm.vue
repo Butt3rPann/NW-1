@@ -1,19 +1,24 @@
 <script setup>
 import { onMounted } from 'vue';
-import { useRoute, useRouter} from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue';
 import { editItem, getItemById } from '@/libs/fetchUtils';
 import SaleItemForm from './SaleItemForm.vue';
 
 const router = useRouter()
 
+const disabled = ref(false)
+
 const { params: { id } } = useRoute()
 
 const saleItem = ref({})
+const originalSaleItem = ref({})
 
-onMounted( async () => {
+onMounted(async () => {
     try {
-        saleItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, id)
+        const result = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, id)
+        saleItem.value = result
+        originalSaleItem.value = JSON.parse(JSON.stringify(result))
     } catch (error) {
         console.log(error);
     }
@@ -28,18 +33,30 @@ async function editSaleItem(editedItem) {
 }
 
 const handleEditSaleItem = async (editedItem) => {
-    await editSaleItem(editedItem)
-    router.push(`/sale-items/${id}`);
+    const oldData = JSON.stringify(originalSaleItem.value)
+    const newData = JSON.stringify(editedItem)
+
+    if (oldData === newData) {
+        disabled.value = true
+        return
+    }
+
+    try {
+        await editSaleItem(editedItem)
+        disabled.value = true
+        router.push(`/sale-items/${id}`)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 </script>
- 
+
 <template>
     <div>
-        <SaleItemForm v-if="saleItem.id" @submitAction="handleEditSaleItem" :saleItemData="saleItem"/>
+        <SaleItemForm v-if="saleItem.id" @submitAction="handleEditSaleItem" :saleItemData="saleItem"
+            :path="`/sale-items/${id}`" :disabled="disabled" />
     </div>
 </template>
- 
-<style scoped>
 
-</style>
+<style scoped></style>

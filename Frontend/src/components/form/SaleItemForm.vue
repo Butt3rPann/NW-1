@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue'
+import { ref, onMounted } from 'vue'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import { getItems } from '@/libs/fetchUtils';
 import FormSelect from '@/components/elements/FormSelect.vue'
@@ -13,12 +13,13 @@ const emit = defineEmits(['submitAction'])
 
 const props = defineProps({
     saleItemData: Object,
-    disabled : Boolean
+    disabled: Boolean,
+    path: String
 })
 
 const newSaleItem = ref({
     model: props.saleItemData?.model || null,
-    brand: { 
+    brand: {
         id: null,
         name: null
     },
@@ -40,18 +41,23 @@ const isNull = ref({
 })
 
 function handleClick() {
-    !newSaleItem.value.model ? isNull.value.model = true : isNull.value.model = false
-    !newSaleItem.value.brand.id ? isNull.value.brand = true : isNull.value.brand = false
-    !newSaleItem.value.description ? isNull.value.description = true : isNull.value.description = false
-    !newSaleItem.value.price ? isNull.value.price = true : isNull.value.price = false
-    !newSaleItem.value.quantity ? isNull.value.quantity = true : isNull.value.quantity = false
+    Object.keys(newSaleItem.value).forEach(key => {
+        if (newSaleItem.value[key] === null) {
+            delete newSaleItem.value[key]
+        }
+    })
+
+    for (const key in isNull.value) {
+        if (key === 'brand') isNull.value.brand = !newSaleItem.value.brand.id
+        else isNull.value[key] = !newSaleItem.value[key]
+    }
 
     if (Object.values(isNull.value).every(value => value === false))
         emit('submitAction', newSaleItem.value)
 }
 
 const cancel = () => {
-    router.back()
+    router.push({ path: props.path })
 }
 
 const brands = ref([])
@@ -61,7 +67,7 @@ onMounted(async () => {
         brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
 
         const brandObj = brands.value.find(b => b.name === props.saleItemData?.brandName)
-        newSaleItem.value.brand = brandObj || null
+        newSaleItem.value.brand = brandObj || newSaleItem.value.brand
     } catch (error) {
         console.log(error);
     }
@@ -100,40 +106,53 @@ const changeMainImg = (index) => {
             <div class="grid gap-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
-                        <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands" property="name" placeholder="Select brand" className="itbms-brand" :isNull="isNull.brand"></FormSelect>
+                        <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands" property="name"
+                            placeholder="Select brand" className="itbms-brand" :isNull="isNull.brand"></FormSelect>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text" placeholder="Enter model" className="itbms-model" :isNull="isNull.model"></FormInput>
+                        <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text"
+                            placeholder="Enter model" className="itbms-model" :isNull="isNull.model"></FormInput>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number" placeholder="Enter price" className="itbms-price" :isNull="isNull.price"></FormInput>
+                        <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number"
+                            placeholder="Enter price" className="itbms-price" :isNull="isNull.price"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.quantity" label="Quantity" :required="true" inputType="Number" placeholder="Enter quantity" className="itbms-quantity" :isNull="isNull.quantity"></FormInput>
+                        <FormInput v-model="newSaleItem.quantity" label="Quantity" :required="true" inputType="Number"
+                            placeholder="Enter quantity" className="itbms-quantity" :isNull="isNull.quantity">
+                        </FormInput>
                     </div>
                 </div>
                 <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.description" label="Description" :required="true" inputType="textarea" placeholder="Enter product description" className="itbms-description" :isNull="isNull.description"></FormInput>
+                    <FormInput v-model="newSaleItem.description" label="Description" :required="true"
+                        inputType="textarea" placeholder="Enter product description" className="itbms-description"
+                        :isNull="isNull.description"></FormInput>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number" placeholder="Enter RAM" className="itbms-ramGb"></FormInput>
+                        <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number"
+                            placeholder="Enter RAM" className="itbms-ramGb"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number" placeholder="Enter storage" className="itbms-storageGb"></FormInput>
+                        <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number"
+                            placeholder="Enter storage" className="itbms-storageGb"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" placeholder="Enter screen size" className="itbms-screenSizeInch"></FormInput>
+                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number"
+                            placeholder="Enter screen size" className="itbms-screenSizeInch"></FormInput>
                     </div>
                 </div>
                 <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" className="itbms-color"></FormInput>
+                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color"
+                        className="itbms-color"></FormInput>
                 </div>
                 <div class="flex gap-4 pt-2">
-                    <FormButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" className="itbms-save-button" :disabled="disabled"></FormButton>
-                    <FormButton @click="cancel" text="Cancel" bgColor="transparent" textColor="text-[#6F879C]" className="itbms-cancel-button" borderColor="border-2 border-[#6F879C]"></FormButton>
+                    <FormButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white"
+                        className="itbms-save-button" :disabled="disabled"></FormButton>
+                    <FormButton @click="cancel" text="Cancel" bgColor="transparent" textColor="text-[#6F879C]"
+                        className="itbms-cancel-button" borderColor="border-2 border-[#6F879C]"></FormButton>
                 </div>
             </div>
         </div>
