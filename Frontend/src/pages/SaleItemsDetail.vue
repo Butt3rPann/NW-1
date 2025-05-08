@@ -8,6 +8,8 @@ import LinkButton from '@/components/elements/LinkButton.vue'
 import backArrow from '@/assets/images/backArrow.png'
 import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue'
 import { formatLocalTime } from '@/libs/datetimeUtils'
+import deleteIcon from "@/assets/images/delete.png";
+import editIcon from "@/assets/images/edit.png";
 
 const { params: { saleItemId } } = useRoute()
 
@@ -89,6 +91,10 @@ const changeMainImg = (index) => {
                     <ItemDetailRow label="RamGb" :value="selectedItem.ramGb" unit="GB" valueClass=" itbms-ramGb" unitClass="itbms-ramGb-unit" />
                     <ItemDetailRow label="ScreenSizeInch" :value="selectedItem.screenSizeInch" unit="Inches" valueClass="itbms-screenSizeInch" unitClass="itbms-screenSizeInch-unit" />
                     <ItemDetailRow label="Color" :value="selectedItem.color" valueClass="itbms-color" />
+                </div>
+                <div class="flex justify-center items-center gap-10 m-4">
+                    <LinkButton :icon="editIcon" text="Edit" bgColor="bg-[#FFFFFF]" textColor="text-[#6F879C]" :to="`/sale-items/${saleItemId}/edit`" class="itbms-edit-button"/>
+                    <LinkButton :icon="deleteIcon" text="Delete" bgColor="bg-[#FFFFFF]" textColor="text-[#6F879C]" class="itbms-delete-button"/>
                 </div>
                 <div class="text-sm space-y-1 flex justify-between mt-3">
                     <div class="flex gap-1">
