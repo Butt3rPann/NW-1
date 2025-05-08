@@ -27,7 +27,7 @@ const inputValue = defineModel()
             { ' border-red-400' : isNull }
         ]"
         >
-            <option disabled :value="{name: null}">{{ placeholder || 'Please select' }}</option>
+            <option disabled :value="{id:null, name: null}">{{ placeholder || 'Please select' }}</option>
             <option v-for="option in options" :key="option.id" :value="option">{{ option[property]}}</option>
         </select>
     </div>
