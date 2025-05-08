@@ -4,7 +4,7 @@ import Bag from '@/assets/images/bag.png'
 import ValueProps from '@/components/home/ValueProps.vue'
 import Genuine from '@/assets/images/genuine.png'
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
-import { getSaleItems } from '@/libs/fetchUtils'
+import { getItems } from '@/libs/fetchUtils'
 import { onMounted, ref} from 'vue'
 import Shipping from '@/assets/images/shipping.png'
 import Ticket from '@/assets/images/ticket.png'
@@ -13,7 +13,7 @@ const saleItems = ref([])
 
 onMounted(async () => {
     try {
-        saleItems.value = await getSaleItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
+        saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
         saleItems.value = saleItems.value.slice(-5).reverse()
     } catch (error) {
         console.log(error);

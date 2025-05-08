@@ -1,7 +1,7 @@
 <script setup>
 import LinkButton from '@/components/elements/LinkButton.vue';
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue';
-import { getSaleItems } from '@/libs/fetchUtils';
+import { getItems } from '@/libs/fetchUtils';
 import { onMounted, ref } from 'vue';
 import addIcon from '@/assets/images/add.png'
 
@@ -9,7 +9,7 @@ const saleItems = ref([])
 
 onMounted(async () => {
     try {
-        saleItems.value = await getSaleItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
+        saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
     } catch (error) {
         console.log(error);
     }

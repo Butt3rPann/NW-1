@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getSaleItemById } from '@/libs/fetchUtils.js'
+import { getItemById } from '@/libs/fetchUtils.js'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import ItemDetailRow from '@/components/sale-item/sale-item-detail/ItemDetailRow.vue'
 import LinkButton from '@/components/elements/LinkButton.vue'
@@ -13,9 +13,9 @@ const { params: { saleItemId } } = useRoute()
 
 const selectedItem = ref({})
 
-async function getItemById() {
+async function getSaleItemById() {
     try {
-        selectedItem.value = await getSaleItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
+        selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
         selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn);
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
     } catch (error) {
@@ -24,7 +24,7 @@ async function getItemById() {
 }
 
 onMounted(() => {
-    getItemById()
+    getSaleItemById()
 })
 
 const phones = ref({

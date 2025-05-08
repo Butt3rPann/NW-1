@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
-import { getSaleItems } from '@/libs/fetchUtils';
+import { getItems } from '@/libs/fetchUtils';
 import FormSelect from '@/components/elements/FormSelect.vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import FormButton from '@/components/elements/FormButton.vue'
@@ -19,7 +19,7 @@ const props = defineProps({
 const newSaleItem = ref({
     model: props.saleItemData?.model || null,
     brand: {
-        id: props.saleItemData?.brand?.id || null,
+        // id: props.saleItemData?.brand?.id || null,
         name: props.saleItemData?.brand?.name || null
     },
     description: props.saleItemData?.description || null,
@@ -58,7 +58,7 @@ const brands = ref([])
 
 onMounted(async () => {
     try {
-        brands.value = await getSaleItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
+        brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
     } catch (error) {
         console.log(error);
     }
