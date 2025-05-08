@@ -1,25 +1,25 @@
-async function getSaleItems(url) {
+async function getItems(url) {
   try {
     const data = await fetch(url)
     const items = await data.json()
     return items
   } catch (error) {
-    throw new Error('no sale item')
+    throw new Error('no item')
   }
 }
 
-async function getSaleItemById(url, id) {
+async function getItemById(url, id) {
   try {
     const data = await fetch(`${url}/${id}`)
     const item = await data.json()
     return item
   } catch (error) {
     if (data.status === 404) return undefined
-    throw new Error('The requested sale item does not exist')
+    throw new Error('The requested item does not exist')
   }
 }
 
-async function addSaleItem(url, newSaleItem) {
+async function addItem(url, newItem) {
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -27,14 +27,32 @@ async function addSaleItem(url, newSaleItem) {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        ...newSaleItem
+        ...newItem
       })
     })
     const addedItem = await res.json()
     return addedItem
   } catch (error) {
-    throw new Error('can not add your sale item')
+    throw new Error('can not add your item')
   }
 }
 
-export { getSaleItems, getSaleItemById, addSaleItem }
+async function editItem(url, id, editItem) {
+  try {
+    const res = await fetch(`${url}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...editItem
+      })
+    })
+    const editedItem = await res.json()
+    return editedItem
+  } catch (error) {
+    throw new Error("can not edit your item");
+  }
+}
+
+export { getItems, getItemById, addItem , editItem }
