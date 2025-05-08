@@ -4,6 +4,7 @@ import SaleItemCard from '@/components/sale-item/SaleItemCard.vue';
 import { getItems } from '@/libs/fetchUtils';
 import { onMounted, ref } from 'vue';
 import addIcon from '@/assets/images/add.png'
+import PopupMessage from '@/components/elements/PopupMessage.vue';
 
 const saleItems = ref([])
 
@@ -14,9 +15,17 @@ onMounted(async () => {
         console.log(error);
     }
 })
+
+const isShowPopup = ref(true)
+
+function closePopup(){
+    isShowPopup.value = false
+}
 </script>
  
 <template>
+<div class="relative">
+    <PopupMessage v-if="isShowPopup" message="The sale item has been successfully added" @close-popup="closePopup"/>
     <div class="font-rubik mx-35 mb-15 space-y-7 mt-30">
         <div class="flex justify-between items-center">
             <p class="text-[3.5rem] font-bold text-[#332A1E]">Products</p>
@@ -64,6 +73,8 @@ onMounted(async () => {
             <p class="text-xl text-[#ABBCC9]">no sale item</p>
         </div>
     </div>
+</div>
+
 </template>
  
 <style scoped>
