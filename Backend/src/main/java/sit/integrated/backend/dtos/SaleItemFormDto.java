@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 @Data
 public class SaleItemFormDto {
+    private Integer id;
     private String model;
     private BrandDto brand;
     private String description;
