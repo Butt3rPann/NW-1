@@ -44,7 +44,7 @@ const handleEditSaleItem = async (editedItem) => {
     try {
         await editSaleItem(editedItem)
         disabled.value = true
-        router.push(`/sale-items/${id}`)
+        router.push({ path: `/sale-items/${id}`, query: { edited: 'true' } })
     } catch (error) {
         console.log(error)
     }
