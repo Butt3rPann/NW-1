@@ -33,12 +33,18 @@ public class SaleItemController {
 
     @GetMapping("/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDto> getSaleItemDetail(@PathVariable Integer id) {
-        SaleItem saleItem = saleItemService.getSaleIteDetail(id);
+        SaleItem saleItem = saleItemService.getSaleItemDetail(id);
         return ResponseEntity.ok(modelMapper.map(saleItem, SaleItemDetailDto.class));
     }
 
     @PostMapping("/sale-items")
     public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestBody SaleItemFormDto formDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItemService.createSaleItem(formDto));
+    }
+
+    @PutMapping("/sale-items/{id}")
+    public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemFormDto formDto) {
+        SaleItemDetailDto updatedItem = saleItemService.updateSaleItem(id, formDto);
+        return ResponseEntity.ok(updatedItem);
     }
 }
