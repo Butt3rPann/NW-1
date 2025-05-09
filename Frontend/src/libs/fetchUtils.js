@@ -55,4 +55,15 @@ async function editItem(url, id, editItem) {
   }
 }
 
-export { getItems, getItemById, addItem , editItem }
+async function deleteItemById(url, id) {
+  try {
+    const res = await fetch(`${url}/${id}`, {
+      method: 'DELETE'
+    })
+    return res.status
+  } catch (error) {
+    throw new Error('can not delete your item')
+  }
+}
+
+export { getItems, getItemById, addItem , editItem , deleteItemById}
