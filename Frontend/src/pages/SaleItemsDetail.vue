@@ -8,10 +8,10 @@ import LinkButton from '@/components/elements/LinkButton.vue'
 import backArrow from '@/assets/images/backArrow.png'
 import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue'
 import { formatLocalTime } from '@/libs/datetimeUtils'
-import deleteIcon from "@/assets/images/delete.png";
 import editIcon from "@/assets/images/edit.png";
 import router from '@/router'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
+import trashIcon from "@/assets/images/trash.png"
 
 const { params: { saleItemId } } = useRoute()
 
@@ -106,7 +106,7 @@ if (route.query.edited === 'true') {
                 </div>
                 <div class="flex justify-center items-center gap-10 m-4">
                     <LinkButton :icon="editIcon" text="Edit" bgColor="bg-[#FFFFFF]" textColor="text-[#6F879C]" :to="`/sale-items/${saleItemId}/edit`" class="itbms-edit-button"/>
-                    <LinkButton :icon="deleteIcon" text="Delete" bgColor="bg-[#FFFFFF]" textColor="text-[#6F879C]" class="itbms-delete-button"/>
+                    <LinkButton :icon="trashIcon" text="Delete" bgColor="bg-[#FFFFFF]" textColor="text-[#D27B7B]" class="itbms-delete-button border-2 border-[#D27B7B]"/>
                 </div>
                 <div class="text-sm space-y-1 flex justify-between mt-3">
                     <div class="flex gap-1">
