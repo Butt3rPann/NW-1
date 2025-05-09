@@ -1,15 +1,38 @@
 <script setup>
+import { ref } from 'vue';
+
 const props = defineProps({
   message: {
     type: String,
     required: true,
   },
+  isShowPopup: {
+    type: Boolean,
+    require: true
+  }
 })
-const emit = defineEmits(['closePopup'])
+
+const displayPopup = ref(props.isShowPopup)
+
+function closePopup(){
+    displayPopup.value = false
+}
+
+setTimeout(() => {
+  displayPopup.value = false
+}, 2500)
+
+const fadeOut = ref(false)
+
+setTimeout(() => {
+  fadeOut.value = true
+}, 2000)
+
 </script>
 
 <template>
-  <div class="flex absolute rounded-sm shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] overflow-hidden bg-[#54b15f] right-10 top-(-5) z-10">
+  <div v-if="displayPopup" class="flex absolute rounded-sm shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] overflow-hidden bg-[#54b15f] right-5 top-0 z-10"
+    :class="{ 'animate-fade-out' : fadeOut }">
     <div class="flex bg-white ml-2 justify-center items-center gap-3 p-3">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -24,9 +47,9 @@ const emit = defineEmits(['closePopup'])
       </svg>
       <div>
         <p class="text-lg font-semibold text-[#54b15f]">Success</p>
-        <p class="text-gray-700">{{ message }}</p>
+        <p class="text-gray-700 itbms-message">{{ message }}</p>
       </div>
-      <button @click="$emit('closePopup')" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+      <button @click="closePopup" class="text-gray-500 hover:text-gray-700 focus:outline-none">
         <svg
           class="w-5 h-5"
           fill="none"
@@ -45,3 +68,18 @@ const emit = defineEmits(['closePopup'])
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 0.5s forwards;
+}
+</style>

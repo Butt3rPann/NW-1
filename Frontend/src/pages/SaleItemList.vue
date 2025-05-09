@@ -5,8 +5,19 @@ import { getItems } from '@/libs/fetchUtils';
 import { onMounted, ref } from 'vue';
 import addIcon from '@/assets/images/add.png'
 import PopupMessage from '@/components/elements/PopupMessage.vue';
+import router from '@/router';
+import { useRoute } from 'vue-router';
 
 const saleItems = ref([])
+
+const route = useRoute()
+
+const isShowPopup = ref(false)
+
+if (route.query.added === 'true') {
+    router.replace({ query: { } })
+    isShowPopup.value = true
+}
 
 onMounted(async () => {
     try {
@@ -16,16 +27,11 @@ onMounted(async () => {
     }
 })
 
-const isShowPopup = ref(true)
-
-function closePopup(){
-    isShowPopup.value = false
-}
 </script>
  
 <template>
 <div class="relative">
-    <PopupMessage v-if="isShowPopup" message="The sale item has been successfully added" @close-popup="closePopup"/>
+    <PopupMessage message="The sale item has been successfully added" :isShowPopup="isShowPopup" class="fixed mt-25"/>
     <div class="font-rubik mx-35 mb-15 space-y-7 mt-30">
         <div class="flex justify-between items-center">
             <p class="text-[3.5rem] font-bold text-[#332A1E]">Products</p>

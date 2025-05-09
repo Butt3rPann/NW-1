@@ -16,11 +16,13 @@ const addNewSaleItem = async (newSaleItemData) => {
 
 const disabled = ref(false)
 
+const emit = defineEmits(['addSuccess'])
+
 const handleNewSaleItem = async (newSaleItem) => {
     try {
         await addNewSaleItem(newSaleItem);
         disabled.value = true
-        router.push('/sale-items')
+        router.push({ name: 'SaleItems', query: { added: 'true' } })
     } catch (error) {
         console.log(error)
     }
