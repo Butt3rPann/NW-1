@@ -47,4 +47,10 @@ public class SaleItemController {
         SaleItemDetailDto updatedItem = saleItemService.updateSaleItem(id, formDto);
         return ResponseEntity.ok(updatedItem);
     }
+
+    @DeleteMapping("/sale-items/{id}")
+    public ResponseEntity<Void> deleteSaleItem(@PathVariable Integer id) {
+        saleItemService.deleteSaleItem(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

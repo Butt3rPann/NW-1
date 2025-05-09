@@ -21,6 +21,12 @@ public class SaleItemService {
     @Autowired
     ModelMapper modelMapper;
 
+    public void isSaleItemExists(Integer id) {
+        if(!saleItemRepository.existsById(id)) {
+            throw new ResourceNotFoundException("SaleItem not found for this id :: " + id);
+        }
+    }
+
     public List<SaleItem> getSaleItems() {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
@@ -34,18 +40,15 @@ public class SaleItemService {
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
     }
 
-//    public SaleItemDetailDto updateSaleItem(Integer id, SaleItemFormDto formDto) {
-//        SaleItem existingItem = saleItemRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("SaleItem not found for this id :: " + id));
-//        modelMapper.map(formDto, existingItem);
-//        return modelMapper.map(saleItemRepository.saveAndFlush(existingItem), SaleItemDetailDto.class);
-//    }
     public SaleItemDetailDto updateSaleItem(Integer id, SaleItemFormDto formDto) {
-        if(!saleItemRepository.existsById(id)) {
-            throw new ResourceNotFoundException("SaleItem not found for this id :: " + id);
-        }
+        isSaleItemExists(id);
         formDto.setId(id);
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
+    }
+
+    public void deleteSaleItem (Integer id) {
+        isSaleItemExists(id);
+        saleItemRepository.deleteById(id);
     }
 }
