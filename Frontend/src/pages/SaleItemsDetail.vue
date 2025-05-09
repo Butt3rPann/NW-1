@@ -10,6 +10,8 @@ import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue'
 import { formatLocalTime } from '@/libs/datetimeUtils'
 import deleteIcon from "@/assets/images/delete.png";
 import editIcon from "@/assets/images/edit.png";
+import router from '@/router'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const { params: { saleItemId } } = useRoute()
 
@@ -46,9 +48,19 @@ const changeMainImg = (index) => {
     phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
 }
 
+const route = useRoute()
+
+const isShowPopup = ref(false)
+
+if (route.query.edited === 'true') {
+    router.replace({ query: { } })
+    isShowPopup.value = true
+}
 </script>
 
 <template>
+<div class="relative">
+    <PopupMessage message="The sale item has been updated" :isShowPopup="isShowPopup" class="fixed mt-25"/>
     <div v-if="selectedItem?.id" class="p-21 pt-9 mt-21 font-rubik">
         <LinkButton :icon="backArrow" alt="backArrow" text="Back to product list" :to="'/sale-items'"
             textColor="text-[#6F879C]" bgColor="bg-transparent"
@@ -110,6 +122,7 @@ const changeMainImg = (index) => {
         </div>
     </div>
     <SaleItemNotFound v-else/>
+</div>
 </template>
 
 <style scoped></style>
