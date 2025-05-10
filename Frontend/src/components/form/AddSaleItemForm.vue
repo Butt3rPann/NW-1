@@ -20,6 +20,8 @@ const emit = defineEmits(['addSuccess'])
 
 const handleNewSaleItem = async (newSaleItem) => {
     try {
+        console.log(newSaleItem);
+        
         await addNewSaleItem(newSaleItem);
         disabled.value = true
         router.push({ name: 'SaleItems', query: { added: 'true' } })

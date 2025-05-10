@@ -58,10 +58,13 @@ if (route.query.edited === 'true') {
     isShowPopup.value = true
 }
 
+const showNotFound = ref(false)
+
 async function deleteSaleItem(){
     try {
-        await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
-        router.push({name: 'SaleItems', query: {deleted: 'true'}})
+        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
+        if (status === 404) showNotFound.value = true
+        else router.push({name: 'SaleItems', query: {deleted: 'true'}})
     } catch (error) {
         console.log(error);  
     }
@@ -77,7 +80,7 @@ function closeDelConfirm() {
 <template>
 <div>
     <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed mt-25"/>
-    <div v-if="selectedItem?.id">
+    <div v-if="selectedItem?.id && !showNotFound">
         <div class="p-21 pt-9 mt-21 font-rubik relative">
             <LinkButton :icon="backArrow" alt="backArrow" text="Back to product list" :to="'/sale-items'"
                 textColor="text-[#6F879C]" bgColor="bg-transparent"
