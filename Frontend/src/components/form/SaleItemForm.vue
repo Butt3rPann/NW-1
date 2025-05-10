@@ -111,7 +111,7 @@ const changeMainImg = (index) => {
                     </div>
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text"
-                            placeholder="Enter model" className="itbms-model" :isNull="isNull.model"></FormInput>
+                            placeholder="Enter model" className="itbms-model" :isNull="isNull.model" :maxlength="60"></FormInput>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
