@@ -7,7 +7,6 @@ defineProps({
     bgColor: String,
     textColor: String,
     borderColor: String,
-    hover: String,
     className: String,
     disabled: Boolean
 })
