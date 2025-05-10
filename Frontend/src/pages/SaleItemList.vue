@@ -14,7 +14,14 @@ const route = useRoute()
 
 const isShowPopup = ref(false)
 
+const message = ref('')
+
 if (route.query.added === 'true') {
+    message.value = "The sale item has been successfully added."
+    router.replace({ query: { } })
+    isShowPopup.value = true
+} else if(route.query.deleted === 'true'){
+    message.value = "The sale item has been deleted."
     router.replace({ query: { } })
     isShowPopup.value = true
 }
@@ -31,7 +38,7 @@ onMounted(async () => {
  
 <template>
 <div class="relative">
-    <PopupMessage message="The sale item has been successfully added" :isShowPopup="isShowPopup" class="fixed mt-25"/>
+    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25"/>
     <div class="font-rubik mx-35 mb-15 space-y-7 mt-30">
         <div class="flex justify-between items-center">
             <p class="text-[3.5rem] font-bold text-[#332A1E]">Products</p>
