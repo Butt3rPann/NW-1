@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
     text: {
         type: String,
         required: true
@@ -10,6 +10,7 @@ defineProps({
     className: String,
     disabled: Boolean
 })
+
 </script>
  
 <template>

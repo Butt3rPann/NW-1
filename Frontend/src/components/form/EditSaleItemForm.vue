@@ -8,8 +8,6 @@ import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue';
 
 const router = useRouter()
 
-const disabled = ref(false)
-
 const { params: { id } } = useRoute()
 
 const saleItem = ref({})
@@ -30,26 +28,9 @@ async function editSaleItem(editedItem) {
     }
 }
 
-function isChange(oldValue, newValue) {
-    return (
-        oldValue.model !== newValue.model ||
-        oldValue.brandName !== newValue.brand.name ||
-        oldValue.description !== newValue.description ||
-        oldValue.price !== newValue.price ||
-        oldValue.ramGb !== (newValue.ramGb ?? null) ||
-        oldValue.screenSizeInch !== (newValue.screenSizeInch ?? null) ||
-        oldValue.quantity !== newValue.quantity ||
-        oldValue.storageGb !== (newValue.storageGb ?? null) ||
-        oldValue.color !== (newValue.color ?? null)
-    )
-}
-
 const handleEditSaleItem = async (editedItem) => {
-    if (!isChange(saleItem.value, editedItem)) return
-
     try {
         await editSaleItem(editedItem)
-        disabled.value = true
         router.push({ path: `/sale-items/${id}`, query: { edited: 'true' } })
     } catch (error) {
         console.log(error)
@@ -60,7 +41,7 @@ const handleEditSaleItem = async (editedItem) => {
 <template>
     <div>
         <SaleItemForm v-if="saleItem.id" @submitAction="handleEditSaleItem" :saleItemData="saleItem"
-            :path="`/sale-items/${id}`" :disabled="disabled" />
+            :path="`/sale-items/${id}`"/>
         <SaleItemNotFound v-else />
     </div>
 </template>

@@ -26,7 +26,7 @@ const navItems = [
                 :class="[route.path === item.path
                     ? 'border-b-[0.18vw]'
                     : 'hover:border-b-[0.18vw]',
-                    item.path === '/' ? 'itbms-home-button' : '']">
+                    item.path === '/sale-items' ? 'itbms-home-button' : '']">
                 {{ item.name }}
             </router-link>
         </div>

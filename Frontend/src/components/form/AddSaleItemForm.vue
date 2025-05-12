@@ -14,14 +14,11 @@ const addNewSaleItem = async (newSaleItemData) => {
     }
 }
 
-const disabled = ref(false)
-
 const emit = defineEmits(['addSuccess'])
 
 const handleNewSaleItem = async (newSaleItem) => {
     try {
         await addNewSaleItem(newSaleItem);
-        disabled.value = true
         router.push({ name: 'SaleItems', query: { added: 'true' } })
     } catch (error) {
         console.log(error)
@@ -31,7 +28,7 @@ const handleNewSaleItem = async (newSaleItem) => {
 
 <template>
     <div>
-        <SaleItemForm @submitAction="handleNewSaleItem" path="/sale-items" :disabled="disabled" />
+        <SaleItemForm @submitAction="handleNewSaleItem" path="/sale-items"/>
     </div>
 </template>
 

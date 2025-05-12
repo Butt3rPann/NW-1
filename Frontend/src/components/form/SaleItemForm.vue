@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import { getItems } from '@/libs/fetchUtils';
 import FormSelect from '@/components/elements/FormSelect.vue'
@@ -13,24 +13,42 @@ const emit = defineEmits(['submitAction'])
 
 const props = defineProps({
     saleItemData: Object,
-    disabled: Boolean,
     path: String
 })
 
+const brands = ref([])
+
+const oldSaleItem = ref(null)
+
+onMounted(async () => {
+    try {
+        brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
+
+        const brandObj = brands.value.find(b => b.name === props.saleItemData?.brandName)
+        newSaleItem.value.brand = brandObj || newSaleItem.value.brand
+
+        oldSaleItem.value = {...newSaleItem.value}
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const newSaleItem = ref({
-    model: props.saleItemData?.model || null,
+    model: props.saleItemData?.model || '',
     brand: {
         id: null,
         name: null
     },
-    description: props.saleItemData?.description || null,
-    price: props.saleItemData?.price || null,
-    ramGb: props.saleItemData?.ramGb || null,
-    screenSizeInch: props.saleItemData?.screenSizeInch || null,
-    quantity: props.saleItemData?.quantity || null,
-    storageGb: props.saleItemData?.storageGb || null,
-    color: props.saleItemData?.color || null
+    description: props.saleItemData?.description || '',
+    price: props.saleItemData?.price || '',
+    ramGb: props.saleItemData?.ramGb || '',
+    screenSizeInch: props.saleItemData?.screenSizeInch || '',
+    quantity: props.saleItemData?.quantity || '',
+    storageGb: props.saleItemData?.storageGb || '',
+    color: props.saleItemData?.color || ''
 })
+
+const disabled = ref(true)
 
 const isNull = ref({
     model: false,
@@ -40,38 +58,35 @@ const isNull = ref({
     quantity: false
 })
 
+watchEffect(() => {    
+    for (const key in isNull.value) {
+      if (key === 'brand') {
+        isNull.value.brand = !newSaleItem.value.brand?.id
+      } else {
+        isNull.value[key] = !newSaleItem.value[key]
+      }
+    }
+    
+    const hasEmptyField = Object.values(isNull.value).some(value => value === true)
+    const unchanged = JSON.stringify(newSaleItem.value) === JSON.stringify(oldSaleItem.value)
+
+    disabled.value = hasEmptyField || unchanged
+})
+
 function handleClick() {
     Object.keys(newSaleItem.value).forEach(key => {
-        if (newSaleItem.value[key] === null) {
+        if (newSaleItem.value[key] === '') {
             delete newSaleItem.value[key]
         }
     })
 
-    for (const key in isNull.value) {
-        if (key === 'brand') isNull.value.brand = !newSaleItem.value.brand.id
-        else isNull.value[key] = !newSaleItem.value[key]
-    }
-
-    if (Object.values(isNull.value).every(value => value === false))
-        emit('submitAction', newSaleItem.value)
+    disabled.value = true
+    emit('submitAction', newSaleItem.value)
 }
 
 const cancel = () => {
     router.push({ path: props.path })
 }
-
-const brands = ref([])
-
-onMounted(async () => {
-    try {
-        brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
-
-        const brandObj = brands.value.find(b => b.name === props.saleItemData?.brandName)
-        newSaleItem.value.brand = brandObj || newSaleItem.value.brand
-    } catch (error) {
-        console.log(error);
-    }
-})
 
 const phones = ref({
     mainImage: '/saleItemImage/demoImg1.png',
@@ -107,28 +122,26 @@ const changeMainImg = (index) => {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
                         <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands" property="name"
-                            placeholder="Select brand" className="itbms-brand" :isNull="isNull.brand"></FormSelect>
+                            placeholder="Select brand" className="itbms-brand"></FormSelect>
                     </div>
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text"
-                            placeholder="Enter model" className="itbms-model" :isNull="isNull.model" :maxlength="60"></FormInput>
+                            placeholder="Enter model" className="itbms-model" :maxlength="60"></FormInput>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number"
-                            placeholder="Enter price" className="itbms-price" :isNull="isNull.price"></FormInput>
+                            placeholder="Enter price" className="itbms-price"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.quantity" label="Quantity" :required="true" inputType="Number"
-                            placeholder="Enter quantity" className="itbms-quantity" :isNull="isNull.quantity">
-                        </FormInput>
+                            placeholder="Enter quantity" className="itbms-quantity"></FormInput>
                     </div>
                 </div>
                 <div class="grid gap-1.5">
                     <FormInput v-model="newSaleItem.description" label="Description" :required="true"
-                        inputType="textarea" placeholder="Enter product description" className="itbms-description"
-                        :isNull="isNull.description"></FormInput>
+                        inputType="textarea" placeholder="Enter product description" className="itbms-description"></FormInput>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="grid gap-1.5">
