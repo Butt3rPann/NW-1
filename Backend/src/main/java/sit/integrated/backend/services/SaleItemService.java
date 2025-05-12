@@ -36,6 +36,7 @@ public class SaleItemService {
     }
 
     public SaleItemDetailDto createSaleItem(SaleItemFormDto formDto) {
+	formDto.setId(null);
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
     }

@@ -18,13 +18,23 @@ public class SaleItemFormDto {
     private Integer quantity;
 
     public void setModel(String model) {
-        this.model = model.trim();
+        if (model == null || model.trim().isBlank())
+            this.model = null;
+        else
+            this.model = model.trim();
     }
     public void setDescription(String description) {
-        this.description = description.trim();
+        if (description == null || description.trim().isBlank())
+            this.description = null;
+        else
+            this.description = description.trim();
     }
     public void setColor(String color) {
-        this.color = color.trim();
+    	if (color == null || color.isBlank()) {
+		this.color = null;
+	} else {
+		this.color = color.trim();
+	}
     }
     public void setQuantity(Integer quantity) {
         if (quantity == null || quantity < 0) {
