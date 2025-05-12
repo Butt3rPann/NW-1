@@ -11,7 +11,6 @@ defineProps({
     },
     placeholder: String,
     className: String,
-    isNull: Boolean,
     maxlength: Number
 })
 
@@ -26,13 +25,11 @@ const inputValue = defineModel()
         </label>
         <textarea v-if="inputType === 'textarea'" v-model="inputValue" :placeholder="placeholder" @change="inputValue = inputValue?.trim()" :maxlength="maxlength"
             :class="[
-                `${className} appearance-none py-3 w-full text-base text-[#332A1E]/80 border-[#332A1E]/20 bg-white border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] min-h-[6rem]`,
-                { ' border-red-400' : isNull }
+                `${className} appearance-none py-3 w-full text-base text-[#332A1E]/80 border-[#332A1E]/20 bg-white border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] min-h-[6rem]`
             ]"/>
         <input v-else :type="inputType" :required="required" v-model="inputValue" :placeholder="placeholder" @change="inputValue = inputValue?.trim()" :maxlength="maxlength"
             :class="[
-                `${className} h-[2.75rem] appearance-none w-full text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]`,
-                { ' border-red-400' : isNull }
+                `${className} h-[2.75rem] appearance-none w-full text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]`
             ]"/>
     </div>
 </template>
