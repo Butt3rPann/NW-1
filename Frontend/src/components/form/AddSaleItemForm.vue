@@ -2,7 +2,6 @@
 import { useRouter } from 'vue-router'
 import SaleItemForm from '@/components/form/SaleItemForm.vue'
 import { addItem } from '@/libs/fetchUtils'
-import { ref } from 'vue'
 
 const router = useRouter()
 

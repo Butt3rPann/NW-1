@@ -54,8 +54,7 @@ const isNull = ref({
     model: false,
     brand: false,
     description: false,
-    price: false,
-    quantity: false
+    price: false
 })
 
 watchEffect(() => {    
@@ -135,7 +134,7 @@ const changeMainImg = (index) => {
                             placeholder="Enter price" className="itbms-price"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.quantity" label="Quantity" :required="true" inputType="Number"
+                        <FormInput v-model="newSaleItem.quantity" label="Quantity" inputType="Number"
                             placeholder="Enter quantity" className="itbms-quantity"></FormInput>
                     </div>
                 </div>
