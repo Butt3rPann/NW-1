@@ -11,11 +11,11 @@ import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.SaleItemService;
 import java.util.List;
-//import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import sit.integrated.backend.utils.ListMapper;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/v1")
 public class SaleItemController {
     @Autowired
