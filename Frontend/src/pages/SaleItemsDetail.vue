@@ -4,15 +4,15 @@ import { useRoute } from 'vue-router'
 import { deleteItemById, getItemById } from '@/libs/fetchUtils.js'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import ItemDetailRow from '@/components/sale-item/sale-item-detail/ItemDetailRow.vue'
-import LinkButton from '@/components/elements/LinkButton.vue'
-import backArrow from '@/assets/images/backArrow.png'
 import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue'
 import { formatLocalTime } from '@/libs/datetimeUtils'
-import editIcon from "@/assets/images/edit.png";
+import backArrowIcon from '@/assets/images/backArrow.png'
+import editIcon from "@/assets/images/edit.png"
+import trashIcon from "@/assets/images/trash.png"
 import router from '@/router'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
-import trashIcon from "@/assets/images/trash.png"
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
+import BaseButton from '@/components/elements/BaseButton.vue'
 
 const { params: { saleItemId } } = useRoute()
 
@@ -28,8 +28,8 @@ async function getSaleItemById() {
     }
 }
 
-onMounted(() => {
-    getSaleItemById()
+onMounted(async () => {
+    await getSaleItemById()
 })
 
 const phones = ref({
@@ -81,10 +81,10 @@ function closeDelConfirm() {
 <div>
     <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed mt-25"/>
     <div v-if="selectedItem?.id && !showNotFound">
-        <div class="p-21 pt-9 mt-21 font-rubik relative">
-            <LinkButton :icon="backArrow" alt="backArrow" text="Back to product list" :to="'/sale-items'"
-                textColor="text-[#6F879C]" bgColor="bg-transparent"
-                class="mb-7" />
+        <div class="px-21 mt-30 mb-15 font-rubik relative">
+            <router-link :to="{ name: 'SaleItems' }">
+                <BaseButton :icon="backArrowIcon" text="Back to product list" class="itbms-home-button mb-7"/>
+            </router-link>
             <div class="itbms-row flex justify-between ">
                 <div class="flex flex-col items-center mr-6">
                     <div class="bg-[#F0EDEC] w-119 h-129 rounded-2xl flex items-center justify-center overflow-hidden">
@@ -125,8 +125,10 @@ function closeDelConfirm() {
                         <ItemDetailRow label="Color" :value="selectedItem.color" valueClass="itbms-color" />
                     </div>
                     <div class="flex justify-center items-center gap-10 m-4">
-                        <LinkButton :icon="editIcon" text="Edit" bgColor="bg-[#FFFFFF]" textColor="text-[#6F879C]" :to="`/sale-items/${saleItemId}/edit`" class="itbms-edit-button"/>
-                        <LinkButton :icon="trashIcon" text="Delete" bgColor="bg-[#FFFFFF]" textColor="text-[#D27B7B]" class="itbms-delete-button border-2 border-[#D27B7B]" @click="showDelConfirm = true"/>
+                        <router-link :to="{ name: 'EditSaleItem', params: { id: saleItemId } }">
+                            <BaseButton :icon="editIcon" text="Edit" class="itbms-edit-button"/>
+                        </router-link>
+                        <BaseButton @click="showDelConfirm = true" :icon="trashIcon" text="Delete" textColor="text-[#D27B7B]" borderColor="border-[#D27B7B]" class="itbms-delete-button"/>
                     </div>
                     <div class="text-sm space-y-1 flex justify-between mt-3">
                         <div class="flex gap-1">

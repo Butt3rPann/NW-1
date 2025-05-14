@@ -10,7 +10,6 @@ import sit.integrated.backend.dtos.BrandFormDto;
 import sit.integrated.backend.entities.Brand;
 import sit.integrated.backend.services.BrandService;
 import sit.integrated.backend.utils.ListMapper;
-
 import java.util.List;
 
 @RestController

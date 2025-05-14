@@ -14,7 +14,7 @@ defineProps({
 </script>
  
 <template>
-    <ListModel :items="saleItems" :view="view">
+    <ListModel :items="saleItems" view="gallery">
         <template #saleItem="slotProps">
             <div class="p-3 w-fit">
                 <p class="itbms-brand text-[#A4A4A3] font-light text-[0.7rem] ">{{ slotProps.itemInList.brandName }}</p>

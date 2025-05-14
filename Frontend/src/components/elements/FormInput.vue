@@ -21,7 +21,6 @@ const inputValue = defineModel()
     <div class="font-rubik flex flex-col">
         <label class="text-[#332A1E] font-medium text-lg">{{ label }}
             <span v-if="required === true" class="text-red-700">*</span>
-            <span v-if="isNull" class=" text-xs ml-3 font-normal text-red-400">This field is required</span>
         </label>
         <textarea v-if="inputType === 'textarea'" v-model="inputValue" :placeholder="placeholder" @change="inputValue = inputValue?.trim()" :maxlength="maxlength"
             :class="[

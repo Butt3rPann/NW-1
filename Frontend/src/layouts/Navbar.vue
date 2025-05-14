@@ -4,11 +4,11 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Products', path: '/sale-items' },
-    { name: 'Promotions', path: '' },
-    { name: 'About Us', path: '' },
-    { name: 'Contact Us', path: '' }
+    { name: 'Home', pathname: 'Homepage' },
+    { name: 'Products', pathname: 'SaleItems' },
+    { name: 'Promotions', pathname: '' },
+    { name: 'About Us', pathname: '' },
+    { name: 'Contact Us', pathname: '' }
 ]
 </script>
 
@@ -20,13 +20,12 @@ const navItems = [
                 <p class="font-bold text-[1.4rem]">ITB-MSHOP</p>
             </div>    
         </router-link>
-        <div class="flex items-center text-lg font-medium">
-            <router-link v-for="item in navItems" :key="item.path" :to="item.path"
-                class="m-[2.5vw] p-[0.3vw] transition-all duration-150" 
-                :class="[route.path === item.path
-                    ? 'border-b-[0.18vw]'
-                    : 'hover:border-b-[0.18vw]',
-                    item.path === '/sale-items' ? 'itbms-home-button' : '']">
+        <div class="flex items-center text-lg font-medium gap-14">
+            <router-link v-for="item in navItems" :key="item.name" :to="{ name: item.pathname }"
+                class="p-1 transition-all duration-150" 
+                :class="route.name === item.pathname
+                    ? 'border-b-2'
+                    : 'hover:border-b-2'">
                 {{ item.name }}
             </router-link>
         </div>

@@ -4,20 +4,17 @@ import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.v
 import { getItems } from '@/libs/fetchUtils';
 import FormSelect from '@/components/elements/FormSelect.vue'
 import FormInput from '@/components/elements/FormInput.vue'
-import FormButton from '@/components/elements/FormButton.vue'
 import { useRouter } from 'vue-router';
-
-const router = useRouter()
-
-const emit = defineEmits(['submitAction'])
+import BaseButton from '../elements/BaseButton.vue';
 
 const props = defineProps({
     saleItemData: Object,
     path: String
 })
 
+const router = useRouter()
+const emit = defineEmits(['submitAction'])
 const brands = ref([])
-
 const oldSaleItem = ref(null)
 
 onMounted(async () => {
@@ -49,7 +46,6 @@ const newSaleItem = ref({
 })
 
 const disabled = ref(true)
-
 const isNull = ref({
     model: false,
     brand: false,
@@ -59,11 +55,10 @@ const isNull = ref({
 
 watchEffect(() => {    
     for (const key in isNull.value) {
-      if (key === 'brand') {
+      if (key === 'brand')
         isNull.value.brand = !newSaleItem.value.brand?.id
-      } else {
+      else
         isNull.value[key] = !newSaleItem.value[key]
-      }
     }
     
     const hasEmptyField = Object.values(isNull.value).some(value => value === true)
@@ -74,9 +69,8 @@ watchEffect(() => {
 
 function handleClick() {
     Object.keys(newSaleItem.value).forEach(key => {
-        if (newSaleItem.value[key] === '') {
+        if (newSaleItem.value[key] === '')
             delete newSaleItem.value[key]
-        }
     })
 
     disabled.value = true
@@ -106,8 +100,8 @@ const changeMainImg = (index) => {
 </script>
 
 <template>
-    <div class="flex justify-between items-center p-[3rem] pt-[7rem] mt-5 mb-2">
-        <div class="flex flex-col items-center mr-[1.7vw]">
+    <div class="flex gap-15">
+        <div class="flex flex-col items-center">
             <div class="bg-[#F0EDEC] w-[30vw] h-[33vw] rounded-2xl flex items-center justify-center">
                 <img :src="phones.mainImage" alt="Selected Phone" class="h-[24vw]">
             </div>
@@ -161,10 +155,8 @@ const changeMainImg = (index) => {
                         className="itbms-color"></FormInput>
                 </div>
                 <div class="flex gap-4 pt-2">
-                    <FormButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white"
-                        className="itbms-save-button" :disabled="disabled"></FormButton>
-                    <FormButton @click="cancel" text="Cancel" bgColor="transparent" textColor="text-[#6F879C]"
-                        className="itbms-cancel-button" borderColor="border-2 border-[#6F879C]"></FormButton>
+                    <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#6F879C]" class="itbms-save-button" :disabled="disabled"/>
+                    <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button"/>
                 </div>
             </div>
         </div>

@@ -11,7 +11,6 @@ import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.SaleItemService;
 import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import sit.integrated.backend.utils.ListMapper;
 
 @RestController
@@ -29,6 +28,12 @@ public class SaleItemController {
     public ResponseEntity<List<SaleItemDto>> getSaleItem() {
         List<SaleItem> saleItems = saleItemService.getSaleItems();
         return ResponseEntity.ok(listMapper.mapList(saleItems, SaleItemDto.class, modelMapper));
+    }
+
+    @GetMapping("/sale-items/list")
+    public ResponseEntity<List<SaleItemDetailDto>> getSaleItemList() {
+        List<SaleItem> saleItems = saleItemService.getSaleItems();
+        return ResponseEntity.ok(listMapper.mapList(saleItems, SaleItemDetailDto.class, modelMapper));
     }
 
     @GetMapping("/sale-items/{id}")
