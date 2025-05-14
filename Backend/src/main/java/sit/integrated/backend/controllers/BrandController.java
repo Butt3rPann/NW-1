@@ -2,6 +2,7 @@ package sit.integrated.backend.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sit.integrated.backend.dtos.BrandDto;
@@ -35,5 +36,10 @@ public class BrandController {
         BrandFormDto brandFormDto = modelMapper.map(brand, BrandFormDto.class);
         brandFormDto.setSaleItemCount(brand.getSaleItems().size());
         return ResponseEntity.ok(brandFormDto);
+    }
+
+    @PostMapping("/brands")
+    public ResponseEntity<BrandFormDto> createBrand(@RequestBody BrandFormDto brandFormDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(brandService.createBrand(brandFormDto));
     }
 }
