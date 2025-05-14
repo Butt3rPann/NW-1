@@ -29,8 +29,8 @@ defineEmits(['delete', 'close'])
                 <p class="text-[#332A1E]/80 itbms-message">{{ message }}</p>
             </div>
             <div class=" space-x-7">
-                <button class="itbms-cancel-button bg-white text-[#332A1E]/80 border-2 border-[#332A1E]/70 rounded-md w-30 py-2 place-content-center" @click="$emit('close')">Cancel</button>
-                <button class="itbms-confirm-button bg-[#DC2524] border-2 border-[#DC2524] text-white rounded-md w-30 py-2 place-content-center" @click="$emit('delete')">Delete</button>
+                <button class="itbms-cancel-button bg-white text-[#332A1E]/80 border-2 border-[#332A1E]/70 rounded-md w-30 py-2 place-content-center cursor-pointer" @click="$emit('close')">Cancel</button>
+                <button class="itbms-confirm-button bg-[#DC2524] border-2 border-[#DC2524] text-white rounded-md w-30 py-2 place-content-center cursor-pointer" @click="$emit('delete')">Delete</button>
             </div>
         </div>
     </div>

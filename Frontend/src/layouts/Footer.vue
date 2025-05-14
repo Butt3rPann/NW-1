@@ -49,7 +49,7 @@ const socialIcons = [facebookIcon, twitterIcon, igIcon, youtubeIcon]
             <div v-for="section in footerSections" :key="section.title">
                 <p class="font-bold text-xl mb-3">{{ section.title }}</p>
                 <template v-for="item in section.items" :key="item">
-                    <router-link v-if="item === 'All Products'" to="/sale-items"
+                    <router-link v-if="item === 'All Products'" :to="{ name: 'SaleItems' }"
                         class="text-base mb-1 hover:text-[#334362] cursor-pointer transition-colors duration-150 block">
                         {{ item }}
                     </router-link>

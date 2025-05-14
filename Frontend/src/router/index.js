@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import SaleItemList from "@/pages/SaleItemList.vue";
+import SaleItemsGallery from "@/pages/SaleItemGallery.vue";
 import SaleItemsDetail from "@/pages/SaleItemsDetail.vue";
 import Homepage from "@/pages/Homepage.vue";
 import AddSaleItemForm from "@/components/form/AddSaleItemForm.vue";
 import EditSaleItemForm from "@/components/form/EditSaleItemForm.vue";
+import SaleItemList from "@/pages/SaleItemList.vue";
 
 const history = createWebHistory()
 const routes = [
@@ -15,7 +16,7 @@ const routes = [
     {
         path: '/sale-items',
         name: 'SaleItems',
-        component: SaleItemList
+        component: SaleItemsGallery
     },
     {
         path: '/sale-items/:saleItemId',
@@ -31,6 +32,16 @@ const routes = [
         path: '/sale-items/:id/edit',
         name: 'EditSaleItem',
         component: EditSaleItemForm
+    },
+    {
+        path: '/sale-items/list',
+        name: 'SaleItemsList',
+        component: SaleItemList
+    },
+    {
+        path: '/brands',
+        name: 'BrandList',
+        component: SaleItemList
     },
 ]
 const router = createRouter({history,routes})
