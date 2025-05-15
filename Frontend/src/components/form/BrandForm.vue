@@ -10,7 +10,7 @@ const emit = defineEmits(['submitAction'])
 
 const props = defineProps({
     brandData: Object,
-    path: String
+    pathName: String
 })
 
 const oldBrand = ref(null)
@@ -36,7 +36,7 @@ function handleClick() {
 }
 
 const cancel = () => {
-    router.push({ path: props.path })
+    router.push({ name: props.pathName })
 }
 
 </script>

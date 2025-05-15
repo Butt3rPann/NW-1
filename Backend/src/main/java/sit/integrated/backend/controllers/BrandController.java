@@ -11,6 +11,7 @@ import sit.integrated.backend.entities.Brand;
 import sit.integrated.backend.services.BrandService;
 import sit.integrated.backend.utils.ListMapper;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1")
@@ -27,6 +28,17 @@ public class BrandController {
     public ResponseEntity<List<BrandDto>> getAllBrands() {
         List<Brand> brands = brandService.getAllBrands();
         return ResponseEntity.ok(listMapper.mapList(brands,BrandDto.class, modelMapper));
+    }
+
+    @GetMapping("/brands/list")
+    public ResponseEntity<List<BrandFormDto>> getAllBrandList() {
+        List<Brand> brands = brandService.getAllBrandsList();
+        List<BrandFormDto> brandDtos = brands.stream().map(brand -> {
+            BrandFormDto brandDto = modelMapper.map(brand, BrandFormDto.class);
+            brandDto.setSaleItemCount(brand.getSaleItems().size());
+            return brandDto;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(brandDtos);
     }
 
     @GetMapping("/brands/{id}")
