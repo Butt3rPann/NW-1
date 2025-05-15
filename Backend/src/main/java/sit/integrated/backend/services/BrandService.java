@@ -2,19 +2,13 @@ package sit.integrated.backend.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import sit.integrated.backend.controllers.BrandController;
-import sit.integrated.backend.dtos.BrandDto;
 import sit.integrated.backend.dtos.BrandFormDto;
 import sit.integrated.backend.entities.Brand;
 import sit.integrated.backend.exceptions.DuplicateBrandException;
 import sit.integrated.backend.repositories.BrandRepository;
-
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
