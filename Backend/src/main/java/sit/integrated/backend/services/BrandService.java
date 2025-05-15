@@ -37,6 +37,7 @@ public class BrandService {
         if (brandRepository.existsBrandsByName(brandFormDto.getName())) {
             throw new DuplicateBrandException("Brand name already exists.");
         }
+        brandFormDto.setId(null);
         Brand brand = modelMapper.map(brandFormDto, Brand.class);
         if (brand.getIsActive() == null) {
             brand.setIsActive(true);
