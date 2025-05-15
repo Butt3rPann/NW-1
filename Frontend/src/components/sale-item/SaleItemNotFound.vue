@@ -7,11 +7,11 @@ import BaseButton from '../elements/BaseButton.vue';
  
 <template>
     <div class="flex flex-row items-center justify-center h-screen bg-white font-rubik">
-        <img src="../../assets/images/product-not-found.png" alt="Product Not Found"
+        <img src="../../assets/images/product-not-found.png"
             class="w-170 h-auto mr-17" />
         <div class="text-left">
             <p class="text-[3.5rem] font-bold text-[#332A1E] leading-tight">
-                <span>Product</span><br/>
+                <span>Sale Item</span><br/>
                 <span>Not Found</span>
             </p>
             <p class="itbms-message text-[1.4rem] text-[#332A1E] mt-3 mb-6">The requested sale item does not exist.</p>
