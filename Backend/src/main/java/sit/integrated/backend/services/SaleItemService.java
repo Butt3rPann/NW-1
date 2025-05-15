@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.SaleItemDetailDto;
 import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.entities.SaleItem;
@@ -35,12 +36,14 @@ public class SaleItemService {
         return saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("SaleItem not found for this id :: " + id));
     }
 
+    @Transactional
     public SaleItemDetailDto createSaleItem(SaleItemFormDto formDto) {
 	formDto.setId(null);
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
     }
 
+    @Transactional
     public SaleItemDetailDto updateSaleItem(Integer id, SaleItemFormDto formDto) {
         isSaleItemExists(id);
         formDto.setId(id);

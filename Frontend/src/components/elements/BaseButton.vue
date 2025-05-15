@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
   icon: String,
   text: String,
   to: String,
@@ -20,10 +20,11 @@ defineProps({
 </script>
 
 <template>
-    <button :class="[
-        'flex items-center py-3 px-4 border-2 w-fit rounded-md hover:scale-103 transition-scale ease-in-out duration-300',
-        bgColor,
-        borderColor,
+    <button 
+      :class="[
+        'flex items-center justify-center py-3 px-4 border-2 w-fit rounded-md hover:scale-103 transition-scale ease-in-out duration-300',
+        text === 'Save' ? (disabled ? 'bg-[#6F879C]/50 cursor-not-allowed border-borderColor border-transparent' : 'bg-[#4bbd80] border-transparent') : bgColor,
+        borderColor
     ]">
         <img v-if="icon" :src="icon" alt="Icon" class="w-5.5 mr-2" />
         <p :class="[textColor, 'font-semibold text-base']">{{ text }}</p>

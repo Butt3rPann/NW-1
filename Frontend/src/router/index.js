@@ -5,7 +5,6 @@ import Homepage from "@/pages/Homepage.vue";
 import AddSaleItemForm from "@/components/form/AddSaleItemForm.vue";
 import EditSaleItemForm from "@/components/form/EditSaleItemForm.vue";
 import SaleItemList from "@/pages/SaleItemList.vue";
-
 const history = createWebHistory()
 const routes = [
     {
