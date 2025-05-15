@@ -26,13 +26,13 @@ public class BrandController {
 
     @GetMapping("/brands")
     public ResponseEntity<List<BrandDto>> getAllBrands() {
-        List<Brand> brands = brandService.getAllBrands();
+        List<Brand> brands = brandService.getAllBrands("name", "ASC");
         return ResponseEntity.ok(listMapper.mapList(brands,BrandDto.class, modelMapper));
     }
 
     @GetMapping("/brands/list")
     public ResponseEntity<List<BrandFormDto>> getAllBrandList() {
-        List<Brand> brands = brandService.getAllBrandsList();
+        List<Brand> brands = brandService.getAllBrands("id", "ASC");
         List<BrandFormDto> brandDtos = brands.stream().map(brand -> {
             BrandFormDto brandDto = modelMapper.map(brand, BrandFormDto.class);
             brandDto.setSaleItemCount(brand.getSaleItems().size());

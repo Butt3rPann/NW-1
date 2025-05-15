@@ -10,7 +10,6 @@ const emit = defineEmits(['addSuccess'])
 const handleNewBrand = async (newBrand) => {
     try {
         await addItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, newBrand)
-        // console.log('success');
         router.push({ name: 'BrandList', query: { added: 'true' } })
     } catch (error) {
         console.log(error)

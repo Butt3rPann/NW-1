@@ -24,12 +24,9 @@ public class BrandService {
         }
     }
 
-    public List<Brand> getAllBrandsList() {
-        return brandRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
-
-    public List<Brand> getAllBrands() {
-        return brandRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    public List<Brand> getAllBrands(String sortBy, String direction) {
+        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
+        return brandRepository.findAll(Sort.by(sortDirection, sortBy));
     }
 
     public Brand getBrandById(Integer id) {
