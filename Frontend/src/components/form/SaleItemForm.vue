@@ -9,7 +9,8 @@ import BaseButton from '../elements/BaseButton.vue';
 
 const props = defineProps({
     saleItemData: Object,
-    path: String
+    pathName: String,
+    params: String
 })
 
 const router = useRouter()
@@ -78,7 +79,16 @@ function handleClick() {
 }
 
 const cancel = () => {
-    router.push({ path: props.path })
+    console.log(props.params);
+    
+    if (props.params) {
+        console.log('di');
+        
+        router.push({ name: props.pathName, params: { saleItemId: props.params } })
+    } else {
+        router.push({ name: props.pathName })
+    }
+    
 }
 
 const phones = ref({

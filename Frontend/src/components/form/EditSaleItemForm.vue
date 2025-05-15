@@ -9,10 +9,25 @@ import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue';
 const router = useRouter()
 const { params: { id } } = useRoute()
 const saleItem = ref({})
+const prevPathName = ref(null)
+const prevParams = ref(null)
+
+const previousPage = () => {
+    const path = router.options.history.state.back
+    if (path) {
+        const resolve = router.resolve(path)
+        prevPathName.value = resolve.name
+        prevParams.value = resolve.params.saleItemId ?? null
+    } else {
+        prevPathName.value = 'SaleItemsDetail'
+        prevParams.value = id
+    }
+}
 
 onMounted(async () => {
     try {
         saleItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, id)
+        previousPage()
     } catch (error) {
         console.log(error);
     }
@@ -35,8 +50,7 @@ const handleEditSaleItem = async (editedItem) => {
             <span class="text-[#332A1E]/50 mx-3"> > </span>
             <router-link :to="{ name: 'SaleItemsDetail', params: { saleItemId: id } }"><span class="itbms-back-button text-[#6F879C]">{{ saleItem.model }}</span></router-link>
         </p>
-        <SaleItemForm v-if="saleItem.id" @submitAction="handleEditSaleItem" :saleItemData="saleItem"
-            :path="`/sale-items/${id}`"/>
+        <SaleItemForm v-if="saleItem.id" @submitAction="handleEditSaleItem" :saleItemData="saleItem" :pathName="prevPathName" :params="prevParams"/>
         <SaleItemNotFound v-else />
     </div>
 </template>
