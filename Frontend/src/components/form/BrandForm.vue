@@ -1,20 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-
 const emit = defineEmits(['submitAction'])
-
 const props = defineProps({
     brandData: Object,
     pathName: String
 })
 
 const oldBrand = ref(null)
-
 const newBrand = ref({
     name: props.brandData?.name || '',
     websiteUrl: props.brandData?.websiteUrl || '',
@@ -23,7 +20,7 @@ const newBrand = ref({
 
 oldBrand.value = {...newBrand.value}
 
-const disabled = ref(false)
+const disabled = ref(true)
 
 function handleClick() {
     Object.keys(newBrand.value).forEach(key => {
@@ -34,6 +31,13 @@ function handleClick() {
 
     emit('submitAction', newBrand.value)
 }
+
+watchEffect(() => {
+    const hasEmptyField = newBrand.value.name === ''
+    const unchanged = JSON.stringify(newBrand.value) === JSON.stringify(oldBrand.value)
+
+    disabled.value = hasEmptyField || unchanged
+})
 
 const cancel = () => {
     router.push({ name: props.pathName })
@@ -48,19 +52,19 @@ const cancel = () => {
         <div class="grid gap-3">
           <div class="grid gap-1.5">
             <FormInput v-model="newBrand.name" label="Brand Name" :required="true" inputType="text"
-                  placeholder="Enter brand name" className="itbms-brand-name"/>
+                  placeholder="Enter brand name" className="itbms-name"/>
             </div>
           </div>
 
           <div class="grid gap-1.5">
             <FormInput v-model="newBrand.websiteUrl" label="Website URL" :required="true" inputType="url"
-                placeholder="Enter Website URL" className="itbms-brand-url"/>
+                placeholder="Enter Website URL" className="itbms-websiteUrl"/>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="grid gap-1.5">
               <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" :required="true" inputType="text" 
-                  placeholder="Enter country" className="itbms-brand-country"/>
+                  placeholder="Enter country" className="itbms-countryOfOrigin"/>
             </div>
           </div>
 

@@ -9,11 +9,8 @@ import { useRoute } from 'vue-router';
 import BaseButton from '@/components/elements/BaseButton.vue';
 
 const saleItems = ref([])
-
 const route = useRoute()
-
 const isShowPopup = ref(false)
-
 const message = ref('')
 
 if (route.query.added === 'true') {

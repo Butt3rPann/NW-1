@@ -23,7 +23,7 @@ const handleNewSaleItem = async (newSaleItem) => {
             <span class="text-[#332A1E]/50 mx-3"> > </span>
             <span class="text-[#6F879C]">New Sale Item</span>
         </p>
-        <SaleItemForm @submitAction="handleNewSaleItem" path="/sale-items"/>
+        <SaleItemForm @submitAction="handleNewSaleItem" pathName="SaleItems"/>
     </div>
 </template>
 

@@ -30,12 +30,6 @@ public class SaleItemController {
         return ResponseEntity.ok(listMapper.mapList(saleItems, SaleItemDto.class, modelMapper));
     }
 
-    @GetMapping("/sale-items/list")
-    public ResponseEntity<List<SaleItemDetailDto>> getSaleItemList() {
-        List<SaleItem> saleItems = saleItemService.getSaleItems();
-        return ResponseEntity.ok(listMapper.mapList(saleItems, SaleItemDetailDto.class, modelMapper));
-    }
-
     @GetMapping("/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDto> getSaleItemDetail(@PathVariable Integer id) {
         SaleItem saleItem = saleItemService.getSaleItemDetail(id);

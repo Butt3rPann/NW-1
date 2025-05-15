@@ -6,24 +6,29 @@ import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
 import PopupMessage from '@/components/elements/PopupMessage.vue';
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue';
+import { useRoute } from 'vue-router';
+import router from '@/router';
 
 const brands = ref([])
 
 onMounted(async () => {
     try {
         brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands/list`)
-        console.log(brands);
-
     } catch (error) {
         console.log(error);
     }
 })
 
 const isShowPopup = ref(false)
-
 const message = ref('')
-
 const deletedId = ref(null)
+const route = useRoute()
+
+if (route.query.added === 'true') {
+    router.replace({query: { }})
+    message.value = 'The brand has been added'
+    isShowPopup.value = true
+}
 
 function deleteBrandById(id) {
     showDelConfirm.value = true
@@ -61,31 +66,33 @@ async function deleteBrand() {
             <div class="flex justify-between items-center mb-4">
                 <p class="text-[3.5rem] font-bold text-[#332A1E]">Brands</p>
                 <router-link :to="{ name: 'AddBrand' }">
-                    <BaseButton :icon="addIcon" text="Add Brand" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" />
+                    <BaseButton :icon="addIcon" text="Add Brand" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" class="itbms-add-button"/>
                 </router-link>
             </div>
+            <p class="font-medium text-lg mb-7">
+                <router-link :to="{ name: 'SaleItemsList' }"><span class="itbms-item-list text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
+                <span class="text-[#332A1E]/50 mx-3"> > </span>
+                <span class="text-[#6F879C]">Brands</span>
+            </p>
             <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white">
                 <ListModel :items="brands" view="list">
                     <template #header>
-                        <p class="w-[9%]">id</p>
-                        <p class="w-[12%]">Name</p>
-                        <p class="w-[27%]">Website Url</p>
-                        <p class="w-[15%]">Country Of Origin</p>
-                        <p class="w-[17%]">Is Active</p>
-                        <p class="w-[20%]">Action</p>
+                        <p class="w-[25%]">id</p>
+                        <p class="w-[75%]">Name</p>
+                        <p class="w-[25%]">Action</p>
                     </template>
                     <template #item="slotProps">
-                        <p class="w-[9%]">{{ slotProps.itemInList.id }}</p>
-                        <p class="w-[12%]">{{ slotProps.itemInList.name }}</p>
-                        <p class="w-[27%]">{{ slotProps.itemInList.websiteUrl ?? '-' }}</p>
-                        <p class="w-[15%]">{{ slotProps.itemInList.countryOfOrigin ?? '-' }}</p>
-                        <p class="w-[17%]">{{ slotProps.itemInList.isActive }}</p>
-                        <div class="w-[20%] flex justify-center gap-3">
+                        <p class="w-[25%]">{{ slotProps.itemInList.id }}</p>
+                        <p class="w-[75%]">{{ slotProps.itemInList.name }}</p>
+                        <div class="w-[25%] flex justify-center gap-3">
                             <router-link :to="{ name: 'EditBrand', params: { id: slotProps.itemInList.id } }"
-                                class="border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">E</router-link>
+                                class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
+                                E
+                            </router-link>
                             <p @click="deleteBrandById(slotProps.itemInList.id)"
-                                class="border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
-                                D</p>
+                                class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
+                                D
+                            </p>
                         </div>
                     </template>
                 </ListModel>

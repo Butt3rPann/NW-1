@@ -8,6 +8,7 @@ import { onMounted, ref} from 'vue'
 import Shipping from '@/assets/images/shipping.png'
 import Ticket from '@/assets/images/ticket.png'
 import BaseButton from '@/components/elements/BaseButton.vue'
+import Seller from '@/assets/images/seller.png'
 
 const saleItems = ref([])
 
@@ -34,9 +35,15 @@ onMounted(async () => {
                     <span>Shop a wide variety of items with special promotions and</span><br>
                     <span>free nationwide delivery.</span>
                 </p>
-                <router-link :to="{ name: 'SaleItems' }">
-                   <BaseButton :icon="Bag" text="SHOP NOW" textColor="text-[#F0EDEC]" bgColor="bg-[#6F879C]" class="itbms-shopnow"/>
-                </router-link>
+                <div class="flex gap-5">
+                    <router-link :to="{ name: 'SaleItems' }">
+                        <BaseButton :icon="Bag" text="SHOP NOW" textColor="text-[#F0EDEC]" bgColor="bg-[#6F879C]" class="itbms-shopnow"/>
+                    </router-link>
+                    <router-link :to="{ name: 'SaleItemsList' }">
+                        <BaseButton :icon="Seller" text="SELLER" textColor="text-[#F0EDEC]" bgColor="bg-[#6F879C]" class="itbms-seller"/>
+                    </router-link>
+                </div>
+
             </div>
             <div class="absolute bottom-[-7vw] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-[3vw] z-10">
                 <ValueProps :icon="Genuine"><template #text>Guaranteed 100% Genuine</template></ValueProps>

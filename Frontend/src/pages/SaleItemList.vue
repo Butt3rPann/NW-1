@@ -11,7 +11,7 @@ const saleItems = ref([])
 
 onMounted(async () => {
     try {
-        saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items/list`)
+        saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
     } catch (error) {
         console.log(error);
     }
@@ -71,28 +71,24 @@ async function deleteSaleItem(){
             <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white">
                 <ListModel :items="saleItems" view="list">
                     <template #header>
-                        <p class="w-[5%]">id</p>
+                        <p class="w-[10%]">id</p>
                         <p class="w-[10%]">Brand</p>
-                        <p class="w-[26%]">Model</p>
-                        <p class="w-[5%]">Ram</p>
-                        <p class="w-[7%]">Storage</p>
+                        <p class="w-[25%]">Model</p>
+                        <p class="w-[7%]">Ram</p>
+                        <p class="w-[10%]">Storage</p>
                         <p class="w-[13%]">Color</p>
-                        <p class="w-[10%]">Screen Size</p>
-                        <p class="w-[7%]">Price</p>
-                        <p class="w-[7%]">Quantity</p>
-                        <div class="w-[10%]">Action</div>
+                        <p class="w-[10%]">Price</p>
+                        <div class="w-[15%]">Action</div>
                     </template>
                     <template #item="slotProps">
-                        <p class="w-[5%]">{{ slotProps.itemInList.id }}</p>
+                        <p class="itbms-id w-[10%]">{{ slotProps.itemInList.id }}</p>
                         <p class="itbms-brand w-[10%]">{{ slotProps.itemInList.brandName }}</p>
-                        <p class="itbms-model w-[26%]">{{ slotProps.itemInList.model }}</p>
-                        <p class="itbms-ramGb w-[5%]">{{ slotProps.itemInList.ramGb ?? '-' }}</p>
-                        <p class="itbms-storageGb w-[7%]">{{ slotProps.itemInList.storageGb ?? '-' }}</p>
+                        <p class="itbms-model w-[25%]">{{ slotProps.itemInList.model }}</p>
+                        <p class="itbms-ramGb w-[7%]">{{ slotProps.itemInList.ramGb ?? '-' }}</p>
+                        <p class="itbms-storageGb w-[10%]">{{ slotProps.itemInList.storageGb ?? '-' }}</p>
                         <p class="itbms-color w-[13%]">{{ slotProps.itemInList.color ?? '-' }}</p>
-                        <p class="itbms-screenSizeInch w-[10%]">{{ slotProps.itemInList.screenSizeInch ?? '-' }}</p>
-                        <p class="itbms-price w-[7%]">{{ slotProps.itemInList.price.toLocaleString() }}</p>
-                        <p class="itbms-quantity w-[7%]">{{ slotProps.itemInList.quantity }}</p>
-                        <div class="w-[10%] flex justify-center gap-3">
+                        <p class="itbms-price w-[10%]">{{ slotProps.itemInList.price.toLocaleString() }}</p>
+                        <div class="w-[15%] flex justify-center gap-3">
                             <router-link :to="{ name: 'EditSaleItem', params: { id: slotProps.itemInList.id } }" class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">E</router-link>
                             <p @click="deleteSaleItemById(slotProps.itemInList.id)" class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">D</p>
                         </div>
