@@ -82,7 +82,7 @@ async function deleteSaleItem(){
                         <p class="w-[7%]">Quantity</p>
                         <div class="w-[10%]">Action</div>
                     </template>
-                    <template #saleItem="slotProps">
+                    <template #item="slotProps">
                         <p class="w-[5%]">{{ slotProps.itemInList.id }}</p>
                         <p class="itbms-brand w-[10%]">{{ slotProps.itemInList.brandName }}</p>
                         <p class="itbms-model w-[26%]">{{ slotProps.itemInList.model }}</p>
@@ -93,8 +93,8 @@ async function deleteSaleItem(){
                         <p class="itbms-price w-[7%]">{{ slotProps.itemInList.price.toLocaleString() }}</p>
                         <p class="itbms-quantity w-[7%]">{{ slotProps.itemInList.quantity }}</p>
                         <div class="w-[10%] flex justify-center gap-3">
-                            <router-link :to="{ name: 'EditSaleItem', params: { id: slotProps.itemInList.id } }" class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5">E</router-link>
-                            <p @click="deleteSaleItemById(slotProps.itemInList.id)" class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5">D</p>
+                            <router-link :to="{ name: 'EditSaleItem', params: { id: slotProps.itemInList.id } }" class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">E</router-link>
+                            <p @click="deleteSaleItemById(slotProps.itemInList.id)" class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">D</p>
                         </div>
                     </template>
                 </ListModel>

@@ -38,7 +38,7 @@ defineProps({
                 </template>
 
                 <template v-else>
-                    <slot name="saleItem" :itemInList="item"/>
+                    <slot name="item" :itemInList="item"/>
                 </template>
             </div>
         </div>

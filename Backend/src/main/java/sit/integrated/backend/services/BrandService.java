@@ -9,7 +9,6 @@ import sit.integrated.backend.dtos.BrandFormDto;
 import sit.integrated.backend.entities.Brand;
 import sit.integrated.backend.exceptions.DuplicateBrandException;
 import sit.integrated.backend.repositories.BrandRepository;
-
 import java.util.List;
 
 @Service
@@ -25,8 +24,9 @@ public class BrandService {
         }
     }
 
-    public List<Brand> getAllBrands() {
-        return brandRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    public List<Brand> getAllBrands(String sortBy, String direction) {
+        Sort.Direction sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC);
+        return brandRepository.findAll(Sort.by(sortDirection, sortBy));
     }
 
     public Brand getBrandById(Integer id) {
@@ -39,6 +39,9 @@ public class BrandService {
         }
         brandFormDto.setId(null);
         Brand brand = modelMapper.map(brandFormDto, Brand.class);
+        if (brand.getIsActive() == null) {
+            brand.setIsActive(true);
+        }
         return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
     }
 }
