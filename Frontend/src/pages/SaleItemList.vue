@@ -81,7 +81,7 @@ async function deleteSaleItem(){
                         <div class="w-[15%]">Action</div>
                     </template>
                     <template #item="slotProps">
-                        <p class="w-[10%]">{{ slotProps.itemInList.id }}</p>
+                        <p class="itbms-id w-[10%]">{{ slotProps.itemInList.id }}</p>
                         <p class="itbms-brand w-[10%]">{{ slotProps.itemInList.brandName }}</p>
                         <p class="itbms-model w-[25%]">{{ slotProps.itemInList.model }}</p>
                         <p class="itbms-ramGb w-[7%]">{{ slotProps.itemInList.ramGb ?? '-' }}</p>

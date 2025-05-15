@@ -4,7 +4,6 @@ import BrandForm from '@/components/form/BrandForm.vue'
 import { addItem } from '@/libs/fetchUtils'
 
 const router = useRouter()
-
 const emit = defineEmits(['addSuccess'])
 
 const handleNewBrand = async (newBrand) => {
@@ -19,7 +18,14 @@ const handleNewBrand = async (newBrand) => {
  
 <template>
     <div class="flex flex-col items-center justify-center gap-7 pt-10 h-screen">
-        <p class="text-5xl font-bold font-rubik text-[#332A1E] ">Add Brand</p> 
+        <p class="itbms-add-button text-5xl font-bold font-rubik text-[#332A1E] ">Add Brand</p>
+        <p class="font-medium text-lg">
+            <router-link :to="{ name: 'SaleItemsList' }"><span class="itbms-item-list text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
+            <span class="text-[#332A1E]/50 mx-3"> > </span>
+            <span class="itbms-manage-brand text-[#332A1E]">Brands</span>
+            <span class="text-[#332A1E]/50 mx-3"> > </span>
+            <span class="itbms-manage-brand text-[#6F879C]">New Brand</span>
+        </p>
         <BrandForm @submitAction="handleNewBrand" pathName="BrandList"/>
     </div>
 </template>

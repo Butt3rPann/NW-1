@@ -79,11 +79,7 @@ function handleClick() {
 }
 
 const cancel = () => {
-    console.log(props.params);
-    
     if (props.params) {
-        console.log('di');
-        
         router.push({ name: props.pathName, params: { saleItemId: props.params } })
     } else {
         router.push({ name: props.pathName })
