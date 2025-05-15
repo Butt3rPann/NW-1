@@ -5,6 +5,8 @@ import Homepage from "@/pages/Homepage.vue";
 import AddSaleItemForm from "@/components/form/AddSaleItemForm.vue";
 import EditSaleItemForm from "@/components/form/EditSaleItemForm.vue";
 import SaleItemList from "@/pages/SaleItemList.vue";
+import AddBrandForm from "@/components/form/AddBrandForm.vue";
+
 const history = createWebHistory()
 const routes = [
     {
@@ -42,6 +44,11 @@ const routes = [
         name: 'BrandList',
         component: SaleItemList
     },
+    {
+        path: '/brands/add',
+        name: 'AddBrand',
+        component: AddBrandForm
+    }
 ]
 const router = createRouter({history,routes})
 export default router

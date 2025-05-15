@@ -1,15 +1,13 @@
 <script setup>
 import Navbar from '@/layouts/Navbar.vue'
 import Footer from '@/layouts/Footer.vue'
-import BrandForm from './components/form/BrandForm.vue';
 </script>
  
 <template>
 <div>
-    <!-- <Navbar />
+    <Navbar />
     <router-view />
-    <Footer /> -->
-    <BrandForm/>
+    <Footer />
 </div>
 </template>
  

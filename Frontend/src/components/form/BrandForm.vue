@@ -43,7 +43,7 @@ const cancel = () => {
  
 <template>
   <div class="flex items-center justify-center">
-    <div class="bg-white border border-gray-200 shadow-lg rounded-lg p-10 w-130">
+    <div class="bg-white border border-gray-200 shadow-md rounded-lg p-10 w-130">
       <div class="grid gap-5">
         <div class="grid gap-3">
           <div class="grid gap-1.5">
