@@ -44,4 +44,18 @@ public class BrandService {
         }
         return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
     }
+
+    public BrandFormDto updateBrand(Integer id, BrandFormDto brandFormDto) {
+        isBrandExists(id);
+        Brand existingBrand = getBrandById(id);
+        if (!existingBrand.getName().equals(brandFormDto.getName()) && brandRepository.existsBrandsByName(brandFormDto.getName())) {
+            throw new DuplicateBrandException("Brand name already exists.");
+        }
+        brandFormDto.setId(id);
+        Brand brand = modelMapper.map(brandFormDto, Brand.class);
+        if (brand.getIsActive() == null) {
+            brand.setIsActive(true);
+        }
+        return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
+    }
 }
