@@ -12,13 +12,14 @@ const isShowPopup = ref(false)
 const isSuccess = ref(true)
 
 const handleNewBrand = async (newBrand) => {
-    Object.keys(newBrand).forEach(key => {
-        if (newBrand[key] === '') {
-            newBrand[key] = null
+    const addedItem = {...newBrand}
+    Object.keys(addedItem).forEach(key => {
+        if (addedItem[key] === '') {
+            addedItem[key] = null
         }
     })
     try {
-        const addedBrand = await addItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, newBrand)
+        const addedBrand = await addItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, addedItem)
         if (addedBrand.status === 400 || addedBrand.status === 500) {
             throw new Error(addedBrand.message)
         }

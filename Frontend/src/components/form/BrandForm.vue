@@ -11,15 +11,11 @@ const props = defineProps({
     pathName: String
 })
 
-function normalizeField(value) {
-  return value == null || value === '' ? null : value
-}
-
 const oldBrand = ref(null)
 const newBrand = ref({
-    name: normalizeField(props.brandData?.name),
-    websiteUrl: normalizeField(props.brandData?.websiteUrl),
-    countryOfOrigin: normalizeField(props.brandData?.countryOfOrigin),
+    name: props.brandData?.name || '',
+    websiteUrl: props.brandData?.websiteUrl || '',
+    countryOfOrigin: props.brandData?.countryOfOrigin || '',
     isActive: props.brandData?.isActive ?? false
 })
 

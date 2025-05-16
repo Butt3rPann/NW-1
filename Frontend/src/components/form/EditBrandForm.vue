@@ -24,13 +24,14 @@ const isShowPopup = ref(false)
 const isSuccess = ref(true)
 
 const handleEditBrand = async (editedBrand) => {
-    Object.keys(editedBrand).forEach(key => {
-        if (editedBrand[key] === '') {
-            editedBrand[key] = null
+    const editedItem = {...editedBrand}
+    Object.keys(editedItem).forEach(key => {
+        if (editedItem[key] === '') {
+            editedItem[key] = null
         }
     })
     try {
-        const edited = await editItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, editedBrand)
+        const edited = await editItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, editedItem)
         if (edited.status === 400 || edited.status === 500) {
             throw new Error(edited.message)
         }
