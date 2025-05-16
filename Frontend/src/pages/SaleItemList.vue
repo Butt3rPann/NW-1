@@ -70,10 +70,10 @@ async function deleteSaleItem(){
 </script>
  
 <template>
-<div>
-    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25"/>
+<div class="bg-white text-[#332A1E]">
+    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed pt-25"/>
     <div v-if="!showNotFound">
-        <div class="font-rubik mx-35 mb-15 mt-30">
+        <div class="font-rubik mx-35 pb-15 pt-30">
             <div class="flex justify-between items-center mb-4">
                 <p class="text-[3.5rem] font-bold text-[#332A1E]">Sale Items</p>
                 <div class="flex gap-3 h-13">

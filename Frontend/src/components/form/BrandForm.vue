@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue';
 import { useRouter } from 'vue-router';
@@ -11,11 +11,15 @@ const props = defineProps({
     pathName: String
 })
 
+function normalizeField(value) {
+  return value == null || value === '' ? null : value
+}
+
 const oldBrand = ref(null)
 const newBrand = ref({
-    name: props.brandData?.name || '',
-    websiteUrl: props.brandData?.websiteUrl || '',
-    countryOfOrigin: props.brandData?.countryOfOrigin || '',
+    name: normalizeField(props.brandData?.name),
+    websiteUrl: normalizeField(props.brandData?.websiteUrl),
+    countryOfOrigin: normalizeField(props.brandData?.countryOfOrigin),
     isActive: props.brandData?.isActive ?? false
 })
 
@@ -24,12 +28,7 @@ oldBrand.value = {...newBrand.value}
 const disabled = ref(true)
 
 function handleClick() {
-    Object.keys(newBrand.value).forEach(key => {
-        if (newBrand.value[key] === '') {
-            newBrand.value[key] = null
-        }
-    })
-
+    disabled.value = true
     emit('submitAction', newBrand.value)
 }
 

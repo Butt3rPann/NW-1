@@ -26,8 +26,6 @@ function closePopup() {
 }
 
 watch(() => props.isShowPopup, (newValue) => { 
-  console.log(isSuccess.value);
-  
   if (newValue) {
     displayPopup.value = true
     fadeOut.value = false

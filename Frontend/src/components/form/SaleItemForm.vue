@@ -71,7 +71,7 @@ watchEffect(() => {
 function handleClick() {
     Object.keys(newSaleItem.value).forEach(key => {
         if (newSaleItem.value[key] === '')
-            delete newSaleItem.value[key]
+            newSaleItem.value[key] = null
     })
 
     disabled.value = true
