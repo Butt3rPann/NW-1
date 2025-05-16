@@ -20,9 +20,10 @@ const props = defineProps({
 </script>
 
 <template>
-    <button 
+    <button
+      :disabled="disabled"
       :class="[
-        'flex items-center justify-center py-3 px-4 border-2 w-fit rounded-md hover:scale-103 transition-scale ease-in-out duration-300',
+        'flex items-center justify-center py-3 px-4 border-2 w-fit rounded-md cursor-pointer',
         text === 'Save' ? (disabled ? 'bg-[#6F879C]/50 cursor-not-allowed border-borderColor border-transparent' : 'bg-[#4bbd80] border-transparent') : bgColor,
         borderColor
     ]">

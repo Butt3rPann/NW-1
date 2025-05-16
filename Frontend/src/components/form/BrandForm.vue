@@ -57,13 +57,13 @@ const cancel = () => {
           </div>
 
           <div class="grid gap-1.5">
-            <FormInput v-model="newBrand.websiteUrl" label="Website URL" :required="true" inputType="url"
+            <FormInput v-model="newBrand.websiteUrl" label="Website URL" inputType="url"
                 placeholder="Enter Website URL" className="itbms-websiteUrl"/>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="grid gap-1.5">
-              <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" :required="true" inputType="text" 
+              <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" 
                   placeholder="Enter country" className="itbms-countryOfOrigin"/>
             </div>
           </div>
