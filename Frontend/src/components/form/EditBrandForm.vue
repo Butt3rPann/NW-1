@@ -30,7 +30,7 @@ const handleEditBrand = async (editedBrand) => {
 <template>
     <div class="flex flex-col items-center justify-center gap-7 pt-10 h-screen">
         <p class="text-5xl font-bold font-rubik text-[#332A1E] ">Edit Brand</p> 
-        <BrandForm @submitAction="handleEditBrand" pathName="BrandList"/>
+        <BrandForm v-if="brand.id" @submitAction="handleEditBrand" pathName="BrandList" :brandData="brand"/>
     </div>
 </template>
  
