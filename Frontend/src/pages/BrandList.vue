@@ -13,7 +13,7 @@ const brands = ref([])
 
 onMounted(async () => {
     try {
-        brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands/list`)
+        brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
     } catch (error) {
         console.log(error);
     }
