@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
  
 <template>
-    <div class="w-full font-rubik">
+    <div class="w-full font-rubik bg-white">
         <div class="relative bg-white h-145 pt-35 px-22">
             <div class="absolute right-0 bottom-0 h-110 w-screen bg-no-repeat bg-[url('@/assets/images/phoneBanner.png')] bg-contain bg-right grayscale pointer-events-none"></div>
             <div class="space-y-6 text-[#332A1E]">
