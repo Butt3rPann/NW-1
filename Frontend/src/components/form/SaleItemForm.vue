@@ -120,7 +120,7 @@ const changeMainImg = (index) => {
             <div class="grid gap-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
-                        <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands" property="name"
+                        <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands.sort((a, b) => a.name.localeCompare(b.name))" property="name"
                             placeholder="Select brand" className="itbms-brand"></FormSelect>
                     </div>
                     <div class="grid gap-1.5">

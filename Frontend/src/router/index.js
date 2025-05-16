@@ -7,6 +7,7 @@ import EditSaleItemForm from "@/components/form/EditSaleItemForm.vue";
 import SaleItemList from "@/pages/SaleItemList.vue";
 import AddBrandForm from "@/components/form/AddBrandForm.vue";
 import BrandList from "@/pages/BrandList.vue";
+import EditBrandForm from "@/components/form/EditBrandForm.vue";
 
 const history = createWebHistory()
 const routes = [
@@ -51,9 +52,9 @@ const routes = [
         component: AddBrandForm
     },
     {
-        path: '/brands/:id/edit',
+        path: '/brands/:id',
         name: 'EditBrand',
-        component: BrandList
+        component: EditBrandForm
     }
 ]
 const router = createRouter({history,routes})

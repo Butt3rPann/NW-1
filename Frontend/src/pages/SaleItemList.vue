@@ -6,7 +6,11 @@ import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
 import PopupMessage from '@/components/elements/PopupMessage.vue';
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue';
+import ItemNotFound from '@/components/elements/ItemNotFound.vue';
+import router from '@/router';
+import { useRoute } from 'vue-router';
 
+const route = useRoute()
 const saleItems = ref([])
 
 onMounted(async () => {
@@ -18,8 +22,19 @@ onMounted(async () => {
 })
 
 const isShowPopup = ref(false)
-
 const message = ref('')
+
+if (route.query.added === 'true') {
+    message.value = "The sale item has been successfully added."
+    router.replace({ query: { } })
+    isShowPopup.value = true
+    setTimeout(() => isShowPopup.value = false, 2500)
+} else if(route.query.edited === 'true'){
+    message.value = "The sale item has been updated."
+    router.replace({ query: { } })
+    isShowPopup.value = true
+    setTimeout(() => isShowPopup.value = false, 2500)
+}
 
 const deletedId = ref(null)
 
@@ -29,6 +44,7 @@ function deleteSaleItemById(id) {
 }
 
 const showDelConfirm = ref(false)
+const showNotFound = ref(false)
 
 function closeDelConfirm() {
     showDelConfirm.value = false
@@ -45,6 +61,7 @@ async function deleteSaleItem(){
             message.value = "The sale item has been deleted."
             showDelConfirm.value = false
             isShowPopup.value = true
+            setTimeout(() => isShowPopup.value = false, 2500)
         }
     } catch (error) {
         console.log(error);  
@@ -55,7 +72,7 @@ async function deleteSaleItem(){
 <template>
 <div>
     <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25"/>
-    <div>
+    <div v-if="!showNotFound">
         <div class="font-rubik mx-35 mb-15 mt-30">
             <div class="flex justify-between items-center mb-4">
                 <p class="text-[3.5rem] font-bold text-[#332A1E]">Sale Items</p>
@@ -102,6 +119,7 @@ async function deleteSaleItem(){
         </div>
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" message="Do you want to delete this sale item?" @delete="deleteSaleItem"/>
     </div>
+    <ItemNotFound title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItemsList" v-else/>
 </div>
 </template>
  

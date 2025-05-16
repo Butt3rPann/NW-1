@@ -17,7 +17,7 @@ if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
     router.replace({ query: { } })
     isShowPopup.value = true
-} else if(route.query.deleted === 'true'){
+} else if (route.query.deleted === 'true'){
     message.value = "The sale item has been deleted."
     router.replace({ query: { } })
     isShowPopup.value = true
@@ -86,9 +86,7 @@ onMounted(async () => {
         </div>
     </div>
 </div>
-
 </template>
  
 <style scoped>
-
 </style>

@@ -6,8 +6,6 @@ import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
 import PopupMessage from '@/components/elements/PopupMessage.vue';
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue';
-import { useRoute } from 'vue-router';
-import router from '@/router';
 
 const brands = ref([])
 
@@ -22,13 +20,6 @@ onMounted(async () => {
 const isShowPopup = ref(false)
 const message = ref('')
 const deletedId = ref(null)
-const route = useRoute()
-
-if (route.query.added === 'true') {
-    router.replace({query: { }})
-    message.value = 'The brand has been added'
-    isShowPopup.value = true
-}
 
 function deleteBrandById(id) {
     showDelConfirm.value = true
@@ -52,6 +43,7 @@ async function deleteBrand() {
             message.value = "The brand has been deleted."
             showDelConfirm.value = false
             isShowPopup.value = true
+            setTimeout(() => isShowPopup.value = false, 2500)
         }
     } catch (error) {
         console.log(error);

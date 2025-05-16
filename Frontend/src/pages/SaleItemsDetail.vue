@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { deleteItemById, getItemById } from '@/libs/fetchUtils.js'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import ItemDetailRow from '@/components/sale-item/sale-item-detail/ItemDetailRow.vue'
-import SaleItemNotFound from '@/components/sale-item/SaleItemNotFound.vue'
+import ItemNotFound from '@/components/elements/ItemNotFound.vue'
 import { formatLocalTime } from '@/libs/datetimeUtils'
 import backArrowIcon from '@/assets/images/backArrow.png'
 import editIcon from "@/assets/images/edit.png"
@@ -145,7 +145,7 @@ function closeDelConfirm() {
         </div>
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" message="Do you want to delete this sale item?" @delete="deleteSaleItem"/>
     </div>
-    <SaleItemNotFound v-else/>
+    <ItemNotFound title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItems" v-else/>
 </div>
 </template>
 
