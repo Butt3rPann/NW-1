@@ -15,7 +15,8 @@ const oldBrand = ref(null)
 const newBrand = ref({
     name: props.brandData?.name || '',
     websiteUrl: props.brandData?.websiteUrl || '',
-    countryOfOrigin: props.brandData?.countryOfOrigin || ''
+    countryOfOrigin: props.brandData?.countryOfOrigin || '',
+    isActive: props.brandData?.isActive ?? false
 })
 
 oldBrand.value = {...newBrand.value}
@@ -62,15 +63,18 @@ const cancel = () => {
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div class="grid gap-1.5">
-              <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" 
-                  placeholder="Enter country" className="itbms-countryOfOrigin"/>
+            <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text"
+                placeholder="Enter country" className="itbms-countryOfOrigin"/>
+
+            <div class="flex flex-col items-center justify-center gap-3 font-medium text-lg">
+              <p class="font-rubik text-[#332A1E]">Active</p>
+              <input v-model="newBrand.isActive" type="checkbox" class="toggle toggle-lg toggle-success"/>
             </div>
           </div>
 
           <div class="flex justify-center gap-4 pt-2">
             <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
-            <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
+            <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"  />
           </div>
         </div>
     </div>
