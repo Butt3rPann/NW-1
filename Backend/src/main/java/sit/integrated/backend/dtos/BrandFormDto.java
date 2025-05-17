@@ -16,8 +16,4 @@ public class BrandFormDto {
         else
             this.name = name.trim();
     }
-
-    public void setActive(Boolean active) {
-        this.isActive = active == null ? true : active;
-    }
 }

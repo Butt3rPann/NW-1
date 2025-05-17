@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import sit.integrated.backend.dtos.BrandDetailDto;
 import sit.integrated.backend.dtos.BrandFormDto;
 import sit.integrated.backend.entities.Brand;
 import sit.integrated.backend.exceptions.BrandHasSaleItemsException;
@@ -34,16 +35,19 @@ public class BrandService {
         return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + id));
     }
 
-    public BrandFormDto createBrand(BrandFormDto brandFormDto) {
+    public BrandDetailDto createBrand(BrandFormDto brandFormDto) {
         if (brandRepository.existsBrandsByName(brandFormDto.getName())) {
             throw new DuplicateBrandException("Brand name already exists.");
         }
         brandFormDto.setId(null);
         Brand brand = modelMapper.map(brandFormDto, Brand.class);
-        return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
+        if (brand.getIsActive() == null) {
+            brand.setIsActive(true);
+        }
+        return modelMapper.map(brandRepository.saveAndFlush(brand), BrandDetailDto.class);
     }
 
-    public BrandFormDto updateBrand(Integer id, BrandFormDto brandFormDto) {
+    public BrandDetailDto updateBrand(Integer id, BrandFormDto brandFormDto) {
         isBrandExists(id);
         Brand existingBrand = getBrandById(id);
         if (!existingBrand.getName().equals(brandFormDto.getName()) && brandRepository.existsBrandsByName(brandFormDto.getName())) {
@@ -51,7 +55,12 @@ public class BrandService {
         }
         brandFormDto.setId(id);
         Brand brand = modelMapper.map(brandFormDto, Brand.class);
-        return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
+        if (brand.getIsActive() == null) {
+            brand.setIsActive(true);
+        }
+        BrandDetailDto brandDetailDto = modelMapper.map(brandRepository.saveAndFlush(brand), BrandDetailDto.class);
+        brandDetailDto.setNoOfSaleItems(existingBrand.getSaleItems().size());
+        return brandDetailDto;
     }
 
     public void deleteBrand(Integer id) {
