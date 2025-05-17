@@ -2,13 +2,14 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getItems, deleteItemById , getItemById} from '@/libs/fetchUtils'
-import ListModel from '@/components/model/ListModel.vue';
-import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
-import PopupMessage from '@/components/elements/PopupMessage.vue';
+import ListModel from '@/components/model/ListModel.vue'
+import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
-import BaseButton from '@/components/elements/BaseButton.vue';
-import WarningMessage from '@/components/elements/WarningMessage.vue';
-import ItemNotFound from '@/components/elements/ItemNotFound.vue';
+import BaseButton from '@/components/elements/BaseButton.vue'
+import WarningMessage from '@/components/elements/WarningMessage.vue'
+import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import emptySaleItems from '@/assets/images/emptySaleItems.png'
 
 const brands = ref([])
 const showNotFound = ref(false)
@@ -125,7 +126,7 @@ async function deleteBrand() {
                     </template>
                 </ListModel>
                 <div v-if="!brands.length" class="flex flex-col items-center space-y-3 py-18">
-                    <img src="../assets/images/emptySaleItems.png" alt="EmptySaleItems" class="w-20">
+                    <img :src="emptySaleItems" alt="EmptySaleItems" class="w-20">
                     <p class="text-xl text-[#ABBCC9]">no brand</p>
                 </div>
             </div>

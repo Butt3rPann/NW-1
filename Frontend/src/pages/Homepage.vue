@@ -9,6 +9,7 @@ import Shipping from '@/assets/images/shipping.png'
 import Ticket from '@/assets/images/ticket.png'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import Seller from '@/assets/images/seller.png'
+import rightVector from '@/assets/images/rigt-vector.png'
 
 const saleItems = ref([])
 
@@ -57,7 +58,7 @@ onMounted(async () => {
                 <p class="text-white font-bold text-[2.5rem] text-shadow-lg">Recommended Products</p>
                 <router-link :to="{ name: 'SaleItems' }" class="flex items-center gap-2">
                     <p class="font-medium text-xl text-white">view all</p>
-                    <img src="../assets/images/rigt-vector.png" alt="Icon" class="w-5"/>
+                    <img :src="rightVector" alt="Icon" class="w-5"/>
                 </router-link>
             </div>
             <SaleItemCard :saleItems="saleItems" view="gallery" />

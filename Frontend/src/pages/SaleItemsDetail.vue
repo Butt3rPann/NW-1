@@ -13,6 +13,7 @@ import router from '@/router'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
+import boxImg from '@/assets/images/box.png'
 
 const { params: { saleItemId } } = useRoute()
 
@@ -33,12 +34,12 @@ onMounted(async () => {
 })
 
 const phones = ref({
-    mainImage: '/saleItemImage/demoImg1.png',
+    mainImage: '/nw1/saleItemImage/demoImg1.png',
     thumbnail: [
-        '/saleItemImage/demoImg1.png',
-        '/saleItemImage/demoImg2.png',
-        '/saleItemImage/demoImg3.png',
-        '/saleItemImage/demoImg4.png'
+        '/nw1/saleItemImage/demoImg1.png',
+        '/nw1/saleItemImage/demoImg2.png',
+        '/nw1/saleItemImage/demoImg3.png',
+        '/nw1/saleItemImage/demoImg4.png'
     ]
 })
 
@@ -107,7 +108,7 @@ function closeDelConfirm() {
                             <span class="itbms-price">{{ selectedItem.price?.toLocaleString() }}</span>
                         </p>
                         <div class="flex items-center">
-                            <img src="@/assets/images/box.png" alt="box" class="w-8 mr-3">
+                            <img :src="boxImg" alt="box" class="w-8 mr-3">
                             <p :class="[selectedItem.quantity > 0 ? 'bg-[#97C5B8] text-[#225528]' : 'bg-[#EAA9A9] text-[#680D0D]']"
                                 class="p-2 font-bold text-lg rounded-full px-9">
                                 <span class="itbms-quantity mr-2">{{ selectedItem.quantity }}</span>

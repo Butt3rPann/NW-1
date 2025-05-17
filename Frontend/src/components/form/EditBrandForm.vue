@@ -3,8 +3,8 @@ import { editItem, getItemById} from '@/libs/fetchUtils'
 import BrandForm from '@/components/form/BrandForm.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
-import PopupMessage from '../elements/PopupMessage.vue';
-import ItemNotFound from '../elements/ItemNotFound.vue';
+import PopupMessage from '@/components/elements/PopupMessage.vue'
+import ItemNotFound from '@/components/elements/ItemNotFound.vue'
 
 const router = useRouter()
 const { params: { id } } = useRoute()

@@ -1,7 +1,8 @@
 <script setup>
 import backArrowIcon from '@/assets/images/backArrow.png'
 import homeLogo from '@/assets/images/home.png'
-import BaseButton from '../elements/BaseButton.vue';
+import BaseButton from '@/components/elements/BaseButton.vue'
+import productNotFound from '@/assets/images/product-not-found.png'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -30,7 +31,7 @@ function goBack() {
  
 <template>
     <div class="flex flex-row items-center justify-center h-screen bg-white font-rubik">
-        <img src="../../assets/images/product-not-found.png"
+        <img :src="productNotFound"
             class="w-170 h-auto mr-17" />
         <div class="text-left">
             <p class="text-[3.5rem] font-bold text-[#332A1E] leading-tight">
