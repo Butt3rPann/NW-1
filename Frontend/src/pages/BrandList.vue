@@ -1,13 +1,14 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getItems, deleteItemById } from '@/libs/fetchUtils'
+import { getItems, deleteItemById , getItemById} from '@/libs/fetchUtils'
 import ListModel from '@/components/model/ListModel.vue';
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
 import PopupMessage from '@/components/elements/PopupMessage.vue';
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue';
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import WarningMessage from '@/components/elements/WarningMessage.vue';
+import ItemNotFound from '@/components/elements/ItemNotFound.vue';
 
 const brands = ref([])
 const showNotFound = ref(false)
@@ -34,19 +35,36 @@ if (route.query.added === 'true') {
     isShowPopup.value = true
 }
 
-function deleteBrandById(id) {
-    const brand = brands.value.find(b => b.id === id)
-    if (brand) {
+const showCannotDeletePopup = ref(false)
+
+
+async function deleteBrandById(id) {
+    try {
+        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
+
+        if (!brand) {
+            console.error('Brand not found from API')
+        }
+
         deletedId.value = brand.id
         brandToDelete.value = brand.name
-        showDelConfirm.value = true
+
+        if (brand.noOfSaleItems === 0) {
+            showDelConfirm.value = true
+        } else {
+            showCannotDeletePopup.value = true
     }
+    } catch (error) {
+        console.error(error)
+  }
 }
+
 
 const showDelConfirm = ref(false)
 
 function closeDelConfirm() {
     showDelConfirm.value = false
+    showCannotDeletePopup.value = false
     deletedId.value = null
 }
 
@@ -66,11 +84,12 @@ async function deleteBrand() {
         console.log(error);
     }
 }
+
 </script>
 
 <template>
     <div class="bg-white text-[#332A1E]">
-        <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed pt-25" />
+        <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
         <div v-if="!showNotFound" class="font-rubik mx-35 pb-15 pt-30">
             <div class="flex justify-between items-center mb-4">
                 <p class="text-[3.5rem] font-bold text-[#332A1E]">Brands</p>
@@ -112,9 +131,10 @@ async function deleteBrand() {
             </div>
         </div>
         <ItemNotFound v-else title="Brands" description="An error has occurred, the brand does not exist." backPathName="BrandList" />
-        <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message="`Do you want to delete ${brandToDelete} brand?`"
+        <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message='`Do you want to delete "${brandToDelete}" brand?`'
             class="itbms-message"
             @delete="deleteBrand" />
+        <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message='`Delete "${brandToDelete}" is not allow. There are sale items with "${brandToDelete}"  brand.`'/>
     </div>
 </template>
 
