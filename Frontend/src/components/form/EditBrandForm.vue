@@ -3,12 +3,15 @@ import { editItem, getItemById} from '@/libs/fetchUtils'
 import BrandForm from '@/components/form/BrandForm.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
-import PopupMessage from '@/components/elements/PopupMessage.vue'
 import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const router = useRouter()
 const { params: { id } } = useRoute()
 const brand = ref({})
+const message = ref('')
+const isShowPopup = ref(false)
+const isSuccess = ref(true)
 
 onMounted(async () => {
     try {
@@ -17,10 +20,6 @@ onMounted(async () => {
         console.log(error);
     }
 })
-
-const message = ref('')
-const isShowPopup = ref(false)
-const isSuccess = ref(true)
 
 const handleEditBrand = async (editedBrand) => {
     const editedItem = {...editedBrand}
@@ -34,10 +33,7 @@ const handleEditBrand = async (editedBrand) => {
         if (edited.status === 400 || edited.status === 500) {
             throw new Error(edited.message)
         }
-        isSuccess.value = true
-        message.value = 'The brand has been updated.'
-        isShowPopup.value = true
-        setTimeout(() => router.push({ name: 'BrandList' }), 800);
+        router.push({ name: 'BrandList' , query: { edited: 'true' }})
     } catch (error) {
         console.log(error)
         isSuccess.value = false

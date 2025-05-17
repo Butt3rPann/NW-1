@@ -23,10 +23,7 @@ const handleNewBrand = async (newBrand) => {
         if (addedBrand.status === 400 || addedBrand.status === 500) {
             throw new Error(addedBrand.message)
         }
-        isSuccess.value = true
-        message.value = 'The brand has been added.'
-        isShowPopup.value = true
-        setTimeout(() => router.push({ name: 'BrandList' }), 800)
+        router.push({ name: 'BrandList', query: { added: 'true' } })
     } catch (error) {
         console.log(error)
         isSuccess.value = false

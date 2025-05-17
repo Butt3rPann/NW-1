@@ -16,4 +16,18 @@ public class BrandFormDto {
         else
             this.name = name.trim();
     }
+
+    public void setWebsiteUrl(String websiteUrl) {
+        if (websiteUrl == null || websiteUrl.trim().isBlank())
+            this.websiteUrl = null;
+        else
+            this.websiteUrl = websiteUrl.trim();
+    }
+
+    public void setCountryOfOrigin(String countryOfOrigin) {
+        if (countryOfOrigin == null || countryOfOrigin.trim().isBlank())
+            this.countryOfOrigin = null;
+        else
+            this.countryOfOrigin = countryOfOrigin.trim();
+    }
 }
