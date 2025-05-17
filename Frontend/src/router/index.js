@@ -52,7 +52,7 @@ const routes = [
         component: AddBrandForm
     },
     {
-        path: '/brands/:id',
+        path: '/brands/:id/edit',
         name: 'EditBrand',
         component: EditBrandForm
     }
