@@ -9,4 +9,15 @@ public class BrandFormDto {
     private String websiteUrl;
     private String countryOfOrigin;
     private Boolean isActive;
+
+    public void setName(String name) {
+        if (name == null || name.trim().isBlank())
+            this.name = null;
+        else
+            this.name = name.trim();
+    }
+
+    public void setActive(Boolean active) {
+        this.isActive = active == null ? true : active;
+    }
 }

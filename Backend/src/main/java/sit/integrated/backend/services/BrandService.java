@@ -7,6 +7,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import sit.integrated.backend.dtos.BrandFormDto;
 import sit.integrated.backend.entities.Brand;
+import sit.integrated.backend.exceptions.BrandHasSaleItemsException;
 import sit.integrated.backend.exceptions.DuplicateBrandException;
 import sit.integrated.backend.repositories.BrandRepository;
 import java.util.List;
@@ -39,9 +40,6 @@ public class BrandService {
         }
         brandFormDto.setId(null);
         Brand brand = modelMapper.map(brandFormDto, Brand.class);
-        if (brand.getIsActive() == null) {
-            brand.setIsActive(true);
-        }
         return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
     }
 
@@ -53,9 +51,15 @@ public class BrandService {
         }
         brandFormDto.setId(id);
         Brand brand = modelMapper.map(brandFormDto, Brand.class);
-        if (brand.getIsActive() == null) {
-            brand.setIsActive(true);
-        }
         return modelMapper.map(brandRepository.saveAndFlush(brand), BrandFormDto.class);
+    }
+
+    public void deleteBrand(Integer id) {
+        Brand brand = getBrandById(id);
+        if (brand.getSaleItems().size() > 0) {
+            throw new BrandHasSaleItemsException("Brand has sale item(s)");
+        }
+        isBrandExists(id);
+        brandRepository.deleteById(id);
     }
 }
