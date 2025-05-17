@@ -47,18 +47,18 @@ const cancel = () => {
       <div class="grid gap-5">
         <div class="grid gap-3">
           <div class="grid gap-1.5">
-            <FormInput v-model="newBrand.name" label="Brand Name" :required="true" inputType="text"
+            <FormInput v-model="newBrand.name" label="Brand Name" :required="true" inputType="text" :maxlength="30"
                   placeholder="Enter brand name" className="itbms-name"/>
             </div>
           </div>
 
           <div class="grid gap-1.5">
-            <FormInput v-model="newBrand.websiteUrl" label="Website URL" inputType="url"
+            <FormInput v-model="newBrand.websiteUrl" label="Website URL" inputType="url" :maxlength="40"
                 placeholder="Enter Website URL" className="itbms-websiteUrl"/>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text"
+            <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" :maxlength="80"
                 placeholder="Enter country" className="itbms-countryOfOrigin"/>
 
             <div class="flex flex-col items-center justify-center gap-3 font-medium text-lg">

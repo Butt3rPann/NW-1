@@ -24,11 +24,11 @@ const inputValue = defineModel()
         </label>
         <textarea v-if="inputType === 'textarea'" v-model="inputValue" :placeholder="placeholder" @change="inputValue = inputValue?.trim()" :maxlength="maxlength"
             :class="[
-                `${className} appearance-none py-3 w-full text-base text-[#332A1E]/80 border-[#332A1E]/20 bg-white border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] min-h-[6rem]`
+                `${className} appearance-none py-3 w-full text-base text-[#332A1E]/80 border-[#332A1E]/20 bg-white border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] min-h-[6rem] selection:bg-[#2684FF]/30`
             ]"/>
         <input v-else :type="inputType" :required="required" v-model="inputValue" :placeholder="placeholder" @change="inputValue = inputValue?.trim()" :maxlength="maxlength"
             :class="[
-                `${className} h-[2.75rem] appearance-none w-full text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]`
+                `${className} h-[2.75rem] appearance-none w-full text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] selection:bg-[#2684FF]/30`
             ]"/>
     </div>
 </template>

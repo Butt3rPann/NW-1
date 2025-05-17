@@ -33,7 +33,7 @@ const handleEditBrand = async (editedBrand) => {
         if (edited.status === 400 || edited.status === 500) {
             throw new Error(edited.message)
         }
-        router.push({ name: 'BrandList' , query: { edited: 'true' }})
+        router.push({ name: 'BrandList', query: { edited: 'true' } })
     } catch (error) {
         console.log(error)
         isSuccess.value = false
@@ -50,7 +50,7 @@ const handleEditBrand = async (editedBrand) => {
         <p class="text-5xl font-bold font-rubik text-[#332A1E] ">Edit Brand</p> 
         <BrandForm @submitAction="handleEditBrand" pathName="BrandList" :brandData="brand"/>
     </div>
-    <ItemNotFound v-else title="Brand" description="The requested brand does not exist." backPathName="BrandList"/>
+    <ItemNotFound v-else title="Brand" description="The brand does not exist." backPathName="BrandList"/>
 </template>
  
 <style scoped></style>

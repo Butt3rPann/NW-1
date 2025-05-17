@@ -31,24 +31,23 @@ const router = useRouter()
 const brandToDelete = ref(null)
 
 if (route.query.added === 'true') {
-    isShowPopup.value = true
-    message.value = 'The brand has been added'
     router.replace({query: { }})
-} else if(route.query.edited === 'true') {
+    message.value = 'The brand has been added.'
     isShowPopup.value = true
+} else if (route.query.edited === 'true') {
+    router.replace({query: { }})
     message.value = 'The brand has been updated.'
-    router.replace({query: { }})
+    isShowPopup.value = true
 }
 
 const showCannotDeletePopup = ref(false)
-
 
 async function deleteBrandById(id) {
     try {
         const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
 
-        if (!brand) {
-            console.error('Brand not found from API')
+        if (brand.status === 404) {
+            showNotFound.value = true
         }
 
         deletedId.value = brand.id
@@ -63,7 +62,6 @@ async function deleteBrandById(id) {
         console.error(error)
   }
 }
-
 
 const showDelConfirm = ref(false)
 
@@ -93,9 +91,10 @@ async function deleteBrand() {
 </script>
 
 <template>
-    <div class="bg-white text-[#332A1E]">
+<div class="bg-white text-[#332A1E]">
+    <div v-if="!showNotFound">
         <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
-        <div v-if="!showNotFound" class="font-rubik mx-35 pb-15 pt-30">
+        <div class="font-rubik mx-35 pb-15 pt-30">
             <div class="flex justify-between items-center mb-4">
                 <p class="text-[3.5rem] font-bold text-[#332A1E]">Brands</p>
                 <router-link :to="{ name: 'AddBrand' }">
@@ -135,12 +134,13 @@ async function deleteBrand() {
                 </div>
             </div>
         </div>
-        <ItemNotFound v-else title="Brands" description="An error has occurred, the brand does not exist." backPathName="BrandList" />
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message='`Do you want to delete "${brandToDelete}" brand?`'
             class="itbms-message"
             @delete="deleteBrand" />
         <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message='`Delete "${brandToDelete}" is not allowed. There are sale items with "${brandToDelete}" brand.`'/>
     </div>
+    <ItemNotFound v-else title="Brands" description="An error has occurred, the brand does not exist." backPathName="BrandList" />
+</div>
 </template>
 
 <style scoped></style>
