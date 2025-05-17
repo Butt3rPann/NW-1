@@ -4,10 +4,14 @@ import BrandForm from '@/components/form/BrandForm.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const router = useRouter()
 const { params: { id } } = useRoute()
 const brand = ref({})
+const message = ref('')
+const isShowPopup = ref(false)
+const isSuccess = ref(true)
 
 onMounted(async () => {
     try {
@@ -32,12 +36,17 @@ const handleEditBrand = async (editedBrand) => {
         router.push({ name: 'BrandList' , query: { edited: 'true' }})
     } catch (error) {
         console.log(error)
+        isSuccess.value = false
+        message.value = 'The brand could not be updated.'
+        isShowPopup.value = true
+        setTimeout(() => isShowPopup.value = false, 1500)
     }
 }
 </script>
  
 <template>
     <div v-if="brand.id" class="flex flex-col items-center justify-center gap-7 pt-10 h-screen bg-white">
+        <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
         <p class="text-5xl font-bold font-rubik text-[#332A1E] ">Edit Brand</p> 
         <BrandForm @submitAction="handleEditBrand" pathName="BrandList" :brandData="brand"/>
     </div>
