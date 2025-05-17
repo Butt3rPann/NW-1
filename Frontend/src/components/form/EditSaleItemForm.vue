@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue';
 import { editItem, getItemById } from '@/libs/fetchUtils';
 import SaleItemForm from './SaleItemForm.vue';
 import ItemNotFound from '../elements/ItemNotFound.vue';
