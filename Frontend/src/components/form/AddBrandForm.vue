@@ -2,14 +2,9 @@
 import { useRouter } from 'vue-router'
 import BrandForm from '@/components/form/BrandForm.vue'
 import { addItem } from '@/libs/fetchUtils'
-import { ref } from 'vue'
-import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const router = useRouter()
 const emit = defineEmits(['addSuccess'])
-const message = ref('')
-const isShowPopup = ref(false)
-const isSuccess = ref(true)
 
 const handleNewBrand = async (newBrand) => {
     const addedItem = {...newBrand}
@@ -23,16 +18,9 @@ const handleNewBrand = async (newBrand) => {
         if (addedBrand.status === 400 || addedBrand.status === 500) {
             throw new Error(addedBrand.message)
         }
-        isSuccess.value = true
-        message.value = 'The brand has been added.'
-        isShowPopup.value = true
-        setTimeout(() => router.push({ name: 'BrandList' }), 800)
+        router.push({ name: 'BrandList', query: { added: 'true' } })
     } catch (error) {
         console.log(error)
-        isSuccess.value = false
-        message.value = 'The brand could not be added.'
-        isShowPopup.value = true
-        setTimeout(() => isShowPopup.value = false, 1500)
     }
 }
 
@@ -40,7 +28,6 @@ const handleNewBrand = async (newBrand) => {
  
 <template>
 <div class="bg-white">
-    <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
     <div class="flex flex-col items-center justify-center gap-7 pt-10 h-screen">
         <p class="itbms-add-button text-5xl font-bold font-rubik text-[#332A1E] ">Add Brand</p>
         <p class="font-medium text-lg">

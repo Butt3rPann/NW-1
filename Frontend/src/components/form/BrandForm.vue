@@ -16,7 +16,7 @@ const newBrand = ref({
     name: props.brandData?.name || '',
     websiteUrl: props.brandData?.websiteUrl || '',
     countryOfOrigin: props.brandData?.countryOfOrigin || '',
-    isActive: props.brandData?.isActive ?? false
+    isActive: props.brandData?.isActive ?? true
 })
 
 oldBrand.value = {...newBrand.value}

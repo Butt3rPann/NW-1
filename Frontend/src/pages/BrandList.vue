@@ -31,9 +31,13 @@ const router = useRouter()
 const brandToDelete = ref(null)
 
 if (route.query.added === 'true') {
-    router.replace({query: { }})
-    message.value = 'The brand has been added'
     isShowPopup.value = true
+    message.value = 'The brand has been added'
+    router.replace({query: { }})
+} else if(route.query.edited === 'true') {
+    isShowPopup.value = true
+    message.value = 'The brand has been updated.'
+    router.replace({query: { }})
 }
 
 const showCannotDeletePopup = ref(false)
@@ -135,7 +139,7 @@ async function deleteBrand() {
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message='`Do you want to delete "${brandToDelete}" brand?`'
             class="itbms-message"
             @delete="deleteBrand" />
-        <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message='`Delete "${brandToDelete}" is not allow. There are sale items with "${brandToDelete}"  brand.`'/>
+        <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message='`Delete "${brandToDelete}" is not allowed. There are sale items with "${brandToDelete}" brand.`'/>
     </div>
 </template>
 
