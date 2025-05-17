@@ -39,12 +39,12 @@ public class BrandController {
     }
 
     @PostMapping("/brands")
-    public ResponseEntity<BrandFormDto> createBrand(@RequestBody BrandFormDto brandFormDto) {
+    public ResponseEntity<BrandDetailDto> createBrand(@RequestBody BrandFormDto brandFormDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(brandService.createBrand(brandFormDto));
     }
 
     @PutMapping("/brands/{id}")
-    public ResponseEntity<BrandFormDto> updateBrand(@PathVariable Integer id, @RequestBody BrandFormDto brandFormDto) {
+    public ResponseEntity<BrandDetailDto> updateBrand(@PathVariable Integer id, @RequestBody BrandFormDto brandFormDto) {
         return ResponseEntity.ok(brandService.updateBrand(id, brandFormDto));
     }
 
