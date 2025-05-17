@@ -2,8 +2,7 @@
 import { editItem, getItemById} from '@/libs/fetchUtils'
 import BrandForm from '@/components/form/BrandForm.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted } from 'vue'
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue'
 import PopupMessage from '../elements/PopupMessage.vue';
 import ItemNotFound from '../elements/ItemNotFound.vue';
 
