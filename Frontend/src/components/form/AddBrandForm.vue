@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import BrandForm from '@/components/form/BrandForm.vue'
 import { addItem } from '@/libs/fetchUtils'
 import { ref } from 'vue'
-import PopupMessage from '../elements/PopupMessage.vue'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const router = useRouter()
 const emit = defineEmits(['addSuccess'])

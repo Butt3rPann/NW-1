@@ -1,8 +1,8 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
-import BaseButton from '@/components/elements/BaseButton.vue';
-import { useRouter } from 'vue-router';
+import BaseButton from '@/components/elements/BaseButton.vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const emit = defineEmits(['submitAction'])

@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onMounted, watchEffect } from 'vue'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
-import { getItems } from '@/libs/fetchUtils';
+import { getItems } from '@/libs/fetchUtils'
 import FormSelect from '@/components/elements/FormSelect.vue'
 import FormInput from '@/components/elements/FormInput.vue'
-import { useRouter } from 'vue-router';
-import BaseButton from '../elements/BaseButton.vue';
+import { useRouter } from 'vue-router'
+import BaseButton from '@/components/elements/BaseButton.vue'
 
 const props = defineProps({
     saleItemData: Object,
@@ -88,12 +88,12 @@ const cancel = () => {
 }
 
 const phones = ref({
-    mainImage: '/saleItemImage/demoImg1.png',
+    mainImage: '/nw1/saleItemImage/demoImg1.png',
     thumbnail: [
-        '/saleItemImage/demoImg1.png',
-        '/saleItemImage/demoImg2.png',
-        '/saleItemImage/demoImg3.png',
-        '/saleItemImage/demoImg4.png'
+        '/nw1/saleItemImage/demoImg1.png',
+        '/nw1/saleItemImage/demoImg2.png',
+        '/nw1/saleItemImage/demoImg3.png',
+        '/nw1/saleItemImage/demoImg4.png'
     ]
 })
 

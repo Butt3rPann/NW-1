@@ -1,14 +1,15 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { deleteItemById, getItems } from '@/libs/fetchUtils';
-import ListModel from '@/components/model/ListModel.vue';
-import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
-import PopupMessage from '@/components/elements/PopupMessage.vue';
+import { onMounted, ref } from 'vue'
+import { deleteItemById, getItems } from '@/libs/fetchUtils'
+import ListModel from '@/components/model/ListModel.vue'
+import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
-import BaseButton from '@/components/elements/BaseButton.vue';
-import ItemNotFound from '@/components/elements/ItemNotFound.vue';
-import router from '@/router';
-import { useRoute } from 'vue-router';
+import BaseButton from '@/components/elements/BaseButton.vue'
+import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import router from '@/router'
+import { useRoute } from 'vue-router'
+import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
 
 const route = useRoute()
 const saleItems = ref([])
@@ -112,7 +113,7 @@ async function deleteSaleItem(){
                     </template>
                 </ListModel>
                 <div v-if="!saleItems.length" class="flex flex-col items-center space-y-3 py-18">
-                    <img src="../assets/images/emptySaleItems.png" alt="EmptySaleItems" class="w-20">
+                    <img :src="emptySaleItemsImg" alt="EmptySaleItems" class="w-20">
                     <p class="text-xl text-[#ABBCC9]">no sale item</p>
                 </div>
             </div>

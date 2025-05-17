@@ -6,6 +6,8 @@ import facebookIcon from '@/assets/images/facebookLogo.png'
 import twitterIcon from '@/assets/images/twitterLogo.png'
 import igIcon from '@/assets/images/igLogo.png'
 import youtubeIcon from '@/assets/images/youtubeLogo.png'
+import copyrightIcon from '@/assets/images/copyright.png'
+
 const footerSections = [
     {
         title: 'Shop',
@@ -73,7 +75,7 @@ const socialIcons = [facebookIcon, twitterIcon, igIcon, youtubeIcon]
         </div>
         <div class="flex justify-between items-center mt-7">
             <div class="flex items-center">
-                <img src="@/assets/images/copyright.png" alt="copyright"></img>
+                <img :src="copyrightIcon" alt="copyright"></img>
                 <p class="text-base font-light ml-2">2025 ITB-MShop. All rights reserved.</p>
             </div>
             <div class="flex items-center">

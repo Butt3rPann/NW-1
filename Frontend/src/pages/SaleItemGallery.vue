@@ -1,12 +1,13 @@
 <script setup>
-import SaleItemCard from '@/components/sale-item/SaleItemCard.vue';
-import { getItems } from '@/libs/fetchUtils';
-import { onMounted, ref } from 'vue';
+import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
+import { getItems } from '@/libs/fetchUtils'
+import { onMounted, ref } from 'vue'
 import addIcon from '@/assets/images/add.png'
-import PopupMessage from '@/components/elements/PopupMessage.vue';
-import router from '@/router';
-import { useRoute } from 'vue-router';
-import BaseButton from '@/components/elements/BaseButton.vue';
+import PopupMessage from '@/components/elements/PopupMessage.vue'
+import router from '@/router'
+import { useRoute } from 'vue-router'
+import BaseButton from '@/components/elements/BaseButton.vue'
+import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
 
 const saleItems = ref([])
 const route = useRoute()
@@ -81,7 +82,7 @@ onMounted(async () => {
         </div>
         <SaleItemCard v-if="saleItems.length" :saleItems="saleItems" view="gallery"/>
         <div v-else class="flex flex-col items-center space-y-3 py-18">
-            <img src="../assets/images/emptySaleItems.png" alt="EmptySaleItems" class=" w-36">
+            <img :src="emptySaleItemsImg" alt="EmptySaleItems" class=" w-36">
             <p class="text-xl text-[#ABBCC9]">no sale item</p>
         </div>
     </div>

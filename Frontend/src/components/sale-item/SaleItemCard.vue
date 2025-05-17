@@ -1,5 +1,5 @@
 <script setup>
-import ListModel from '../model/ListModel.vue';
+import ListModel from '@/components/model/ListModel.vue'
 
 defineProps({
     saleItems: {

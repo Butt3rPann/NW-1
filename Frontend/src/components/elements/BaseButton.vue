@@ -2,7 +2,6 @@
 const props = defineProps({
   icon: String,
   text: String,
-  to: String,
   disabled: Boolean,
   bgColor: {
     type: String,

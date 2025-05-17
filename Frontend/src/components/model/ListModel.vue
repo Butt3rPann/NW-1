@@ -29,7 +29,7 @@ defineProps({
                 <template v-if="view === 'gallery'">
                     <router-link :to="{ name: 'SaleItemsDetail', params: { saleItemId: item.id } }">
                         <div class="flex items-center justify-center bg-[#FAF6F5]">
-                            <img :src="'./saleItemImage/demoImg1.png'" class="h-[7.5rem] my-8" />
+                            <img :src="'/nw1/saleItemImage/demoImg1.png'" class="h-[7.5rem] my-8" />
                         </div>
                         <div class="flex bg-white">
                             <slot name="saleItem" :itemInList="item"/>

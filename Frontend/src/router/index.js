@@ -9,7 +9,7 @@ import AddBrandForm from "@/components/form/AddBrandForm.vue";
 import BrandList from "@/pages/BrandList.vue";
 import EditBrandForm from "@/components/form/EditBrandForm.vue";
 
-const history = createWebHistory()
+const history = createWebHistory('/nw1/')
 const routes = [
     {
         path: '/',
