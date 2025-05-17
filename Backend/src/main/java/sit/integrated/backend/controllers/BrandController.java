@@ -34,7 +34,7 @@ public class BrandController {
     public ResponseEntity<BrandDetailDto> getBrand(@PathVariable Integer id) {
         Brand brand = brandService.getBrandById(id);
         BrandDetailDto brandDetailDto = modelMapper.map(brand, BrandDetailDto.class);
-        brandDetailDto.setNoOfSaleItem(brand.getSaleItems().size());
+        brandDetailDto.setNoOfSaleItems(brand.getSaleItems().size());
         return ResponseEntity.ok(brandDetailDto);
     }
 
@@ -46,5 +46,11 @@ public class BrandController {
     @PutMapping("/brands/{id}")
     public ResponseEntity<BrandFormDto> updateBrand(@PathVariable Integer id, @RequestBody BrandFormDto brandFormDto) {
         return ResponseEntity.ok(brandService.updateBrand(id, brandFormDto));
+    }
+
+    @DeleteMapping("/brands/{id}")
+    public ResponseEntity<Void> deleteBrand(@PathVariable Integer id) {
+        brandService.deleteBrand(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

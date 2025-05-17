@@ -9,5 +9,5 @@ public class BrandDetailDto {
     private String websiteUrl;
     private String countryOfOrigin;
     private Boolean isActive;
-    private Integer noOfSaleItem;
+    private Integer noOfSaleItems;
 }
