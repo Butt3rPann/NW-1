@@ -57,13 +57,14 @@ const cancel = () => {
                 placeholder="Enter Website URL" className="itbms-websiteUrl"/>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" :maxlength="80"
+          <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
+            <div class="md:col-span-7">
+              <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" 
                 placeholder="Enter country" className="itbms-countryOfOrigin"/>
-
-            <div class="flex flex-col items-center justify-center gap-3 font-medium text-lg">
+            </div>
+            <div class="md:col-span-3 flex flex-col items-center justify-center gap-3 font-medium text-lg">
               <p class="font-rubik text-[#332A1E]">Active</p>
-              <input v-model="newBrand.isActive" type="checkbox" class="toggle toggle-lg toggle-success"/>
+              <input v-model="newBrand.isActive" type="checkbox" class="toggle toggle-lg custom-toggle" />
             </div>
           </div>
 
@@ -76,4 +77,18 @@ const cancel = () => {
   </div>
 </template>
  
-<style scoped></style>
+<style scoped>
+.custom-toggle {
+  background-color: #d1d5db;
+  border: 2px
+}
+.custom-toggle::before {
+  background-color: #ffffff
+}
+.custom-toggle:checked {
+  background-color: #4bbd80 
+}
+.custom-toggle:checked::before {
+  background-color: #ffffff
+}
+</style>
