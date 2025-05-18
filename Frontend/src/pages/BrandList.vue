@@ -114,8 +114,8 @@ async function deleteBrand() {
                         <p class="w-[25%]">Action</p>
                     </template>
                     <template #item="slotProps">
-                        <p class="w-[25%]">{{ slotProps.itemInList.id }}</p>
-                        <p class="w-[75%]">{{ slotProps.itemInList.name }}</p>
+                        <p class="itbms-id w-[25%]">{{ slotProps.itemInList.id }}</p>
+                        <p class="itbms-name w-[75%]">{{ slotProps.itemInList.name }}</p>
                         <div class="w-[25%] flex justify-center gap-3">
                             <router-link :to="{ name: 'EditBrand', params: { id: slotProps.itemInList.id } }"
                                 class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
