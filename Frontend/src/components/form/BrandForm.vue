@@ -64,13 +64,13 @@ const cancel = () => {
             </div>
             <div class="md:col-span-3 flex flex-col items-center justify-center gap-3 font-medium text-lg">
               <p class="font-rubik text-[#332A1E]">Active</p>
-              <input v-model="newBrand.isActive" type="checkbox" class="toggle toggle-lg custom-toggle" />
+              <input v-model="newBrand.isActive" type="checkbox" class="itbms-isActive toggle toggle-lg custom-toggle"/>
             </div>
           </div>
 
           <div class="flex justify-center gap-4 pt-2">
             <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
-            <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"  />
+            <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"/>
           </div>
         </div>
     </div>
