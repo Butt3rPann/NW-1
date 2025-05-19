@@ -134,10 +134,10 @@ async function deleteBrand() {
                 </div>
             </div>
         </div>
-        <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message='`Do you want to delete "${brandToDelete}" brand?`'
+        <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message="`Do you want to delete ${brandToDelete} brand?`"
             class="itbms-message"
             @delete="deleteBrand" />
-        <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message='`Delete "${brandToDelete}" is not allowed. There are sale items with "${brandToDelete}" brand.`'/>
+        <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message="`Delete ${brandToDelete} is not allowed. There are sale items with ${brandToDelete} brand.`"/>
     </div>
     <ItemNotFound v-else title="Brands" description="An error has occurred, the brand does not exist." backPathName="BrandList" />
 </div>
