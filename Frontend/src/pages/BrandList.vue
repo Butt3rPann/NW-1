@@ -42,21 +42,15 @@ if (route.query.added === 'true') {
 
 const showCannotDeletePopup = ref(false)
 
-async function deleteBrandById(id) {
+async function deleteBrandById(id, name) {
     try {
-        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
-
-        if (brand.status === 404) {
-            showNotFound.value = true
-        }
-
-        deletedId.value = brand.id
-        brandToDelete.value = brand.name
-
-        if (brand.noOfSaleItems === 0) {
-            showDelConfirm.value = true
+        deletedId.value = id
+	brandToDelete.value = name
+	const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
+	if (brand.noOfSaleItems > 0) {
+	    showCannotDeletePopup.value = true
         } else {
-            showCannotDeletePopup.value = true
+	    showDelConfirm.value = true
     }
     } catch (error) {
         console.error(error)
@@ -121,7 +115,7 @@ async function deleteBrand() {
                                 class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
                                 E
                             </router-link>
-                            <p @click="deleteBrandById(slotProps.itemInList.id)"
+                            <p @click="deleteBrandById(slotProps.itemInList.id, slotProps.itemInList.name)"
                                 class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
                                 D
                             </p>
