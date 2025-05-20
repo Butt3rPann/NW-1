@@ -100,6 +100,7 @@ async function deleteBrand() {
                 <span class="text-[#332A1E]/50 mx-3"> > </span>
                 <span class="text-[#6F879C]">Brands</span>
             </p>
+<<<<<<< Updated upstream
             <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white">
                 <ListModel :items="brands" view="list">
                     <template #header>
@@ -122,6 +123,37 @@ async function deleteBrand() {
                         </div>
                     </template>
                 </ListModel>
+=======
+            <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white gap-2">
+                <table class="w-full ">
+                    <thead>
+                        <tr class="flex bg-[#F9F5F5] font-semibold border-b border-[#CFC8BE] h-16 items-center">
+                            <th class="w-[25%] p-2 text-center">id</th>
+                            <th class="w-[75%] p-2">Name</th>
+                            <th class="w-[25%] p-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="itbms-row">
+                        <tr v-for="brand in brands" :key="brand.id" class="flex items-center border-t border-[#CFC8BE] h-17">
+                            <td class="itbms-id w-[25%] p-2 text-center">{{ brand.id }}</td>
+                            <td class="itbms-name w-[75%] p-2 text-center">{{ brand.name }}</td>
+                            <td class="w-[25%] p-2">
+                                <div class="flex justify-center gap-3">
+                                    <router-link :to="{ name: 'EditBrand', params: { id: brand.id } }" 
+                                        class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
+                                        E
+                                    </router-link>
+                                    <p @click="deleteBrandById(brand.id)" 
+                                        class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
+                                        D
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+>>>>>>> Stashed changes
                 <div v-if="!brands.length" class="flex flex-col items-center space-y-3 py-18">
                     <img :src="emptySaleItems" alt="EmptySaleItems" class="w-20">
                     <p class="text-xl text-[#ABBCC9]">no brand</p>

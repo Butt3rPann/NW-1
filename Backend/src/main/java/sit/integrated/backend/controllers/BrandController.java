@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1")
-//@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 public class BrandController {
     @Autowired
     private BrandService brandService;

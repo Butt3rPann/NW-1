@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { deleteItemById, getItems } from '@/libs/fetchUtils'
-import ListModel from '@/components/model/ListModel.vue'
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
@@ -39,11 +38,10 @@ if (route.query.added === 'true') {
 
 const deletedId = ref(null)
 
-function deleteSaleItemById(id) {
+function deleteSaleItemById(id){
     showDelConfirm.value = true
     deletedId.value = id
 }
-
 const showDelConfirm = ref(false)
 const showNotFound = ref(false)
 
@@ -87,31 +85,43 @@ async function deleteSaleItem(){
                 </div>
             </div>
             <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white">
-                <ListModel :items="saleItems" view="list">
-                    <template #header>
-                        <p class="w-[10%]">id</p>
-                        <p class="w-[10%]">Brand</p>
-                        <p class="w-[25%]">Model</p>
-                        <p class="w-[7%]">Ram</p>
-                        <p class="w-[10%]">Storage</p>
-                        <p class="w-[13%]">Color</p>
-                        <p class="w-[10%]">Price</p>
-                        <div class="w-[15%]">Action</div>
-                    </template>
-                    <template #item="slotProps">
-                        <p class="itbms-id w-[10%]">{{ slotProps.itemInList.id }}</p>
-                        <p class="itbms-brand w-[10%]">{{ slotProps.itemInList.brandName }}</p>
-                        <p class="itbms-model w-[25%]">{{ slotProps.itemInList.model }}</p>
-                        <p class="itbms-ramGb w-[7%]">{{ slotProps.itemInList.ramGb ?? '-' }}</p>
-                        <p class="itbms-storageGb w-[10%]">{{ slotProps.itemInList.storageGb ?? '-' }}</p>
-                        <p class="itbms-color w-[13%]">{{ slotProps.itemInList.color ?? '-' }}</p>
-                        <p class="itbms-price w-[10%]">{{ slotProps.itemInList.price.toLocaleString() }}</p>
-                        <div class="w-[15%] flex justify-center gap-3">
-                            <router-link :to="{ name: 'EditSaleItem', params: { id: slotProps.itemInList.id } }" class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">E</router-link>
-                            <p @click="deleteSaleItemById(slotProps.itemInList.id)" class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">D</p>
-                        </div>
-                    </template>
-                </ListModel>
+                <table class="w-full ">
+                    <thead>
+                        <tr class="flex bg-[#F9F5F5] font-semibold border-b border-[#CFC8BE] h-16 items-center">
+                            <th class="w-[10%]">id</th>
+                            <th class="w-[10%]">Brand</th>
+                            <th class="w-[25%]">Model</th>
+                            <th class="w-[7%]">Ram</th>
+                            <th class="w-[10%]">Storage</th>
+                            <th class="w-[13%]">Color</th>
+                            <th class="w-[10%]">Price</th>
+                            <th class="w-[15%]">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="itbms-row">
+                        <tr v-for="si in saleItems" :key="saleItems.id" class="flex items-center border-t border-[#CFC8BE] h-17">
+                            <td class="itbms-id w-[10%] text-center">{{ si.id }}</td>
+                            <td class="itbms-brand w-[10%] text-center">{{ si.brandName}}</td>
+                            <td class="itbms-model w-[25%] text-center">{{ si.model }}</td>
+                            <td class="itbms-ramGb w-[7%] text-center">{{ si.ramGb ?? '-' }}</td>
+                            <td class="itbms-storageGb w-[10%] text-center">{{ si.storageGb ?? '-' }}</td>
+                            <td class="itbms-color w-[13%] text-center">{{ si.color ?? '-' }}</td>
+                            <td class="itbms-price w-[10%] text-center">{{ si.price.toLocaleString()}}</td>
+                            <td class="w-[15%] ">
+                                <div class="flex justify-center gap-3">
+                                    <router-link :to="{ name: 'EditSaleItem', params: { id: si.id } }" 
+                                        class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
+                                        E
+                                    </router-link>
+                                    <p @click="deleteSaleItemById(si.id)" 
+                                        class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
+                                        D
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div v-if="!saleItems.length" class="flex flex-col items-center space-y-3 py-18">
                     <img :src="emptySaleItemsImg" alt="EmptySaleItems" class="w-20">
                     <p class="text-xl text-[#ABBCC9]">no sale item</p>
