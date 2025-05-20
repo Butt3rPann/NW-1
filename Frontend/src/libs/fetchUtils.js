@@ -1,7 +1,11 @@
-async function getItems(url) {
+async function getItems(url, sortField, sortDirection) {
   try {
-    const data = await fetch(url)
-    const items = await data.json()
+    let fullUrl = url
+    if (sortField && sortDirection) {
+      fullUrl += `?sort=${sortField}&order=${sortDirection}`
+    }
+    const data = await fetch(fullUrl)
+    const items = await data.json();
     return items
   } catch (error) {
     throw new Error('no item')
