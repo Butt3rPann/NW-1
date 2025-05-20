@@ -100,30 +100,6 @@ async function deleteBrand() {
                 <span class="text-[#332A1E]/50 mx-3"> > </span>
                 <span class="text-[#6F879C]">Brands</span>
             </p>
-<<<<<<< Updated upstream
-            <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white">
-                <ListModel :items="brands" view="list">
-                    <template #header>
-                        <p class="w-[25%]">id</p>
-                        <p class="w-[75%]">Name</p>
-                        <p class="w-[25%]">Action</p>
-                    </template>
-                    <template #item="slotProps">
-                        <p class="itbms-id w-[25%]">{{ slotProps.itemInList.id }}</p>
-                        <p class="itbms-name w-[75%]">{{ slotProps.itemInList.name }}</p>
-                        <div class="w-[25%] flex justify-center gap-3">
-                            <router-link :to="{ name: 'EditBrand', params: { id: slotProps.itemInList.id } }"
-                                class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
-                                E
-                            </router-link>
-                            <p @click="deleteBrandById(slotProps.itemInList.id, slotProps.itemInList.name)"
-                                class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
-                                D
-                            </p>
-                        </div>
-                    </template>
-                </ListModel>
-=======
             <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white gap-2">
                 <table class="w-full ">
                     <thead>
@@ -152,8 +128,6 @@ async function deleteBrand() {
                         </tr>
                     </tbody>
                 </table>
-
->>>>>>> Stashed changes
                 <div v-if="!brands.length" class="flex flex-col items-center space-y-3 py-18">
                     <img :src="emptySaleItems" alt="EmptySaleItems" class="w-20">
                     <p class="text-xl text-[#ABBCC9]">no brand</p>
