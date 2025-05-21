@@ -1,9 +1,18 @@
-async function getItems(url, sortField, sortDirection) {
+async function getItems(url, sortField, sortDirection, brands) {
   try {
-    let fullUrl = url
+    const params = new URLSearchParams()
+
     if (sortField && sortDirection) {
-      fullUrl += `?sortField=${sortField}&sortDirection=${sortDirection}`
+      params.append('sortField', sortField)
+      params.append('sortDirection', sortDirection)
     }
+
+    if(Array.isArray(brands) && brands.length > 0) {
+      const joinedBrands = brands.join(',')
+      params.append('filterBrands', joinedBrands)
+    }
+
+    const fullUrl = `${url}?${params.toString()}`
     const data = await fetch(fullUrl)
     const items = await data.json();
     return items
