@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,13 @@ public class SaleItemService {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
 
-    public Page<SaleItem> getSaleItems(String sortField, String sortDirection) {
-        Sort sort = (sortField == null ? Sort.by("createdOn","id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField));
-        return saleItemRepository.findAll(PageRequest.of(0, (int) saleItemRepository.count(), sort));
+    public Page<SaleItem> getSaleItems(List<String> brands, String sortField, String sortDirection) {
+        Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField));
+        if (brands == null) {
+            return saleItemRepository.findAll(PageRequest.of(0, (int) saleItemRepository.count(), sort));
+        } else {
+            return saleItemRepository.findByBrands(brands, PageRequest.of(0, (int) saleItemRepository.count(), sort));
+        }
     }
 
     public SaleItem getSaleItemDetail(Integer id) {
@@ -58,9 +63,9 @@ public class SaleItemService {
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
     }
 
-    @Transactional
     public void deleteSaleItem (Integer id) {
         isSaleItemExists(id);
         saleItemRepository.deleteById(id);
     }
+
 }
