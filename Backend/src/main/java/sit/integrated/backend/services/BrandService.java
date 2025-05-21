@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.BrandDetailDto;
 import sit.integrated.backend.dtos.BrandFormDto;
 import sit.integrated.backend.entities.Brand;
@@ -34,6 +35,7 @@ public class BrandService {
         return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + id));
     }
 
+    @Transactional
     public BrandDetailDto createBrand(BrandFormDto brandFormDto) {
         if (brandRepository.existsBrandsByName(brandFormDto.getName())) {
             throw new DuplicateBrandException("Brand name already exists.");
@@ -46,6 +48,7 @@ public class BrandService {
         return modelMapper.map(brandRepository.saveAndFlush(brand), BrandDetailDto.class);
     }
 
+    @Transactional
     public BrandDetailDto updateBrand(Integer id, BrandFormDto brandFormDto) {
         isBrandExists(id);
         Brand existingBrand = getBrandById(id);
@@ -62,6 +65,7 @@ public class BrandService {
         return brandDetailDto;
     }
 
+    @Transactional
     public void deleteBrand(Integer id) {
         Brand brand = getBrandById(id);
         if (brand.getSaleItems().size() > 0) {

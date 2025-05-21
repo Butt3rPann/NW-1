@@ -106,17 +106,17 @@ const changeMainImg = (index) => {
 </script>
 
 <template>
-    <div class="flex gap-15">
-        <div class="flex flex-col items-center">
-            <div class="bg-[#F0EDEC] w-[30vw] h-[33vw] rounded-2xl flex items-center justify-center">
-                <img :src="phones.mainImage" alt="Selected Phone" class="h-[24vw]">
+    <div class="flex flex-col lg:flex-row gap-8  lg:gap-10 justify-between">
+        <div class="flex flex-col items-center lg:w-[35%] xl:w-[45%]">
+            <div class="bg-[#F0EDEC] w-full max-w-[24rem] sm:w-[17rem] md:w-[22rem] lg:w-[20rem] xl:w-[24rem] aspect-[9/10] rounded-2xl flex items-center justify-center">
+                <img :src="phones.mainImage" alt="Selected Phone" class="h-[13rem] sm:h-[13rem] md:h-[33vw] lg:h-[22vw] xl:h-[18rem]">
             </div>
             <div>
                 <OptionsPhone :phones="phones.thumbnail" :selectedIndex="selectedPhone"
                     @update:selected-index="changeMainImg" />
             </div>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-3 lg:w-[55%]">
             <div class="grid gap-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">

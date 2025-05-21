@@ -80,7 +80,7 @@ function closeDelConfirm() {
 
 <template>
 <div class="bg-white text-[#332A1E]">
-    <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed pt-25"/>
+    <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed mt-25"/>
     <div v-if="selectedItem?.id && !showNotFound">
         <div class="px-21 pt-30 pb-15 font-rubik relative">
             <router-link :to="{ name: 'SaleItems' }">

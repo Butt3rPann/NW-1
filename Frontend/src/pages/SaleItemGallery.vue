@@ -56,7 +56,7 @@ const sortSaleItems = async (type) => {
  
 <template>
 <div class="bg-white">
-    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed pt-25"/>
+    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25"/>
     <div class="font-rubik mx-35 pb-15 space-y-7 pt-30">
         <div class="flex justify-between items-center">
             <p class="text-[3.5rem] font-bold text-[#332A1E]">Products</p>
