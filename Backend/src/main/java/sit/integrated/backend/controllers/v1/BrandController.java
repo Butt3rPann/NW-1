@@ -1,4 +1,4 @@
-package sit.integrated.backend.controllers;
+package sit.integrated.backend.controllers.v1;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

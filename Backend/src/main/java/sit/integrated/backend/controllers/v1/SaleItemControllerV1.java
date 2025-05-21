@@ -1,4 +1,4 @@
-package sit.integrated.backend.controllers;
+package sit.integrated.backend.controllers.v1;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import sit.integrated.backend.utils.ListMapper;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/v1")
-public class SaleItemController {
+public class SaleItemControllerV1 {
     @Autowired
     private SaleItemService saleItemService;
     @Autowired

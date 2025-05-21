@@ -2,6 +2,8 @@ package sit.integrated.backend.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,13 +34,18 @@ public class SaleItemService {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
 
+    public Page<SaleItem> getSaleItems(String sortField, String sortDirection) {
+        Sort sort = (sortField == null ? Sort.by("createdOn","id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField));
+        return saleItemRepository.findAll(PageRequest.of(0, (int) saleItemRepository.count(), sort));
+    }
+
     public SaleItem getSaleItemDetail(Integer id) {
         return saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("SaleItem not found for this id :: " + id));
     }
 
     @Transactional
     public SaleItemDetailDto createSaleItem(SaleItemFormDto formDto) {
-	formDto.setId(null);
+	    formDto.setId(null);
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
     }
