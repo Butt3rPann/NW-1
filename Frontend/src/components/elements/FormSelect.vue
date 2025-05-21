@@ -8,7 +8,6 @@ const props = defineProps({
     property: String,
     placeholder : String,
     className: String,
-    isNull: Boolean
 })
 
 const inputValue = defineModel()
@@ -22,7 +21,7 @@ const inputValue = defineModel()
         <select v-model="inputValue" :value="inputValue"
         :class="[
             `${className} h-[2.75rem] appearance-none w-full text-base text-[#332A1E]/80 bg-white border border-[#332A1E]/20 rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]`,
-            inputValue.id ? 'text-[#332A1E]/80' : 'text-[#AEAAA6]'
+            inputValue?.id ? 'text-[#332A1E]/80' : 'text-[#AEAAA6]'
         ]">
             <option disabled :value="{id: null, name: null}">{{ placeholder || 'Please select' }}</option>
             <option v-for="option in options" :key="option.id" :value="option">{{ option[property]}}</option>

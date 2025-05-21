@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getItems, deleteItemById , getItemById} from '@/libs/fetchUtils'
-import ListModel from '@/components/model/ListModel.vue'
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
@@ -134,9 +133,7 @@ async function deleteBrand() {
                 </div>
             </div>
         </div>
-        <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message="`Do you want to delete ${brandToDelete} brand?`"
-            class="itbms-message"
-            @delete="deleteBrand" />
+        <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message="`Do you want to delete ${brandToDelete} brand?`" class="itbms-message" @delete="deleteBrand" />
         <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message="`Delete ${brandToDelete} is not allowed. There are sale items with ${brandToDelete} brand.`"/>
     </div>
     <ItemNotFound v-else title="Brands" description="An error has occurred, the brand does not exist." backPathName="BrandList" />
