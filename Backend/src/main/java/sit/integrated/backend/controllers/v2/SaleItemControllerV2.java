@@ -28,9 +28,9 @@ public class SaleItemControllerV2 {
     public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(
             @RequestParam(required = false) String sortField,
             @RequestParam(required = false, defaultValue = "asc") String sortDirection,
-            @RequestParam(required = false) List<String> brands
+            @RequestParam(required = false, defaultValue = "") List<String> filterBrands
             ) {
-        Page<SaleItem> page = saleItemService.getSaleItems(brands,sortField, sortDirection);
+        Page<SaleItem> page = saleItemService.getSaleItems(filterBrands,sortField, sortDirection);
         return ResponseEntity.ok(listMapper.toPageDto(page, SaleItemDetailDto.class, modelMapper));
     }
 }
