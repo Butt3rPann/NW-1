@@ -2,7 +2,7 @@ async function getItems(url, sortField, sortDirection) {
   try {
     let fullUrl = url
     if (sortField && sortDirection) {
-      fullUrl += `?sort=${sortField}&order=${sortDirection}`
+      fullUrl += `?sortField=${sortField}&sortDirection=${sortDirection}`
     }
     const data = await fetch(fullUrl)
     const items = await data.json();
