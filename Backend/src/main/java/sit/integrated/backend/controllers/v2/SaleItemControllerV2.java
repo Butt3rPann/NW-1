@@ -11,6 +11,8 @@ import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.utils.ListMapper;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/v2")
@@ -23,9 +25,12 @@ public class SaleItemControllerV2 {
     private ListMapper listMapper;
 
     @GetMapping("/sale-items")
-    public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(@RequestParam(required = false) String sortField,
-                                                                   @RequestParam(required = false, defaultValue = "asc") String sortDirection) {
-        Page<SaleItem> page = saleItemService.getSaleItems(sortField, sortDirection);
+    public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+            @RequestParam(required = false) List<String> brands
+            ) {
+        Page<SaleItem> page = saleItemService.getSaleItems(brands,sortField, sortDirection);
         return ResponseEntity.ok(listMapper.toPageDto(page, SaleItemDetailDto.class, modelMapper));
     }
 }
