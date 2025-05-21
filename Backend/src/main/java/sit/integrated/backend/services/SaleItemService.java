@@ -37,7 +37,7 @@ public class SaleItemService {
 
     public Page<SaleItem> getSaleItems(List<String> brands, String sortField, String sortDirection) {
         Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField));
-        if (brands == null) {
+        if (brands.isEmpty()) {
             return saleItemRepository.findAll(PageRequest.of(0, (int) saleItemRepository.count(), sort));
         } else {
             return saleItemRepository.findByBrands(brands, PageRequest.of(0, (int) saleItemRepository.count(), sort));
