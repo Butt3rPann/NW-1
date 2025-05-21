@@ -7,10 +7,9 @@ async function getItems(url, sortField, sortDirection, brands) {
       params.append('sortDirection', sortDirection)
     }
 
-    if(Array.isArray(brands)) {
-      brands.forEach(brand => {
-        params.append('filterBrands', brand)
-      })
+    if(Array.isArray(brands) && brands.length > 0) {
+      const joinedBrands = brands.join(',')
+      params.append('filterBrands', joinedBrands)
     }
 
     const fullUrl = `${url}?${params.toString()}`
