@@ -25,12 +25,12 @@ public class SaleItemControllerV2 {
     private ListMapper listMapper;
 
     @GetMapping("/sale-items")
-    public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(
-            @RequestParam(required = false) String sortField,
-            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
-            @RequestParam(required = false, defaultValue = "") List<String> filterBrands
-            ) {
-        Page<SaleItem> page = saleItemService.getSaleItems(filterBrands,sortField, sortDirection);
-        return ResponseEntity.ok(listMapper.toPageDto(page, SaleItemDetailDto.class, modelMapper));
+    public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(@RequestParam(required = false) String sortField,
+                                                                   @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+                                                                   @RequestParam(required = false, defaultValue = "") List<String> filterBrands,
+                                                                   @RequestParam Integer page,
+                                                                   @RequestParam(required = false, defaultValue = "10") Integer size) {
+        Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands,sortField, sortDirection, page, size);
+        return ResponseEntity.ok(listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper));
     }
 }
