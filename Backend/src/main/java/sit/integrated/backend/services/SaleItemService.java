@@ -35,12 +35,12 @@ public class SaleItemService {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
 
-    public Page<SaleItem> getSaleItems(List<String> brands, String sortField, String sortDirection) {
+    public Page<SaleItem> getSaleItems(List<String> brands, String sortField, String sortDirection, Integer page, Integer size) {
         Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField));
         if (brands.isEmpty()) {
-            return saleItemRepository.findAll(PageRequest.of(0, (int) saleItemRepository.count(), sort));
+            return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {
-            return saleItemRepository.findByBrands(brands, PageRequest.of(0, (int) saleItemRepository.count(), sort));
+            return saleItemRepository.findByBrands(brands, PageRequest.of(page, size, sort));
         }
     }
 
