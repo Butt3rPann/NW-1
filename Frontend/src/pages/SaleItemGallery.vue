@@ -23,6 +23,7 @@ const pageSize = ref(10)
 const brands = ref([])
 const showFilter = ref(false)
 const filterBrands = ref([])
+const pageNumber = ref(0)
 
 if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
@@ -40,7 +41,8 @@ async function getSaleItems() {
             `${import.meta.env.VITE_APP_URL}/v2/sale-items`,
             selectedSortField.value,  
             selectedSortType.value === 'none' ? null : selectedSortType.value,
-            filterBrands.value
+            filterBrands.value,
+            pageNumber.value
         )
         saleItems.value = saleItems.value.content
     } catch (error) {

@@ -1,4 +1,4 @@
-async function getItems(url, sortField, sortDirection, brands) {
+async function getItems(url, sortField, sortDirection, brands, page) {
   try {
     const params = new URLSearchParams()
 
@@ -12,6 +12,8 @@ async function getItems(url, sortField, sortDirection, brands) {
       params.append('filterBrands', joinedBrands)
     }
 
+    params.append('page', page)
+    
     const fullUrl = `${url}?${params.toString()}`
     const data = await fetch(fullUrl)
     const items = await data.json();
