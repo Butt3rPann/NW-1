@@ -19,15 +19,14 @@ const route = useRoute()
 const isShowPopup = ref(false)
 const message = ref('')
 const selectedSortField = ref('brand.name')
-const selectedSortType = ref('none')
 const pageSizeOptions = [5, 10, 20]
 const pageSize = ref(10)
 const brands = ref([])
 const showFilter = ref(false)
 
 const SaleItemsStore = useSaleItemGalleryStore()
-const { currentPage, currentFilter } = storeToRefs(SaleItemsStore)
-const { clearFilter, deleteFilter, goToPage, prevPage ,nextPage, lastPage, resetPage } = SaleItemsStore
+const { currentPage, currentFilter, currentSort } = storeToRefs(SaleItemsStore)
+const { clearFilter, deleteFilter, goToPage, prevPage ,nextPage, lastPage, resetPage, changeSort } = SaleItemsStore
 
 if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
@@ -44,7 +43,7 @@ async function getSaleItems() {
         saleItems.value = await getItems(
             `${import.meta.env.VITE_APP_URL}/v2/sale-items`,
             selectedSortField.value,  
-            selectedSortType.value === 'none' ? null : selectedSortType.value,
+            currentSort.value === 'none' ? null : currentSort.value,
             currentFilter.value,
             currentPage.value - 1
         )
@@ -64,6 +63,11 @@ function loadFromSessionStorage() {
     if (pageStore) {
         currentPage.value = pageStore
     }
+
+    const sortStore = sessionStorage.getItem('sortType')
+    if (sortStore) {
+        currentSort.value = sortStore
+    }
 }
 
 onMounted(async () => {
@@ -77,11 +81,6 @@ onMounted(async () => {
     }
 })
 
-const sortSaleItems = async (type) => {
-    selectedSortType.value = type
-    await getSaleItems()
-}
-
 watchEffect(async () => {
     await getSaleItems()
 
@@ -90,8 +89,10 @@ watchEffect(async () => {
     } else {
         sessionStorage.setItem('filter', JSON.stringify(currentFilter.value))
     }
-    
+
     sessionStorage.setItem('page', currentPage.value)
+
+    sessionStorage.setItem('sortType', currentSort.value)
 })
 </script>
 
@@ -148,14 +149,14 @@ watchEffect(async () => {
                     </select>
                 </div>
                 <div class="flex shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-1 px-2 w-fit gap-4">
-                    <button @click="sortSaleItems('none')" class="itbms-brand-none p-2 rounded-full cursor-pointer">
+                    <button @click="changeSort('none')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'none' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
                         <img :src="sortNone" alt="Default" class="w-6 h-6" />
                     </button>
-                    <button @click="sortSaleItems('asc')" class="itbms-brand-asc p-2 rounded-full cursor-pointer">
-                        <img :src="sortAsc" alt="Default" class="w-7 h-7" />
+                    <button @click="changeSort('asc')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'asc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                        <img :src="sortAsc" alt="Default" class="w-6 h-6" />
                     </button>
-                    <button @click="sortSaleItems('desc')" class="itbms-brand-desc p-2 rounded-full cursor-pointer">
-                        <img :src="sortDesc" alt="Default" class="w-7 h-7" />
+                    <button @click="changeSort('desc')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'desc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                        <img :src="sortDesc" alt="Default" class="w-6 h-6" />
                     </button>
                 </div>
             </div>
