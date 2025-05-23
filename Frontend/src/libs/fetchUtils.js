@@ -11,10 +11,12 @@ async function getItems(url, sortField, sortDirection, brands, page) {
       const joinedBrands = brands.join(',')
       params.append('filterBrands', joinedBrands)
     }
-
-    params.append('page', page)
     
-    const fullUrl = `${url}?${params.toString()}`
+    if (page >= 0) {
+      params.append('page', page)
+    }
+    
+    const fullUrl = params.toString() ? `${url}?${params.toString()}` : url
     const data = await fetch(fullUrl)
     const items = await data.json();
     return items
