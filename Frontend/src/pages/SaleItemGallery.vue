@@ -46,7 +46,7 @@ async function getSaleItems() {
             selectedSortField.value,  
             selectedSortType.value === 'none' ? null : selectedSortType.value,
             currentFilter.value,
-            currentPage.value
+            currentPage.value - 1
         )
         saleItems.value = saleItems.value.content
     } catch (error) {
@@ -59,8 +59,11 @@ function loadFromSessionStorage() {
     if (filterStore) {
         currentFilter.value = JSON.parse(filterStore)
     }
-
-    currentPage.value = sessionStorage.getItem('page')
+    
+    const pageStore = sessionStorage.getItem('page')
+    if (pageStore) {
+        currentPage.value = pageStore
+    }
 }
 
 onMounted(async () => {
@@ -87,7 +90,6 @@ watchEffect(async () => {
     } else {
         sessionStorage.setItem('filter', JSON.stringify(currentFilter.value))
     }
-    console.log(currentPage.value);
     
     sessionStorage.setItem('page', currentPage.value)
 })
