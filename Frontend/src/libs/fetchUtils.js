@@ -12,7 +12,7 @@ async function getItems(url, sortField, sortDirection, brands, page, size) {
       params.append('filterBrands', joinedBrands)
     }
     
-    if (page >= 0 && size != null) {
+    if (page >= 0 && size) {
       params.append('page', page)
       params.append('size', size)
     }
