@@ -4,9 +4,18 @@ import { ref } from 'vue'
 export const useSaleItemGalleryStore = defineStore('saleItemGallery', () => {
     const currentPage = ref(1)
     const currentFilter = ref([])
+    const currentSort = ref('none')
 
     const getPage = () => {
         return currentPage.value
+    }
+
+    const getSort = () => {
+        return currentSort.value
+    }
+
+    const changeSort = (type) => {
+        currentSort.value = type
     }
 
     const getFilter = () => {
@@ -47,7 +56,11 @@ export const useSaleItemGalleryStore = defineStore('saleItemGallery', () => {
         currentPage.value = 1
     }
 
-    return {currentPage, getPage, goToPage, prevPage ,nextPage, lastPage, resetPage, currentFilter, getFilter, clearFilter, deleteFilter}
+    return {
+        currentPage, getPage, goToPage, prevPage ,nextPage, lastPage, resetPage, 
+        currentFilter, getFilter, clearFilter, deleteFilter,
+        currentSort, getSort, changeSort
+    }
 })
 
 if (import.meta.hot){
