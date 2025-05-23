@@ -1,4 +1,4 @@
-async function getItems(url, sortField, sortDirection, brands, page) {
+async function getItems(url, sortField, sortDirection, brands, page, size) {
   try {
     const params = new URLSearchParams()
 
@@ -12,8 +12,9 @@ async function getItems(url, sortField, sortDirection, brands, page) {
       params.append('filterBrands', joinedBrands)
     }
     
-    if (page >= 0) {
+    if (page >= 0 && size != null) {
       params.append('page', page)
+      params.append('size', size)
     }
     
     const fullUrl = params.toString() ? `${url}?${params.toString()}` : url

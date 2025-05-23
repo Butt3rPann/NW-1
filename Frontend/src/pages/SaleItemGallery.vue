@@ -1,7 +1,7 @@
 <script setup>
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
 import { getItems } from '@/libs/fetchUtils'
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect, watch, computed} from 'vue'
 import addIcon from '@/assets/images/add.png'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import router from '@/router'
@@ -21,33 +21,57 @@ const message = ref('')
 const selectedSortField = ref('brand.name')
 const pageSizeOptions = [5, 10, 20]
 const pageSize = ref(10)
+const totalPage = ref(0)
 const brands = ref([])
 const showFilter = ref(false)
+const response = ref({})
+const isInitialized = ref(false)
 
 const SaleItemsStore = useSaleItemGalleryStore()
 const { currentPage, currentFilter, currentSort } = storeToRefs(SaleItemsStore)
 const { clearFilter, deleteFilter, goToPage, prevPage ,nextPage, lastPage, resetPage, changeSort } = SaleItemsStore
 
+const pageNumbers = computed(() => {
+    const numbers = []
+
+    let startNumber = Math.max(1, currentPage.value - 9)
+    const endNumber = Math.min(totalPage.value, startNumber + 9)
+
+    if(endNumber - startNumber < 9) {
+        startNumber = Math.max(1, endNumber - 9)
+    }
+
+    for(let i = startNumber; i <= endNumber; i++) {
+        numbers.push(i)
+    }
+
+    return numbers
+})
+
 if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
     router.replace({ query: { } })
     isShowPopup.value = true
+    currentPage.value = 1
 } else if (route.query.deleted === 'true'){
     message.value = "The sale item has been deleted."
     router.replace({ query: { } })
     isShowPopup.value = true
+    currentPage.value = 1
 }
 
 async function getSaleItems() {
     try {
-        saleItems.value = await getItems(
+        response.value = await getItems(
             `${import.meta.env.VITE_APP_URL}/v2/sale-items`,
             selectedSortField.value,  
             currentSort.value === 'none' ? null : currentSort.value,
             currentFilter.value,
-            currentPage.value - 1
+            currentPage.value - 1,
+            pageSize.value
         )
-        saleItems.value = saleItems.value.content
+        totalPage.value = response.value.totalPages
+        saleItems.value = response.value.content
     } catch (error) {
         console.log(error)
     }
@@ -55,16 +79,15 @@ async function getSaleItems() {
 
 function loadFromSessionStorage() {
     const filterStore = sessionStorage.getItem('filter')
+    const pageStore = sessionStorage.getItem('page')
+    const sortStore = sessionStorage.getItem('sortType')
+
     if (filterStore) {
         currentFilter.value = JSON.parse(filterStore)
     }
-    
-    const pageStore = sessionStorage.getItem('page')
-    if (pageStore) {
-        currentPage.value = pageStore
+    if(pageStore) {
+        currentPage.value = Number(pageStore)
     }
-
-    const sortStore = sessionStorage.getItem('sortType')
     if (sortStore) {
         currentSort.value = sortStore
     }
@@ -76,12 +99,15 @@ onMounted(async () => {
         await getSaleItems()
         brands.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/brands`)
         brands.value = brands.value.sort((a, b) => a.name.localeCompare(b.name))
+        isInitialized.value = true
     } catch (error) {
         console.log(error)
     }
 })
 
 watchEffect(async () => {
+    if (!isInitialized.value) return
+
     await getSaleItems()
 
     if (currentFilter.value.length === 0) {
@@ -93,6 +119,13 @@ watchEffect(async () => {
     sessionStorage.setItem('page', currentPage.value)
 
     sessionStorage.setItem('sortType', currentSort.value)
+})
+
+watch([selectedSortField, currentSort, currentFilter, pageSize], async () => {
+    if (!isInitialized.value) return
+    currentPage.value = 1
+    sessionStorage.setItem('page', 1) 
+    await getSaleItems()
 })
 </script>
 
@@ -152,10 +185,10 @@ watchEffect(async () => {
                     <button @click="changeSort('none')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'none' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
                         <img :src="sortNone" alt="Default" class="w-6 h-6" />
                     </button>
-                    <button @click="changeSort('asc')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'asc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                    <button @click="changeSort('asc')" :class="['itbms-brand-asc p-2 rounded-md cursor-pointer', currentSort === 'asc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
                         <img :src="sortAsc" alt="Default" class="w-6 h-6" />
                     </button>
-                    <button @click="changeSort('desc')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'desc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                    <button @click="changeSort('desc')" :class="['itbms-brand-desc p-2 rounded-md cursor-pointer', currentSort === 'desc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
                         <img :src="sortDesc" alt="Default" class="w-6 h-6" />
                     </button>
                 </div>
@@ -165,6 +198,38 @@ watchEffect(async () => {
         <div v-else class="flex flex-col items-center space-y-3 py-18">
             <img :src="emptySaleItemsImg" alt="EmptySaleItems" class=" w-36">
             <p class="text-xl text-[#ABBCC9]">no sale item</p>
+        </div>
+        <div v-if="totalPage > 1" class="flex flex-wrap justify-center items-center gap-2 mt-8">
+            <button @click="resetPage" :disabled="currentPage === 1" :class="['itbms-page-first flex items-center justify-center w-10 h-10 rounded-md border',
+            currentPage === 1? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="m11 17-5-5 5-5"></path>
+                    <path d="m18 17-5-5 5-5"></path>
+                </svg>
+            </button>
+            <button @click="prevPage(response.first)" :disabled="currentPage === 1" :class="['itbms-page-prev flex items-center justify-center w-10 h-10 rounded-md border',
+            currentPage === 1? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="m15 18-6-6 6-6"></path>
+                </svg>
+            </button>
+            <button @click="goToPage(number)" v-for="(number, index) in pageNumbers" :key="number" :class="[`itbms-page-${index} flex items-center justify-center w-10 h-10 rounded-md border`,
+            currentPage === number? 'bg-[#6F879C] text-white border-[#6F879C]': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
+                {{ number }}
+            </button>
+            <button @click="nextPage(response.last)" :disabled="currentPage === totalPage" :class="['itbms-page-next flex items-center justify-center w-10 h-10 rounded-md border',
+            currentPage === totalPage? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="m9 18 6-6-6-6"></path>
+                </svg>
+            </button>
+            <button @click="lastPage(totalPage)" :disabled="currentPage === totalPage" :class="['itbms-page-last flex items-center justify-center w-10 h-10 rounded-md border',
+            currentPage === totalPage? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="m13 17 5-5-5-5"></path>
+                    <path d="m6 17 5-5-5-5"></path>
+                </svg>
+            </button>
         </div>
     </div>
 </div>
