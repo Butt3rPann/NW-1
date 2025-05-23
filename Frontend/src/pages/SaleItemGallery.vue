@@ -27,7 +27,7 @@ const showFilter = ref(false)
 
 const SaleItemsStore = useSaleItemGalleryStore()
 const { currentPage, currentFilter } = storeToRefs(SaleItemsStore)
-const { clearFilter, deleteFilter } = SaleItemsStore
+const { clearFilter, deleteFilter, goToPage, prevPage ,nextPage, lastPage, resetPage } = SaleItemsStore
 
 if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
@@ -59,6 +59,8 @@ function loadFromSessionStorage() {
     if (filterStore) {
         currentFilter.value = JSON.parse(filterStore)
     }
+
+    currentPage.value = sessionStorage.getItem('page')
 }
 
 onMounted(async () => {
@@ -85,6 +87,9 @@ watchEffect(async () => {
     } else {
         sessionStorage.setItem('filter', JSON.stringify(currentFilter.value))
     }
+    console.log(currentPage.value);
+    
+    sessionStorage.setItem('page', currentPage.value)
 })
 </script>
 
