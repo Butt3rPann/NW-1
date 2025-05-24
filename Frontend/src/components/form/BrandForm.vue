@@ -39,6 +39,15 @@ const cancel = () => {
     router.push({ name: props.pathName })
 }
 
+const invalid = ref({
+    name: 'Brand name must be 1-30 characters long.',
+    url: 'Brand URL must be a valid URL or not specified.',
+    countryOfOrigin: 'Brand country of origin must be 1-80 characters long or not specified.'
+})
+
+const disabledSaveBtn = () => {
+  disabled.value = true
+}
 </script>
  
 <template>
@@ -48,19 +57,19 @@ const cancel = () => {
         <div class="grid gap-3">
           <div class="grid gap-1.5">
             <FormInput v-model="newBrand.name" label="Brand Name" :required="true" inputType="text" :maxlength="30"
-                  placeholder="Enter brand name" className="itbms-name"/>
+                  placeholder="Enter brand name" className="itbms-name" :invalidMessage="invalid.name" @disabledButton="disabledSaveBtn"/>
             </div>
           </div>
 
           <div class="grid gap-1.5">
             <FormInput v-model="newBrand.websiteUrl" label="Website URL" inputType="url" :maxlength="40"
-                placeholder="Enter Website URL" className="itbms-websiteUrl"/>
+                placeholder="Enter Website URL" className="itbms-websiteUrl" :invalidMessage="invalid.url" @disabledButton="disabledSaveBtn"/>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
             <div class="md:col-span-7">
               <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" 
-                placeholder="Enter country" className="itbms-countryOfOrigin"/>
+                placeholder="Enter country" className="itbms-countryOfOrigin" :invalidMessage="invalid.countryOfOrigin" @disabledButton="disabledSaveBtn"/>
             </div>
             <div class="md:col-span-3 flex flex-col items-center justify-center gap-3 font-medium text-lg">
               <p class="font-rubik text-[#332A1E]">Active</p>

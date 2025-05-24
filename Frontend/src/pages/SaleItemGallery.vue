@@ -147,9 +147,9 @@ watch(pageSize, () => {
         <div class="flex items-center justify-between">
             <div>
                 <div class="itbms-brand-filter justify-between relative h-12 w-120 text-[#332A1E] px-4 flex items-center bg-white border border-[#332A1E]/10 rounded-md shadow-sm">
-                    <div class="flex gap-2 overflow-scroll">
+                    <div class="flex gap-2 overflow-auto" style="scrollbar-width: none;">
                         <p v-if="!currentFilter.length" class="text-[#AEAAA6]">Filter by brand(s)</p>
-                        <div v-for="(filterBrand, index) in currentFilter" class="itbms-filter-item flex border border-[#ABBCC9] px-4 py-1 rounded-3xl">
+                        <div v-for="(filterBrand, index) in currentFilter" class="itbms-filter-item flex border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm">
                             {{ filterBrand }}
                             <button @click.stop="deleteFilter(index)" class="itbms-filter-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
                                 ✕
