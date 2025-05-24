@@ -103,6 +103,22 @@ const changeMainImg = (index) => {
     selectedPhone.value = index
     phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
 }
+
+const invalid = ref({
+    model: "Model must be 1-60 characters long.",
+    brand: "Brand must be selected.",
+    description: "Description must be 1-65,535 characters long.",
+    price: "Price must be non-negative integer.",
+    ramGb: "RAM size must be positive integer or not specified.",
+    screenSizeInch: "Screen size must be positive number with at most 2 decimal points or not specified.",
+    storageGb: "Storage size must be positive integer or not specified.",
+    color: "Color must be 1-40 characters long or not specified.",
+    quantity: "Quantity must be non-negative integer."
+})
+
+const disabledSaveBtn = () => {
+  disabled.value = true
+}
 </script>
 
 <template>
@@ -121,44 +137,44 @@ const changeMainImg = (index) => {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
                         <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands.sort((a, b) => a.name.localeCompare(b.name))" property="name"
-                            placeholder="Select brand" className="itbms-brand"></FormSelect>
+                            placeholder="Select brand" className="itbms-brand" :invalidMessage="invalid.brand" @disabledButton="disabledSaveBtn"></FormSelect>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text"
-                            placeholder="Enter model" className="itbms-model" :maxlength="60"></FormInput>
+                        <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text" :maxlength="60"
+                            placeholder="Enter model" className="itbms-model" :invalidMessage="invalid.model" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number"
-                            placeholder="Enter price" className="itbms-price"></FormInput>
+                        <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number" :min="0" 
+                            placeholder="Enter price" className="itbms-price" :invalidMessage="invalid.price" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.quantity" label="Quantity" inputType="Number"
-                            placeholder="Enter quantity" className="itbms-quantity"></FormInput>
+                        <FormInput v-model="newSaleItem.quantity" label="Quantity" inputType="Number" :min="0"
+                            placeholder="Enter quantity" className="itbms-quantity" :invalidMessage="invalid.quantity" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                 </div>
                 <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.description" label="Description" :required="true"
-                        inputType="textarea" placeholder="Enter product description" className="itbms-description"></FormInput>
+                    <FormInput v-model="newSaleItem.description" label="Description" :required="true" :maxlength="65535"
+                        inputType="textarea" placeholder="Enter product description" className="itbms-description" :invalidMessage="invalid.description" @disabledButton="disabledSaveBtn"></FormInput>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number"
-                            placeholder="Enter RAM" className="itbms-ramGb"></FormInput>
+                        <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number" :min="1"
+                            placeholder="Enter RAM" className="itbms-ramGb" :invalidMessage="invalid.ramGb" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number"
-                            placeholder="Enter storage" className="itbms-storageGb"></FormInput>
+                        <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number" :min="1"
+                            placeholder="Enter storage" className="itbms-storageGb" :invalidMessage="invalid.storageGb" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number"
-                            placeholder="Enter screen size" className="itbms-screenSizeInch"></FormInput>
+                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="1" :max="9.99" :step="0.01"
+                            placeholder="Enter screen size" className="itbms-screenSizeInch" :invalidMessage="invalid.screenSizeInch" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                 </div>
                 <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color"
-                        className="itbms-color"></FormInput>
+                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40"
+                        className="itbms-color" @disabledButton="disabledSaveBtn"></FormInput>
                 </div>
                 <div class="flex gap-4 pt-2">
                     <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#6F879C]" class="itbms-save-button" :disabled="disabled"/>
