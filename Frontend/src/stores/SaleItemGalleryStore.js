@@ -14,10 +14,6 @@ export const useSaleItemGalleryStore = defineStore('saleItemGallery', () => {
         return currentSort.value
     }
 
-    const changeSort = (type) => {
-        currentSort.value = type
-    }
-
     const getFilter = () => {
         return currentFilter.value
     }
@@ -46,14 +42,17 @@ export const useSaleItemGalleryStore = defineStore('saleItemGallery', () => {
         currentPage.value = 1
     }
 
+    const changeSort = (type) => {
+        currentSort.value = type
+        resetPage()
+    }
+
     const clearFilter = () => {
         currentFilter.value = []
-        currentPage.value = 1
     }
 
     const deleteFilter = (index) => {
         currentFilter.value.splice(index, 1)
-        currentPage.value = 1
     }
 
     return {
