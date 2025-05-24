@@ -15,6 +15,9 @@ const props = defineProps({
     className: String,
     maxlength: Number,
     invalidMessage: String,
+    min: Number,
+    max: Number,
+    step: Number
 })
 
 const inputValue = defineModel()
@@ -49,7 +52,7 @@ function handleBlur() {
                 `${className} appearance-none py-3 w-full text-base text-[#332A1E]/80 border-[#332A1E]/20 bg-white border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] min-h-[6rem] selection:bg-[#2684FF]/30`,
                 { 'border-red-400' : !isValid }
             ]"/>
-        <input v-else :type="inputType" :required="required" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :maxlength="maxlength" :minlength="1"
+        <input v-else :type="inputType" :required="required" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :maxlength="maxlength" :min="min" :max="max" :step="step"
             :class="[
                 `${className} h-[2.75rem] appearance-none w-full text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] selection:bg-[#2684FF]/30`,
                 { 'border-red-400' : !isValid }
