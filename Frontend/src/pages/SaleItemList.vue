@@ -85,7 +85,7 @@ async function deleteSaleItem(){
                 </div>
             </div>
             <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white">
-                <table class="w-full ">
+                <table class="w-full">
                     <thead>
                         <tr class="flex bg-[#F9F5F5] font-semibold border-b border-[#CFC8BE] h-16 items-center">
                             <th class="w-[10%]">id</th>
@@ -98,8 +98,8 @@ async function deleteSaleItem(){
                             <th class="w-[15%]">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="itbms-row">
-                        <tr v-for="si in saleItems" :key="saleItems.id" class="flex items-center border-t border-[#CFC8BE] h-17">
+                    <tbody>
+                        <tr v-for="si in saleItems" :key="saleItems.id" class="itbms-row flex items-center border-t border-[#CFC8BE] h-17">
                             <td class="itbms-id w-[10%] text-center">{{ si.id }}</td>
                             <td class="itbms-brand w-[10%] text-center">{{ si.brandName}}</td>
                             <td class="itbms-model w-[25%] text-center">{{ si.model }}</td>

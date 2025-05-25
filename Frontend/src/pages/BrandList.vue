@@ -108,8 +108,8 @@ async function deleteBrand() {
                             <th class="w-[25%] p-2">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="itbms-row">
-                        <tr v-for="brand in brands" :key="brand.id" class="flex items-center border-t border-[#CFC8BE] h-17">
+                    <tbody>
+                        <tr v-for="brand in brands" :key="brand.id" class="itbms-row flex items-center border-t border-[#CFC8BE] h-17">
                             <td class="itbms-id w-[25%] p-2 text-center">{{ brand.id }}</td>
                             <td class="itbms-name w-[75%] p-2 text-center">{{ brand.name }}</td>
                             <td class="w-[25%] p-2">
