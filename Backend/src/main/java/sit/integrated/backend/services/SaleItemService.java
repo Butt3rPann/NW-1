@@ -62,6 +62,7 @@ public class SaleItemService {
         return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
     }
 
+    @Transactional
     public void deleteSaleItem (Integer id) {
         isSaleItemExists(id);
         saleItemRepository.deleteById(id);

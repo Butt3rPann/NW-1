@@ -13,8 +13,6 @@ import sortAsc from "@/assets/images/sort-asc.png"
 import sortDesc from "@/assets/images/sort-desc.png"
 import { useSaleItemGalleryStore } from '@/stores/SaleItemGalleryStore'
 import { storeToRefs } from 'pinia'
-import SaleItemsDetail from './SaleItemsDetail.vue'
-import AddSaleItemForm from '@/components/form/AddSaleItemForm.vue'
 
 const saleItems = ref([])
 const route = useRoute()
@@ -146,7 +144,7 @@ watch(pageSize, () => {
         </div>
         <div class="flex items-center justify-between">
             <div>
-                <div class="itbms-brand-filter justify-between relative h-12 w-120 text-[#332A1E] px-4 flex items-center bg-white border border-[#332A1E]/10 rounded-md shadow-sm">
+                <div @click.stop="showFilter = !showFilter" class="itbms-brand-filter justify-between relative h-12 w-120 text-[#332A1E] px-4 flex items-center bg-white border border-[#332A1E]/10 rounded-md shadow-sm">
                     <div class="flex gap-2 overflow-auto" style="scrollbar-width: none;">
                         <p v-if="!currentFilter.length" class="text-[#AEAAA6]">Filter by brand(s)</p>
                         <div v-for="(filterBrand, index) in currentFilter" class="itbms-filter-item flex border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm">
@@ -160,7 +158,7 @@ watch(pageSize, () => {
                         <button v-if="currentFilter.length" @click="clearFilter" class="itbms-brand-filter-clear ml-1 cursor-pointer flex items-center justify-center px-2 py-1 text-[#6F879C]">
                             ✕
                         </button>
-                        <button @click.stop="showFilter = !showFilter" class="itbms-brand-filter-button cursor-pointer flex items-center justify-center p-1.5 bg-[#ABBCC9] hover:bg-[#6F879C] rounded-full">
+                        <button class="itbms-brand-filter-button cursor-pointer flex items-center justify-center p-1.5 bg-[#ABBCC9] hover:bg-[#6F879C] rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
                                 <path fill="#FFFFFF" fill-rule="evenodd" d="M2.43 1c-.799 0-1.28.89-.832 1.55l4.4 6.6V14a.5.5 0 0 0 .276.447l3 1.5a.5.5 0 0 0 .723-.447V9.15l4.4-6.6A.996.996 0 0 0 13.565 1h-11.1zm0 1h11.1L9.05 8.72a.5.5 0 0 0-.084.277v5.69l-2-1v-4.69a.5.5 0 0 0-.084-.277L2.402 2z" clip-rule="evenodd" />
                             </svg>
@@ -175,7 +173,7 @@ watch(pageSize, () => {
                                 <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                             </svg>
                         </div>
-                        <span>{{ brand.name }}</span>
+                        <span class="itbms-filter-item">{{ brand.name }}</span>
                     </label>
                 </div>
             </div>
