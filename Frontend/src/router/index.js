@@ -2,12 +2,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import SaleItemsGallery from "@/pages/SaleItemGallery.vue";
 import SaleItemsDetail from "@/pages/SaleItemsDetail.vue";
 import Homepage from "@/pages/Homepage.vue";
-import AddSaleItemForm from "@/components/form/AddSaleItemForm.vue";
-import EditSaleItemForm from "@/components/form/EditSaleItemForm.vue";
+import AddSaleItemForm from "@/components/sale-item/AddSaleItemForm.vue";
+import EditSaleItemForm from "@/components/sale-item/EditSaleItemForm.vue";
 import SaleItemList from "@/pages/SaleItemList.vue";
-import AddBrandForm from "@/components/form/AddBrandForm.vue";
+import AddBrandForm from "@/components/brand/AddBrandForm.vue";
 import BrandList from "@/pages/BrandList.vue";
-import EditBrandForm from "@/components/form/EditBrandForm.vue";
+import EditBrandForm from "@/components/brand/EditBrandForm.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
