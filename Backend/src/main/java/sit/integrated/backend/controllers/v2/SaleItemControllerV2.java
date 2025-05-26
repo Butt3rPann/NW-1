@@ -14,7 +14,6 @@ import sit.integrated.backend.utils.ListMapper;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/v2")
 public class SaleItemControllerV2 {
     @Autowired

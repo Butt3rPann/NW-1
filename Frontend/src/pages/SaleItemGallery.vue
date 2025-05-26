@@ -134,16 +134,22 @@ watch(currentFilter, () => {
 })
 
 watch(currentPage, () => {
-    sessionStorage.setItem('page', currentPage.value)
+    if (currentPage.value !== Number(sessionStorage.getItem('page'))) {
+        sessionStorage.setItem('page', currentPage.value)
+    }
 })
 
 watch(currentSort, () => {
-    sessionStorage.setItem('sortType', currentSort.value)
+    if (currentSort.value !== sessionStorage.getItem('sortType')) {
+        sessionStorage.setItem('sortType', currentSort.value)
+    }
 })
 
 watch(currentSize, () => {
-    sessionStorage.setItem('size', currentSize.value)
-    resetPage()
+    if (currentSize.value !== Number(sessionStorage.getItem('size'))) {
+        sessionStorage.setItem('size', currentSize.value)
+        resetPage()
+    }
 })
 </script>
 

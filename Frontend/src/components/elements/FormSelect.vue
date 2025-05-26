@@ -32,7 +32,6 @@ function handleBlur() {
     <div class="font-rubik">
         <label class="text-[#332A1E] font-medium text-lg">{{ label }}
             <span class="text-red-700">*</span>
-            <span v-if="!isValid" class="text-xs ml-3 font-normal text-red-400">{{ invalidMessage }}</span>
         </label>
         <select v-model="inputValue" :value="inputValue" @blur="handleBlur"
         :class="[
@@ -43,6 +42,7 @@ function handleBlur() {
             <option disabled :value="{id: null, name: null}">{{ placeholder || 'Please select' }}</option>
             <option v-for="option in options" :key="option.id" :value="option">{{ option[property]}}</option>
         </select>
+	<p v-if="!isValid" class="text-xs ml-3 font-normal text-red-400">{{ invalidMessage }}</p>
     </div>
 </template>
  

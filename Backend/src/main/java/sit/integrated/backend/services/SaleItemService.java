@@ -35,7 +35,7 @@ public class SaleItemService {
     }
 
     public Page<SaleItem> getSaleItems(List<String> brands, String sortField, String sortDirection, Integer page, Integer size) {
-        Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField));
+        Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
         if (brands.isEmpty()) {
             return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {

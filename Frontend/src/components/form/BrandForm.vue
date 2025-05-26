@@ -68,7 +68,7 @@ const disabledSaveBtn = () => {
 
           <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
             <div class="md:col-span-7">
-              <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" 
+              <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" :maxlength="80" 
                 placeholder="Enter country" className="itbms-countryOfOrigin" :invalidMessage="invalid.countryOfOrigin" @disabledButton="disabledSaveBtn"/>
             </div>
             <div class="md:col-span-3 flex flex-col items-center justify-center gap-3 font-medium text-lg">

@@ -122,7 +122,7 @@ const disabledSaveBtn = () => {
 </script>
 
 <template>
-    <div class="flex flex-col lg:flex-row gap-8  lg:gap-10 justify-between">
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-3 justify-between">
         <div class="flex flex-col items-center lg:w-[35%] xl:w-[45%]">
             <div class="bg-[#F0EDEC] w-full max-w-[24rem] sm:w-[17rem] md:w-[22rem] lg:w-[20rem] xl:w-[24rem] aspect-[9/10] rounded-2xl flex items-center justify-center">
                 <img :src="phones.mainImage" alt="Selected Phone" class="h-[13rem] sm:h-[13rem] md:h-[33vw] lg:h-[22vw] xl:h-[18rem]">
@@ -158,6 +158,10 @@ const disabledSaveBtn = () => {
                     <FormInput v-model="newSaleItem.description" label="Description" :required="true" :maxlength="65535"
                         inputType="textarea" placeholder="Enter product description" className="itbms-description" :invalidMessage="invalid.description" @disabledButton="disabledSaveBtn"></FormInput>
                 </div>
+		<div class="grid gap-1.5">
+                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40"
+                        className="itbms-color" @disabledButton="disabledSaveBtn"></FormInput>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number" :min="1"
@@ -171,10 +175,6 @@ const disabledSaveBtn = () => {
                         <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="1" :max="9.99" :step="0.01"
                             placeholder="Enter screen size" className="itbms-screenSizeInch" :invalidMessage="invalid.screenSizeInch" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
-                </div>
-                <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40"
-                        className="itbms-color" @disabledButton="disabledSaveBtn"></FormInput>
                 </div>
                 <div class="flex gap-4 pt-2">
                     <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#6F879C]" class="itbms-save-button" :disabled="disabled"/>

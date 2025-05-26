@@ -88,7 +88,7 @@ function closeDelConfirm() {
             </router-link>
             <div class="itbms-row flex justify-between ">
                 <div class="flex flex-col items-center mr-6">
-                    <div class="bg-[#F0EDEC] w-119 h-129 rounded-2xl flex items-center justify-center overflow-hidden">
+                    <div class="bg-[#F0EDEC] w-110 h-120 rounded-2xl flex items-center justify-center overflow-hidden">
                         <img :src="phones.mainImage" alt="Selected Phone" class="h-87">
                     </div>
                     <div>
