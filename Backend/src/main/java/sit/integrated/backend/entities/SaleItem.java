@@ -44,14 +44,14 @@ public class  SaleItem {
     @Column(name = "ramGb")
     private Integer ramGb;
 
-    @Column(name = "screenSizeInch", precision = 3, scale = 2)
+    @Column(name = "screenSizeInch", precision = 4, scale = 2)
     private BigDecimal screenSizeInch;
 
     @Column(name = "storageGb")
     private Integer storageGb;
 
-    @Size(max = 30)
-    @Column(name = "color", length = 30)
+    @Size(max = 40)
+    @Column(name = "color", length = 40)
     private String color;
 
     @ColumnDefault("1")

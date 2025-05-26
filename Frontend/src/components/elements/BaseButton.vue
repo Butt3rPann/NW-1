@@ -22,9 +22,10 @@ const props = defineProps({
     <button
       :disabled="disabled"
       :class="[
-        'flex items-center justify-center py-3 px-4 border-2 w-fit rounded-md cursor-pointer',
-        text === 'Save' ? (disabled ? 'bg-[#6F879C]/50 cursor-not-allowed border-borderColor border-transparent' : 'bg-[#4bbd80] border-transparent') : bgColor,
-        borderColor
+	'flex items-center justify-center py-3 px-4 border-2 w-fit rounded-md',
+        text === 'Save' ? (disabled ? 'bg-[#6F879C]/50 border-transparent' : 'bg-[#4bbd80] border-transparent') : bgColor,
+        borderColor,
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer'
     ]">
         <img v-if="icon" :src="icon" alt="Icon" class="w-5.5 mr-2" />
         <p :class="[textColor, 'font-semibold text-base']">{{ text }}</p>

@@ -160,7 +160,7 @@ const disabledSaveBtn = () => {
                 </div>
 		<div class="grid gap-1.5">
                     <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40"
-                        className="itbms-color" @disabledButton="disabledSaveBtn"></FormInput>
+                        className="itbms-color" @disabledButton="disabledSaveBtn" :invalidMessage="invalid.color"></FormInput>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="grid gap-1.5">
@@ -172,7 +172,7 @@ const disabledSaveBtn = () => {
                             placeholder="Enter storage" className="itbms-storageGb" :invalidMessage="invalid.storageGb" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="1" :max="9.99" :step="0.01"
+                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="0.01" :max="99.99" :step="0.01"
                             placeholder="Enter screen size" className="itbms-screenSizeInch" :invalidMessage="invalid.screenSizeInch" @disabledButton="disabledSaveBtn"></FormInput>
                     </div>
                 </div>
