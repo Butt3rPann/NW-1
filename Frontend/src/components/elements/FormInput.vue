@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
     label: {
@@ -44,7 +44,15 @@ function handleBlur() {
     }
 
     emit('disabledButton', props.field, !isValid.value)
-}</script>
+}
+
+const charCount = computed(() => {
+  if (typeof inputValue.value !== 'string') return ''
+  return props.maxlength
+    ? `${inputValue.value.length} / ${props.maxlength}`
+    : ''
+})
+</script>
 
 <template>
     <div class="font-rubik flex flex-col">

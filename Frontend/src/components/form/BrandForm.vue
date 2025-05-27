@@ -27,11 +27,11 @@ const invalidMessage = {
     countryOfOrigin: 'Brand country of origin must be 1-80 characters long or not specified.'
 }
 
-const invalid = {
+const invalid = ref({
     name: false,
     url: false,
     countryOfOrigin: false
-}
+})
 
 const handleDisabledButton = (field, value) => {
     invalid.value[field] = value
@@ -45,10 +45,11 @@ function handleClick() {
 }
 
 watchEffect(() => {
+    const anyInvalid = Object.values(invalid.value).some(value => value === true)
     const hasEmptyField = newBrand.value.name === ''
     const unchanged = JSON.stringify(newBrand.value) === JSON.stringify(oldBrand.value)
 
-    disabled.value = hasEmptyField || unchanged
+    disabled.value = hasEmptyField || unchanged || anyInvalid
 })
 
 const cancel = () => {
