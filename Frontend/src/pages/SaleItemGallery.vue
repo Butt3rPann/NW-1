@@ -124,14 +124,14 @@ onMounted(async () => {
 
 watch([currentFilter, currentPage, currentSort, currentSize], async () => {
     await getSaleItems()
-})
+}, { deep: true })
 
 watch(currentFilter, () => {
     if (JSON.stringify(currentFilter.value) !== sessionStorage.getItem('filter')) {
         resetPage()
         sessionStorage.setItem('filter', JSON.stringify(currentFilter.value))
     }
-})
+}, { deep: true })
 
 watch(currentPage, () => {
     if (currentPage.value !== Number(sessionStorage.getItem('page'))) {
