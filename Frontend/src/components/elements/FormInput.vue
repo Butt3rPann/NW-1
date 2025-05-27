@@ -11,6 +11,10 @@ const props = defineProps({
         type: String,
         required: true
     },
+    field: {
+        type: String,
+        required: true
+    },
     placeholder: String,
     className: String,
     maxlength: Number,
@@ -39,9 +43,8 @@ function handleBlur() {
         isValid.value = true
     }
 
-    if (!isValid.value) emit('disabledButton')
-}
-</script>
+    emit('disabledButton', props.field, !isValid.value)
+}</script>
 
 <template>
     <div class="font-rubik flex flex-col">
@@ -58,7 +61,10 @@ function handleBlur() {
                 `${className} h-[2.75rem] appearance-none w-full text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] selection:bg-[#2684FF]/30`,
                 { 'border-red-400' : !isValid }
             ]"/>
-	<p v-if="!isValid" class="text-xs ml-3 font-normal text-red-400">{{ invalidMessage }}</p>
+	<div class="flex justify-between items-center mt-1">
+            <p v-if="!isValid" class="itbms-message text-xs text-red-400">{{ invalidMessage }}</p>
+            <p :class="['text-xs text-gray-500 ml-auto', {'text-red-400' : inputValue.length > props.maxlength}]" v-if="typeof inputValue === 'string'">{{ charCount }}</p>
+        </div>
     </div>
 </template>
 

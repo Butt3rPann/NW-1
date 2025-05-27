@@ -6,7 +6,6 @@ import { ref } from 'vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const router = useRouter()
-const emit = defineEmits(['addSuccess'])
 const message = ref('')
 const isShowPopup = ref(false)
 const isSuccess = ref(true)

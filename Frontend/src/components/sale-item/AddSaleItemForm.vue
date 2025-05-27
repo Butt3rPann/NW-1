@@ -5,7 +5,6 @@ import { addItem } from '@/libs/fetchUtils'
 import { ref } from 'vue'
 
 const router = useRouter()
-const emit = defineEmits(['addSuccess'])
 
 const prevPath = ref(null)
 const prevPathName = ref(null)

@@ -6,6 +6,10 @@ const props = defineProps({
         type: String,
         required: true
     },
+    field: {
+        type: String,
+        required: true
+    },
     options: Array,
     property: String,
     placeholder : String,
@@ -21,12 +25,12 @@ const emit = defineEmits(['disabledButton'])
 function handleBlur() {
     if (!inputValue.value.id) {
         isValid.value = false
-        emit('disabledButton')
     } else {
         isValid.value = true
     }
-}
-</script>
+
+    emit('disabledButton', props.field, !isValid.value)
+}</script>
  
 <template>
     <div class="font-rubik">
@@ -40,9 +44,10 @@ function handleBlur() {
             {'border-red-400' : !isValid}
         ]">
             <option disabled :value="{id: null, name: null}">{{ placeholder || 'Please select' }}</option>
+	    <option :value="''">{{ '' }}</option>
             <option v-for="option in options" :key="option.id" :value="option">{{ option[property]}}</option>
         </select>
-	<p v-if="!isValid" class="text-xs ml-3 font-normal text-red-400">{{ invalidMessage }}</p>
+	<p v-if="!isValid" class="itbms-message text-xs ml-3 font-normal text-red-400">{{ invalidMessage }}</p>
     </div>
 </template>
  
