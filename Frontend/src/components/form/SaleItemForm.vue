@@ -46,13 +46,42 @@ const newSaleItem = ref({
     color: props.saleItemData?.color || ''
 })
 
-const disabled = ref(true)
 const isNull = ref({
     model: false,
     brand: false,
     description: false,
     price: false
 })
+
+const invalidMessage = {
+    model: "Model must be 1-60 characters long.",
+    brand: "Brand must be selected.",
+    description: "Description must be 1-65,535 characters long.",
+    price: "Price must be non-negative integer.",
+    ramGb: "RAM size must be positive integer or not specified.",
+    screenSizeInch: "Screen size must be positive number with at most 2 decimal points or not specified.",
+    storageGb: "Storage size must be positive integer or not specified.",
+    color: "Color must be 1-40 characters long or not specified.",
+    quantity: "Quantity must be non-negative integer."
+}
+
+const invalid = ref({
+    model: false,
+    brand: false,
+    description: false,
+    price: false,
+    ramGb: false,
+    screenSizeInch: false,
+    storageGb: false,
+    color: false,
+    quantity: false
+})
+
+const handleDisabledButton = (field, value) => {
+    invalid.value[field] = value
+}
+
+const disabled = ref(true)
 
 watchEffect(() => {    
     for (const key in isNull.value) {
@@ -62,10 +91,11 @@ watchEffect(() => {
         isNull.value[key] = !newSaleItem.value[key]
     }
     
+    const anyInvalid = Object.values(invalid.value).some(value => value === true)
     const hasEmptyField = Object.values(isNull.value).some(value => value === true)
     const unchanged = JSON.stringify(newSaleItem.value) === JSON.stringify(oldSaleItem.value)
 
-    disabled.value = hasEmptyField || unchanged
+    disabled.value = hasEmptyField || unchanged || anyInvalid
 })
 
 function handleClick() {
@@ -84,7 +114,7 @@ const cancel = () => {
     } else {
         router.push({ name: props.pathName })
     }
-    
+
 }
 
 const phones = ref({
@@ -103,22 +133,6 @@ const changeMainImg = (index) => {
     selectedPhone.value = index
     phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
 }
-
-const invalid = ref({
-    model: "Model must be 1-60 characters long.",
-    brand: "Brand must be selected.",
-    description: "Description must be 1-65,535 characters long.",
-    price: "Price must be non-negative integer.",
-    ramGb: "RAM size must be positive integer or not specified.",
-    screenSizeInch: "Screen size must be positive number with at most 2 decimal points or not specified.",
-    storageGb: "Storage size must be positive integer or not specified.",
-    color: "Color must be 1-40 characters long or not specified.",
-    quantity: "Quantity must be non-negative integer."
-})
-
-const disabledSaveBtn = () => {
-  disabled.value = true
-}
 </script>
 
 <template>
@@ -136,47 +150,47 @@ const disabledSaveBtn = () => {
             <div class="grid gap-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
-                        <FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands.sort((a, b) => a.name.localeCompare(b.name))" property="name"
-                            placeholder="Select brand" className="itbms-brand" :invalidMessage="invalid.brand" @disabledButton="disabledSaveBtn"></FormSelect>
-                    </div>
+                    	<FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands.sort((a, b) => a.name.localeCompare(b.name))" property="name" field="brand"
+                            placeholder="Select brand" className="itbms-brand" :invalidMessage="invalidMessage.brand" @disabledButton="handleDisabledButton"></FormSelect>
+		    </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text" :maxlength="60"
-                            placeholder="Enter model" className="itbms-model" :invalidMessage="invalid.model" @disabledButton="disabledSaveBtn"></FormInput>
-                    </div>
+                    	<FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text" :maxlength="60" field="model"
+                            placeholder="Enter model" className="itbms-model" :invalidMessage="invalidMessage.model" @disabledButton="handleDisabledButton"></FormInput>
+		    </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number" :min="0" 
-                            placeholder="Enter price" className="itbms-price" :invalidMessage="invalid.price" @disabledButton="disabledSaveBtn"></FormInput>
+                        <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number" :min="0" field="price"
+                            placeholder="Enter price" className="itbms-price" :invalidMessage="invalidMessage.price" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.quantity" label="Quantity" inputType="Number" :min="0"
-                            placeholder="Enter quantity" className="itbms-quantity" :invalidMessage="invalid.quantity" @disabledButton="disabledSaveBtn"></FormInput>
+                        <FormInput v-model="newSaleItem.quantity" label="Quantity" inputType="Number" :min="0" field="quantity"
+                            placeholder="Enter quantity" className="itbms-quantity" :invalidMessage="invalidMessage.quantity" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
                 </div>
                 <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.description" label="Description" :required="true" :maxlength="65535"
-                        inputType="textarea" placeholder="Enter product description" className="itbms-description" :invalidMessage="invalid.description" @disabledButton="disabledSaveBtn"></FormInput>
+                    <FormInput v-model="newSaleItem.description" label="Description" :required="true" :maxlength="65535" field="description"
+                        inputType="textarea" placeholder="Enter product description" className="itbms-description" :invalidMessage="invalidMessage.description" @disabledButton="handleDisabledButton"></FormInput>
                 </div>
-		<div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40"
-                        className="itbms-color" @disabledButton="disabledSaveBtn" :invalidMessage="invalid.color"></FormInput>
+                <div class="grid gap-1.5">
+                    <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40" field="color"
+                        className="itbms-color" @disabledButton="handleDisabledButton" :invalidMessage="invalidMessage.color"></FormInput>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number" :min="1"
-                            placeholder="Enter RAM" className="itbms-ramGb" :invalidMessage="invalid.ramGb" @disabledButton="disabledSaveBtn"></FormInput>
+                        <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number" :min="1" field="ramGb"
+                            placeholder="Enter RAM" className="itbms-ramGb" :invalidMessage="invalidMessage.ramGb" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number" :min="1"
-                            placeholder="Enter storage" className="itbms-storageGb" :invalidMessage="invalid.storageGb" @disabledButton="disabledSaveBtn"></FormInput>
+                        <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number" :min="1" field="storageGb"
+                            placeholder="Enter storage" className="itbms-storageGb" :invalidMessage="invalidMessage.storageGb" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
                     <div class="grid gap-1.5">
-                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="0.01" :max="99.99" :step="0.01"
-                            placeholder="Enter screen size" className="itbms-screenSizeInch" :invalidMessage="invalid.screenSizeInch" @disabledButton="disabledSaveBtn"></FormInput>
+                        <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="0.01" :max="99.99" :step="0.01" field="screenSizeInch"
+                            placeholder="Enter screen size" className="itbms-screenSizeInch" :invalidMessage="invalidMessage.screenSizeInch" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
                 </div>
-                <div class="flex gap-4 pt-2">
+		<div class="flex gap-4 pt-2">
                     <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#6F879C]" class="itbms-save-button" :disabled="disabled"/>
                     <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button"/>
                 </div>
