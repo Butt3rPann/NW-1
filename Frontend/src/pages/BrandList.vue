@@ -65,6 +65,7 @@ function closeDelConfirm() {
 }
 
 async function deleteBrand() {
+    isShowPopup.value = false
     try {
         const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, deletedId.value)
         if (status === 404) {
@@ -118,7 +119,7 @@ async function deleteBrand() {
                                         class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
                                         E
                                     </router-link>
-                                    <p @click="deleteBrandById(brand.id)" 
+                                    <p @click="deleteBrandById(brand.id, brand.name)" 
                                         class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
                                         D
                                     </p>
