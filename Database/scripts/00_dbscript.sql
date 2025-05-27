@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS sale_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     model VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     brandId INT NOT NULL,
-    description MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, 
+    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, 
     price INT NOT NULL,
     ramGb INT,
     screenSizeInch DECIMAL(4,2),

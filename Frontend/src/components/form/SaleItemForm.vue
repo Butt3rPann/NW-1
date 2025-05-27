@@ -56,7 +56,7 @@ const isNull = ref({
 const invalidMessage = {
     model: "Model must be 1-60 characters long.",
     brand: "Brand must be selected.",
-    description: "Description must be 1-65,535 characters long.",
+    description: "Description must be 1-16,384 characters long.",
     price: "Price must be non-negative integer.",
     ramGb: "RAM size must be positive integer or not specified.",
     screenSizeInch: "Screen size must be positive number with at most 2 decimal points or not specified.",
@@ -169,7 +169,7 @@ const changeMainImg = (index) => {
                     </div>
                 </div>
                 <div class="grid gap-1.5">
-                    <FormInput v-model="newSaleItem.description" label="Description" :required="true" :maxlength="65535" field="description"
+                    <FormInput v-model="newSaleItem.description" label="Description" :required="true" :maxlength="16384" field="description"
                         inputType="textarea" placeholder="Enter product description" className="itbms-description" :invalidMessage="invalidMessage.description" @disabledButton="handleDisabledButton"></FormInput>
                 </div>
                 <div class="grid gap-1.5">
