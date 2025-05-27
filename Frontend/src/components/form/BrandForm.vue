@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, computed } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import { useRouter } from 'vue-router'
@@ -37,20 +37,18 @@ const handleDisabledButton = (field, value) => {
     invalid.value[field] = value
 }
 
-const disabled = ref(true)
+const disabled = computed(() => {
+    const anyInvalid = Object.values(invalid.value).some(value => value === true)
+    const hasEmptyField = newBrand.value.name === ''
+    const unchanged = JSON.stringify(newBrand.value) === JSON.stringify(oldBrand.value)
+
+    return hasEmptyField || unchanged || anyInvalid
+})
 
 function handleClick() {
     disabled.value = true
     emit('submitAction', newBrand.value)
 }
-
-watchEffect(() => {
-    const anyInvalid = Object.values(invalid.value).some(value => value === true)
-    const hasEmptyField = newBrand.value.name === ''
-    const unchanged = JSON.stringify(newBrand.value) === JSON.stringify(oldBrand.value)
-
-    disabled.value = hasEmptyField || unchanged || anyInvalid
-})
 
 const cancel = () => {
     router.push({ name: props.pathName })

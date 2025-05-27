@@ -28,11 +28,30 @@ const currentSize = ref(10)
 const currentFilter = ref([])
 const currentSort = ref('none')
 
-const goToPage = (page) => { currentPage.value = page }
-const prevPage = (isFirstPage) => { if (!isFirstPage) currentPage.value -= 1 }
-const nextPage = (isLastPage) => { if (!isLastPage) currentPage.value += 1 }
-const lastPage = (totalPage) => { currentPage.value = totalPage }
-const resetPage = () => { currentPage.value = 1 }
+const goToPage = async (page) => {
+    currentPage.value = page
+    await getSaleItems()
+}
+const prevPage = async (isFirstPage) => {
+    if (!isFirstPage) {
+        currentPage.value -= 1
+        await getSaleItems()
+    }
+}
+const nextPage = async (isLastPage) => {
+    if (!isLastPage) {
+        currentPage.value += 1
+        await getSaleItems()
+    }
+}
+const lastPage = async (totalPage) => {
+    currentPage.value = totalPage
+    await getSaleItems()
+}
+const resetPage = async() => { 
+    currentPage.value = 1 
+    await getSaleItems()
+}
 const changeSort = (type) => {
     currentSort.value = type
     resetPage()
@@ -122,7 +141,7 @@ onMounted(async () => {
     }
 })
 
-watch([currentFilter, currentPage, currentSort, currentSize], async () => {
+watch([currentFilter, currentSort, currentSize], async () => {
     await getSaleItems()
 }, { deep: true })
 
@@ -223,7 +242,7 @@ watch(currentSize, () => {
             <p class="text-xl text-[#ABBCC9]">no sale item</p>
         </div>
         <div v-show="totalPage > 1" class="flex flex-wrap justify-center items-center gap-2 mt-8">
-            <button @click="resetPage" :disabled="currentPage === 1" :class="['itbms-page-first flex items-center justify-center w-10 h-10 rounded-md border',
+            <button @click="goToPage(1)" :disabled="currentPage === 1" :class="['itbms-page-first flex items-center justify-center w-10 h-10 rounded-md border',
             currentPage === 1? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                     <path d="m11 17-5-5 5-5"></path>
