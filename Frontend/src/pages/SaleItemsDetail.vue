@@ -19,7 +19,7 @@ const { params: { saleItemId } } = useRoute()
 
 const selectedItem = ref({})
 
-async function getSaleItemById() {
+onMounted(async () => {
     try {
         selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
         selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn);
@@ -27,10 +27,6 @@ async function getSaleItemById() {
     } catch (error) {
         console.log(error)
     }
-}
-
-onMounted(async () => {
-    await getSaleItemById()
 })
 
 const phones = ref({

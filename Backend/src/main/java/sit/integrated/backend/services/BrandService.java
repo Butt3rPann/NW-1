@@ -45,7 +45,7 @@ public class BrandService {
         if (brand.getIsActive() == null) {
             brand.setIsActive(true);
         }
-        return modelMapper.map(brandRepository.saveAndFlush(brand), BrandDetailDto.class);
+        return modelMapper.map(brandRepository.save(brand), BrandDetailDto.class);
     }
 
     @Transactional

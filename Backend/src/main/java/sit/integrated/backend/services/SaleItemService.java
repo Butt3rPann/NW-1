@@ -51,7 +51,7 @@ public class SaleItemService {
     public SaleItemDetailDto createSaleItem(SaleItemFormDto formDto) {
 	    formDto.setId(null);
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
-        return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
+        return modelMapper.map(saleItemRepository.save(saleItem), SaleItemDetailDto.class);
     }
 
     @Transactional
@@ -59,7 +59,7 @@ public class SaleItemService {
         isSaleItemExists(id);
         formDto.setId(id);
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
-        return modelMapper.map(saleItemRepository.saveAndFlush(saleItem), SaleItemDetailDto.class);
+        return modelMapper.map(saleItemRepository.save(saleItem), SaleItemDetailDto.class);
     }
 
     @Transactional
