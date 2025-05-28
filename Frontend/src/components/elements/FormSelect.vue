@@ -1,0 +1,56 @@
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+    label: {
+        type: String,
+        required: true
+    },
+    field: {
+        type: String,
+        required: true
+    },
+    options: Array,
+    property: String,
+    placeholder : String,
+    className: String,
+    invalidMessage: String
+})
+
+const inputValue = defineModel()
+const isValid = ref(true)
+
+const emit = defineEmits(['disabledButton'])
+
+function handleBlur() {
+    if (!inputValue.value.id) {
+        isValid.value = false
+    } else {
+        isValid.value = true
+    }
+
+    emit('disabledButton', props.field, !isValid.value)
+}</script>
+ 
+<template>
+    <div class="font-rubik">
+        <label class="text-[#332A1E] font-medium text-lg">{{ label }}
+            <span class="text-red-700">*</span>
+        </label>
+        <select v-model="inputValue" :value="inputValue" @blur="handleBlur"
+        :class="[
+            `${className} h-[2.75rem] appearance-none w-full text-base text-[#332A1E]/80 bg-white border border-[#332A1E]/20 rounded-xs px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF]`,
+            inputValue?.id ? 'text-[#332A1E]/80' : 'text-[#AEAAA6]',
+            {'border-red-400' : !isValid}
+        ]">
+            <option disabled :value="{id: null, name: null}">{{ placeholder || 'Please select' }}</option>
+	    <option :value="''">{{ '' }}</option>
+            <option v-for="option in options" :key="option.id" :value="option">{{ option[property]}}</option>
+        </select>
+	<p v-if="!isValid" class="itbms-message text-xs ml-3 font-normal text-red-400">{{ invalidMessage }}</p>
+    </div>
+</template>
+ 
+<style scoped>
+
+</style>

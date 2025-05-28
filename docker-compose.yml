@@ -1,0 +1,56 @@
+services:
+  db:
+    image: mysql
+    container_name: db-server
+    ports:
+      - "3306:3306"
+    networks:
+      - nw1-network
+    volumes:
+      - ./Database/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./Database/scripts:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    env_file:
+      - ./Database/.env
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost"]
+      interval: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: api-server
+    ports:
+      - "8080:8080"
+    networks:
+      - nw1-network
+    env_file:
+      - ./Backend/.env
+    restart: always
+    depends_on:
+      db: 
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend-server
+    ports:
+      - "80:80"
+    networks:
+      - nw1-network
+    restart: always
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+
+networks: 
+  nw1-network:
+     driver: bridge

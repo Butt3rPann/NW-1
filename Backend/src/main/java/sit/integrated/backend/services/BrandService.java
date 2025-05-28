@@ -1,0 +1,77 @@
+package sit.integrated.backend.services;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sit.integrated.backend.dtos.BrandDetailDto;
+import sit.integrated.backend.dtos.BrandFormDto;
+import sit.integrated.backend.entities.Brand;
+import sit.integrated.backend.exceptions.BrandHasSaleItemsException;
+import sit.integrated.backend.exceptions.DuplicateBrandException;
+import sit.integrated.backend.repositories.BrandRepository;
+import java.util.List;
+
+@Service
+public class BrandService {
+    @Autowired
+    private BrandRepository brandRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public void isBrandExists(Integer id) {
+        if(!brandRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Brand not found for this id :: " + id);
+        }
+    }
+
+    public List<Brand> getAllBrands() {
+        return brandRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
+    }
+
+    public Brand getBrandById(Integer id) {
+        return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand not found for this id :: " + id));
+    }
+
+    @Transactional
+    public BrandDetailDto createBrand(BrandFormDto brandFormDto) {
+        if (brandRepository.existsBrandsByName(brandFormDto.getName())) {
+            throw new DuplicateBrandException("Brand name already exists.");
+        }
+        brandFormDto.setId(null);
+        Brand brand = modelMapper.map(brandFormDto, Brand.class);
+        if (brand.getIsActive() == null) {
+            brand.setIsActive(true);
+        }
+        return modelMapper.map(brandRepository.save(brand), BrandDetailDto.class);
+    }
+
+    @Transactional
+    public BrandDetailDto updateBrand(Integer id, BrandFormDto brandFormDto) {
+        isBrandExists(id);
+        Brand existingBrand = getBrandById(id);
+        if (!existingBrand.getName().equals(brandFormDto.getName()) && brandRepository.existsBrandsByName(brandFormDto.getName())) {
+            throw new DuplicateBrandException("Brand name already exists.");
+        }
+        brandFormDto.setId(id);
+        Brand brand = modelMapper.map(brandFormDto, Brand.class);
+        if (brand.getIsActive() == null) {
+            brand.setIsActive(true);
+        }
+        BrandDetailDto brandDetailDto = modelMapper.map(brandRepository.saveAndFlush(brand), BrandDetailDto.class);
+        brandDetailDto.setNoOfSaleItems(existingBrand.getSaleItems().size());
+        return brandDetailDto;
+    }
+
+    @Transactional
+    public void deleteBrand(Integer id) {
+        Brand brand = getBrandById(id);
+        if (brand.getSaleItems().size() > 0) {
+            throw new BrandHasSaleItemsException("Brand has sale item(s)");
+        }
+        isBrandExists(id);
+        brandRepository.deleteById(id);
+    }
+}
