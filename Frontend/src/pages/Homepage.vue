@@ -46,7 +46,7 @@ onMounted(async () => {
                 </div>
 
             </div>
-            <div class="absolute bottom-[-7vw] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-[3vw] z-10">
+            <div class="absolute bottom-[-7rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-10 z-10">
                 <ValueProps :icon="Genuine"><template #text>Guaranteed 100% Genuine</template></ValueProps>
                 <ValueProps :icon="Shipping"><template #text>Free nationwide shipping</template></ValueProps>
                 <ValueProps :icon="Ticket"><template #text>Discover amazing deals and unbeatable discounts</template></ValueProps>
