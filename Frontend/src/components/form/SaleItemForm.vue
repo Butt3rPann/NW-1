@@ -136,29 +136,29 @@ const changeMainImg = (index) => {
 </script>
 
 <template>
-    <div class="flex flex-col lg:flex-row gap-8 lg:gap-3 justify-between">
-        <div class="flex flex-col items-center lg:w-[35%] xl:w-[45%]">
-            <div class="bg-[#F0EDEC] w-full max-w-[24rem] sm:w-[17rem] md:w-[22rem] lg:w-[20rem] xl:w-[24rem] aspect-[9/10] rounded-2xl flex items-center justify-center">
-                <img :src="phones.mainImage" alt="Selected Phone" class="h-[13rem] sm:h-[13rem] md:h-[33vw] lg:h-[22vw] xl:h-[18rem]">
+    <div class="flex flex-col xl:flex-row gap-4 lg:gap-8 xl:gap-12 justify-between p-4 lg:p-8">
+        <div class="flex flex-col items-center w-full xl:w-[35%] 2xl:w-[40%]">
+            <div class="bg-[#F0EDEC] w-full max-w-[15rem] md:max-w-[20rem] lg:max-w-[23rem] xl:max-w-[20rem] 2xl:max-w-[24rem] aspect-[9/10] rounded-2xl flex items-center justify-center mb-3 md:mb-5">
+                <img :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
             </div>
             <div>
                 <OptionsPhone :phones="phones.thumbnail" :selectedIndex="selectedPhone"
                     @update:selected-index="changeMainImg" />
             </div>
         </div>
-        <div class="space-y-3 lg:w-[55%]">
-            <div class="grid gap-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="w-full xl:w-[60%] 2xl:w-[55%] space-y-4 sm:space-y-5 lg:space-y-6">
+            <div class="grid gap-4 sm:gap-5 lg:gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
                     <div class="grid gap-1.5">
                     	<FormSelect v-model="newSaleItem.brand" label="Brand" :options="brands.sort((a, b) => a.name.localeCompare(b.name))" property="name" field="brand"
                             placeholder="Select brand" className="itbms-brand" :invalidMessage="invalidMessage.brand" @disabledButton="handleDisabledButton"></FormSelect>
-		    </div>
+		            </div>
                     <div class="grid gap-1.5">
                     	<FormInput v-model="newSaleItem.model" label="Model" :required="true" inputType="text" :maxlength="60" field="model"
                             placeholder="Enter model" className="itbms-model" :invalidMessage="invalidMessage.model" @disabledButton="handleDisabledButton"></FormInput>
-		    </div>
+		            </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.price" label="Price (Baht)" :required="true" inputType="Number" :min="0" field="price"
                             placeholder="Enter price" className="itbms-price" :invalidMessage="invalidMessage.price" @disabledButton="handleDisabledButton"></FormInput>
@@ -176,7 +176,7 @@ const changeMainImg = (index) => {
                     <FormInput v-model="newSaleItem.color" label="Color" inputType="text" placeholder="Enter color" :maxlength="40" field="color"
                         className="itbms-color" @disabledButton="handleDisabledButton" :invalidMessage="invalidMessage.color"></FormInput>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
                     <div class="grid gap-1.5">
                         <FormInput v-model="newSaleItem.ramGb" label="RAM (GB)" inputType="Number" :min="1" field="ramGb"
                             placeholder="Enter RAM" className="itbms-ramGb" :invalidMessage="invalidMessage.ramGb" @disabledButton="handleDisabledButton"></FormInput>
@@ -185,12 +185,12 @@ const changeMainImg = (index) => {
                         <FormInput v-model="newSaleItem.storageGb" label="Storage (GB)" inputType="Number" :min="1" field="storageGb"
                             placeholder="Enter storage" className="itbms-storageGb" :invalidMessage="invalidMessage.storageGb" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
-                    <div class="grid gap-1.5">
+                    <div class="grid gap-1.5 sm:col-span-2 lg:col-span-1">
                         <FormInput v-model="newSaleItem.screenSizeInch" label="Screen Size (Inches)" inputType="Number" :min="0.01" :max="99.99" :step="0.01" field="screenSizeInch"
                             placeholder="Enter screen size" className="itbms-screenSizeInch" :invalidMessage="invalidMessage.screenSizeInch" @disabledButton="handleDisabledButton"></FormInput>
                     </div>
                 </div>
-		<div class="flex gap-4 pt-2">
+		        <div class="flex gap-4 pt-2">
                     <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#6F879C]" class="itbms-save-button" :disabled="disabled"/>
                     <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button"/>
                 </div>

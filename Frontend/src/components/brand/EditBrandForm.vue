@@ -45,10 +45,10 @@ const handleEditBrand = async (editedBrand) => {
 </script>
  
 <template>
-    <div v-if="brand.id" class="flex flex-col items-center justify-center gap-7 pt-10 h-screen bg-white">
+    <div v-if="brand.id" class="flex flex-col items-center justify-center gap-7 pt-10 px-7 lg:px-8 min-h-screen bg-white">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
-        <p class="text-5xl font-bold font-rubik text-[#332A1E] ">Edit Brand</p> 
-        <BrandForm @submitAction="handleEditBrand" pathName="BrandList" :brandData="brand"/>
+        <p class="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-rubik text-[#332A1E] text-center leading-tight">Edit Brand</p> 
+        <BrandForm @submitAction="handleEditBrand" pathName="BrandList" :brandData="brand"/>   
     </div>
     <ItemNotFound v-else title="Brand" description="The brand does not exist." backPathName="BrandList"/>
 </template>
