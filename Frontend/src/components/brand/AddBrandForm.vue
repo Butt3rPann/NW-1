@@ -35,15 +35,15 @@ const handleNewBrand = async (newBrand) => {
 </script>
  
 <template>
-<div class="bg-white">
+<div class="bg-white min-h-screen">
     <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
-    <div class="flex flex-col items-center justify-center gap-7 pt-10 h-screen">
-        <p class="itbms-add-button text-5xl font-bold font-rubik text-[#332A1E] ">Add Brand</p>
-        <p class="font-medium text-lg">
+    <div class="flex flex-col items-center justify-center gap-4 lg:gap-8 pt-8 lg:pt-12 px-7 lg:px-8 min-h-screen">
+        <p class="itbms-add-button text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-rubik text-[#332A1E] text-center leading-tight">Add Brand</p>
+        <p class="font-medium text-sm sm:text-base lg:text-lg">
             <router-link :to="{ name: 'SaleItemsList' }"><span class="itbms-item-list text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
-            <span class="text-[#332A1E]/50 mx-3"> > </span>
+            <span class="text-[#332A1E]/50 mx-1.5 md:mx-3"> > </span>
             <router-link :to="{ name: 'BrandList' }"><span class="itbms-manage-brand text-[#332A1E] cursor-pointer">Brands</span></router-link>
-            <span class="text-[#332A1E]/50 mx-3"> > </span>
+            <span class="text-[#332A1E]/50 mx-1.5 md:mx-3"> > </span>
             <span class="itbms-manage-brand text-[#6F879C]">New Brand</span>
         </p>
         <BrandForm @submitAction="handleNewBrand" pathName="BrandList"/>
