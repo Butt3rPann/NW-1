@@ -85,12 +85,12 @@ async function deleteBrand() {
 </script>
 
 <template>
-<div class="bg-white text-[#332A1E]">
+<div class="bg-white text-[#332A1E] font-rubik">
     <div v-if="!showNotFound">
-        <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25" />
-        <div class="font-rubik mx-5 md:mx-10 lg:mx-35 pb-15 pt-25 md:pt-30 lg:pt-30">
+        <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
+        <div class="mx-auto px-7 pb-15 pt-20 md:pt-30 max-w-300">
             <div class="flex justify-between items-center mb-4">
-                <p class="text-[1.75rem] md:text-[2.75rem] lg:text-[3.5rem] font-bold text-[#332A1E]">Brands</p>
+                <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#332A1E]">Brands</p>
                 <router-link :to="{ name: 'AddBrand' }">
                     <BaseButton :icon="addIcon" text="Add Brand" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" class="itbms-add-button"/>
                 </router-link>
@@ -100,27 +100,27 @@ async function deleteBrand() {
                 <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>
                 <span class="text-[#6F879C]">Brands</span>
             </p>
-            <div class="border border-[#CFC8BE] rounded-md overflow-hidden bg-white gap-2">
-                <table class="w-full ">
+            <div class="border border-[#CFC8BE] rounded-md overflow-x-auto bg-white">
+                <table class="table-auto w-full">
                     <thead>
-                        <tr class="flex bg-[#F9F5F5] font-semibold border-b border-[#CFC8BE] h-16 items-center">
-                            <th class="w-[21%] md:w-[25%] text-sm md:text-lg p-2 text-center">id</th>
-                            <th class="w-[51%] md:w-[75%] text-sm md:text-lg p-2 md:p-2 text-center">Name</th>
-                            <th class="w-[29%] md:w-[25%] text-sm md:text-lg p-2 text-center">Action</th>
+                        <tr class="bg-[#F9F5F5] font-semibold border-b border-[#CFC8BE] h-15 text-center text-sm md:text-lg">
+                            <th class="pl-5">id</th>
+                            <th class="p-5">Name</th>
+                            <th class="pr-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="brand in brands" :key="brand.id" class="itbms-row flex items-center border-t border-[#CFC8BE] h-17">
-                            <td class="itbms-id w-[25%] text-sm md:text-lg p-2 text-center">{{ brand.id }}</td>
-                            <td class="itbms-name w-[50%] md:w-[75%] text-sm md:text-lg p-2 text-center">{{ brand.name }}</td>
-                            <td class="w-[30%] md:w-[25%] text-sm md:text-lg p-2">
+                        <tr v-for="brand in brands" :key="brand.id" class="itbms-row border-t border-[#CFC8BE] h-15 text-center text-sm md:text-lg">
+                            <td class="itbms-id pl-5">{{ brand.id }}</td>
+                            <td class="itbms-name p-5">{{ brand.name }}</td>
+                            <td class="pr-5">
                                 <div class="flex justify-center gap-1 md:gap-3">
                                     <router-link :to="{ name: 'EditBrand', params: { id: brand.id } }" 
                                         class="itbms-edit-button border-2 border-[#6F879C] text-[#6F879C] py-1 px-2.5 hover:bg-[#6F879C] hover:text-[#F2EDEC]">
                                         E
                                     </router-link>
                                     <p @click="deleteBrandById(brand.id, brand.name)" 
-                                        class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] cursor-pointer py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
+                                        class="itbms-delete-button border-2 border-[#D27B7B] text-[#D27B7B] py-1 px-2.5 hover:bg-[#D27B7B] hover:text-[#F2EDEC]">
                                         D
                                     </p>
                                 </div>

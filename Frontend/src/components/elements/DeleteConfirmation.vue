@@ -25,14 +25,12 @@ defineEmits(['delete', 'close'])
                 </svg>
             </div>
             <div class="flex flex-col justify-center items-center text-sm md:text-lg space-y-2">
-                <p class=" font-semibold text-[#332A1E]">Confirm Delete</p>
-                <div class="h-9 w-55 md:h-15 md:w-80 ">
-                    <p class="text-[#332A1E]/80 itbms-message">{{ message }}</p>
-                </div>
+                <p class="text-base md:text-xl font-semibold text-[#332A1E]">Confirm Delete</p>
+                <p class="text-sm md:text-lg text-[#332A1E]/80 itbms-message">{{ message }}</p>
             </div>
             <div class="space-x-5 text-sm md:text-lg md:space-x-7">
-                <button class="itbms-cancel-button bg-white text-[#332A1E]/80 border-2 border-[#332A1E]/70 rounded-md w-20 md:w-30 py-2 place-content-center cursor-pointer" @click="$emit('close')">Cancel</button>
-                <button class="itbms-confirm-button bg-[#DC2524] border-2 border-[#DC2524] text-white rounded-md w-20 md:w-30 py-2 place-content-center cursor-pointer" @click="$emit('delete')">Delete</button>
+                <button class="itbms-cancel-button text-sm md:text-lg bg-white text-[#332A1E]/80 border-2 border-[#332A1E]/70 rounded-md w-20 md:w-30 py-2 place-content-center cursor-pointer" @click="$emit('close')">Cancel</button>
+                <button class="itbms-confirm-button text-sm md:text-lg bg-[#DC2524] border-2 border-[#DC2524] text-white rounded-md w-20 md:w-30 py-2 place-content-center cursor-pointer" @click="$emit('delete')">Delete</button>
             </div>
         </div>
     </div>

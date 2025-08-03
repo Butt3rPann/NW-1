@@ -76,44 +76,44 @@ function closeDelConfirm() {
 
 <template>
 <div class="bg-white text-[#332A1E]">
-    <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed mt-25"/>
+    <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
     <div v-if="selectedItem?.id && !showNotFound">
-        <div class="px-21 pt-30 pb-15 font-rubik relative">
+        <div class="px-7 md:px-13 pb-15 pt-22 md:pt-30 mx-auto font-rubik relative">
             <router-link :to="{ name: 'SaleItems' }">
                 <BaseButton :icon="backArrowIcon" text="Back to product list" class="itbms-home-button mb-7"/>
             </router-link>
-            <div class="itbms-row flex justify-between ">
-                <div class="flex flex-col items-center mr-6">
-                    <div class="bg-[#F0EDEC] w-110 h-120 rounded-2xl flex items-center justify-center overflow-hidden">
-                        <img :src="phones.mainImage" alt="Selected Phone" class="h-87">
+            <div class="itbms-row flex justify-center flex-col md:flex-row gap-10 xl:gap-12 xl:mx-5">
+                <div class="flex flex-col items-center">
+                    <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-90 xl:w-110 xl:h-120 rounded-2xl flex items-center justify-center overflow-hidden">
+                        <img :src="phones.mainImage" alt="Selected Phone" class="h-40 md:h-47 lg:h-57 xl:h-87">
                     </div>
                     <div>
                         <OptionsPhone :phones="phones.thumbnail" :selectedIndex="selectedPhone"
                             @update:selected-index="changeMainImg" />
                     </div>
                 </div>
-                <div class="flex flex-col ml-7 w-1750">
+                <div class="flex flex-col w-full">
                     <div class="border-b-3 border-[#E5E8F4] pb-4.5 space-y-3">
-                        <p class="itbms-brand text-[#A4A4A3] text-xl">{{ selectedItem.brandName }}</p>
-                        <p class="itbms-model text-[#332A1E] font-bold text-4xl">{{ selectedItem.model }}</p>
-                        <p class="itbms-description text-[#6F879C] text-xl font-light">{{ selectedItem.description }}</p>
+                        <p class="itbms-brand text-[#A4A4A3] text-base lg:text-lg xl:text-xl">{{ selectedItem.brandName }}</p>
+                        <p class="itbms-model text-[#332A1E] font-bold text-2xl md:text-3xl xl:text-4xl">{{ selectedItem.model }}</p>
+                        <p class="itbms-description text-[#6F879C] text-sm md:text-base lg:text-lg font-light">{{ selectedItem.description }}</p>
                     </div>
-                    <div class="flex items-center justify-between border-b-3 border-[#E5E8F4]">
-                        <p class="text-[#6F879C] py-5 font-bold text-4xl">
+                    <div class="flex justify-between border-b-3 py-5 gap-3 border-[#E5E8F4] flex-col lg:flex-row">
+                        <p class="text-[#6F879C] font-bold text-2xl md:text-2xl lg:text-3xl xl:text-4xl">
                             <span class="itbms-price-unit pr-2">Bath</span>
                             <span class="itbms-price">{{ selectedItem.price?.toLocaleString() }}</span>
                         </p>
                         <div class="flex items-center">
-                            <img :src="boxImg" alt="box" class="w-8 mr-3">
+                            <img :src="boxImg" alt="box" class="w-7 xl:w-8 mr-3">
                             <p :class="[selectedItem.quantity > 0 ? 'bg-[#97C5B8] text-[#225528]' : 'bg-[#EAA9A9] text-[#680D0D]']"
-                                class="p-2 font-bold text-lg rounded-full px-9">
+                                class="p-2 font-bold text-sm lg:text-base rounded-full px-7">
                                 <span class="itbms-quantity mr-2">{{ selectedItem.quantity }}</span>
                                 <span class="itbms-quantity-unit">items in stock</span>
                             </p>
                         </div>
                     </div>
                     <div class="text-[#332A1E] pb-3">
-                        <p class="pt-4.5 font-bold text-[1.45rem]">Product Description</p>
+                        <p class="pt-4.5 font-bold text-xl lg:text-2xl">Product Description</p>
                         <ItemDetailRow label="Brand" :value="selectedItem.brandName" />
                         <ItemDetailRow label="Model" :value="selectedItem.model" />
                         <ItemDetailRow label="StorageGb" :value="selectedItem.storageGb" unit="GB" valueClass="itbms-storageGb" unitClass=" itbms-storageGb-unit" />
@@ -127,7 +127,7 @@ function closeDelConfirm() {
                         </router-link>
                         <BaseButton @click="showDelConfirm = true" :icon="trashIcon" text="Delete" textColor="text-[#D27B7B]" borderColor="border-[#D27B7B]" class="itbms-delete-button"/>
                     </div>
-                    <div class="text-sm space-y-1 flex justify-between mt-3">
+                    <div class="text-xs lg:text-sm space-y-1 md:gap-7 flex items-center flex-col md:flex-row justify-between mt-3">
                         <div class="flex gap-1">
                             <p class="font-semibold text-[#332A1E]/70 mr-3">Created On:</p>
                             <p class="text-[#332A1E]/40">{{ selectedItem.createdOn }}</p>

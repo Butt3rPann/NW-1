@@ -174,11 +174,11 @@ watch(currentSize, () => {
 
 <template>
 <div @click="showFilter = false" class="bg-white text-[#332A1E]">
-    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mt-25"/>
-    <div class="font-rubik mx-8 md:mx-18 lg:mx-25 xl:mx-35 pb-15 space-y-7 pt-30">
-        <div class="md:flex md:justify-between md:items-center">
-            <p class="text-[2.2rem] md:text-[2.7rem] lg:text-[3.5rem] font-bold text-[#332A1E] mb-3 md:mb-0">Products</p>
-            <router-link :to="{ name: 'AddSaleItem' }">
+    <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
+    <div class="font-rubik px-7 md:px-13 lg:px-19 xl:px-26 pb-15 space-y-7 pt-22 md:pt-30">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+            <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#332A1E] mb-3 md:mb-0">Products</p>
+            <router-link :to="{ name: 'AddSaleItem' }" class="w-fit">
                 <BaseButton :icon="addIcon" text="Add Sale Item" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" class="itbms-sale-item-add"/>
             </router-link>
         </div>
@@ -236,7 +236,7 @@ watch(currentSize, () => {
                 </label>
             </div>
         </div>
-        <SaleItemCard v-if="saleItems.length" :saleItems="saleItems" view="gallery"/>
+        <SaleItemCard v-if="saleItems.length" :saleItems="saleItems" view="gallery" class="xl:grid-cols-5"/>
         <div v-else class="flex flex-col items-center space-y-3 py-18">
             <img :src="emptySaleItemsImg" alt="EmptySaleItems" class=" w-36">
             <p class="text-xl text-[#ABBCC9]">no sale item</p>

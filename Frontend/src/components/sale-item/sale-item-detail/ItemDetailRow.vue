@@ -18,9 +18,8 @@ defineProps({
 </script>
  
 <template>
-<div>
     <div class="text-[#332A1E] py-3.5 border-b-3 border-[#E5E8F4]">
-        <div class="flex items-center justify-between text-xl gap-30">
+        <div class="flex items-center justify-between text-sm md:text-base lg:text-lg">
           <p class="font-medium">{{ label }}</p>
           <p class="text-right">
             <span :class="[value ? 'text-[#332A1E]' : 'text-[#A4A4A3]', valueClass]">{{ value ? value : '-' }}</span>
@@ -28,7 +27,6 @@ defineProps({
           </p>
         </div>
   </div>
-</div>
 </template>
  
 <style scoped>

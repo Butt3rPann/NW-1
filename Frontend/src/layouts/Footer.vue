@@ -23,7 +23,7 @@ const footerSections = [
     },
     {
         title: 'About Us',
-        items: ['Careers', 'Terms & Conditions of Sales', 'Privacy Policy', 'Responsibility']
+        items: ['Careers', 'Terms & Conditions', 'Privacy Policy', 'Responsibility']
     }
 ]
 
@@ -46,42 +46,38 @@ const socialIcons = [facebookIcon, twitterIcon, igIcon, youtubeIcon]
 </script>
 
 <template>
-    <div class="font-rubik bg-[#6F879C] text-[#F0EDEC] h-fit py-10 px-15">
-        <div class="flex justify-between pb-8 border-b-1 border-[#F0EDEC]">
-            <div v-for="section in footerSections" :key="section.title">
-                <p class="font-bold text-xl mb-3">{{ section.title }}</p>
-                <template v-for="item in section.items" :key="item">
-                    <router-link v-if="item === 'All Products'" :to="{ name: 'SaleItems' }"
-                        class="text-base mb-1 hover:text-[#334362] cursor-pointer transition-colors duration-150 block">
-                        {{ item }}
-                    </router-link>
-                    <p v-else
-                        class="text-base font-normal mb-1 hover:text-[#334362] cursor-pointer transition-colors duration-150">
-                        {{ item }}
-                    </p>
-                </template>
+    <div class="font-rubik bg-[rgb(111,135,156)] text-[#F0EDEC] h-fit py-7 px-5 md:py-10 md:px-9 lg:px-12">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:flex lg:justify-between pb-6 md:pb-8 border-b-1 border-[#F0EDEC]">
+            <div class="grid grid-cols-2 xl:grid-cols-4 col-span-2 gap-y-4 xl:gap-0 w-full">
+                <div v-for="section in footerSections" :key="section.title">
+                    <p class="font-bold text-base md:text-xl mb-1.5 xl:mb-3">{{ section.title }}</p>
+                    <template v-for="item in section.items" :key="item">
+                        <router-link v-if="item === 'All Products'" :to="{ name: 'SaleItems' }"
+                            class="text-xs md:text-base mb-1 hover:text-[#334362] cursor-pointer transition-colors duration-150 block">
+                            {{ item }}
+                        </router-link>
+                        <p v-else
+                            class="text-xs md:text-base font-normal mb-1 hover:text-[#334362] cursor-pointer transition-colors duration-150">
+                            {{ item }}
+                        </p>
+                    </template>
+                </div>
             </div>
-            <div class="w-60">
-                <p class="font-bold text-xl mb-3">Contact Us</p>
+            <div class="mt-2 md:mt-0 w-65 lg:w-90 xl:w-80 md:col-start-3 md:col-end-4">
+                <p class="font-bold text-base md:text-xl mb-1.5 xl:mb-3">Contact Us</p>
                 <div v-for="(contact, index) in contactInfo" :key="index" class="flex items-center mb-1">
-                    <img :src="contact.icon" alt="Contact" class="mr-3 w-6" />
-                    <p class="text-sm font-light">{{ contact.text }}</p>
+                    <img :src="contact.icon" alt="Contact" class="mr-3 w-4 md:w-6" />
+                    <p class="text-xs md:text-base font-light">{{ contact.text }}</p>
                 </div>
                 <div class="flex items-center">
                     <img v-for="(icon, index) in socialIcons" :key="index" :src="icon" alt=""
-                        class="mr-3 mt-3 w-10" />
+                        class="mr-3 mt-3 w-8 md:w-10" />
                 </div>
             </div>
         </div>
-        <div class="flex justify-between items-center mt-7">
-            <div class="flex items-center">
-                <img :src="copyrightIcon" alt="copyright"></img>
-                <p class="text-base font-light ml-2">2025 ITB-MShop. All rights reserved.</p>
-            </div>
-            <div class="flex items-center">
-                <p class="text-base font-light mr-10">Privacy Policy</p>
-                <p class="text-base font-light">Terms & Conditions</p>
-            </div>
+        <div class="flex items-center justify-center mt-5 md:mt-7">
+            <img :src="copyrightIcon" alt="copyright"></img>
+            <p class="text-xs md:text-base font-light ml-2">2025 ITB-MShop. All rights reserved.</p>
         </div>
     </div>
 
