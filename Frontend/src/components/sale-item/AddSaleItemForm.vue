@@ -27,7 +27,7 @@ const handleNewSaleItem = async (newSaleItem) => {
 </script>
 
 <template>
-    <div class="px-10 md:px-22 lg:px-25 pt-35 pb-20 font-rubik bg-white">
+    <div class="px-10 md:px-22 lg:px-25 pt-22 md:pt-30 pb-13 font-rubik bg-white">
         <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
             <router-link :to="{ name: 'SaleItems' }"><span class="text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
             <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>

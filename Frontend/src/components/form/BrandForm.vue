@@ -56,36 +56,31 @@ const cancel = () => {
 </script>
  
 <template>
-  <div class="flex items-center justify-center">
-    <div class="bg-white border w-full border-gray-200 shadow-md rounded-lg px-8 py-6 md:p-10">
-      <div class="grid gap-5">
-        <div class="grid gap-3">
-          <div class="grid gap-1.5">
-            <FormInput v-model="newBrand.name" label="Brand Name" :required="true" inputType="text" :maxlength="30" field="name"
-                  placeholder="Enter brand name" className="itbms-name" :invalidMessage="invalidMessage.name" @disabledButton="handleDisabledButton"/>  
-	        </div>
-        </div>
-
+  <div class="bg-white border w-full border-gray-200 shadow-md rounded-lg px-8 py-6 md:p-10">
+    <div class="grid gap-5">
+      <div class="grid gap-3">
         <div class="grid gap-1.5">
-          <FormInput v-model="newBrand.websiteUrl" label="Website URL" inputType="url" :maxlength="40" field="websiteUrl"
-              placeholder="Enter Website URL" className="itbms-websiteUrl" :invalidMessage="invalidMessage.url" @disabledButton="handleDisabledButton"/>
+          <FormInput v-model="newBrand.name" label="Brand Name" :required="true" inputType="text" :maxlength="30" field="name"
+                placeholder="Enter brand name" className="itbms-name" :invalidMessage="invalidMessage.name" @disabledButton="handleDisabledButton"/>  
 	      </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
-          <div class="md:col-span-7">
-            <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" :maxlength="80" field="countryOfOrigin"
-              placeholder="Enter country" className="itbms-countryOfOrigin" :invalidMessage="invalidMessage.countryOfOrigin" @disabledButton="handleDisabledButton"/>
-	        </div>
-          <div class="md:col-span-3 flex flex-col items-center justify-center gap-3 font-medium text-sm md:text-base lg:text-lg">
-              <p class="font-rubik text-[#332A1E]">Active</p>
-              <input v-model="newBrand.isActive" type="checkbox" class="itbms-isActive toggle toggle-md lg:toggle-lg custom-toggle"/>
-          </div>
+      </div>
+      <div class="grid gap-1.5">
+        <FormInput v-model="newBrand.websiteUrl" label="Website URL" inputType="url" :maxlength="40" field="websiteUrl"
+            placeholder="Enter Website URL" className="itbms-websiteUrl" :invalidMessage="invalidMessage.url" @disabledButton="handleDisabledButton"/>
+	    </div>
+      <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
+        <div class="md:col-span-7">
+          <FormInput v-model="newBrand.countryOfOrigin" label="Country of Origin" inputType="text" :maxlength="80" field="countryOfOrigin"
+            placeholder="Enter country" className="itbms-countryOfOrigin" :invalidMessage="invalidMessage.countryOfOrigin" @disabledButton="handleDisabledButton"/>
+	      </div>
+        <div class="md:col-span-3 flex flex-col items-center gap-3 md:gap-4 font-medium text-sm md:text-base lg:text-lg">
+            <p class="font-rubik text-[#332A1E]">Active</p>
+            <input v-model="newBrand.isActive" type="checkbox" class="itbms-isActive toggle toggle-md lg:toggle-lg custom-toggle"/>
         </div>
-
-        <div class="flex justify-center gap-4 pt-2">
-          <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
-           <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"/>
-        </div>
+      </div>
+      <div class="flex justify-center gap-4 pt-2">
+        <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
+         <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"/>
       </div>
     </div>
   </div>

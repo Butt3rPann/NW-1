@@ -50,11 +50,11 @@ watch(() => props.isShowPopup, (newValue) => {
         <path v-else fill="#DC2524" fill-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m4.066-14.066a.75.75 0 0 1 0 1.06L13.06 12l3.005 3.005a.75.75 0 0 1-1.06 1.06L12 13.062l-3.005 3.005a.75.75 0 1 1-1.06-1.06L10.938 12L7.934 8.995a.75.75 0 1 1 1.06-1.06L12 10.938l3.005-3.005a.75.75 0 0 1 1.06 0" clip-rule="evenodd" />
       </svg>
       <div>
-        <p class="text-[12px] md:text-lg font-semibold">
+        <p class="text-xs md:text-lg font-semibold">
           <span v-if="isSuccess" class="text-[#54b15f]">Success</span>
           <span v-else class="text-[#DC2524]">Failure</span>
         </p>
-        <p class="text-gray-700 text-[12px] md:text-lg itbms-message">{{ message }}</p>
+        <p class="text-gray-700 text-xs md:text-lg itbms-message">{{ message }}</p>
       </div>
       <button @click="closePopup" class="text-gray-500 hover:text-gray-700 focus:outline-none">
         <svg class="w-4 md:w-5 h-4 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

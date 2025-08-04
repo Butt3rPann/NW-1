@@ -136,9 +136,9 @@ const changeMainImg = (index) => {
 </script>
 
 <template>
-    <div class="flex flex-col xl:flex-row gap-4 lg:gap-8 xl:gap-12 justify-between p-4 lg:p-8">
-        <div class="flex flex-col items-center w-full xl:w-[35%] 2xl:w-[40%]">
-            <div class="bg-[#F0EDEC] w-full max-w-[15rem] md:max-w-[20rem] lg:max-w-[23rem] xl:max-w-[20rem] 2xl:max-w-[24rem] aspect-[9/10] rounded-2xl flex items-center justify-center mb-3 md:mb-5">
+    <div class="flex flex-col xl:flex-row gap-4 lg:gap-8 xl:gap-12 justify-between">
+        <div class="flex flex-col items-center">
+            <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-90 xl:w-110 xl:h-120 rounded-2xl flex items-center justify-center overflow-hidden">
                 <img :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
             </div>
             <div>
