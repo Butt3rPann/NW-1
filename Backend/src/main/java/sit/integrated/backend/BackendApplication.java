@@ -3,10 +3,13 @@ package sit.integrated.backend;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import sit.integrated.backend.utils.FileStorageProperties;
 import sit.integrated.backend.utils.ListMapper;
 
 @SpringBootApplication
+@EnableConfigurationProperties({ FileStorageProperties.class })
 public class BackendApplication {
 
     public static void main(String[] args) {
@@ -22,5 +25,4 @@ public class BackendApplication {
     public ListMapper listMapper() {
         return ListMapper.getInstance();
     }
-
 }
