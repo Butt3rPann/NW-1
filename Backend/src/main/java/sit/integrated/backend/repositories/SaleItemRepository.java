@@ -10,6 +10,12 @@ import sit.integrated.backend.entities.SaleItem;
 import java.util.List;
 
 public interface SaleItemRepository extends JpaRepository<SaleItem, Integer> {
-    @Query("SELECT s FROM SaleItem s JOIN s.brand b WHERE b.name IN :brands")
-    Page<SaleItem> findByBrands(@Param("brands") List<String> brands, Pageable pageable);
+    @Query("""
+           SELECT s FROM SaleItem s JOIN s.brand b
+           WHERE (:brands IS NULL OR b.name IN :brands)
+           AND (:lower IS NULL OR s.price >= :lower)
+           AND (:upper IS NULL OR s.price <= :upper)
+           AND (:storages IS NULL OR s.storageGb IN :storages)
+           """)
+    Page<SaleItem> findFilteredItems(@Param("brands") List<String> brands, @Param("storages") List<Integer> filterStorages, @Param("lower") Integer filterPriceLower, @Param("upper") Integer filterPriceUpper, Pageable pageable);
 }
