@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
 @Getter
-@Setter
 @Entity
 @Immutable
 @Table(name = "view_storagegb")
