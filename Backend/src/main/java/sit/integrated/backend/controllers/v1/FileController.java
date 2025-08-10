@@ -18,15 +18,9 @@ public class FileController {
     @Autowired
     FileService fileService;
 
-    @PostMapping
-    public ResponseEntity<Object> uploadFile(@RequestParam List<MultipartFile> files) {
-        return ResponseEntity.ok(fileService.store(files));
-    }
-
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         Resource file = fileService.loadFileAsResource(filename);
-        return ResponseEntity.ok()
-                .contentType(MediaType.valueOf(fileService.getFileType(file))).body(file);
+        return ResponseEntity.ok().contentType(MediaType.valueOf(fileService.getFileType(file))).body(file);
     }
 }

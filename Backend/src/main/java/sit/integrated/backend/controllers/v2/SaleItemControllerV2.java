@@ -24,8 +24,6 @@ public class SaleItemControllerV2 {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
-    @Autowired
-    private StorageSizeService storageSizeService;
 
     @GetMapping("/sale-items")
     public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(@RequestParam(required = false) String sortField,
