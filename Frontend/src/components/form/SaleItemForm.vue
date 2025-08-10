@@ -7,7 +7,6 @@ import FormInput from '@/components/elements/FormInput.vue'
 import { useRouter } from 'vue-router'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import { previewBinaryFile } from '@/libs/utilities'
-import WarningMessage from '@/components/elements/WarningMessage.vue'
 
 const props = defineProps({
     saleItemData: Object,
