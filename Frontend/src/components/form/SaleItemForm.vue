@@ -6,6 +6,7 @@ import FormSelect from '@/components/elements/FormSelect.vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import { useRouter } from 'vue-router'
 import BaseButton from '@/components/elements/BaseButton.vue'
+import { previewBinaryFile } from '@/libs/utilities'
 
 const props = defineProps({
     saleItemData: Object,
@@ -17,6 +18,7 @@ const router = useRouter()
 const emit = defineEmits(['submitAction'])
 const brands = ref([])
 const oldSaleItem = ref(null)
+const myImages = ref([])
 
 onMounted(async () => {
     try {
@@ -117,14 +119,31 @@ const cancel = () => {
 
 }
 
+ const chooseBinaryFile = (event) => {
+    const files = event.target.files
+    
+    Array.from(files).forEach(file => {
+        if (myImages.value.length >= 4) {
+            return
+        }
+
+        const extension = file.name.split('.').pop().toLowerCase()
+        const picNumber = myImages.value.length + 1
+        const newFileName = `${newSaleItem.value.model}-pic${picNumber}.${extension}`
+        const renamedFile = new File([file], newFileName, {type: file.type})
+        const previewFile = previewBinaryFile(renamedFile)
+        myImages.value.push({file: renamedFile, url: previewFile})
+
+        if(!phones.value.mainImage) {
+            phones.value.mainImage = previewFile
+        }
+        phones.value.thumbnail.push(previewFile)
+    })
+}
+
 const phones = ref({
-    mainImage: '/nw1/saleItemImage/demoImg1.png',
-    thumbnail: [
-        '/nw1/saleItemImage/demoImg1.png',
-        '/nw1/saleItemImage/demoImg2.png',
-        '/nw1/saleItemImage/demoImg3.png',
-        '/nw1/saleItemImage/demoImg4.png'
-    ]
+    mainImage: '',
+    thumbnail: []
 })
 
 const selectedPhone = ref(0)
@@ -133,18 +152,70 @@ const changeMainImg = (index) => {
     selectedPhone.value = index
     phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
 }
+
+const updatePhonesDisplay = () => {
+  phones.value.mainImage = myImages.value[0]?.url || null
+  phones.value.thumbnail = myImages.value.map(img => img.url)
+}
+
+const moveImageUp = (index) => {
+  if (index > 0) {
+    const temp = myImages.value[index]
+    myImages.value[index] = myImages.value[index - 1]
+    myImages.value[index - 1] = temp
+    updatePhonesDisplay()
+  }
+}
+
+const moveImageDown = (index) => {
+  if (index < myImages.value.length - 1) {
+    const temp = myImages.value[index]
+    myImages.value[index] = myImages.value[index + 1]
+    myImages.value[index + 1] = temp
+    updatePhonesDisplay()
+  }
+}
+
+const removeImage = (index) => {
+    myImages.value.splice(index, 1)
+    updatePhonesDisplay()
+}
 </script>
 
 <template>
     <div class="flex flex-col xl:flex-row gap-4 lg:gap-8 xl:gap-12 justify-between">
         <div class="flex flex-col items-center">
             <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-90 xl:w-110 xl:h-120 rounded-2xl flex items-center justify-center overflow-hidden">
-                <img :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
+                <p v-if="phones.mainImage.length === 0" class="text-[#332A1E] text-lg xl:text-2xl">No Picture</p>
+                <img v-else :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
             </div>
             <div>
                 <OptionsPhone :phones="phones.thumbnail" :selectedIndex="selectedPhone"
                     @update:selected-index="changeMainImg" />
             </div>
+            <input type="file" accept=".jpg, .jpeg, .png" multiple @change="chooseBinaryFile" class="mt-5 mb-3 self-start md:self-auto 2xl:ml-9 text-sm xl:text-lg text-gray-700
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-md file:border-0
+            file:text-sm xl:file:text-lg file:font-semibold
+          file:bg-orange-400 file:text-white
+          hover:file:bg-orange-300"/>
+          <div v-for="(picture, index) in myImages" :key="index" class="flex items-center mt-1 self-start md:self-auto">
+            <p class="p-2 text-sm md:text-base border-1 text-[#332A1E] border-[#6F879C] border-solid rounded-md">{{ picture.file.name }}
+                <span class="ml-2"><button @click="removeImage(index)">x</button></span>
+            </p>
+            <div class="flex flex-col items-center ml-2 mb-2 text-[#6F879C]">
+              <button @click="moveImageUp(index)" :disabled="index === 0" class="disabled:opacity-50 mb-1 p-1 hover:bg-gray-200 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                </svg>
+              </button>  
+              <button @click="moveImageDown(index)" :disabled="index === myImages.length - 1" class="disabled:opacity-50 hover:bg-gray-200 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>  
+            </div>
+          </div>
         </div>
         <div class="w-full xl:w-[60%] 2xl:w-[55%] space-y-4 sm:space-y-5 lg:space-y-6">
             <div class="grid gap-4 sm:gap-5 lg:gap-6">

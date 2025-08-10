@@ -12,7 +12,6 @@ import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.services.StorageSizeService;
 import sit.integrated.backend.utils.ListMapper;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
