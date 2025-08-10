@@ -1,4 +1,4 @@
-async function getItems(url, sortField, sortDirection, brands, page, size, filterPriceLower, filterPriceUpper,filterStorages) {
+async function getItems(url, sortField, sortDirection, brands, filterPriceLower, filterPriceUpper,filterStorages, page, size) {
   try {
     const params = new URLSearchParams()
 

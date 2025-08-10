@@ -20,7 +20,9 @@ const selectedSortField = ref('brand.name')
 const pageSizeOptions = [5, 10, 20]
 const totalPage = ref(0)
 const brands = ref([])
-const showFilter = ref(false)
+const showBrandFilter = ref(false)
+const showPriceFilter = ref(false)
+const showStorageFilter = ref(false)
 const response = ref({})
 const storages = ref([])
 
@@ -168,7 +170,6 @@ onMounted(async () => {
         brands.value = brands.value.sort((a, b) => a.name.localeCompare(b.name))
 
         storages.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/storage-size`)
-        storages.value = storages.value.sort((a, b) => a.storageGb - b.storageGb)
     } catch (error) {
         console.log(error)
     }
@@ -258,21 +259,21 @@ watch(currentStorageFilter, () => {
         <div>
             <div class="relative bg-white border border-[#332A1E]/10 rounded-md shadow-sm p-3 flex">
                 <div class="w-full grid grid-cols-3">
-                    <div @click.stop="showFilter = !showFilter" class="itbms-brand-filter border-r border-[#332A1E]/20">
+                    <div @click.stop="showBrandFilter = !showBrandFilter" class="itbms-brand-filter border-r border-[#332A1E]/20">
                         <div class="font-bold text-sm md:text-base text-center">Brand</div>
                         <div class="w-full flex items-center gap-2">
                             <div class="w-full flex overflow-auto" style="scrollbar-width: none;"> 
                                 <p v-if="!currentBrandFilter.length" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Filter by brand(s)</p>
-                                <div v-for="(filterBrand, index) in currentBrandFilter" class="itbms-filter-item inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
+                                <div v-for="(filterBrand, index) in currentBrandFilter" class="itbms-brand-item inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
                                     {{ filterBrand }}
-                                    <button @click.stop="deleteFilter(index)" class="itbms-filter-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
+                                    <button @click.stop="deleteFilter(index)" class="itbms-brand-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
                                         ✕
                                     </button>
                                 </div>
                             </div>
                         </div> 
                     </div>
-                    <div @click.stop="showFilter = !showFilter" class="itbms-price-filter border-r border-[#332A1E]/20">
+                    <div @click.stop="showPriceFilter = !showPriceFilter" class="itbms-price-filter border-r border-[#332A1E]/20">
                         <div class="font-bold text-sm md:text-base text-center">Price</div>
                         <div class="w-full flex items-center gap-2">
                             <div class="w-full flex overflow-auto" style="scrollbar-width: none;"> 
@@ -286,13 +287,13 @@ watch(currentStorageFilter, () => {
                             </div>
                         </div> 
                     </div>
-                    <div @click.stop="showFilter = !showFilter" class="itbms-storage-size-filter px-2">
+                    <div @click.stop="showStorageFilter = !showStorageFilter" class="itbms-storage-size-filter px-2">
                         <div class="font-bold text-sm md:text-base text-center">Storage</div>
                         <div class="w-full flex items-center gap-2">
                             <div class="w-full flex overflow-auto" style="scrollbar-width: none;"> 
                                 <p v-if="!currentStorageFilter.length" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Storage size(s)</p>
                                 <div v-for="(filterStorage, index) in currentStorageFilter" class="itbms-storage-size-item inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
-                                    {{ filterStorage }}
+                                    {{ `${filterStorage}Gb` }}
                                     <button @click.stop="deleteFilter(index)" class="itbms-storage-size-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
                                         ✕
                                     </button>
@@ -301,10 +302,10 @@ watch(currentStorageFilter, () => {
                         </div> 
                     </div>
                 </div>
-                <button @click.stop="clearFilter(index)" class="w-fit cursor-pointer">clear</button>
+                <button @click.stop="clearFilter(index)" class="itbms-filter-clear w-fit cursor-pointer">clear</button>
             </div>
             <div class="w-full grid grid-cols-3">
-                <div @click.stop v-if="showFilter" class="h-50 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm">
+                <div @click.stop v-if="showBrandFilter" class="h-50 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm">
                     <label v-for="brand in brands" :key="brand.name" class="flex items-center gap-4 py-1.5 cursor-pointer">
                         <input type="checkbox" v-model="currentBrandFilter" :value="brand.name" class="hidden peer">
                         <div class="w-4 h-4 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
@@ -315,7 +316,7 @@ watch(currentStorageFilter, () => {
                         <span class="itbms-filter-item text-sm md:text-base">{{ brand.name }}</span>
                     </label>
                 </div>
-                <div @click.stop v-if="showFilter" class="h-50 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm">
+                <div @click.stop v-if="showPriceFilter" class="h-50 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm">
                     <label v-for="brand in brands" :key="brand.name" class="flex items-center gap-4 py-1.5 cursor-pointer">
                         <input type="checkbox" v-model="currentBrandFilter" :value="brand.name" class="hidden peer">
                         <div class="w-4 h-4 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
@@ -326,7 +327,7 @@ watch(currentStorageFilter, () => {
                         <span class="itbms-filter-item text-sm md:text-base">{{ brand.name }}</span>
                     </label>
                 </div>
-                <div @click.stop v-if="showFilter" class="h-50 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm">
+                <div @click.stop v-if="showStorageFilter" class="h-50 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm">
                     <label v-for="storage in storages" :key="storage.storageGb" class="flex items-center gap-4 py-1.5 cursor-pointer">
                         <input type="checkbox" v-model="currentStorageFilter" :value="storage.storageGb" class="hidden peer">
                         <div class="w-4 h-4 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
@@ -334,7 +335,7 @@ watch(currentStorageFilter, () => {
                                 <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                             </svg>
                         </div>
-                        <span class="itbms-filter-item text-sm md:text-base">{{ storage.storageGb }}</span>
+                        <span class="itbms-filter-item text-sm md:text-base">{{ `${storage.storageGb}Gb` }}</span>
                     </label>
                 </div>
             </div>
