@@ -86,9 +86,9 @@ public class FileService {
     public String getFileType(Resource resource) {
         try {
             String type = Files.probeContentType(resource.getFile().toPath());
-            return type == null? "image/jpeg": type;
+            return type == null ? "image/jpeg" : type;
         } catch (IOException ex) {
-            throw new RuntimeException("ProbeContentType error: " + resource,ex);
+            throw new RuntimeException("ProbeContentType error: " + resource, ex);
         }
     }
 }

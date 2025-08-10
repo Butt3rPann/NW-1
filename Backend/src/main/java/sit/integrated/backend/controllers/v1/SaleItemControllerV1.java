@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.SaleItemDetailDto;
 import sit.integrated.backend.dtos.SaleItemDto;
 import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.entities.SaleItem;
+import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
 import java.util.List;
 import sit.integrated.backend.utils.ListMapper;
@@ -23,6 +25,8 @@ public class SaleItemControllerV1 {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
+    @Autowired
+    FileService fileService;
 
     @GetMapping("/sale-items")
     public ResponseEntity<List<SaleItemDto>> getSaleItem() {
@@ -37,8 +41,12 @@ public class SaleItemControllerV1 {
     }
 
     @PostMapping("/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestBody SaleItemFormDto formDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(saleItemService.createSaleItem(formDto));
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestPart("data") SaleItemFormDto formDto, @RequestPart(value = "file", required = false)  List<MultipartFile> files) {
+        SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
+        if (files != null && !files.isEmpty()) {
+            fileService.store(files);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
     }
 
     @PutMapping("/sale-items/{id}")
