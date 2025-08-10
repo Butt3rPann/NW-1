@@ -37,6 +37,7 @@ public class SaleItemControllerV2 {
                                                                    @RequestParam(required = false) Integer filterPriceUpper,
                                                                    @RequestParam Integer page,
                                                                    @RequestParam(required = false, defaultValue = "10") Integer size) {
+
         if(filterPriceLower != null && filterPriceUpper != null && filterPriceLower > filterPriceUpper) {
             int temp = filterPriceLower;
             filterPriceLower = filterPriceUpper;
