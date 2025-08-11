@@ -3,6 +3,7 @@ package sit.integrated.backend.controllers.v1;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,11 +41,12 @@ public class SaleItemControllerV1 {
         return ResponseEntity.ok(modelMapper.map(saleItem, SaleItemDetailDto.class));
     }
 
-    @PostMapping("/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestPart("data") SaleItemFormDto formDto, @RequestPart(value = "file", required = false)  List<MultipartFile> files) {
+    @PostMapping(value = "/sale-items", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestPart("data") SaleItemFormDto formDto,
+                                                            @RequestPart(value = "file", required = false)  List<MultipartFile> files) {
         SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
         if (files != null && !files.isEmpty()) {
-            fileService.store(files);
+            fileService.store(files, saleItem.getId());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
     }

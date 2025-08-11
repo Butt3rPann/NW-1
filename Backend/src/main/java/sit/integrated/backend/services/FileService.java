@@ -10,10 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.utils.FileStorageProperties;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +40,7 @@ public class FileService {
         return supportFileType.contains(file.getContentType());
     }
 
-    public String store(MultipartFile file) {
+    public String store(MultipartFile file, Integer id, int imgNumber) {
         if(!isSupportedContentType(file)) {
             return null;
         }
@@ -51,7 +49,15 @@ public class FileService {
             if (fileName.contains("..")) {
                 throw new RuntimeException("Filename contains invalid path sequence " + fileName);
             }
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+
+            String extension = "";
+            int dotIndex = fileName.lastIndexOf('.');
+            if (dotIndex != -1) {
+                extension = fileName.substring(dotIndex);
+            }
+            String newFileName = id + "_pic" + imgNumber + extension;
+
+            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException ex) {
@@ -59,14 +65,16 @@ public class FileService {
         }
     }
 
-    public List<String> store(List<MultipartFile> files) {
+    public List<String> store(List<MultipartFile> files, Integer id) {
         List<String> fileNames = new ArrayList<>();
-        files.forEach(file -> {
-            String fileName = store(file);
+        int imgNumber = 1;
+        for (MultipartFile file : files) {
+            String fileName = store(file, id, imgNumber);
             if (fileName != null) {
                 fileNames.add(fileName);
             }
-        });
+            imgNumber++;
+        }
         return fileNames;
     }
 
@@ -90,5 +98,27 @@ public class FileService {
         } catch (IOException ex) {
             throw new RuntimeException("ProbeContentType error: " + resource, ex);
         }
+    }
+
+    public List<String> getMatchedFiles(String pattern) {
+        List<String> fileNames = new ArrayList<>();
+        FileVisitor<Path> matcherVisitor = new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                FileSystem fileSystem = FileSystems.getDefault();
+                PathMatcher pathMatcher = fileSystem.getPathMatcher("glob:" + pattern);
+                Path name = file.getFileName();
+                if (pathMatcher.matches(name)) {
+                    fileNames.add(name.toString());
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        };
+        try {
+            Files.walkFileTree(this.fileStorageLocation, matcherVisitor);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+        return fileNames;
     }
 }
