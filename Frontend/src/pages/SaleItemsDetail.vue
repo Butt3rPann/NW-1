@@ -19,24 +19,25 @@ const { params: { saleItemId } } = useRoute()
 
 const selectedItem = ref({})
 
+const phones = ref({
+    mainImage: '',
+    thumbnail: []
+})
+
 onMounted(async () => {
     try {
         selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
-        selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn);
+        selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn)
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
+
+        const fileNames = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/multiple-files`, `${saleItemId}*`)
+        phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${fileNames[0]}`
+        fileNames.forEach(fileName => {
+            phones.value.thumbnail.push(`${import.meta.env.VITE_APP_URL}/v1/files/${fileName}`)
+        })
     } catch (error) {
         console.log(error)
     }
-})
-
-const phones = ref({
-    mainImage: '/nw1/saleItemImage/demoImg1.png',
-    thumbnail: [
-        '/nw1/saleItemImage/demoImg1.png',
-        '/nw1/saleItemImage/demoImg2.png',
-        '/nw1/saleItemImage/demoImg3.png',
-        '/nw1/saleItemImage/demoImg4.png'
-    ]
 })
 
 const selectedPhone = ref(0)
@@ -79,13 +80,14 @@ function closeDelConfirm() {
     <PopupMessage message="The sale item has been updated." :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
     <div v-if="selectedItem?.id && !showNotFound">
         <div class="px-7 md:px-13 pb-15 pt-22 md:pt-30 mx-auto font-rubik relative">
-            <router-link :to="{ name: 'SaleItems' }">
+            <router-link :to="{ name: 'SaleItems' }" class="w-fit inline-block">
                 <BaseButton :icon="backArrowIcon" text="Back to product list" class="itbms-home-button mb-7"/>
             </router-link>
             <div class="itbms-row flex justify-center flex-col md:flex-row gap-10 xl:gap-12 xl:mx-5">
                 <div class="flex flex-col items-center">
-                    <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-90 xl:w-110 xl:h-120 rounded-2xl flex items-center justify-center overflow-hidden">
-                        <img :src="phones.mainImage" alt="Selected Phone" class="h-40 md:h-47 lg:h-57 xl:h-87">
+                    <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-80 xl:w-110 xl:h-110 rounded-2xl flex items-center justify-center overflow-hidden">
+                        <p v-if="!phones.mainImage" class="text-[#332A1E] text-lg xl:text-2xl">No Picture</p>
+                        <img v-else :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
                     </div>
                     <div>
                         <OptionsPhone :phones="phones.thumbnail" :selectedIndex="selectedPhone"

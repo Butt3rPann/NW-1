@@ -1,6 +1,6 @@
 <script setup>
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
-import { getItems } from '@/libs/fetchUtils'
+import { getItems, getItemById } from '@/libs/fetchUtils'
 import { onMounted, ref, watch, computed} from 'vue'
 import addIcon from '@/assets/images/add.png'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
@@ -93,6 +93,8 @@ if (prevPath && (router.resolve(prevPath).name !== 'SaleItemsDetail' && router.r
     sessionStorage.setItem('page', 1)
 }
 
+const saleItemImg = ref([])
+
 async function getSaleItems() {
     try {
         response.value = await getItems(
@@ -105,6 +107,11 @@ async function getSaleItems() {
         )
         totalPage.value = response.value.totalPages
         saleItems.value = response.value.content
+
+        for (const item of saleItems.value) {
+            const image = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/multiple-files`, `${item.id}_pic1*`)
+            saleItemImg.value[item.id] = image[0]
+        }
     } catch (error) {
         console.log(error)
     }
@@ -236,7 +243,7 @@ watch(currentSize, () => {
                 </label>
             </div>
         </div>
-        <SaleItemCard v-if="saleItems.length" :saleItems="saleItems" view="gallery" class="xl:grid-cols-5"/>
+        <SaleItemCard v-if="saleItems.length" :saleItems="saleItems" view="gallery" :images="saleItemImg" class="xl:grid-cols-5"/>
         <div v-else class="flex flex-col items-center space-y-3 py-18">
             <img :src="emptySaleItemsImg" alt="EmptySaleItems" class=" w-36">
             <p class="text-xl text-[#ABBCC9]">no sale item</p>

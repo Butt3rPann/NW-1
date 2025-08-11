@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import SaleItemForm from '@/components/form/SaleItemForm.vue'
-import { addItem } from '@/libs/fetchUtils'
+import { uploadFormData } from '@/libs/fetchUtils'
 import { ref } from 'vue'
 
 const router = useRouter()
@@ -16,9 +16,9 @@ if (prevPath.value) {
     prevPathName.value = 'SaleItems'
 }
 
-const handleNewSaleItem = async (newSaleItem) => {
+const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
     try {
-        await addItem(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, newSaleItem)
+        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemImg, newSaleItem)
         router.push({ name: prevPathName.value, query: { added: 'true' } })
     } catch (error) {
         console.log(error)

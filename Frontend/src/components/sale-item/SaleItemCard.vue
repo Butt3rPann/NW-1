@@ -9,12 +9,13 @@ defineProps({
     view: {
         type: String,
         required: true
-    }
+    },
+    images: Array
 })
 </script>
  
 <template>
-    <ListModel :items="saleItems" view="gallery">
+    <ListModel :items="saleItems" :images="images" view="gallery">
         <template #saleItem="slotProps">
             <p class="itbms-brand text-[#A4A4A3] font-light text-[0.5rem] md:text-[0.6rem] lg:text-[0.7rem] ">{{ slotProps.itemInList.brandName }}</p>
             <div class="font-bold mb-3 text-[0.7rem] md:text-[0.7rem] lg:text-[0.9rem] text-[#332A1E]">

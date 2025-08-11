@@ -84,4 +84,20 @@ async function deleteItemById(url, id) {
   }
 }
 
-export { getItems, getItemById, addItem , editItem , deleteItemById}
+async function uploadFormData(url, file, data) {
+  try {
+    const formData = new FormData()
+    formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+    file.forEach(f => formData.append('file', f))
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData
+    })
+    const addedItem = await res.json()
+    return addedItem
+  } catch (error) {
+    throw new Error('can not add your item')
+  }
+}
+
+export { getItems, getItemById, addItem , editItem , deleteItemById, uploadFormData}
