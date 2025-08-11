@@ -38,12 +38,4 @@ public class SaleItemFormDto {
 		    this.color = color.trim();
 	    }
     }
-
-    public void setQuantity(Integer quantity) {
-        if (quantity == null || quantity < 0) {
-            this.quantity = 1;
-        } else {
-            this.quantity = quantity;
-        }
-    }
 }
