@@ -82,4 +82,13 @@ public class FileService {
             throw new RuntimeException("File operation error: " + fileName, ex);
         }
     }
+
+    public String getFileType(Resource resource) {
+        try {
+            String type = Files.probeContentType(resource.getFile().toPath());
+            return type == null ? "image/jpeg" : type;
+        } catch (IOException ex) {
+            throw new RuntimeException("ProbeContentType error: " + resource, ex);
+        }
+    }
 }

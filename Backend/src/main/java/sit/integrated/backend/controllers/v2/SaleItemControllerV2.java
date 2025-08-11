@@ -12,7 +12,6 @@ import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.services.StorageSizeService;
 import sit.integrated.backend.utils.ListMapper;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -25,8 +24,6 @@ public class SaleItemControllerV2 {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
-    @Autowired
-    private StorageSizeService storageSizeService;
 
     @GetMapping("/sale-items")
     public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(@RequestParam(required = false) String sortField,
@@ -37,6 +34,7 @@ public class SaleItemControllerV2 {
                                                                    @RequestParam(required = false) Integer filterPriceUpper,
                                                                    @RequestParam Integer page,
                                                                    @RequestParam(required = false, defaultValue = "10") Integer size) {
+
         if(filterPriceLower != null && filterPriceUpper != null && filterPriceLower > filterPriceUpper) {
             int temp = filterPriceLower;
             filterPriceLower = filterPriceUpper;

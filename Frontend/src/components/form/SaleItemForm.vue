@@ -6,6 +6,7 @@ import FormSelect from '@/components/elements/FormSelect.vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import { useRouter } from 'vue-router'
 import BaseButton from '@/components/elements/BaseButton.vue'
+import { previewBinaryFile } from '@/libs/utilities'
 
 const props = defineProps({
     saleItemData: Object,
@@ -17,6 +18,7 @@ const router = useRouter()
 const emit = defineEmits(['submitAction'])
 const brands = ref([])
 const oldSaleItem = ref(null)
+const myImages = ref([])
 
 onMounted(async () => {
     try {
@@ -105,7 +107,9 @@ function handleClick() {
     })
 
     disabled.value = true
-    emit('submitAction', newSaleItem.value)
+
+    const saleItemImages = myImages.value.map(item => item.file).filter(item => item)
+    emit('submitAction', newSaleItem.value, saleItemImages)
 }
 
 const cancel = () => {
@@ -114,17 +118,35 @@ const cancel = () => {
     } else {
         router.push({ name: props.pathName })
     }
+}
 
+const fileInput = ref(null)
+
+const chooseBinaryFile = (event) => {
+    const files = event.target.files
+    
+    Array.from(files).forEach(file => {
+        console.log(myImages.value);
+    
+        if (myImages.value.length >= 4) {
+            showPictureLimitMessage.value = true
+            return
+        }
+        showPictureLimitMessage.value = false
+
+        const previewFile = previewBinaryFile(file)
+        myImages.value.push({file: file, url: previewFile})
+
+        if(!phones.value.mainImage) {
+            phones.value.mainImage = previewFile
+        }
+        phones.value.thumbnail.push(previewFile)
+    })
 }
 
 const phones = ref({
-    mainImage: '/nw1/saleItemImage/demoImg1.png',
-    thumbnail: [
-        '/nw1/saleItemImage/demoImg1.png',
-        '/nw1/saleItemImage/demoImg2.png',
-        '/nw1/saleItemImage/demoImg3.png',
-        '/nw1/saleItemImage/demoImg4.png'
-    ]
+    mainImage: '',
+    thumbnail: []
 })
 
 const selectedPhone = ref(0)
@@ -133,17 +155,82 @@ const changeMainImg = (index) => {
     selectedPhone.value = index
     phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
 }
+
+const updatePhonesDisplay = () => {
+  phones.value.mainImage = myImages.value[0]?.url || null
+  phones.value.thumbnail = myImages.value.map(img => img.url)
+}
+
+const moveImageUp = (index) => {
+  if (index > 0) {
+    const temp = myImages.value[index]
+    myImages.value[index] = myImages.value[index - 1]
+    myImages.value[index - 1] = temp
+    updatePhonesDisplay()
+  }
+}
+
+const moveImageDown = (index) => {
+  if (index < myImages.value.length - 1) {
+    const temp = myImages.value[index]
+    myImages.value[index] = myImages.value[index + 1]
+    myImages.value[index + 1] = temp
+    updatePhonesDisplay()
+  }
+}
+
+const removeImage = (index) => {
+    myImages.value[index] = {}
+    updatePhonesDisplay()
+
+    if (myImages.value.length > 4) {
+        showPictureLimitMessage.value = true
+    } else {
+        showPictureLimitMessage.value = false
+    }
+}
+
+const showPictureLimitMessage = ref(false)
+
 </script>
 
 <template>
     <div class="flex flex-col xl:flex-row gap-4 lg:gap-8 xl:gap-12 justify-between">
         <div class="flex flex-col items-center">
-            <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-90 xl:w-110 xl:h-120 rounded-2xl flex items-center justify-center overflow-hidden">
-                <img :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
+            <div class="bg-[#F0EDEC] w-60 h-60 md:w-70 md:h-70 lg:w-80 lg:h-80 xl:w-110 xl:h-110 rounded-2xl flex items-center justify-center overflow-hidden">
+                <p v-if="!phones.mainImage" class="text-[#332A1E] text-lg xl:text-2xl">No Picture</p>
+                <img v-else :src="phones.mainImage" alt="Selected Phone" class="h-[10rem] md:h-[13rem] lg:h-[16rem] xl:h-[16rem] 2xl:h-[18rem] object-contain">
             </div>
             <div>
                 <OptionsPhone :phones="phones.thumbnail" :selectedIndex="selectedPhone"
                     @update:selected-index="changeMainImg" />
+            </div>
+            <div class="flex flex-col items-center mt-5 mr-4 mb-3 gap-4">
+                <div class="flex justify-center items-center gap-4">
+                    <input type="file" accept=".jpg, .jpeg, .png" multiple ref="fileInput" @change="chooseBinaryFile" class="hidden">
+                    <button @click="fileInput.click()" class="itbms-upload-button py-2 px-4 h-fit rounded-md md:self-auto font-semibold 2xl:ml-9 text-sm xl:text-lg bg-orange-400 text-white hover:bg-orange-300">Choose Files</button>
+                    <p class="text-[#332A1E]" v-text="myImages.length === 0 ? 'No file chosen' : `${myImages.length} files`"/>
+                </div>
+                <p v-if="showPictureLimitMessage" class=" text-xs text-red-400">Maximum 4 pictures are allowed.</p>
+                <div class="flex flex-col gap-2">
+                    <div v-for="(picture, index) in myImages" :key="index" class="flex items-center self-start md:self-auto" :class="`itbms-picture-file${index + 1}`">
+                        <p class="p-2 text-sm md:text-base border-1 border-[#6F879C] border-solid rounded-md" :class="picture.file?.name ? 'text-[#332A1E]' : 'text-[#332A1E]/50'">{{ picture.file?.name ?? 'No file selected' }}
+                            <span class="ml-2 'text-[#332A1E]'"><button @click="removeImage(index)" :class="`itbms-picture-file${index + 1}-clear`">x</button></span>
+                        </p>
+                        <div class="flex flex-col items-center ml-2 mb-1 text-[#6F879C]">
+                            <button @click="moveImageUp(index)" :disabled="index === 0" class="disabled:opacity-40 mb-1 p-1 hover:bg-gray-200 rounded-full" :class="`itbms-picture-file${index + 1}-up`">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </button>  
+                            <button @click="moveImageDown(index)" :disabled="index === myImages.length - 1" class="disabled:opacity-40 hover:bg-gray-200 rounded-full" :class="`itbms-picture-file${index + 1}-down`">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>  
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="w-full xl:w-[60%] 2xl:w-[55%] space-y-4 sm:space-y-5 lg:space-y-6">
