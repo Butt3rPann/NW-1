@@ -36,10 +36,10 @@ public class SaleItemService {
 
     public Page<SaleItem> getSaleItems(List<String> brands, List<Integer> filterStorages, Integer filterPriceLower, Integer filterPriceUpper, String sortField, String sortDirection,  Integer page, Integer size) {
         Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
-        if ((brands == null || brands.isEmpty()) && filterStorages == null && filterPriceLower == null && filterPriceUpper == null) {
+        if (brands == null && filterStorages == null && filterPriceLower == null && filterPriceUpper == null) {
             return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {
-            return saleItemRepository.findFilteredItems(brands, filterStorages, filterPriceLower, filterPriceUpper, PageRequest.of(page, size, sort));
+            return saleItemRepository.findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, PageRequest.of(page, size, sort));
         }
     }
 
