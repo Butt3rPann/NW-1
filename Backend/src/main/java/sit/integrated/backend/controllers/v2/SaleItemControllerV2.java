@@ -57,7 +57,7 @@ public class SaleItemControllerV2 {
 
     @DeleteMapping("/sale-items/{id}")
     public ResponseEntity<Void> deleteSaleItem(@PathVariable Integer id) {
-        String pattern = id + "*";
+        String pattern = id + "-*";
         List<String> matchedFiles = fileService.getMatchedFiles(pattern);
         for (String fileName : matchedFiles) {
             fileService.removeFile(fileName);
