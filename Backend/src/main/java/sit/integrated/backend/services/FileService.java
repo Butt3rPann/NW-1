@@ -7,6 +7,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import sit.integrated.backend.dtos.SaleItemDetailDto;
 import sit.integrated.backend.utils.FileStorageProperties;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -121,4 +122,18 @@ public class FileService {
         }
         return fileNames;
     }
+
+    public void removeFile(String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            if(Files.exists(filePath)) {
+                Files.delete(filePath);
+            } else {
+                throw new ResourceNotFoundException("File not found " + fileName);
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException("File operation (DELETE) error: " + fileName, ex);
+        }
+    }
+
 }

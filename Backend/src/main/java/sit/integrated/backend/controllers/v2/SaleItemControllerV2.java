@@ -3,11 +3,13 @@ package sit.integrated.backend.controllers.v2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sit.integrated.backend.dtos.PageDto;
 import sit.integrated.backend.dtos.SaleItemDetailDto;
 import sit.integrated.backend.entities.SaleItem;
+import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.services.StorageSizeService;
 import sit.integrated.backend.utils.ListMapper;
@@ -20,6 +22,8 @@ import java.util.List;
 public class SaleItemControllerV2 {
     @Autowired
     private SaleItemService saleItemService;
+    @Autowired
+    private FileService fileService;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -49,5 +53,16 @@ public class SaleItemControllerV2 {
 
         Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, sortField, sortDirection, page, size);
         return ResponseEntity.ok(listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper));
+    }
+
+    @DeleteMapping("/sale-items/{id}")
+    public ResponseEntity<Void> deleteSaleItem(@PathVariable Integer id) {
+        String pattern = id + "-*";
+        List<String> matchedFiles = fileService.getMatchedFiles(pattern);
+        for (String fileName : matchedFiles) {
+            fileService.removeFile(fileName);
+        }
+        saleItemService.deleteSaleItem(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
