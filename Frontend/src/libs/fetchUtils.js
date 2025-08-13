@@ -1,4 +1,4 @@
-async function getItems(url, sortField, sortDirection, brands, page, size) {
+async function getItems(url, sortField, sortDirection, brands, filterPriceLower, filterPriceUpper,filterStorages, page, size) {
   try {
     const params = new URLSearchParams()
 
@@ -7,9 +7,22 @@ async function getItems(url, sortField, sortDirection, brands, page, size) {
       params.append('sortDirection', sortDirection)
     }
 
-    if(Array.isArray(brands) && brands.length > 0) {
+    if (Array.isArray(brands) && brands.length > 0) {
       const joinedBrands = brands.join(',')
       params.append('filterBrands', joinedBrands)
+    }
+
+    if (filterPriceLower || filterPriceLower === 0) {
+      params.append('filterPriceLower', filterPriceLower)
+    }
+
+    if (filterPriceUpper || filterPriceUpper === 0) {
+      params.append('filterPriceUpper', filterPriceUpper)
+    }
+
+    if (Array.isArray(filterStorages) && filterStorages.length > 0) {
+      const joinedStorages = filterStorages.map(value => value === null ? -1 : value).join(',')
+      params.append('filterStorages', joinedStorages)
     }
     
     if (page >= 0 && size) {

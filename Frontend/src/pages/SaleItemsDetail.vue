@@ -20,7 +20,7 @@ const { params: { saleItemId } } = useRoute()
 const selectedItem = ref({})
 
 const phones = ref({
-    mainImage: '',
+    mainImage: null,
     thumbnail: []
 })
 
@@ -31,7 +31,9 @@ onMounted(async () => {
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
 
         const fileNames = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/multiple-files`, `${saleItemId}*`)
-        phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${fileNames[0]}`
+        if (fileNames.length > 0) {
+            phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${fileNames[0]}`
+        }
         fileNames.forEach(fileName => {
             phones.value.thumbnail.push(`${import.meta.env.VITE_APP_URL}/v1/files/${fileName}`)
         })

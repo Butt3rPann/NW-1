@@ -35,10 +35,16 @@ public class SaleItemControllerV2 {
                                                                    @RequestParam Integer page,
                                                                    @RequestParam(required = false, defaultValue = "10") Integer size) {
 
-        if(filterPriceLower != null && filterPriceUpper != null && filterPriceLower > filterPriceUpper) {
+        if (filterStorages != null && filterStorages.contains(-1)) {
+            filterStorages = filterStorages.stream().map(value -> value == -1 ? null : value).toList();
+        }
+
+        if (filterPriceLower != null && filterPriceUpper != null && filterPriceLower > filterPriceUpper) {
             int temp = filterPriceLower;
             filterPriceLower = filterPriceUpper;
             filterPriceUpper = temp;
+        } else if (filterPriceLower != null && filterPriceUpper == null) {
+            filterPriceUpper = filterPriceLower;
         }
 
         Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, sortField, sortDirection, page, size);
