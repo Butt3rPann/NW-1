@@ -8,12 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sit.integrated.backend.dtos.PageDto;
 import sit.integrated.backend.dtos.SaleItemDetailDto;
+import sit.integrated.backend.dtos.SaleItemImageDto;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.services.StorageSizeService;
 import sit.integrated.backend.utils.ListMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,9 +57,25 @@ public class SaleItemControllerV2 {
         return ResponseEntity.ok(listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper));
     }
 
+    @GetMapping("/sale-items/{id}")
+    public ResponseEntity<SaleItemDetailDto> getSaleItemDetail(@PathVariable Integer id) {
+        SaleItem saleItem = saleItemService.getSaleItemDetail(id);
+        List<String> matchedFiles = fileService.getMatchedFiles(id + ".*");
+        SaleItemDetailDto saleItemDetailDto = modelMapper.map(saleItem, SaleItemDetailDto.class);
+        List<SaleItemImageDto> saleItemImages = new ArrayList<>();
+        int imageViewOrder = 1;
+        for (String fileName :  matchedFiles) {
+            SaleItemImageDto saleItemImage =  new SaleItemImageDto();
+            saleItemImage.setFileName(fileName);
+            saleItemImage.setImageViewOrder(imageViewOrder++);
+            saleItemImages.add(saleItemImage);         }
+        saleItemDetailDto.setSaleItemImages(saleItemImages);
+        return ResponseEntity.ok(saleItemDetailDto);
+    }
+
     @DeleteMapping("/sale-items/{id}")
     public ResponseEntity<Void> deleteSaleItem(@PathVariable Integer id) {
-        String pattern = id + "-*";
+        String pattern = id + ".";
         List<String> matchedFiles = fileService.getMatchedFiles(pattern);
         for (String fileName : matchedFiles) {
             fileService.removeFile(fileName);
