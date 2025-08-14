@@ -26,17 +26,16 @@ const phones = ref({
 
 onMounted(async () => {
     try {
-        selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
+        selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemId)
         selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn)
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
 
-        const fileNames = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/multiple-files`, `${saleItemId}*`)
-        if (fileNames.length > 0) {
-            phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${fileNames[0]}`
-        }
-        fileNames.forEach(fileName => {
-            phones.value.thumbnail.push(`${import.meta.env.VITE_APP_URL}/v1/files/${fileName}`)
+        if (selectedItem.value.saleItemImages.length > 0) {
+            phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${selectedItem.value.saleItemImages[0].fileName}`  
+            selectedItem.value.saleItemImages.forEach(file => {
+            phones.value.thumbnail.push(`${import.meta.env.VITE_APP_URL}/v1/files/${file.fileName}`)
         })
+        }
     } catch (error) {
         console.log(error)
     }

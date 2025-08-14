@@ -18,7 +18,7 @@ if (prevPath.value) {
 
 const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
     try {
-        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemImg, newSaleItem)
+        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemImg, newSaleItem)
         router.push({ name: prevPathName.value, query: { added: 'true' } })
     } catch (error) {
         console.log(error)

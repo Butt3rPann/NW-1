@@ -2,6 +2,8 @@ package sit.integrated.backend.dtos;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SaleItemDto {
     private Integer id;

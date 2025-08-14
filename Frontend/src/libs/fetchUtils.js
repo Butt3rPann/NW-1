@@ -100,8 +100,20 @@ async function deleteItemById(url, id) {
 async function uploadFormData(url, file, data) {
   try {
     const formData = new FormData()
-    formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }))
-    file.forEach(f => formData.append('file', f))
+    file.forEach(f => formData.append('files', f))
+    if (data.model !== null) formData.append('model', data.model)
+    if (data.brand.id !== null && data.brand.name !== null)  {
+      formData.append('brand.id', data.brand.id)
+      formData.append('brand.name', data.brand.name)
+    }
+    if (data.description !== null) formData.append('description', data.description)
+    if (data.price !== null) formData.append('price', data.price)
+    if (data.ramGb !== null) formData.append('ramGb', data.ramGb)
+    if (data.screenSizeInch !== null) formData.append('screenSizeInch', data.screenSizeInch)
+    if (data.storageGb !== null) formData.append('storageGb', data.storageGb)
+    if (data.color !== null) formData.append('color', data.color)
+    if (data.quantity !== null) formData.append('quantity', data.quantity)
+
     const res = await fetch(url, {
       method: 'POST',
       body: formData
