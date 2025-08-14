@@ -11,11 +11,14 @@ import Seller from '@/assets/images/seller.png'
 import rightVector from '@/assets/images/rigt-vector.png'
 
 const saleItems = ref([])
+const saleItemImgs = ref([])
 
 onMounted(async () => {
     try {
         saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
         saleItems.value = saleItems.value.slice(-4).reverse()
+        saleItemImgs.value = saleItems.value.map(item => item.saleItemImages[0]?.fileName)
+        
     } catch (error) {
         console.log(error);
     }
@@ -66,7 +69,7 @@ onMounted(async () => {
                     <img :src="rightVector" alt="Icon" class="w-3 md:w-4 lg:w-5"/>
                 </router-link>
             </div>
-            <SaleItemCard :saleItems="saleItems" view="gallery" class="w-full md:my-[0.5rem] md:gap-4 lg:gap-5 xl:gap-13 grid-cols-2 lg:grid-cols-4"/>
+            <SaleItemCard :saleItems="saleItems" :images="saleItemImgs" view="gallery" class="w-full md:my-[0.5rem] md:gap-4 lg:gap-5 xl:gap-13 grid-cols-2 lg:grid-cols-4"/>
         </div>
     </div>
 </template>
