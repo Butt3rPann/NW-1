@@ -1,13 +1,12 @@
 package sit.integrated.backend.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import sit.integrated.backend.dtos.SaleItemDetailDto;
+import sit.integrated.backend.dtos.SaleItemImageDto;
 import sit.integrated.backend.utils.FileStorageProperties;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -15,6 +14,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -122,6 +122,21 @@ public class FileService {
         return fileNames;
     }
 
+    public List<SaleItemImageDto> getSaleItemImages(Integer id) {
+        String pattern = id + ".*";
+        List<String> fileNames = getMatchedFiles(pattern);
+        Collections.sort(fileNames);
+        List<SaleItemImageDto> saleItemImageDtos = new ArrayList<>();
+        int imageViewOrder = 1;
+        for (String fileName : fileNames) {
+            SaleItemImageDto saleItemImage = new SaleItemImageDto();
+            saleItemImage.setFileName(fileName);
+            saleItemImage.setImageViewOrder(imageViewOrder++);
+            saleItemImageDtos.add(saleItemImage);
+        }
+        return saleItemImageDtos;
+    }
+
     public void removeFile(String fileName) {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
@@ -134,5 +149,4 @@ public class FileService {
             throw new RuntimeException("File operation (DELETE) error: " + fileName, ex);
         }
     }
-
 }

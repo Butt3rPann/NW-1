@@ -121,23 +121,24 @@ const cancel = () => {
 }
 
 const fileInput = ref(null)
+const totalImgs = ref(0)
 
 const chooseBinaryFile = (event) => {
     const files = event.target.files
     
     Array.from(files).forEach(file => {
-        console.log(myImages.value);
-    
-        if (myImages.value.length >= 4) {
+        if (totalImgs.value >= 4) {
             showPictureLimitMessage.value = true
             return
+        } else {
+            showPictureLimitMessage.value = false
         }
-        showPictureLimitMessage.value = false
 
         const previewFile = previewBinaryFile(file)
-        myImages.value.push({file: file, url: previewFile})
-
-        if(!phones.value.mainImage) {
+        const emptyIndex = myImages.value.findIndex(img => Object.keys(img).length === 0)
+        myImages.value[emptyIndex === -1 ? myImages.value.length : emptyIndex] = {file: file, url: previewFile}
+        totalImgs.value += 1
+        if (!phones.value.mainImage) {
             phones.value.mainImage = previewFile
         }
         phones.value.thumbnail.push(previewFile)
@@ -181,9 +182,10 @@ const moveImageDown = (index) => {
 
 const removeImage = (index) => {
     myImages.value[index] = {}
+    totalImgs.value -= 1
     updatePhonesDisplay()
 
-    if (myImages.value.length > 4) {
+    if (totalImgs.value > 4) {
         showPictureLimitMessage.value = true
     } else {
         showPictureLimitMessage.value = false
@@ -209,7 +211,7 @@ const showPictureLimitMessage = ref(false)
                 <div class="flex justify-center items-center gap-4">
                     <input type="file" accept=".jpg, .jpeg, .png" multiple ref="fileInput" @change="chooseBinaryFile" class="hidden">
                     <button @click="fileInput.click()" class="itbms-upload-button py-2 px-4 h-fit rounded-md md:self-auto font-semibold 2xl:ml-9 text-sm xl:text-lg bg-orange-400 text-white hover:bg-orange-300">Choose Files</button>
-                    <p class="text-[#332A1E]" v-text="myImages.length === 0 ? 'No file chosen' : `${myImages.length} files`"/>
+                    <p class="text-[#332A1E]" v-text="totalImgs === 0 ? 'No file chosen' : `${totalImgs} files`"/>
                 </div>
                 <p v-if="showPictureLimitMessage" class=" text-xs text-red-400">Maximum 4 pictures are allowed.</p>
                 <div class="flex flex-col gap-2">

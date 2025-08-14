@@ -1,6 +1,6 @@
 <script setup>
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
-import { getItems, getItemById } from '@/libs/fetchUtils'
+import { getItems } from '@/libs/fetchUtils'
 import { onMounted, ref, watch, computed} from 'vue'
 import addIcon from '@/assets/images/add.png'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
@@ -148,11 +148,8 @@ async function getSaleItems() {
         )
         totalPage.value = response.value.totalPages
         saleItems.value = response.value.content
+        saleItemImg.value = saleItems.value.map(item => item.saleItemImages[0]?.fileName)
 
-        for (const item of saleItems.value) {
-            const image = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/multiple-files`, `${item.id}_pic1*`)
-            saleItemImg.value[item.id] = image[0]
-        }
     } catch (error) {
         console.log(error)
     }
@@ -314,12 +311,12 @@ watch(currentStorageFilter, () => {
                     <div class="font-bold text-sm md:text-base text-center">Price</div>
                     <div class="w-full flex items-center gap-2">
                         <div class="w-full flex overflow-auto" style="scrollbar-width: none;"> 
-                            <p v-if="(currentLowerPriceFilter === null && currentUpperPriceFilter === null) || (currentLowerPriceFilter === '' && currentUpperPriceFilter === '')" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Price Range</p>
+                            <p v-if="(currentLowerPriceFilter === null || currentLowerPriceFilter === '') && (currentUpperPriceFilter === null || currentUpperPriceFilter === '')" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Price Range</p>
                             <div v-else class="itbms-price-item inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
                                 <p>
-                                    <span v-if="currentLowerPriceFilter !== null">{{ currentLowerPriceFilter.toLocaleString() }}</span> 
-                                    <span v-if="currentLowerPriceFilter !== null && currentLowerPriceFilter !== '' && currentUpperPriceFilter !== null && currentUpperPriceFilter !== ''"> - </span>
-                                    <span v-if="currentUpperPriceFilter !== null">{{ currentUpperPriceFilter.toLocaleString() }}</span>
+                                    <span v-if="currentLowerPriceFilter !== null && currentLowerPriceFilter !== ''">{{ currentLowerPriceFilter.toLocaleString() }}</span>
+                                    <span v-else-if="currentUpperPriceFilter !== null && currentUpperPriceFilter !== ''">0</span>
+                                    <span v-if="currentUpperPriceFilter !== null && currentUpperPriceFilter !== '' && currentUpperPriceFilter !== currentLowerPriceFilter"> {{ ` - ${currentUpperPriceFilter.toLocaleString()}` }} </span>
                                 </p>
                                 <button @click.stop="deletePriceFilter" class="itbms-price-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
                                     ✕

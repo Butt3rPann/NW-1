@@ -6,16 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.PageDto;
 import sit.integrated.backend.dtos.SaleItemDetailDto;
+import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.dtos.SaleItemImageDto;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
-import sit.integrated.backend.services.StorageSizeService;
 import sit.integrated.backend.utils.ListMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,31 +54,35 @@ public class SaleItemControllerV2 {
         }
 
         Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, sortField, sortDirection, page, size);
-        return ResponseEntity.ok(listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper));
+        PageDto<SaleItemDetailDto> dtos = listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper);
+        dtos.getContent().forEach(item -> item.setSaleItemImages(fileService.getSaleItemImages(item.getId())));
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDto> getSaleItemDetail(@PathVariable Integer id) {
         SaleItem saleItem = saleItemService.getSaleItemDetail(id);
-        List<String> matchedFiles = fileService.getMatchedFiles(id + ".*");
         SaleItemDetailDto saleItemDetailDto = modelMapper.map(saleItem, SaleItemDetailDto.class);
-        List<SaleItemImageDto> saleItemImages = new ArrayList<>();
-        int imageViewOrder = 1;
-        for (String fileName :  matchedFiles) {
-            SaleItemImageDto saleItemImage =  new SaleItemImageDto();
-            saleItemImage.setFileName(fileName);
-            saleItemImage.setImageViewOrder(imageViewOrder++);
-            saleItemImages.add(saleItemImage);         }
-        saleItemDetailDto.setSaleItemImages(saleItemImages);
+        saleItemDetailDto.setSaleItemImages(fileService.getSaleItemImages(id));
         return ResponseEntity.ok(saleItemDetailDto);
+    }
+
+    @PostMapping( "/sale-items")
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemFormDto formDto,
+                                                            @RequestParam List<MultipartFile> files) {
+        SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
+        if (files != null && !files.isEmpty()) {
+            fileService.store(files, saleItem.getId());
+        }
+        saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
     }
 
     @DeleteMapping("/sale-items/{id}")
     public ResponseEntity<Void> deleteSaleItem(@PathVariable Integer id) {
-        String pattern = id + ".";
-        List<String> matchedFiles = fileService.getMatchedFiles(pattern);
-        for (String fileName : matchedFiles) {
-            fileService.removeFile(fileName);
+        List<SaleItemImageDto> matchedFiles = fileService.getSaleItemImages(id);
+        for (SaleItemImageDto saleItemImage : matchedFiles) {
+            fileService.removeFile(saleItemImage.getFileName());
         }
         saleItemService.deleteSaleItem(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
