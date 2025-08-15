@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sit.integrated.backend.dtos.PageDto;
-import sit.integrated.backend.dtos.SaleItemDetailDto;
-import sit.integrated.backend.dtos.SaleItemFormDto;
-import sit.integrated.backend.dtos.SaleItemImageDto;
+import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
@@ -76,6 +73,13 @@ public class SaleItemControllerV2 {
         }
         saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
+    }
+
+    @PutMapping("/sale-items/{id}")
+    public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id,
+                                               @ModelAttribute SaleItemWithImageInfo request) {
+        SaleItemDetailDto saleItem = saleItemService.updateSaleItemWithImages(id, request);
+        return ResponseEntity.ok(saleItem);
     }
 
     @DeleteMapping("/sale-items/{id}")
