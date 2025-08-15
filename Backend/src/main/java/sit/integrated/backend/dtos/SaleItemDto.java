@@ -13,4 +13,5 @@ public class SaleItemDto {
     private Integer ramGb;
     private Integer storageGb;
     private String color;
+    private List<SaleItemImageDto> saleItemImages;
 }

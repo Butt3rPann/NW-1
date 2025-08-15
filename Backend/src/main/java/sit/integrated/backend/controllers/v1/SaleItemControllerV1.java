@@ -30,7 +30,9 @@ public class SaleItemControllerV1 {
     @GetMapping("/sale-items")
     public ResponseEntity<List<SaleItemDto>> getSaleItem() {
         List<SaleItem> saleItems = saleItemService.getSaleItems();
-        return ResponseEntity.ok(listMapper.mapList(saleItems, SaleItemDto.class, modelMapper));
+        List<SaleItemDto> dtos = listMapper.mapList(saleItems, SaleItemDto.class, modelMapper);
+        dtos.forEach(item -> item.setSaleItemImages(fileService.getSaleItemImages(item.getId())));
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/sale-items/{id}")

@@ -61,7 +61,7 @@ const showNotFound = ref(false)
 
 async function deleteSaleItem(){
     try {
-        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, saleItemId)
+        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemId)
         if (status === 404) showNotFound.value = true
         else router.push({name: 'SaleItems', query: {deleted: 'true'}})
     } catch (error) {
