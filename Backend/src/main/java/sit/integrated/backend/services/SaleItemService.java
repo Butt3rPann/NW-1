@@ -8,18 +8,22 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sit.integrated.backend.dtos.SaleItemDetailDto;
-import sit.integrated.backend.dtos.SaleItemFormDto;
+import org.springframework.web.multipart.MultipartFile;
+import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.repositories.SaleItemRepository;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
+
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -66,6 +70,36 @@ public class SaleItemService {
     public void deleteSaleItem (Integer id) {
         isSaleItemExists(id);
         saleItemRepository.deleteById(id);
+    }
+
+    @Transactional
+    public SaleItemDetailDto updateSaleItemWithImages(Integer id, SaleItemWithImageInfo request) {
+        SaleItemDetailDto saleItem = updateSaleItem(id,request.getSaleItem());
+        List<String> existingFiles = fileService.getMatchedFiles(id + ".*");
+        List<MultipartFile> newFilesToStore = new ArrayList<>();
+        List<Integer> deletedPositions = new ArrayList<>();
+        for (SaleItemImageRequest imgReq : request.getImageInfos()) {
+            switch (imgReq.getStatus()) {
+                case "ONLINE":
+                    break;
+                case "DELETE":
+                    deletedPositions.add(imgReq.getOrder());
+                    break;
+                case "NEW":
+                    if (imgReq.getImageFile() != null && !imgReq.getImageFile().isEmpty()) {
+                        newFilesToStore.add(imgReq.getImageFile());
+                    }
+                    break;
+            }
+        }
+        int keepCount = request.getImageInfos().size() - newFilesToStore.size();
+        for (int i = keepCount; i < existingFiles.size(); i++) {
+            fileService.removeFile(existingFiles.get(i));
+        }
+        if (!newFilesToStore.isEmpty()) {
+            fileService.store(newFilesToStore,id);
+        }
+        return saleItem;
     }
 
 }
