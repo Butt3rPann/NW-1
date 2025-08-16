@@ -33,7 +33,7 @@ const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
             <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>
             <span class="text-[#6F879C]">New Sale Item</span>
         </p>
-        <SaleItemForm @submitAction="handleNewSaleItem" :pathName="prevPathName"/>
+        <SaleItemForm @submitAction="handleNewSaleItem" :pathName="prevPathName" :filePath="[]" :imageData="[]"/>
     </div>
 </template>
 

@@ -31,10 +31,8 @@ onMounted(async () => {
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
 
         if (selectedItem.value.saleItemImages.length > 0) {
-            phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${selectedItem.value.saleItemImages[0].fileName}`  
-            selectedItem.value.saleItemImages.forEach(file => {
-            phones.value.thumbnail.push(`${import.meta.env.VITE_APP_URL}/v1/files/${file.fileName}`)
-        })
+            phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${selectedItem.value.saleItemImages[0].fileName}?t=${Date.now()}`  
+            phones.value.thumbnail = selectedItem.value.saleItemImages.map(file => `${import.meta.env.VITE_APP_URL}/v1/files/${file.fileName}?t=${Date.now()}`)
         }
     } catch (error) {
         console.log(error)

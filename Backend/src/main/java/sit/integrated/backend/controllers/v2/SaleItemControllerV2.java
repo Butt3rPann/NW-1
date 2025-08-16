@@ -65,11 +65,10 @@ public class SaleItemControllerV2 {
     }
 
     @PostMapping( "/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemFormDto formDto,
-                                                            @RequestParam List<MultipartFile> files) {
-        SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
-        if (files != null && !files.isEmpty()) {
-            fileService.store(files, saleItem.getId());
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemWithImageInfo request) {
+        SaleItemDetailDto saleItem = saleItemService.createSaleItem(request.getSaleItem());
+        if (request.getImageInfos() != null && !request.getImageInfos().isEmpty()) {
+            fileService.createOrUpdateSaleItemImages(saleItem.getId(), request.getImageInfos());
         }
         saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
@@ -77,8 +76,12 @@ public class SaleItemControllerV2 {
 
     @PutMapping("/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id,
-                                               @ModelAttribute SaleItemWithImageInfo request) {
-        SaleItemDetailDto saleItem = saleItemService.updateSaleItemWithImages(id, request);
+                                                            @ModelAttribute SaleItemWithImageInfo request) {
+        SaleItemDetailDto saleItem = saleItemService.updateSaleItem(id, request.getSaleItem());
+        if (request.getImageInfos() != null && !request.getImageInfos().isEmpty()) {
+            fileService.createOrUpdateSaleItemImages(id, request.getImageInfos());
+        }
+        saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
         return ResponseEntity.ok(saleItem);
     }
 
