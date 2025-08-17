@@ -7,7 +7,7 @@ import org.hibernate.annotations.Immutable;
 @Getter
 @Entity
 @Immutable
-@Table(name = "view_storagegb")
+@Table(name = "view_storageGb")
 public class ViewStoragegb {
 
     @Id
