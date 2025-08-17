@@ -71,35 +71,4 @@ public class SaleItemService {
         isSaleItemExists(id);
         saleItemRepository.deleteById(id);
     }
-
-    @Transactional
-    public SaleItemDetailDto updateSaleItemWithImages(Integer id, SaleItemWithImageInfo request) {
-        SaleItemDetailDto saleItem = updateSaleItem(id,request.getSaleItem());
-        List<String> existingFiles = fileService.getMatchedFiles(id + ".*");
-        List<MultipartFile> newFilesToStore = new ArrayList<>();
-        List<Integer> deletedPositions = new ArrayList<>();
-        for (SaleItemImageRequest imgReq : request.getImageInfos()) {
-            switch (imgReq.getStatus()) {
-                case "ONLINE":
-                    break;
-                case "DELETE":
-                    deletedPositions.add(imgReq.getOrder());
-                    break;
-                case "NEW":
-                    if (imgReq.getImageFile() != null && !imgReq.getImageFile().isEmpty()) {
-                        newFilesToStore.add(imgReq.getImageFile());
-                    }
-                    break;
-            }
-        }
-        int keepCount = request.getImageInfos().size() - newFilesToStore.size();
-        for (int i = keepCount; i < existingFiles.size(); i++) {
-            fileService.removeFile(existingFiles.get(i));
-        }
-        if (!newFilesToStore.isEmpty()) {
-            fileService.store(newFilesToStore,id);
-        }
-        return saleItem;
-    }
-
 }

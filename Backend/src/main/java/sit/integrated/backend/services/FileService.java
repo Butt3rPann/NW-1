@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.SaleItemImageDto;
+import sit.integrated.backend.dtos.SaleItemImageRequest;
 import sit.integrated.backend.utils.FileStorageProperties;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -41,6 +42,15 @@ public class FileService {
         return supportFileType.contains(file.getContentType());
     }
 
+    public String getExtension(String fileName) {
+        String extension = "";
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex != -1) {
+            extension = fileName.substring(dotIndex);
+        }
+        return extension;
+    }
+
     public String store(MultipartFile file, Integer id, int imgNumber) {
         if(!isSupportedContentType(file)) {
             return null;
@@ -50,11 +60,7 @@ public class FileService {
             if (fileName.contains("..")) {
                 throw new RuntimeException("Filename contains invalid path sequence " + fileName);
             }
-            String extension = "";
-            int dotIndex = fileName.lastIndexOf('.');
-            if (dotIndex != -1) {
-                extension = fileName.substring(dotIndex);
-            }
+            String extension = getExtension(fileName);
             String newFileName = id + "." + imgNumber + extension;
 
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
@@ -69,6 +75,10 @@ public class FileService {
         List<String> fileNames = new ArrayList<>();
         int imgNumber = 1;
         for (MultipartFile file : files) {
+            if (file == null) {
+                imgNumber++;
+                continue;
+            }
             String fileName = store(file, id, imgNumber);
             if (fileName != null) {
                 fileNames.add(fileName);
@@ -148,5 +158,54 @@ public class FileService {
         } catch (IOException ex) {
             throw new RuntimeException("File operation (DELETE) error: " + fileName, ex);
         }
+    }
+
+    public void moveFile(Path src, Path dest) {
+        try {
+            Files.move(src, dest, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to move file: " + src + " to " + dest, e);
+        }
+    }
+
+    public void createOrUpdateSaleItemImages(Integer id, List<SaleItemImageRequest> imageInfos) {
+        List<MultipartFile> newFiles = new ArrayList<>();
+        List<Path[]> renameList = new ArrayList<>();
+        int imgNumber = 1;
+
+        for (SaleItemImageRequest image : imageInfos) {
+            switch (image.getStatus()) {
+                case "ONLINE":
+                    newFiles.add(null);
+                    imgNumber++;
+                    break;
+
+                case "DELETE":
+                    removeFile(image.getFileName());
+                    break;
+
+                case "MOVE":
+                    String extension = getExtension(image.getFileName());
+                    Path oldPath = fileStorageLocation.resolve(image.getFileName());
+                    Path tempPath = fileStorageLocation.resolve("tmp_" + image.getFileName());
+                    moveFile(oldPath, tempPath);
+                    Path finalPath = fileStorageLocation.resolve(id.toString() + '.' + imgNumber + extension);
+                    renameList.add(new Path[]{tempPath, finalPath});
+                    newFiles.add(null);
+                    imgNumber++;
+                    break;
+
+                case "NEW":
+                    System.out.println("do");
+                    newFiles.add(image.getImageFile());
+                    imgNumber++;
+                    break;
+            }
+        }
+
+        for (Path[] path : renameList) {
+            moveFile(path[0], path[1]);
+        }
+        store(newFiles, id);
     }
 }

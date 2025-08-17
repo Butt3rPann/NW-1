@@ -11,14 +11,17 @@ import { previewBinaryFile } from '@/libs/utilities'
 const props = defineProps({
     saleItemData: Object,
     pathName: String,
-    params: String
+    params: String,
+    imageData: Array,
+    filePath: Array
 })
 
 const router = useRouter()
 const emit = defineEmits(['submitAction'])
 const brands = ref([])
 const oldSaleItem = ref(null)
-const myImages = ref([])
+const myImages = ref( props.imageData || [])
+const removeList = ref([])
 
 onMounted(async () => {
     try {
@@ -46,6 +49,11 @@ const newSaleItem = ref({
     quantity: props.saleItemData?.quantity || '',
     storageGb: props.saleItemData?.storageGb || '',
     color: props.saleItemData?.color || ''
+})
+
+const phones = ref({
+    mainImage: props.filePath[0] || '',
+    thumbnail: props.filePath || []
 })
 
 const isNull = ref({
@@ -95,9 +103,10 @@ watchEffect(() => {
     
     const anyInvalid = Object.values(invalid.value).some(value => value === true)
     const hasEmptyField = Object.values(isNull.value).some(value => value === true)
-    const unchanged = JSON.stringify(newSaleItem.value) === JSON.stringify(oldSaleItem.value)
+    const dataChanged = JSON.stringify(newSaleItem.value) !== JSON.stringify(oldSaleItem.value)
+    const imagesChanged = myImages.value.concat(removeList.value).some(img => img.status !== 'ONLINE')
 
-    disabled.value = hasEmptyField || unchanged || anyInvalid
+    disabled.value = hasEmptyField || anyInvalid || (!dataChanged && !imagesChanged)
 })
 
 function handleClick() {
@@ -107,9 +116,10 @@ function handleClick() {
     })
 
     disabled.value = true
-
-    const saleItemImages = myImages.value.map(item => item.file).filter(item => item)
-    emit('submitAction', newSaleItem.value, saleItemImages)
+    myImages.value = myImages.value.filter(img => img.fileName)
+    updateImageStatus(myImages.value.map((_, i) => i))
+    
+    emit('submitAction', newSaleItem.value, myImages.value.concat(removeList.value))
 }
 
 const cancel = () => {
@@ -121,7 +131,7 @@ const cancel = () => {
 }
 
 const fileInput = ref(null)
-const totalImgs = ref(0)
+const totalImgs = ref(props.imageData.length)
 
 const chooseBinaryFile = (event) => {
     const files = event.target.files
@@ -136,19 +146,19 @@ const chooseBinaryFile = (event) => {
 
         const previewFile = previewBinaryFile(file)
         const emptyIndex = myImages.value.findIndex(img => Object.keys(img).length === 0)
-        myImages.value[emptyIndex === -1 ? myImages.value.length : emptyIndex] = {file: file, url: previewFile}
+        myImages.value[emptyIndex === -1 ? myImages.value.length : emptyIndex] = {
+            order : emptyIndex === -1 ? myImages.value.length + 1 : emptyIndex + 1,
+            fileName : file.name,
+            status : 'NEW',
+            imageFile : file
+        }
         totalImgs.value += 1
         if (!phones.value.mainImage) {
             phones.value.mainImage = previewFile
         }
-        phones.value.thumbnail.push(previewFile)
+        phones.value.thumbnail[emptyIndex === -1 ? myImages.value.length - 1 : emptyIndex] = previewFile
     })
 }
-
-const phones = ref({
-    mainImage: '',
-    thumbnail: []
-})
 
 const selectedPhone = ref(0)
 
@@ -157,33 +167,62 @@ const changeMainImg = (index) => {
     phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
 }
 
-const updatePhonesDisplay = () => {
-  phones.value.mainImage = myImages.value[0]?.url || null
-  phones.value.thumbnail = myImages.value.map(img => img.url)
+const swapPhoneImages = (index1, index2) => {
+    const imgTemp = phones.value.thumbnail[index1]
+    phones.value.thumbnail[index1] = phones.value.thumbnail[index2]
+    phones.value.thumbnail[index2] = imgTemp
+    phones.value.mainImage = phones.value.thumbnail[selectedPhone.value]
+}
+
+const updateImageStatus = (indexs) => {
+    indexs.forEach(index => {
+        myImages.value[index].order = index + 1
+        if (myImages.value[index].status === 'ONLINE'
+                && !myImages.value[index].fileName.startsWith(`${props.saleItemData.id}.${myImages.value[index].order}.`)) {
+            myImages.value[index].status ='MOVE'
+        } else if (myImages.value[index].status === 'MOVE' 
+                        && myImages.value[index].fileName.startsWith(`${props.saleItemData.id}.${myImages.value[index].order}.`)) {
+            myImages.value[index].status ='ONLINE'
+        }
+    })
 }
 
 const moveImageUp = (index) => {
-  if (index > 0) {
-    const temp = myImages.value[index]
-    myImages.value[index] = myImages.value[index - 1]
-    myImages.value[index - 1] = temp
-    updatePhonesDisplay()
-  }
+    if (index > 0) {
+        const temp = myImages.value[index]
+
+        myImages.value[index] = myImages.value[index - 1]
+        myImages.value[index - 1] = temp
+
+        swapPhoneImages(index, index - 1)
+        updateImageStatus([index, index - 1])
+    }
 }
 
 const moveImageDown = (index) => {
-  if (index < myImages.value.length - 1) {
-    const temp = myImages.value[index]
-    myImages.value[index] = myImages.value[index + 1]
-    myImages.value[index + 1] = temp
-    updatePhonesDisplay()
-  }
+    if (index < myImages.value.length - 1) {
+        const temp = myImages.value[index]
+
+        myImages.value[index] = myImages.value[index + 1]
+        myImages.value[index + 1] = temp
+
+        swapPhoneImages(index, index + 1)
+        updateImageStatus([index, index + 1])
+    }
 }
 
 const removeImage = (index) => {
+    if (myImages.value[index].status === 'ONLINE') {
+        myImages.value[index].status = 'DELETE'
+        removeList.value.push(myImages.value[index])
+    }
+    
     myImages.value[index] = {}
     totalImgs.value -= 1
-    updatePhonesDisplay()
+    phones.value.thumbnail[index] = ''
+    if (selectedPhone.value === index) {
+        phones.value.mainImage = ''
+    }
 
     if (totalImgs.value > 4) {
         showPictureLimitMessage.value = true
@@ -216,7 +255,7 @@ const showPictureLimitMessage = ref(false)
                 <p v-if="showPictureLimitMessage" class=" text-xs text-red-400">Maximum 4 pictures are allowed.</p>
                 <div class="flex flex-col gap-2">
                     <div v-for="(picture, index) in myImages" :key="index" class="flex items-center self-start md:self-auto" :class="`itbms-picture-file${index + 1}`">
-                        <p class="p-2 text-sm md:text-base border-1 border-[#6F879C] border-solid rounded-md" :class="picture.file?.name ? 'text-[#332A1E]' : 'text-[#332A1E]/50'">{{ picture.file?.name ?? 'No file selected' }}
+                        <p class="p-2 text-sm md:text-base border-1 border-[#6F879C] border-solid rounded-md" :class="picture.fileName ? 'text-[#332A1E]' : 'text-[#332A1E]/50'">{{ picture.fileName ?? 'No file selected' }}
                             <span class="ml-2 'text-[#332A1E]'"><button @click="removeImage(index)" :class="`itbms-picture-file${index + 1}-clear`">x</button></span>
                         </p>
                         <div class="flex flex-col items-center ml-2 mb-1 text-[#6F879C]">
