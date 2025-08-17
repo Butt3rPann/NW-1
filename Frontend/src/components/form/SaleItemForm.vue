@@ -93,6 +93,9 @@ const handleDisabledButton = (field, value) => {
 
 const disabled = ref(true)
 
+const dataChanged = ref(false)
+const imagesChanged = ref(false)
+
 watchEffect(() => {    
     for (const key in isNull.value) {
       if (key === 'brand')
@@ -103,10 +106,10 @@ watchEffect(() => {
     
     const anyInvalid = Object.values(invalid.value).some(value => value === true)
     const hasEmptyField = Object.values(isNull.value).some(value => value === true)
-    const dataChanged = JSON.stringify(newSaleItem.value) !== JSON.stringify(oldSaleItem.value)
-    const imagesChanged = myImages.value.concat(removeList.value).some(img => img.status !== 'ONLINE')
+    dataChanged.value = JSON.stringify(newSaleItem.value) !== JSON.stringify(oldSaleItem.value)
+    imagesChanged.value = myImages.value.concat(removeList.value).some(img => img.status !== 'ONLINE')
 
-    disabled.value = hasEmptyField || anyInvalid || (!dataChanged && !imagesChanged)
+    disabled.value = hasEmptyField || anyInvalid || (!dataChanged.value && !imagesChanged.value)
 })
 
 function handleClick() {
@@ -119,7 +122,7 @@ function handleClick() {
     myImages.value = myImages.value.filter(img => img.fileName)
     updateImageStatus(myImages.value.map((_, i) => i))
     
-    emit('submitAction', newSaleItem.value, myImages.value.concat(removeList.value))
+    emit('submitAction', newSaleItem.value, myImages.value.concat(removeList.value), dataChanged.value, imagesChanged.value)
 }
 
 const cancel = () => {

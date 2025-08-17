@@ -40,9 +40,9 @@ onMounted(async () => {
     }
 })
 
-const handleEditSaleItem = async (editedItem, saleItemImg) => {
+const handleEditSaleItem = async (editedItem, saleItemImg, dataChanged, imagesChanged) => {
     try { 
-        await updateFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, saleItemImg, editedItem)
+        await updateFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, saleItemImg, editedItem, dataChanged, imagesChanged)
         if (prevPathName.value === 'SaleItemsList') {
             router.push({ name: prevPathName.value , query: { edited: 'true' }})
         } else {
