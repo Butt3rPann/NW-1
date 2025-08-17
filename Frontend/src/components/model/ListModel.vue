@@ -24,7 +24,7 @@ const baseUrl = import.meta.env.VITE_APP_URL
             <router-link :to="{ name: 'SaleItemsDetail', params: { saleItemId: item.id } }">
                 <div class="flex items-center justify-center bg-[#FAF6F5] h-34 lg:h-42 xl:h-50">
                     <p v-if="!images[index]" class="text-[#332A1E] text-sm lg:text-base xl:text-lg">No Picture</p>
-                    <img v-else :src="`${baseUrl}/v1/files/${images[index]}`" class="h-18 md:h-18 lg:h-24 xl:h-30 my-6 lg:my-8" />
+                    <img v-else :src="`${baseUrl}/v1/files/${images[index]}?t=${Date.now()}`" class="h-18 md:h-18 lg:h-24 xl:h-30 my-6 lg:my-8" />
                 </div>
                 <div class="flex flex-col justify-center p-3 bg-white">
                     <slot name="saleItem" :itemInList="item"/>

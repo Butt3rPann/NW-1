@@ -65,7 +65,7 @@ public class SaleItemControllerV2 {
 
     @PostMapping( "/sale-items")
     public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemFormDto formDto,
-                                                            @RequestParam List<MultipartFile> images) {
+                                                            @RequestParam(required = false) List<MultipartFile> images) {
         SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
         if (images != null && !images.isEmpty()) {
             fileService.store(images, saleItem.getId());
