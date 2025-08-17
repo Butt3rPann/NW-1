@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
@@ -63,10 +64,11 @@ public class SaleItemControllerV2 {
     }
 
     @PostMapping( "/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemWithImageInfo request) {
-        SaleItemDetailDto saleItem = saleItemService.createSaleItem(request.getSaleItem());
-        if (request.getImageInfos() != null && !request.getImageInfos().isEmpty()) {
-            fileService.createOrUpdateSaleItemImages(saleItem.getId(), request.getImageInfos());
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemFormDto formDto,
+                                                            @RequestParam List<MultipartFile> images) {
+        SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
+        if (images != null && !images.isEmpty()) {
+            fileService.store(images, saleItem.getId());
         }
         saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
