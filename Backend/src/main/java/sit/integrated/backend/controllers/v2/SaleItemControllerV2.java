@@ -77,12 +77,16 @@ public class SaleItemControllerV2 {
     @PutMapping("/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id,
                                                             @ModelAttribute SaleItemWithImageInfo request) {
-        SaleItemDetailDto saleItem = saleItemService.updateSaleItem(id, request.getSaleItem());
+        SaleItemDetailDto saleItemDetailDto =
+                (request.getSaleItem() != null) ? saleItemService.updateSaleItem(id, request.getSaleItem())
+                                                : modelMapper.map(saleItemService.getSaleItemDetail(id), SaleItemDetailDto.class);
+
         if (request.getImageInfos() != null && !request.getImageInfos().isEmpty()) {
             fileService.createOrUpdateSaleItemImages(id, request.getImageInfos());
         }
-        saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
-        return ResponseEntity.ok(saleItem);
+
+        saleItemDetailDto.setSaleItemImages(fileService.getSaleItemImages(id));
+        return ResponseEntity.ok(saleItemDetailDto);
     }
 
     @DeleteMapping("/sale-items/{id}")

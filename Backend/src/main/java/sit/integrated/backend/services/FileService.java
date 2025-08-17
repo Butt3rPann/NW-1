@@ -196,7 +196,6 @@ public class FileService {
                     break;
 
                 case "NEW":
-                    System.out.println("do");
                     newFiles.add(image.getImageFile());
                     imgNumber++;
                     break;
