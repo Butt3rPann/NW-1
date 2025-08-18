@@ -267,7 +267,7 @@ const showInvalidSizeFile = ref(false)
                 <div class="flex flex-col gap-2">
                     <div v-for="(picture, index) in myImages" :key="index" class="flex items-center self-start md:self-auto" :class="`itbms-picture-file${index + 1}`">
                         <p class="p-2 text-sm md:text-base border-1 border-[#6F879C] border-solid rounded-md" :class="picture.fileName ? 'text-[#332A1E]' : 'text-[#332A1E]/50'">{{ picture.fileName ?? 'No file selected' }}
-                            <span class="ml-2 'text-[#332A1E]'"><button @click="removeImage(index)" :class="`itbms-picture-file${index + 1}-clear`">x</button></span>
+                            <span v-if="picture.fileName" class="ml-2 'text-[#332A1E]'"><button @click="removeImage(index)" :class="`itbms-picture-file${index + 1}-clear`">x</button></span>
                         </p>
                         <div class="flex flex-col items-center ml-2 mb-1 text-[#6F879C]">
                             <button @click="moveImageUp(index)" :disabled="index === 0" class="disabled:opacity-40 mb-1 p-1 hover:bg-gray-200 rounded-full" :class="`itbms-picture-file${index + 1}-up`">
