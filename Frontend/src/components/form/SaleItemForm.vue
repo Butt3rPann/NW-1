@@ -138,8 +138,14 @@ const totalImgs = ref(props.imageData.length)
 
 const chooseBinaryFile = (event) => {
     const files = event.target.files
-    
+    showInvalidSizeFile.value = false
+
     Array.from(files).forEach(file => {
+        if(file.size > 2 * 1024 * 1024) {
+            showInvalidSizeFile.value = true
+            return
+        }
+
         if (totalImgs.value >= 4) {
             showPictureLimitMessage.value = true
             return
@@ -235,6 +241,7 @@ const removeImage = (index) => {
 }
 
 const showPictureLimitMessage = ref(false)
+const showInvalidSizeFile = ref(false)
 
 </script>
 
@@ -256,6 +263,7 @@ const showPictureLimitMessage = ref(false)
                     <p class="text-[#332A1E]" v-text="totalImgs === 0 ? 'No file chosen' : `${totalImgs} files`"/>
                 </div>
                 <p v-if="showPictureLimitMessage" class=" text-xs text-red-400">Maximum 4 pictures are allowed.</p>
+                <p v-if="showInvalidSizeFile" class=" text-xs text-red-400">The picture file size cannot be larger than 2MB.</p>
                 <div class="flex flex-col gap-2">
                     <div v-for="(picture, index) in myImages" :key="index" class="flex items-center self-start md:self-auto" :class="`itbms-picture-file${index + 1}`">
                         <p class="p-2 text-sm md:text-base border-1 border-[#6F879C] border-solid rounded-md" :class="picture.fileName ? 'text-[#332A1E]' : 'text-[#332A1E]/50'">{{ picture.fileName ?? 'No file selected' }}
