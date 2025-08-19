@@ -97,6 +97,20 @@ const deleteStorageFilter = (index) => {
     currentStorageFilter.value.splice(index,1)
 }
 
+const minPrice = ref(null)
+const maxPrice = ref(null)
+const showPriceFilterWarning = ref(false)
+
+const applyCustomPriceFilter = () => {
+    if (maxPrice.value !== '' && maxPrice.value !== null && minPrice.value > maxPrice.value) {
+        showPriceFilterWarning.value = true
+        return
+    } 
+    showPriceFilterWarning.value = false
+    currentLowerPriceFilter.value = minPrice.value
+    currentUpperPriceFilter.value = maxPrice.value
+}
+
 const pageNumbers = computed(() => {
     const numbers = []
 
@@ -178,9 +192,11 @@ function loadFromSessionStorage() {
     }
     if (lowerPriceFilterStore && lowerPriceFilterStore !== 'null' && lowerPriceFilterStore !== '""') {
         currentLowerPriceFilter.value = Number(lowerPriceFilterStore)
+        minPrice.value = Number(lowerPriceFilterStore)
     }
     if (upperPriceFilterStore && upperPriceFilterStore !== 'null' && upperPriceFilterStore !== '""') {
         currentUpperPriceFilter.value = Number(upperPriceFilterStore)
+        maxPrice.value = Number(upperPriceFilterStore)
     }
     if (storageFilterStore) {
         currentStorageFilter.value = JSON.parse(storageFilterStore)
@@ -311,7 +327,7 @@ watch(currentStorageFilter, () => {
                     <div class="font-bold text-sm md:text-base text-center">Price</div>
                     <div class="w-full flex items-center gap-2">
                         <div class="w-full flex overflow-auto" style="scrollbar-width: none;"> 
-                            <p v-if="(currentLowerPriceFilter === null || currentLowerPriceFilter === '') && (currentUpperPriceFilter === null || currentUpperPriceFilter === '')" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Price Range</p>
+                            <p v-if="((currentLowerPriceFilter === null || currentLowerPriceFilter === '') && (currentUpperPriceFilter === null || currentUpperPriceFilter === '')) || (currentUpperPriceFilter !== '' && currentUpperPriceFilter !== null && currentLowerPriceFilter > currentUpperPriceFilter )" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Price Range</p>
                             <div v-else class="itbms-price-item inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
                                 <p>
                                     <span v-if="currentLowerPriceFilter !== null && currentLowerPriceFilter !== ''">{{ currentLowerPriceFilter.toLocaleString() }}</span>
@@ -357,10 +373,14 @@ watch(currentStorageFilter, () => {
                     <label @click="choosePriceFilter(price)" v-for="(price, index) in priceFilterOptions" :key="index" class="itbms-price-item flex justify-center items-center gap-4 py-1.5 hover:bg-[#e7edf2] cursor-pointer">
                         <span class="itbms-filter-item">{{ `${price.lower.toLocaleString()} - ${price.upper.toLocaleString()} Baht` }}</span>
                     </label>
-                    <div class="flex gap-3 justify-center items-center py-1.5">
-                        <input type="number" v-model="currentLowerPriceFilter" placeholder="Min Price" class="itbms-price-item-min shadow-sm border border-[#332A1E]/10 md:w-15 lg:w-20 xl:w-30 placeholder:text-xs lg:placeholder:text-sm p-1">
-                        <input type="number" v-model="currentUpperPriceFilter" placeholder="Max Price" class="itbms-price-item-max shadow-sm border border-[#332A1E]/10 md:w-15 lg:w-20 xl:w-30 placeholder:text-xs lg:placeholder:text-sm p-1">
-                        <p>Baht</p>
+                    <div class="flex flex-col items-center">
+                        <div class="flex gap-3 justify-center items-center py-1.5">
+                            <input type="number" v-model="minPrice" placeholder="Min Price" class="itbms-price-item-min shadow-sm border border-[#332A1E]/10 md:w-15 lg:w-20 xl:w-30 placeholder:text-xs lg:placeholder:text-sm p-1">
+                            <input type="number" v-model="maxPrice" placeholder="Max Price" class="itbms-price-item-max shadow-sm border border-[#332A1E]/10 md:w-15 lg:w-20 xl:w-30 placeholder:text-xs lg:placeholder:text-sm p-1" :class="showPriceFilterWarning ? 'border border-red-400' : ''">
+                            <p>Baht</p>
+                        </div>
+                        <p v-if="showPriceFilterWarning" class="text-sm text-red-400">Max price should be greater than or equal to Min price.</p>
+                        <button @click="applyCustomPriceFilter" class="bg-[#e7edf2] hover:bg-[#ABBCC9] py-2 px-4 rounded-md mt-2">Apply</button>
                     </div>
                 </div>
                 <div @click.stop v-if="showStorageFilter" class="h-50 col-span-5 col-start-11 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm text-sm lg:text-base">
@@ -419,3 +439,4 @@ watch(currentStorageFilter, () => {
  
 <style scoped>
 </style>
+
