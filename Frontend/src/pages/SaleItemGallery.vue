@@ -42,6 +42,9 @@ const priceFilterOptions = [
     {lower: 30001, upper: 40000},
     {lower: 40001, upper: 50000}
 ]
+const minPrice = ref(null)
+const maxPrice = ref(null)
+const showPriceFilterWarning = ref(false)
 
 const choosePriceFilter = (price) => {
     currentLowerPriceFilter.value = price.lower
@@ -83,6 +86,8 @@ const clearFilter = () => {
     currentLowerPriceFilter.value = null
     currentUpperPriceFilter.value = null
     currentStorageFilter.value = []
+    minPrice.value = ''
+    maxPrice.value = ''
 }
 const deleteBrandFilter = (index) => { 
     currentBrandFilter.value.splice(index, 1) 
@@ -91,15 +96,13 @@ const deleteBrandFilter = (index) => {
 const deletePriceFilter = () => { 
     currentLowerPriceFilter.value = null
     currentUpperPriceFilter.value = null
+    minPrice.value = ''
+    maxPrice.value = ''
 }
 
 const deleteStorageFilter = (index) => { 
     currentStorageFilter.value.splice(index,1)
 }
-
-const minPrice = ref(null)
-const maxPrice = ref(null)
-const showPriceFilterWarning = ref(false)
 
 const applyCustomPriceFilter = () => {
     if (maxPrice.value !== '' && maxPrice.value !== null && minPrice.value > maxPrice.value) {
