@@ -33,7 +33,7 @@ onMounted(async () => {
         saleItem.value.saleItemImages.forEach(img => {
             imageData.value.push({order: img.imageViewOrder, fileName: img.fileName, status: 'ONLINE', imageFile: null})
         })
-        filePath.value = imageData.value.map(img => `${import.meta.env.VITE_APP_URL}/v1/files/${img.fileName}`)
+        filePath.value = imageData.value.map(img => `${import.meta.env.VITE_APP_URL}/v1/files/${img.fileName}?t=${Date.now()}`)
         previousPage()
     } catch (error) {
         console.log(error);
