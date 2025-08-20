@@ -16,6 +16,16 @@ public interface SaleItemRepository extends JpaRepository<SaleItem, Integer> {
            AND (:lower IS NULL OR s.price >= :lower)
            AND (:upper IS NULL OR s.price <= :upper)
            AND (:storages IS NULL OR s.storageGb IN :storages OR (:hasNull = true AND s.storageGb IS NULL))
+           AND (:keyword IS NULL
+                OR s.description LIKE CONCAT('%', :keyword, '%')
+                OR s.model LIKE CONCAT('%', :keyword, '%')
+                OR s.color LIKE CONCAT('%', :keyword, '%')
+                )
            """)
-    Page<SaleItem> findFilteredItems(@Param("brands") List<String> brands, @Param("storages") List<Integer> filterStorages, @Param("hasNull") boolean hasNull, @Param("lower") Integer filterPriceLower, @Param("upper") Integer filterPriceUpper, Pageable pageable);
+    Page<SaleItem> findFilteredItems(@Param("brands") List<String> brands,
+                                     @Param("storages") List<Integer> filterStorages,
+                                     @Param("hasNull") boolean hasNull,
+                                     @Param("lower") Integer filterPriceLower,
+                                     @Param("upper") Integer filterPriceUpper,
+                                     @Param("keyword") String keyword, Pageable pageable);
 }
