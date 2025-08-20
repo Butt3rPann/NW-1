@@ -38,12 +38,12 @@ public class SaleItemService {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
 
-    public Page<SaleItem> getSaleItems(List<String> brands, List<Integer> filterStorages, Integer filterPriceLower, Integer filterPriceUpper, String sortField, String sortDirection,  Integer page, Integer size) {
+    public Page<SaleItem> getSaleItems(List<String> brands, List<Integer> filterStorages, Integer filterPriceLower, Integer filterPriceUpper, String keyword, String sortField, String sortDirection,  Integer page, Integer size) {
         Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
-        if (brands == null && filterStorages == null && filterPriceLower == null && filterPriceUpper == null) {
+        if (brands == null && filterStorages == null && filterPriceLower == null && filterPriceUpper == null && (keyword == null || keyword.isBlank())) {
             return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {
-            return saleItemRepository.findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, PageRequest.of(page, size, sort));
+            return saleItemRepository.findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, (keyword == null || keyword.isBlank())? null: keyword, PageRequest.of(page, size, sort));
         }
     }
 
