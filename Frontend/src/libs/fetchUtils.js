@@ -97,23 +97,8 @@ async function deleteItemById(url, id) {
   }
 }
 
-async function uploadFormData(url, file, data) {
+async function uploadFormData(url, formData) {
   try {
-    const formData = new FormData()
-    file.forEach(f => formData.append('images', f))
-    if (data.model !== null) formData.append('model', data.model)
-    if (data.brand.id !== null && data.brand.name !== null)  {
-      formData.append('brand.id', data.brand.id)
-      formData.append('brand.name', data.brand.name)
-    }
-    if (data.description !== null) formData.append('description', data.description)
-    if (data.price !== null) formData.append('price', data.price)
-    if (data.ramGb !== null) formData.append('ramGb', data.ramGb)
-    if (data.screenSizeInch !== null) formData.append('screenSizeInch', data.screenSizeInch)
-    if (data.storageGb !== null) formData.append('storageGb', data.storageGb)
-    if (data.color !== null) formData.append('color', data.color)
-    if (data.quantity !== null) formData.append('quantity', data.quantity)
-
     const res = await fetch(url, {
       method: 'POST',
       body: formData
@@ -125,36 +110,8 @@ async function uploadFormData(url, file, data) {
   }
 }
 
-async function updateFormData(url, id, file, data, dataChanged, fileChanged) {
+async function updateFormData(url, id, formData) {
   try {
-    const formData = new FormData()
-    if (fileChanged) {
-      console.log('do1');
-      
-      file.forEach((f, index) => {
-        formData.append(`imageInfos[${index}].order`, f.order)
-        formData.append(`imageInfos[${index}].fileName`, f.fileName)
-        formData.append(`imageInfos[${index}].status`, f.status)
-        if (f.imageFile) {
-          formData.append(`imageInfos[${index}].imageFile`, f.imageFile);
-        } 
-      })
-    }
-    if (dataChanged) {
-      if (data.model !== null) formData.append('saleItem.model', data.model)
-      if (data.brand.id !== null && data.brand.name !== null)  {
-        formData.append('saleItem.brand.id', data.brand.id)
-        formData.append('saleItem.brand.name', data.brand.name)
-      }
-      if (data.description !== null) formData.append('saleItem.description', data.description)
-      if (data.price !== null) formData.append('saleItem.price', data.price)
-      if (data.ramGb !== null) formData.append('saleItem.ramGb', data.ramGb)
-      if (data.screenSizeInch !== null) formData.append('saleItem.screenSizeInch', data.screenSizeInch)
-      if (data.storageGb !== null) formData.append('saleItem.storageGb', data.storageGb)
-      if (data.color !== null) formData.append('saleItem.color', data.color)
-      if (data.quantity !== null) formData.append('saleItem.quantity', data.quantity)
-    }
-
     const res = await fetch(`${url}/${id}`, {
       method: 'PUT',
       body: formData

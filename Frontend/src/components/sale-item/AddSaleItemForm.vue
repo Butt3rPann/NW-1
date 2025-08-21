@@ -18,7 +18,22 @@ if (prevPath.value) {
 
 const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
     try {
-        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemImg.map(img => img.imageFile), newSaleItem)
+        const formData = new FormData()
+        saleItemImg.map(img => img.imageFile).forEach(f => formData.append('images', f))
+        if (newSaleItem.model !== null) formData.append('model', newSaleItem.model)
+        if (newSaleItem.brand.id !== null && newSaleItem.brand.name !== null)  {
+        formData.append('brand.id', newSaleItem.brand.id)
+        formData.append('brand.name', newSaleItem.brand.name)
+        }
+        if (newSaleItem.description !== null) formData.append('description', newSaleItem.description)
+        if (newSaleItem.price !== null) formData.append('price', newSaleItem.price)
+        if (newSaleItem.ramGb !== null) formData.append('ramGb', newSaleItem.ramGb)
+        if (newSaleItem.screenSizeInch !== null) formData.append('screenSizeInch', newSaleItem.screenSizeInch)
+        if (newSaleItem.storageGb !== null) formData.append('storageGb', newSaleItem.storageGb)
+        if (newSaleItem.color !== null) formData.append('color', newSaleItem.color)
+        if (newSaleItem.quantity !== null) formData.append('quantity', newSaleItem.quantity)
+
+        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, formData)
         router.push({ name: prevPathName.value, query: { added: 'true' } })
     } catch (error) {
         console.log(error)

@@ -41,8 +41,35 @@ onMounted(async () => {
 })
 
 const handleEditSaleItem = async (editedItem, saleItemImg, dataChanged, imagesChanged) => {
-    try { 
-        await updateFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, saleItemImg, editedItem, dataChanged, imagesChanged)
+    try {
+        const formData = new FormData()
+        if (imagesChanged) {
+            saleItemImg.forEach((f, index) => {
+                formData.append(`imageInfos[${index}].order`, f.order)
+                formData.append(`imageInfos[${index}].fileName`, f.fileName)
+                formData.append(`imageInfos[${index}].status`, f.status)
+                if (f.imageFile) {
+                    formData.append(`imageInfos[${index}].imageFile`, f.imageFile);
+                } 
+                console.log(f);
+            })
+            }
+        if (dataChanged) {
+            if (editedItem.model !== null) formData.append('saleItem.model', editedItem.model)
+            if (editedItem.brand.id !== null && editedItem.brand.name !== null)  {
+                formData.append('saleItem.brand.id', editedItem.brand.id)
+                formData.append('saleItem.brand.name', editedItem.brand.name)
+            }
+            if (editedItem.description !== null) formData.append('saleItem.description', editedItem.description)
+            if (editedItem.price !== null) formData.append('saleItem.price', editedItem.price)
+            if (editedItem.ramGb !== null) formData.append('saleItem.ramGb', editedItem.ramGb)
+            if (editedItem.screenSizeInch !== null) formData.append('saleItem.screenSizeInch', editedItem.screenSizeInch)
+            if (editedItem.storageGb !== null) formData.append('saleItem.storageGb', editedItem.storageGb)
+            if (editedItem.color !== null) formData.append('saleItem.color', editedItem.color)
+            if (editedItem.quantity !== null) formData.append('saleItem.quantity', editedItem.quantity)
+        }
+
+        await updateFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, formData)
         if (prevPathName.value === 'SaleItemsList') {
             router.push({ name: prevPathName.value , query: { edited: 'true' }})
         } else {

@@ -221,9 +221,9 @@ const moveImageDown = (index) => {
 }
 
 const removeImage = (index) => {
-    if (myImages.value[index].status === 'ONLINE') {
+    if (myImages.value[index].status === 'ONLINE' || myImages.value[index].status === 'MOVE') {
         myImages.value[index].status = 'DELETE'
-        removeList.value.push(myImages.value[index])
+        removeList.value.push(myImages.value[index]) 
     }
     
     myImages.value[index] = {}
