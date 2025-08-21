@@ -8,22 +8,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.repositories.SaleItemRepository;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
-
-    @Autowired
-    private FileService fileService;
 
     @Autowired
     ModelMapper modelMapper;
