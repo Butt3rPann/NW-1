@@ -28,6 +28,7 @@ public class BuyerService {
     @Transactional
     public BuyerResponseDto createBuyer(BuyerRequestDto buyerRequestDto) {
         isBuyerExists(buyerRequestDto.getEmail());
+        buyerRequestDto.setId(null);
         Buyer buyer = modelMapper.map(buyerRequestDto, Buyer.class);
         return modelMapper.map(buyerRepository.save(buyer), BuyerResponseDto.class);
     }
