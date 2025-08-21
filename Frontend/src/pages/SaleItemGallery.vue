@@ -46,11 +46,6 @@ const minPrice = ref(null)
 const maxPrice = ref(null)
 const showPriceFilterWarning = ref(false)
 
-const choosePriceFilter = (price) => {
-    currentLowerPriceFilter.value = price.lower
-    currentUpperPriceFilter.value = price.upper
-}
-
 const currentStorageFilter = ref([]) 
 
 const goToPage = async (page) => {
@@ -81,6 +76,7 @@ const changeSort = (type) => {
     currentSort.value = type
     resetPage()
 }
+
 const clearFilter = () => { 
     currentBrandFilter.value = []
     currentLowerPriceFilter.value = null
@@ -89,8 +85,14 @@ const clearFilter = () => {
     minPrice.value = ''
     maxPrice.value = ''
 }
+
 const deleteBrandFilter = (index) => { 
     currentBrandFilter.value.splice(index, 1) 
+}
+
+const choosePriceFilter = (price) => {
+    currentLowerPriceFilter.value = price.lower
+    currentUpperPriceFilter.value = price.upper
 }
 
 const deletePriceFilter = () => { 
@@ -131,6 +133,8 @@ const pageNumbers = computed(() => {
     return numbers
 })
 
+const searchKeyword = ref('')
+
 if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
     router.replace({ query: { } })
@@ -144,6 +148,7 @@ if (route.query.added === 'true') {
 }
 
 const prevPath = router.options.history.state.back
+
 if (prevPath && (router.resolve(prevPath).name !== 'SaleItemsDetail' && router.resolve(prevPath).name !== 'AddSaleItem')) {
     sessionStorage.setItem('page', 1)
 }
@@ -157,9 +162,10 @@ async function getSaleItems() {
             selectedSortField.value,  
             currentSort.value === 'none' ? null : currentSort.value,
             currentBrandFilter.value,
+            currentStorageFilter.value,
             currentLowerPriceFilter.value,
             currentUpperPriceFilter.value,
-            currentStorageFilter.value,
+            searchKeyword.value,
             currentPage.value - 1,
             currentSize.value
         )
@@ -180,6 +186,7 @@ function loadFromSessionStorage() {
     const lowerPriceFilterStore = sessionStorage.getItem('lowerPriceFilter')
     const upperPriceFilterStore = sessionStorage.getItem('upperPriceFilter')
     const storageFilterStore = sessionStorage.getItem('storageFilter')
+    const SearchKeywordStore = sessionStorage.getItem('searchKeyword')
 
     if (brandFilterStore) {
         currentBrandFilter.value = JSON.parse(brandFilterStore)
@@ -204,6 +211,9 @@ function loadFromSessionStorage() {
     if (storageFilterStore) {
         currentStorageFilter.value = JSON.parse(storageFilterStore)
     }
+    if (SearchKeywordStore) {
+        searchKeyword.value = SearchKeywordStore
+    }
 }
 
 onMounted(async () => {
@@ -225,7 +235,7 @@ onMounted(async () => {
 
 const isFirstRun = ref(true)
 
-watch([currentBrandFilter, currentSort, currentSize, currentLowerPriceFilter, currentUpperPriceFilter, currentStorageFilter], async () => {
+watch([currentBrandFilter, currentSort, currentSize, currentLowerPriceFilter, currentUpperPriceFilter, currentStorageFilter, searchKeyword], async () => {
     if (isFirstRun) {
         isFirstRun.value = false
         return
@@ -279,6 +289,13 @@ watch(currentStorageFilter, () => {
         sessionStorage.setItem('storageFilter', JSON.stringify(currentStorageFilter.value))
     }
 }, { deep: true })
+
+watch(searchKeyword, () => {
+    if (JSON.stringify(searchKeyword.value) !== sessionStorage.getItem('searchKeyword')) {
+        resetPage()
+        sessionStorage.setItem('searchKeyword', searchKeyword.value)
+    }
+}, { deep: true })
 </script>
 
 <template>
@@ -291,23 +308,36 @@ watch(currentStorageFilter, () => {
                 <BaseButton :icon="addIcon" text="Add Sale Item" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" class="itbms-sale-item-add"/>
             </router-link>
         </div>
-        <div class="h-10 md:h-11 lg:h-12 flex justify-between">
-            <div class="flex shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-1 px-1.5 md:py-1 md:px-2 w-fit gap-2 md:gap-3 lg:gap-4">
-                <button @click="changeSort('none')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'none' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
-                    <img :src="sortNone" alt="Default" class="w-4.5 h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                </button>
-                <button @click="changeSort('asc')" :class="['itbms-brand-asc p-2 rounded-md cursor-pointer', currentSort === 'asc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
-                    <img :src="sortAsc" alt="Default" class="w-4.5 h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                </button>
-                <button @click="changeSort('desc')" :class="['itbms-brand-desc p-2 rounded-md cursor-pointer', currentSort === 'desc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
-                    <img :src="sortDesc" alt="Default" class="w-4.5 h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                </button>
+        <div class="flex flex-col md:flex-row gap-5 md:gap-3 lg:gap-5">
+            <div class="relative shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-1 px-1.5 md:py-1 md:px-2 md:w-2xs lg:w-sm flex-shrink-0">
+                <input type="text" placeholder="Search..." v-model="searchKeyword" class="itbms-search-text w-full placeholder:text-xs lg:placeholder:text-sm p-1">
+                <div class="absolute top-1 md:top-1.5 right-2 bg-white flex items-center gap-1">
+                    <p v-if="searchKeyword != ''" @click="searchKeyword = ''" class="itbms-search-clear-button text-[#6F879C] px-2">x</p>
+                    <div class="bg-[#ABBCC9] p-1.5 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="w-5 h-5 lg:w-6 lg:h-6">
+                            <path fill="#FFFFFF" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+                        </svg>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center text-sm md:text-base lg:text-lg text-[#332A1E]">
-                <p class="font-bold">Show</p>
-                <select v-model="currentSize" class="itbms-page-size h-full ml-3 w-13 md:w-20 text-[#332A1E] bg-white border border-[#332A1E]/10 rounded-md px-1.5 md:px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2684FF] focus:border-[#2684FF] transition duration-200">
-                    <option v-for="pageSizeOption in pageSizeOptions" :key="pageSizeOption" :value="pageSizeOption">{{ pageSizeOption }}</option>
-                </select>
+            <div class="flex justify-between w-full">
+                <div class="flex shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-1 px-1.5 md:py-1 md:px-2 w-fit gap-2 md:gap-3 lg:gap-4">
+                    <button @click="changeSort('none')" :class="['itbms-brand-none p-2 rounded-md cursor-pointer', currentSort === 'none' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                        <img :src="sortNone" alt="Default" class="w-4.5 h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                    </button>
+                    <button @click="changeSort('asc')" :class="['itbms-brand-asc p-2 rounded-md cursor-pointer', currentSort === 'asc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                        <img :src="sortAsc" alt="Default" class="w-4.5 h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                    </button>
+                    <button @click="changeSort('desc')" :class="['itbms-brand-desc p-2 rounded-md cursor-pointer', currentSort === 'desc' ? 'bg-[#ece8e5]' : 'bg-[#FFFF]']">
+                        <img :src="sortDesc" alt="Default" class="w-4.5 h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                    </button>
+                </div>
+                <div class="flex items-center text-sm md:text-base lg:text-lg text-[#332A1E]">
+                    <p class="font-bold">Show</p>
+                    <select v-model="currentSize" class="itbms-page-size h-full ml-3 w-13 md:w-20 text-[#332A1E] bg-white border border-[#332A1E]/10 rounded-md px-1.5 md:px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2684FF] focus:border-[#2684FF] transition duration-200">
+                        <option v-for="pageSizeOption in pageSizeOptions" :key="pageSizeOption" :value="pageSizeOption">{{ pageSizeOption }}</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div>
