@@ -70,7 +70,7 @@ public class SaleItemControllerV2 {
                                                             @RequestParam(required = false) List<MultipartFile> images) {
         SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
         if (images != null && !images.isEmpty()) {
-            fileService.store(images, saleItem.getId());
+            fileService.storeSaleItem(images, saleItem.getId());
         }
         saleItem.setSaleItemImages(fileService.getSaleItemImages(saleItem.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);

@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.SaleItemImageDto;
 import sit.integrated.backend.dtos.SaleItemImageRequest;
+import sit.integrated.backend.dtos.SellerNationalIdPhotoDto;
 import sit.integrated.backend.utils.FileStorageProperties;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -51,7 +52,7 @@ public class FileService {
         return extension;
     }
 
-    public String store(MultipartFile file, Integer id, int imgNumber) {
+    public String store(MultipartFile file, Integer id, String imgTag) {
         if(!isSupportedContentType(file)) {
             return null;
         }
@@ -61,7 +62,7 @@ public class FileService {
                 throw new RuntimeException("Filename contains invalid path sequence " + fileName);
             }
             String extension = getExtension(fileName);
-            String newFileName = id + "." + imgNumber + extension;
+            String newFileName = id + "." + imgTag + extension;
 
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -71,7 +72,7 @@ public class FileService {
         }
     }
 
-    public List<String> store(List<MultipartFile> files, Integer id) {
+    public List<String> storeSaleItem(List<MultipartFile> files, Integer id) {
         List<String> fileNames = new ArrayList<>();
         int imgNumber = 1;
         for (MultipartFile file : files) {
@@ -79,11 +80,23 @@ public class FileService {
                 imgNumber++;
                 continue;
             }
-            String fileName = store(file, id, imgNumber);
+            String fileName = store(file, id, Integer.toString(imgNumber));
             if (fileName != null) {
                 fileNames.add(fileName);
             }
             imgNumber++;
+        }
+        return fileNames;
+    }
+
+    public List<String> storeNationalId(List<MultipartFile> files, Integer id) {
+        List<String> fileNames = new ArrayList<>();
+        String[] imgTags = {"front", "back"};
+        for (int i = 0; i < imgTags.length; i++) {
+            String fileName = store(files.get(i), id, imgTags[i]);
+            if (fileName != null) {
+                fileNames.add(fileName);
+            }
         }
         return fileNames;
     }
@@ -205,6 +218,21 @@ public class FileService {
         for (Path[] path : renameList) {
             moveFile(path[0], path[1]);
         }
-        store(newFiles, id);
+        storeSaleItem(newFiles, id);
+    }
+
+    public SellerNationalIdPhotoDto getSellerPhotos(Integer id) {
+        SellerNationalIdPhotoDto photos = new SellerNationalIdPhotoDto();
+        String frontPattern = id + ".front.*";
+        String backPattern = id + ".back.*";
+        List<String> frontFiles = getMatchedFiles(frontPattern);
+        List<String> backFiles = getMatchedFiles(backPattern);
+        if (!frontFiles.isEmpty()) {
+            photos.setNationalIdPhotoFront(frontFiles.get(0));
+        }
+        if (!backFiles.isEmpty()) {
+            photos.setNationalIdPhotoBack(backFiles.get(0));
+        }
+        return photos;
     }
 }
