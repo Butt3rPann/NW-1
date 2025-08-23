@@ -2,12 +2,11 @@ package sit.integrated.backend.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
@@ -21,32 +20,20 @@ public class Buyer {
     @Column(name = "buyer_id", nullable = false)
     private Integer id;
 
-    @Size(max = 40)
     @NotNull
-    @Column(name = "nickname", nullable = false, length = 40)
-    private String nickname;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Size(max = 100)
     @NotNull
-    @Column(name = "email", nullable = false, length = 100)
-    private String email;
-
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Size(max = 60)
-    @NotNull
-    @Column(name = "fullname", nullable = false, length = 60)
-    private String fullname;
-
-    @CreationTimestamp
-    @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "createdOn", nullable = false)
     private Instant createdOn;
 
-    @UpdateTimestamp
-    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
+    @NotNull
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
 
 }
