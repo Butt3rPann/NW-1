@@ -8,7 +8,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.dtos.SaleItemImageDto;
 import sit.integrated.backend.dtos.SaleItemImageRequest;
-import sit.integrated.backend.dtos.SellerNationalIdPhotoDto;
 import sit.integrated.backend.utils.FileStorageProperties;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -221,17 +220,17 @@ public class FileService {
         storeSaleItem(newFiles, id);
     }
 
-    public SellerNationalIdPhotoDto getSellerPhotos(Integer id) {
-        SellerNationalIdPhotoDto photos = new SellerNationalIdPhotoDto();
-        String frontPattern = id + ".front.*";
-        String backPattern = id + ".back.*";
+    public List<String> getSellerPhotos(Integer Id) {
+        List<String> photos = new ArrayList<>();
+        String frontPattern = Id + ".front.*";
+        String backPattern = Id + ".back.*";
         List<String> frontFiles = getMatchedFiles(frontPattern);
         List<String> backFiles = getMatchedFiles(backPattern);
-        if (!frontFiles.isEmpty()) {
-            photos.setNationalIdPhotoFront(frontFiles.get(0));
+        if (!frontFiles.isEmpty()){
+            photos.add(frontFiles.get(0));
         }
-        if (!backFiles.isEmpty()) {
-            photos.setNationalIdPhotoBack(backFiles.get(0));
+        if (!backFiles.isEmpty()){
+            photos.add(backFiles.get(0));
         }
         return photos;
     }
