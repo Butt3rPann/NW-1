@@ -13,11 +13,13 @@ import sit.integrated.backend.exceptions.EmailAlreadyExistsException;
 import sit.integrated.backend.repositories.BuyerRepository;
 import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.repositories.UserRepository;
+import sit.integrated.backend.utils.Role;
+import sit.integrated.backend.utils.UserStatus;
 
 @Service
 public class UserService {
     @Autowired
-    private UserRepository userRepository ;
+    private UserRepository userRepository;
 
     @Autowired
     private SellerRepository sellerRepository;
@@ -30,16 +32,22 @@ public class UserService {
 
     public void isUserExists(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyExistsException("User email : " + email + " already exists." );
+            throw new EmailAlreadyExistsException("User email : " + email + " already exists.");
         }
     }
 
     public void validateUser(UserRequestDto user) {
-        if (user.getNickname() == null || user.getEmail() == null || user.getPassword() == null || user.getFullname() == null) {
-            throw new IllegalArgumentException("Missing required fields for user");
+        if (user.getNickname() == null ||
+                user.getEmail() == null ||
+                user.getPassword() == null ||
+                user.getFullname() == null) {
+            throw new IllegalArgumentException("Missing required fields for User");
         }
-        if ("SELLER".equalsIgnoreCase(user.getUserType())) {
-            if (user.getMobileNumber() == null || user.getBankAccountNumber() == null || user.getBankName() == null || user.getNationalId() == null) {
+        if (user.getUserType().equals(Role.SELLER)) {
+            if (user.getMobileNumber() == null ||
+                    user.getBankAccountNumber() == null ||
+                    user.getBankName() == null ||
+                    user.getNationalId() == null) {
                 throw new IllegalArgumentException("Missing required fields for Seller");
             }
         }
@@ -49,18 +57,37 @@ public class UserService {
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         validateUser(userRequestDto);
         isUserExists(userRequestDto.getEmail());
+
         userRequestDto.setId(null);
-        userRequestDto.setStatus("INACTIVE");
+        userRequestDto.setStatus(UserStatus.INACTIVE);
+
         User user = userRepository.save(modelMapper.map(userRequestDto, User.class));
-        if ("SELLER".equalsIgnoreCase(user.getUserType())) {
+        UserResponseDto response = modelMapper.map(user, UserResponseDto.class);
+        if (user.getUserType().equals(Role.SELLER)) {
             Seller seller = modelMapper.map(userRequestDto, Seller.class);
             seller.setUser(user);
-            sellerRepository.save(seller);
-        } else if ("BUYER".equalsIgnoreCase(user.getUserType())) {
+            Seller savedSeller = sellerRepository.save(seller);
+            response.setNickname(savedSeller.getNickname());
+            response.setFullname(savedSeller.getFullname());
+            response.setBankAccountNumber(savedSeller.getBankAccountNumber());
+            response.setBankName(savedSeller.getBankName());
+            response.setMobileNumber(savedSeller.getMobileNumber());
+            response.setNationalId(savedSeller.getNationalId());
+        } else if (user.getUserType().equals(Role.BUYER)) {
             Buyer buyer = modelMapper.map(userRequestDto, Buyer.class);
             buyer.setUser(user);
-            buyerRepository.save(buyer);
+            Buyer savedBuyer = buyerRepository.save(buyer);
+            response.setNickname(savedBuyer.getNickname());
+            response.setFullname(savedBuyer.getFullname());
         }
-        return modelMapper.map(userRepository.save(user), UserResponseDto.class);
+        return response;
+    }
+
+    @Transactional
+    public void updateStatus(String email) {
+        int updated = userRepository.updateStatusByEmail(email, UserStatus.ACTIVE);
+        if (updated == 0) {
+            throw new RuntimeException("No user found with email: " + email);
+        }
     }
 }
