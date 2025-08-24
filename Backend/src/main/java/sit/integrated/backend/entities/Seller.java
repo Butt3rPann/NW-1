@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -14,18 +13,28 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "seller")
+@Table(name = "sellers")
 public class Seller {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seller_id", nullable = false)
-    private Integer id;
+    @Column(name = "user_id")
+    private Integer userId;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne
+    @MapsId
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    @Size(max = 40)
+    @NotNull
+    @Column(name = "nickname", nullable = false, length = 40)
+    private String nickname;
+
+    @Size(max = 60)
+    @NotNull
+    @Column(name = "fullname", nullable = false, length = 60)
+    private String fullname;
 
     @Size(max = 20)
     @NotNull
@@ -48,12 +57,10 @@ public class Seller {
     private String nationalId;
 
     @NotNull
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdOn", nullable = false)
     private Instant createdOn;
 
     @NotNull
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
 
