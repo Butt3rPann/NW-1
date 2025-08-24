@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.SellerRequestDto;
 import sit.integrated.backend.dtos.SellerResponseDto;
-import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.exceptions.EmailAlreadyExistsException;
 import sit.integrated.backend.repositories.SellerRepository;
 
