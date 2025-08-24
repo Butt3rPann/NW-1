@@ -38,7 +38,7 @@ public class JwtUtils {
         }
     }
 
-    public String generateToken(String email, String role, TokenType tokenType) {
+    public String generateToken(String email, Role role, TokenType tokenType) {
         try {
             JWSSigner signer = new RSASSASigner(rsaPrivateJWK);
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()

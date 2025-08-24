@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -56,12 +58,12 @@ public class Seller {
     @Column(name = "national_id", nullable = false, length = 25)
     private String nationalId;
 
-    @NotNull
-    @Column(name = "createdOn", nullable = false)
+    @CreationTimestamp
+    @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
     private Instant createdOn;
 
-    @NotNull
-    @Column(name = "updatedOn", nullable = false)
+    @UpdateTimestamp
+    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
     private Instant updatedOn;
 
 }

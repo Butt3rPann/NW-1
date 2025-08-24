@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import sit.integrated.backend.utils.Role;
+import sit.integrated.backend.utils.UserStatus;
 
 import java.time.Instant;
 
@@ -31,18 +35,18 @@ public class User {
     @NotNull
     @Lob
     @Column(name = "user_type", nullable = false)
-    private String userType;
+    private Role userType;
 
     @NotNull
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private UserStatus status;
 
-    @NotNull
-    @Column(name = "createdOn", nullable = false)
+    @CreationTimestamp
+    @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
     private Instant createdOn;
 
-    @NotNull
-    @Column(name = "updatedOn", nullable = false)
+    @UpdateTimestamp
+    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
     private Instant updatedOn;
 }

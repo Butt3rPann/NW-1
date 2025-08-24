@@ -9,6 +9,7 @@ import AddBrandForm from "@/components/brand/AddBrandForm.vue";
 import BrandList from "@/pages/BrandList.vue";
 import EditBrandForm from "@/components/brand/EditBrandForm.vue";
 import RegisterForm from "@/components/form/RegisterForm.vue";
+import VerifyEmail from "@/pages/VerifyEmail.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -61,6 +62,11 @@ const routes = [
         path : '/registers',
         name : 'Registers',
         component: RegisterForm
+    },
+    {
+        path: '/verify-email',
+        name: 'VerifyEmail',
+        component: VerifyEmail
     }
 ]
 const router = createRouter({history,routes})
