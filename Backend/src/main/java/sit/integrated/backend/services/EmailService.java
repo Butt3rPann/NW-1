@@ -1,2 +1,4 @@
-package sit.integrated.backend.services;public class EmailService {
+package sit.integrated.backend.services;
+
+public class EmailService {
 }
