@@ -8,19 +8,22 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "seller")
+@Table(name = "sellers")
 public class Seller {
     @Id
-    @Column(name = "user_id", nullable = false)
-    private Integer id;
+    @Column(name = "user_id")
+    private Integer userId;
 
+    @NotNull
+    @OneToOne
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Size(max = 40)
@@ -52,5 +55,13 @@ public class Seller {
     @NotNull
     @Column(name = "national_id", nullable = false, length = 25)
     private String nationalId;
+
+    @NotNull
+    @Column(name = "createdOn", nullable = false)
+    private Instant createdOn;
+
+    @NotNull
+    @Column(name = "updatedOn", nullable = false)
+    private Instant updatedOn;
 
 }

@@ -15,8 +15,8 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "sale_item")
-public class  SaleItem {
+@Table(name = "sale_items")
+public class SaleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -73,5 +73,4 @@ public class  SaleItem {
             this.quantity = quantity;
         }
     }
-
 }

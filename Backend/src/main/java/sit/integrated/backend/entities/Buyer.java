@@ -1,28 +1,29 @@
 package sit.integrated.backend.entities;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "buyer")
+@Table(name = "buyers")
 public class Buyer {
     @Id
-    @Column(name = "user_id", nullable = false)
-    private Integer id;
+    @Column(name = "user_id")
+    private Integer userId;
 
+    @NotNull
+    @OneToOne
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Size(max = 40)
@@ -35,12 +36,12 @@ public class Buyer {
     @Column(name = "fullname", nullable = false, length = 60)
     private String fullname;
 
-    @CreationTimestamp
-    @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
+    @NotNull
+    @Column(name = "createdOn", nullable = false)
     private Instant createdOn;
 
-    @UpdateTimestamp
-    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
+    @NotNull
+    @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
 
 }
