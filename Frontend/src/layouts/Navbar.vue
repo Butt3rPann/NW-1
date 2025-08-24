@@ -39,7 +39,9 @@ const isMenuOpen = ref(false)
                 {{ item.name }}
             </router-link>
         </div>
-        <img :src="profileImg" alt="profile" class="w-12 hidden md:block">
+        <router-link to="/registers">
+            <img :src="profileImg" alt="profile" class="w-12 hidden md:block">
+        </router-link>
         <div v-if="isMenuOpen" class="absolute left-0 top-14 bg-[#6F879C] text-xs md:hidden font-medium flex items-center flex-col w-full gap-3 py-4">
             <router-link v-for="item in navItems" :key="item.name" :to="{ name: item.pathname }" @click="isMenuOpen = false" class="w-full flex justify-center transition-all duration-150">
                 <span class="inline-block transition-all duration-150 p-1"  :class="{'border-b-2 border-white' : route.name === item.pathname}">
