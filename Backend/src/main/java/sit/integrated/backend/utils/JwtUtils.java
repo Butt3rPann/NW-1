@@ -38,7 +38,7 @@ public class JwtUtils {
         }
     }
 
-    public String generateToken(String email, Role role, TokenType tokenType) {
+    public String generateToken(Integer id, String email, Role role, TokenType tokenType) {
         try {
             JWSSigner signer = new RSASSASigner(rsaPrivateJWK);
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
@@ -48,6 +48,8 @@ public class JwtUtils {
                     .issueTime(new Date(new Date().getTime()))
                     .claim("typ", tokenType.toString())
                     .claim("role", role)
+                    .claim("userId", id)
+                    .claim("email", email)
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .keyID(rsaPrivateJWK.getKeyID()).build(), claimsSet);
@@ -63,9 +65,14 @@ public class JwtUtils {
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = new RSASSAVerifier(rsaPublicJWK);
             boolean passed = signedJWT.verify(verifier);
-            System.out.println("Token verification: " + passed);
             if(!passed) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Verified Error, Invalid JWT");
+            }
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            Integer userId = claims.getIntegerClaim("userId");
+            String email = claims.getStringClaim("email");
+            if (userId == null || email == null || email.isBlank()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token claims: userId or email missing");
             }
         } catch (JOSEException | ParseException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Verified Error, Invalid JWT", ex);

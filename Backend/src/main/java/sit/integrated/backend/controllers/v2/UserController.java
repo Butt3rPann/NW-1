@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
@@ -13,7 +14,10 @@ import sit.integrated.backend.services.UserService;
 import sit.integrated.backend.utils.JwtUtils;
 import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.TokenType;
+import sit.integrated.backend.utils.UserStatus;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,26 +34,32 @@ public class UserController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("/registers")
+    @PostMapping("/users/register")
     public ResponseEntity<UserResponseDto> createUser(@ModelAttribute UserRequestDto user) {
         UserResponseDto userDto = userService.createUser(user);
         if (user.getUserType().equals(Role.SELLER)) {
-            fileService.storeNationalId(user.getSellerNationalIdPhotos(), userDto.getId());
-            userDto.setSellerNationalIdPhotos(fileService.getSellerPhotos(userDto.getId()));
+            List<MultipartFile> files = Arrays.asList(user.getIdCardImageFront(), user.getIdCardImageBack());
+            fileService.storeNationalId(files, userDto.getId());
         }
-        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateToken(userDto.getEmail(), userDto.getUserType(), TokenType.EMAIL_TOKEN));
+        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateToken(userDto.getId(), userDto.getEmail(), userDto.getUserType(), TokenType.EMAIL_TOKEN));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
-    @PatchMapping("/verify-email")
-    public ResponseEntity<String> verifyToken(@RequestParam String token) {
-        jwtUtils.verifyToken(token);
-        Map<String, Object> claims = jwtUtils.getJWTClaimsSet(token);
+    @PostMapping("/users/verify-email")
+    public ResponseEntity<UserResponseDto> verifyToken(@RequestParam String jwtToken) {
+        jwtUtils.verifyToken(jwtToken);
+        Map<String, Object> claims = jwtUtils.getJWTClaimsSet(jwtToken);
         if (jwtUtils.isExpired(claims)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT token expired");
         }
-        String email = claims.get("sub").toString();
+        String email = claims.get("email").toString();
+        Integer id = Integer.valueOf(claims.get("userId").toString());
+        UserResponseDto user = userService.getUserById(id);
+        if (user.getIsActive()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already verified");
+        }
         userService.updateStatus(email);
-        return ResponseEntity.ok("Status updated successfully");
+        user.setStatus(UserStatus.ACTIVE);
+        return ResponseEntity.ok(user);
     }
 }

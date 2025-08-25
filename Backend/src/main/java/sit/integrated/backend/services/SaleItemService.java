@@ -38,7 +38,7 @@ public class SaleItemService {
         if (brands == null && filterStorages == null && filterPriceLower == null && filterPriceUpper == null && (keyword == null || keyword.isBlank())) {
             return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {
-            return saleItemRepository.findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, (keyword == null || keyword.isBlank())? null: keyword, PageRequest.of(page, size, sort));
+            return saleItemRepository.findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, (keyword == null || keyword.isBlank()) ? null : keyword, PageRequest.of(page, size, sort));
         }
     }
 

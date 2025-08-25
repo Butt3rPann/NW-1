@@ -33,7 +33,7 @@ public class User {
     private String password;
 
     @NotNull
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false)
     private Role userType;
 

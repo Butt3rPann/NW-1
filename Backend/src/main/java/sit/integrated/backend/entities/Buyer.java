@@ -30,13 +30,13 @@ public class Buyer {
 
     @Size(max = 40)
     @NotNull
-    @Column(name = "nickname", nullable = false, length = 40)
-    private String nickname;
+    @Column(name = "nick_name", nullable = false, length = 40)
+    private String nickName;
 
     @Size(max = 60)
     @NotNull
-    @Column(name = "fullname", nullable = false, length = 60)
-    private String fullname;
+    @Column(name = "full_name", nullable = false, length = 60)
+    private String fullName;
 
     @CreationTimestamp
     @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)

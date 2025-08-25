@@ -30,23 +30,23 @@ public class Seller {
 
     @Size(max = 40)
     @NotNull
-    @Column(name = "nickname", nullable = false, length = 40)
-    private String nickname;
+    @Column(name = "nick_name", nullable = false, length = 40)
+    private String nickName;
 
     @Size(max = 60)
     @NotNull
-    @Column(name = "fullname", nullable = false, length = 60)
-    private String fullname;
+    @Column(name = "full_name", nullable = false, length = 60)
+    private String fullName;
 
     @Size(max = 20)
     @NotNull
-    @Column(name = "mobile_number", nullable = false, length = 20)
-    private String mobileNumber;
+    @Column(name = "phone_number", nullable = false, length = 20)
+    private String phoneNumber;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "bank_account_number", nullable = false, length = 50)
-    private String bankAccountNumber;
+    @Column(name = "bank_account", nullable = false, length = 50)
+    private String bankAccount;
 
     @Size(max = 100)
     @NotNull
@@ -55,8 +55,8 @@ public class Seller {
 
     @Size(max = 25)
     @NotNull
-    @Column(name = "national_id", nullable = false, length = 25)
-    private String nationalId;
+    @Column(name = "id_card_number", nullable = false, length = 25)
+    private String idCardNumber;
 
     @CreationTimestamp
     @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
