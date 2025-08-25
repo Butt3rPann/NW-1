@@ -52,7 +52,7 @@ public class FileService {
     }
 
     public String store(MultipartFile file, Integer id, String imgTag) {
-        if(!isSupportedContentType(file)) {
+        if (!isSupportedContentType(file)) {
             return null;
         }
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());

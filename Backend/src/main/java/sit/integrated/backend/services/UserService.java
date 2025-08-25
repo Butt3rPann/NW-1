@@ -2,8 +2,11 @@ package sit.integrated.backend.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 import sit.integrated.backend.entities.Buyer;
@@ -30,6 +33,21 @@ public class UserService {
     @Autowired
     ModelMapper modelMapper;
 
+    public UserResponseDto getUserById(Integer id) {
+        UserResponseDto user = modelMapper.map(userRepository.findById(id), UserResponseDto.class);
+        if (user.getUserType().equals(Role.SELLER)) {
+            Seller seller = sellerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
+            user.setNickName(seller.getNickName());
+            user.setFullName(seller.getFullName());
+            user.setPhoneNumber(seller.getPhoneNumber());
+        } else if (user.getUserType().equals(Role.BUYER)) {
+            Buyer buyer = buyerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Buyer not found"));
+            user.setNickName(buyer.getNickName());
+            user.setFullName(buyer.getFullName());
+        }
+        return user;
+    }
+
     public void isUserExists(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new EmailAlreadyExistsException("User email : " + email + " already exists.");
@@ -37,17 +55,19 @@ public class UserService {
     }
 
     public void validateUser(UserRequestDto user) {
-        if (user.getNickname() == null ||
+        if (user.getNickName() == null ||
                 user.getEmail() == null ||
                 user.getPassword() == null ||
-                user.getFullname() == null) {
+                user.getFullName() == null) {
             throw new IllegalArgumentException("Missing required fields for User");
         }
         if (user.getUserType().equals(Role.SELLER)) {
-            if (user.getMobileNumber() == null ||
-                    user.getBankAccountNumber() == null ||
+            if (user.getPhoneNumber() == null ||
+                    user.getBankAccount() == null ||
                     user.getBankName() == null ||
-                    user.getNationalId() == null) {
+                    user.getIdCardNumber() == null ||
+                    user.getIdCardImageFront() == null ||
+                    user.getIdCardImageBack() == null) {
                 throw new IllegalArgumentException("Missing required fields for Seller");
             }
         }
@@ -67,18 +87,15 @@ public class UserService {
             Seller seller = modelMapper.map(userRequestDto, Seller.class);
             seller.setUser(user);
             Seller savedSeller = sellerRepository.save(seller);
-            response.setNickname(savedSeller.getNickname());
-            response.setFullname(savedSeller.getFullname());
-            response.setBankAccountNumber(savedSeller.getBankAccountNumber());
-            response.setBankName(savedSeller.getBankName());
-            response.setMobileNumber(savedSeller.getMobileNumber());
-            response.setNationalId(savedSeller.getNationalId());
+            response.setNickName(savedSeller.getNickName());
+            response.setFullName(savedSeller.getFullName());
+            response.setPhoneNumber(savedSeller.getPhoneNumber());
         } else if (user.getUserType().equals(Role.BUYER)) {
             Buyer buyer = modelMapper.map(userRequestDto, Buyer.class);
             buyer.setUser(user);
             Buyer savedBuyer = buyerRepository.save(buyer);
-            response.setNickname(savedBuyer.getNickname());
-            response.setFullname(savedBuyer.getFullname());
+            response.setNickName(savedBuyer.getNickName());
+            response.setFullName(savedBuyer.getFullName());
         }
         return response;
     }

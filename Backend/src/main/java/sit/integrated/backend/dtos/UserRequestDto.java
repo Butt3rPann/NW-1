@@ -10,15 +10,16 @@ import java.util.List;
 @Data
 public class UserRequestDto {
     private Integer id;
-    private String nickname;
+    private String nickName;
     private String email;
+    private String fullName;
     private String password;
-    private String fullname;
-    private String mobileNumber;
-    private String bankAccountNumber;
+    private String phoneNumber;
+    private String bankAccount;
     private String bankName;
-    private String nationalId;
-    private List<MultipartFile> sellerNationalIdPhotos;
+    private String idCardNumber;
     private Role userType;
+    private MultipartFile idCardImageFront;
+    private MultipartFile  idCardImageBack;
     private UserStatus status;
 }

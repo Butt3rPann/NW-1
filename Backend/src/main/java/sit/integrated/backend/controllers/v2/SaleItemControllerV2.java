@@ -35,7 +35,7 @@ public class SaleItemControllerV2 {
                                                                    @RequestParam(required = false) List<Integer> filterStorages,
                                                                    @RequestParam(required = false) Integer filterPriceLower,
                                                                    @RequestParam(required = false) Integer filterPriceUpper,
-                                                                   @RequestParam(required = false) String keyword,
+                                                                   @RequestParam(required = false) String searchKeyWord,
                                                                    @RequestParam Integer page,
                                                                    @RequestParam(required = false, defaultValue = "10") Integer size) {
 
@@ -51,7 +51,8 @@ public class SaleItemControllerV2 {
             filterPriceUpper = filterPriceLower;
         }
 
-        Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, keyword, sortField, sortDirection, page, size);
+        // String[] keywords = (searchKeyWord != null && !searchKeyWord.isBlank()) ? searchKeyWord.split(" ") : null;
+        Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, searchKeyWord, sortField, sortDirection, page, size);
         PageDto<SaleItemDetailDto> dtos = listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper);
         dtos.getContent().forEach(item -> item.setSaleItemImages(fileService.getSaleItemImages(item.getId())));
         return ResponseEntity.ok(dtos);

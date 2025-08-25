@@ -18,7 +18,7 @@ public class EmailService {
 
     private void sendEmail(String to, String token, String subject, String path, String message) {
         try {
-            String url = "http://localhost:5173/nw1" + path + "?token=" + token;
+            String url = "http://localhost:5173/nw1" + path + "?jwtToken=" + token;
 
             String content = """
                 <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">

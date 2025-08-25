@@ -310,9 +310,9 @@ watch(searchKeyword, () => {
         </div>
         <div class="flex flex-col md:flex-row gap-5 md:gap-3 lg:gap-5">
             <div class="relative shadow-[0_0.045rem_0.23rem_0_rgba(0,0,0,0.15)] rounded-md py-1 px-1.5 md:py-1 md:px-2 md:w-2xs lg:w-sm flex-shrink-0">
-                <input type="text" placeholder="Search..." v-model="searchKeyword" class="itbms-search-text w-full placeholder:text-xs lg:placeholder:text-sm p-1">
+                <input type="text" placeholder="Search..." v-model="searchKeyword" class="itbms-search-text h-full w-full placeholder:text-xs lg:placeholder:text-sm p-1 outline-0">
                 <div class="absolute top-1 md:top-1.5 right-2 bg-white flex items-center gap-1">
-                    <p v-if="searchKeyword != ''" @click="searchKeyword = ''" class="itbms-search-clear-button text-[#6F879C] px-2">x</p>
+                    <p v-if="searchKeyword != ''" @click="searchKeyword = ''" class="itbms-search-clear-button cursor-pointer text-[#6F879C] px-2">x</p>
                     <div class="bg-[#ABBCC9] p-1.5 rounded-md">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="w-5 h-5 lg:w-6 lg:h-6">
                             <path fill="#FFFFFF" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />

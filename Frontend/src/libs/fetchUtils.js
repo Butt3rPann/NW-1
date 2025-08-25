@@ -26,7 +26,7 @@ async function getItems(url, sortField, sortDirection, brands, filterStorages, f
     }
 
     if (keyword) {
-      params.append('keyword', keyword)
+      params.append('searchKeyWord', keyword)
     }
     
     if (page >= 0 && size) {
@@ -127,16 +127,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-async function patchItem(url) {
-  try {
-    const res = await fetch(url, {
-      method: 'PATCH'
-    })
-    if (!res.ok) throw new Error(`Failed to patch item. Status: ${res.status}`);
-    return res.status
-  } catch (error) {
-    throw new Error('can not patch item')
-  }
-}
-
-export { getItems, getItemById, addItem , editItem , deleteItemById, uploadFormData, updateFormData, patchItem}
+export { getItems, getItemById, addItem , editItem , deleteItemById, uploadFormData, updateFormData}
