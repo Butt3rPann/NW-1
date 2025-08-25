@@ -5,21 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.repositories.SaleItemRepository;
+import sit.integrated.backend.utils.SaleItemSpecifications;
 
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
-
     @Autowired
     ModelMapper modelMapper;
 
@@ -33,12 +36,23 @@ public class SaleItemService {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
 
+    public Specification<SaleItem> findFilteredItems(List<String> brands, List<Integer> filterStorages, boolean hasNull, Integer filterPriceLower, Integer filterPriceUpper, List<String> keywords) {
+        return Specification.where(SaleItemSpecifications.hasBrand(brands)
+                .and(SaleItemSpecifications.hasPriceLessThanOrEqual(filterPriceUpper))
+                .and(SaleItemSpecifications.hasPriceGreaterThanOrEqual(filterPriceLower))
+                .and(SaleItemSpecifications.hasStorages(filterStorages, hasNull))
+                .and(SaleItemSpecifications.hasKeyWord(keywords)));
+    }
+
     public Page<SaleItem> getSaleItems(List<String> brands, List<Integer> filterStorages, Integer filterPriceLower, Integer filterPriceUpper, String keyword, String sortField, String sortDirection,  Integer page, Integer size) {
         Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
         if (brands == null && filterStorages == null && filterPriceLower == null && filterPriceUpper == null && (keyword == null || keyword.isBlank())) {
             return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {
-            return saleItemRepository.findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, (keyword == null || keyword.isBlank()) ? null : keyword, PageRequest.of(page, size, sort));
+            List<String> keywords = (keyword == null || keyword.isBlank())
+                    ? Collections.emptyList()
+                    : Arrays.asList(keyword.trim().split("\\s+"));
+            return saleItemRepository.findAll(findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, keywords), PageRequest.of(page, size, sort));
         }
     }
 
