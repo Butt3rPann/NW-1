@@ -5,6 +5,7 @@ import BaseButton from '@/components/elements/BaseButton.vue'
 import { useRouter } from 'vue-router'
 import { uploadFormData } from '@/libs/fetchUtils'
 import { previewBinaryFile } from '@/libs/utilities'
+import PopupMessage from '../elements/PopupMessage.vue'
 
 const router = useRouter()
 const frontPreview = ref(null)
@@ -102,7 +103,10 @@ const cancel = () => {
     router.push({ name: 'Homepage' })
 }
 
+const isShowPopUp = ref(false)
+
 const handleClick = async () => {
+    isShowPopUp.value = false
     try {
         const formData = new FormData()
         for(const key in user.value) {
@@ -114,8 +118,10 @@ const handleClick = async () => {
 
         const addedUser = await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/users/register`, formData)
         if (addedUser.status === 400 || addedUser.status === 500) {
+            isShowPopUp.value = true
             throw new Error(addedUser.message || 'Save failed')
         }
+        disabled.value = true
         router.push({ name: 'SaleItems', query: { userAdded: 'true' } })
     } catch (error) {
         console.log(error)
@@ -126,6 +132,7 @@ const handleClick = async () => {
 <template>
 <div class="w-full font-rubik bg-white "> 
     <div class="flex flex-col items-center h-200 py-28 px-10 md:px-22 lg:px-25  "> 
+        <PopupMessage message="Email already exists" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <div v-show="user.userType === 'BUYER'">
             <div class="bg-[#F2EDEC] shadow-md w-220 flex h-150 rounded-lg px-3 pt-3">  
                 <div class="bg-white h-143 w-80 rounded-lg">
