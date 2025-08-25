@@ -61,7 +61,12 @@ public class FileService {
                 throw new RuntimeException("Filename contains invalid path sequence " + fileName);
             }
             String extension = getExtension(fileName);
-            String newFileName = id + "." + imgTag + extension;
+            String newFileName;
+            if (imgTag.equals("front") || imgTag.equals("back")) {
+                newFileName = id + "_" + imgTag + extension;
+            } else {
+                newFileName = id + "." + imgTag + extension;
+            }
 
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);

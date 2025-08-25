@@ -145,6 +145,10 @@ if (route.query.added === 'true') {
     router.replace({ query: { } })
     isShowPopup.value = true
     sessionStorage.setItem('page', 1)
+} else if (route.query.userAdded === 'true') {
+    message.value = "The user account has been successfully registered."
+    router.replace({ query: { } })
+    isShowPopup.value = true
 }
 
 const prevPath = router.options.history.state.back

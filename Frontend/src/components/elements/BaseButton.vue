@@ -23,7 +23,7 @@ const props = defineProps({
       :disabled="disabled"
       :class="[
         'flex items-center justify-center w-fit py-3 px-2 md:py-2 md:px-3 lg:py-3 lg:px-4 border-2 rounded-md',
-              text === 'Save' ? (disabled ? 'bg-[#6F879C]/50 border-transparent' : 'bg-[#4bbd80] border-transparent') : bgColor,
+              text === 'Save' || text === 'Submit' ? (disabled ? 'bg-[#6F879C]/50 border-transparent' : 'bg-[#4bbd80] border-transparent') : bgColor,
               borderColor,
               disabled ? 'cursor-not-allowed' : 'cursor-pointer'
           ]">
