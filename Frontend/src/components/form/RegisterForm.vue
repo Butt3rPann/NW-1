@@ -121,6 +121,7 @@ const handleClick = async () => {
             isShowPopUp.value = true
             throw new Error(addedUser.message || 'Save failed')
         }
+        disabled.value = true
         router.push({ name: 'SaleItems', query: { userAdded: 'true' } })
     } catch (error) {
         console.log(error)
