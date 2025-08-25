@@ -1,78 +1,58 @@
 <script setup>
-import { ref , computed } from 'vue'
+import { ref, watchEffect } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import { useRouter } from 'vue-router'
-import { addItem } from '@/libs/fetchUtils'
-import PopupMessage from '@/components/elements/PopupMessage.vue'
+import { uploadFormData } from '@/libs/fetchUtils'
+import { previewBinaryFile } from '@/libs/utilities'
 
 const router = useRouter()
-const emit = defineEmits(['submitAction'])
+const frontPreview = ref(null)
+const backPreview = ref(null)
 
-const props = defineProps({
-    userData: Object,
-    pathName: String
+const user = ref({
+  nickName: '',
+  email: '',
+  password: '',
+  fullName: '',
+  phoneNumber: '',
+  bankAccount: '',
+  bankName: '',
+  idCardNumber: '',
+  userType: 'BUYER',
+  idCardImageFront: null,
+  idCardImageBack: null
 })
-
-const oldUser = ref(null)
-const newUser = ref({
-  nickname: props.userData?.nickname || '',
-  fullname: props.userData?.fullname || '',
-  email: props.userData?.email || '',
-  password: props.userData?.password || '',
-  mobileNumber: props.userData?.mobileNumber || '',
-  bankAccountNumber: props.userData?.bankAccountNumber || '',
-  bankName: props.userData?.bankName || '',
-  nationalId: props.userData?.nationalId || '',
-  sellerNationalIdPhotos: [],
-  userType: props.userData?.userType || 'BUYER',  
-  status: props.userData?.status || 'INACTIVE'
-})
-
-oldUser.value = {...newUser.value}
 
 const invalidMessage = {
-    nickname: 'Nickname must be require.',
+    nickName: 'Nickname must be require.',
     email: 'Email must be require',
     password: 'Password must be at least 8 characters, including upper, lower, number, and special char',
-    fullname: 'Fullname must be require.',
-    mobile: 'Mobile must be require',
-    bankAccountNumber: 'Bank Account Number must be require.',
+    fullName: 'Fullname must be require at least 4 characters and no more than 40 characters.',
+    phoneNumber: 'Mobile must be require',
+    bankAccount: 'Bank Account Number must be require.',
     bankName: 'Bank name must be require.',
-    nationalId: 'National Id must be require.'
+    idCardNumber: 'National Id must be require.',
+    sellerNationalIdPhotos: 'National Id photos must be require.'
 }
-const invalid = ref({
-    nickname: false,
+const isNull = ref({
+    nickName: false,
     email: false,
     password: false,
-    fullname: false,
-    mobile: false,
-    bankAccountNumber: false,
+    fullName: false,
+    phoneNumber: false,
+    bankAccount: false,
     bankName: false,
-    nationalId: false
+    idCardNumber: false,
+    idCardImageFront: false,
+    idCardImageBack: false
 })
 
 const handleDisabledButton = (field, value) => {
-    invalid.value[field] = value
+    isNull.value[field] = value
 }
 
-const disabled = computed(() => {
-    const hasEmptyField = !newUser.value.nickname || !newUser.value.email || !newUser.value.password ||!newUser.value.fullname ||
-                        (newUser.value.userType === 'SELLER' && (
-                          !newUser.value.mobileNumber ||
-                          !newUser.value.bankAccountNumber ||
-                          !newUser.value.bankName ||
-                          !newUser.value.nationalId
-                        ))
-    invalid.value.password = !validatePassword(newUser.value.password)
-    const anyInvalid = Object.values(invalid.value).some(v => v === true)
-    const unchanged = JSON.stringify(newUser.value) === JSON.stringify(oldUser.value)
-    return hasEmptyField || unchanged || anyInvalid
-})
-
-const cancel = () => {
-    router.push({ name: props.pathName })
-}
+const disabled = ref(true)
 
 const validatePassword = (password) => {
   if (password.length < 8) return false
@@ -85,28 +65,60 @@ const validatePassword = (password) => {
   return hasLower && hasUpper && hasNumber && hasSpecial
 }
 
+const handleFrontUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    user.value.idCardImageFront = file
+    frontPreview.value = previewBinaryFile(file)
+  }
+}
+
+const handleBackUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    user.value.idCardImageBack = file
+    backPreview.value = previewBinaryFile(file)
+  } 
+}
+
+watchEffect(() => {
+    for(const key in isNull.value) {
+        const value = user.value[key]
+        isNull.value[key] = !value
+    }
+    const requiredField = user.value.userType === 'SELLER'
+            ? ['nickName', 'email', 'password', 'fullName', 'phoneNumber', 'bankAccount', 'bankName', 'idCardNumber', 'sellerNationalIdPhotos']
+            : ['nickName', 'email', 'password', 'fullName']
+
+    const hasEmptyField = requiredField.some(field => isNull.value[field] === true)
+    const isFullnameValid = user.value.fullName && user.value.fullName.length >= 4
+    const isPasswordValid = validatePassword(user.value.password)
+    const hasTwoFile = user.value.userType === 'SELLER'? (user.value.idCardImageFront !== null && user.value.idCardImageBack != null): true
+
+    disabled.value = hasEmptyField || !isFullnameValid || !isPasswordValid || !hasTwoFile
+})
+
+const cancel = () => {
+    router.push({ name: 'Homepage' })
+}
+
 const handleClick = async () => {
-    const addedItem = { ...newUser.value }
-    Object.keys(addedItem).forEach(key => {
-        if (addedItem[key] === '') {
-        addedItem[key] = null
-        }
-    })
-
     try {
-        const addedUser = await addItem(`${import.meta.env.VITE_APP_URL}/v2/registers`, addedItem)
-        console.log(addedUser);
-        if (addedUser.status === 400 || addedUser.status === 500) {
-        throw new Error(addedUser.message || 'Save failed')
+        const formData = new FormData()
+        for(const key in user.value) {
+            const value = user.value[key]
+            if(value !== '' && value !== null) {
+                formData.append(key, value)   
+            }
         }
-        router.push({ name: props.pathName, query: { added: 'true' } })
 
+        const addedUser = await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/users/register`, formData)
+        if (addedUser.status === 400 || addedUser.status === 500) {
+            throw new Error(addedUser.message || 'Save failed')
+        }
+        router.push({ name: 'SaleItems', query: { userAdded: 'true' } })
     } catch (error) {
         console.log(error)
-        isSuccess.value = false
-        message.value = 'The user could not be added.'
-        isShowPopup.value = true
-        setTimeout(() => isShowPopup.value = false, 1500)
   }
 }
 </script>
@@ -114,7 +126,7 @@ const handleClick = async () => {
 <template>
 <div class="w-full font-rubik bg-white "> 
     <div class="flex flex-col items-center h-200 py-28 px-10 md:px-22 lg:px-25  "> 
-        <div v-if="newUser.userType === 'BUYER'">
+        <div v-show="user.userType === 'BUYER'">
             <div class="bg-[#F2EDEC] shadow-md w-220 flex h-150 rounded-lg px-3 pt-3">  
                 <div class="bg-white h-143 w-80 rounded-lg">
 
@@ -123,75 +135,77 @@ const handleClick = async () => {
                     <p class="text-3xl font-semibold">Create your account</p>
                     <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
                         <div>
-                            <input type="radio" v-model="newUser.userType" value="BUYER"> Buyer</input>
+                            <input type="radio" v-model="user.userType" value="BUYER">Buyer</input>
                         </div>
                         <div>
-                            <input type="radio" v-model="newUser.userType" value="SELLER"> Seller</input>
+                            <input type="radio" v-model="user.userType" value="SELLER">Seller</input>
                         </div>
                     </div>
                     <div class="pt-3">
-                        <FormInput v-model="newUser.nickname" label="Nickname" :required="true" inputType="text" :maxlength="30" field="nickname"
-                            placeholder="Enter nickname" :invalidMessage="invalidMessage.nickname" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="newUser.email" label="Email" :required="true" inputType="text" :maxlength="30" field="email"
+                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="30" field="nickName"
+                            placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
+                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="30" field="email"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="newUser.password" label="Password" :required="true" inputType="text" :maxlength="25" field="password"
+                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="25" field="password"
                             placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="newUser.fullname" label="Fullname" :required="true" inputType="text" :maxlength="40" field="fullname"
-                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullname" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
+                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" field="fullName"
+                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                     </div>
                     <div class="flex justify-center gap-4 pt-2">
-                        <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                        <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="newUser.userType === 'SELLER'">
+        <div v-show="user.userType === 'SELLER'">
             <div class="bg-[#F2EDEC] shadow-md w-220 flex h-150 rounded-lg px-3 pt-3 grid-cols-2">  
                 <div class=" px-7 pt-3 w-100">
                     <p class="text-3xl font-semibold">Create your account</p>
                     <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
                         <div>
-                            <input type="radio" v-model="newUser.userType" value="BUYER"> Buyer</input>
+                            <input type="radio" v-model="user.userType" value="BUYER"> Buyer</input>
                         </div>
                         <div>
-                            <input type="radio" v-model="newUser.userType" value="SELLER"> Seller</input>
+                            <input type="radio" v-model="user.userType" value="SELLER"> Seller</input>
                         </div>
                     </div>
                     <div class="pt-3">
-                        <FormInput v-model="newUser.nickname" label="Nickname" :required="true" inputType="text" :maxlength="30" field="nickname"
-                            placeholder="Enter nickname" :invalidMessage="invalidMessage.nickname" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="newUser.email" label="Email" :required="true" inputType="text" :maxlength="30" field="email"
+                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="30" field="nickName"
+                            placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
+                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="30" field="email"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="newUser.password" label="Password" :required="true" inputType="text" :maxlength="25" field="password"
+                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="25" field="password"
                             placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="newUser.fullname" label="Fullname" :required="true" inputType="text" :maxlength="40" field="fullname"
-                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullname" className="itbms-fullname" @disabledButton="handleDisabledButton"/> 
+                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" field="fullName"
+                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/> 
                     </div>
                     <div class="flex justify-center gap-4 pt-2">
-                        <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                        <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
                 <div class=" px-5 w-100">
-                    <FormInput v-model="newUser.mobileNumber" label="Mobile" :required="true" inputType="text" :maxlength="40" field="mobileNumber"
-                        placeholder="Enter mobile" :invalidMessage="invalidMessage.mobileNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="newUser.bankAccountNumber" label="Bank Accout No" :required="true" inputType="text" :maxlength="40" field="bankAccountNumber"
-                        placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccountNumber" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="newUser.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="40" field="bankName"
+                    <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="40" field="phoneNumber"
+                        placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
+                    <FormInput v-model="user.bankAccount" label="Bank Accout No" :required="true" inputType="text" :maxlength="40" field="bankAccount"
+                        placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
+                    <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="40" field="bankName"
                         placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="newUser.nationalId" label="National Card No" :required="true" inputType="text" :maxlength="40" field="nationalId"
-                        placeholder="Enter national Id" :invalidMessage="invalidMessage.nationalId" className="itbms-card-no" @disabledButton="handleDisabledButton"/>
+                    <FormInput v-model="user.idCardNumber" label="National Card No" :required="true" inputType="text" :maxlength="40" field="idCardNumber"
+                        placeholder="Enter national Id" :invalidMessage="invalidMessage.idCardNumber" className="itbms-card-no" @disabledButton="handleDisabledButton"/>
                     <div >
                         <p>National Card Photo</p>
                         <div class="flex gap-6">
                             <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200">
                                 <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-front" @change="handleFrontUpload" />
-                                <span class="text-gray-700">Front side</span>
+                                <span v-if="!frontPreview" class="text-gray-700">Front side</span>
+                                <img v-if="frontPreview" :src="frontPreview" alt="Front preview" class="mt-2 w-full h-28 object-cover rounded"/>
                             </label>
                             <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200">
                                 <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-back" @change="handleBackUpload" />
-                                <span class="text-gray-700">Back side</span>
+                                <span v-if="!backPreview" class="text-gray-700">Back side</span>
+                                <img v-if="backPreview" :src="backPreview" alt="Back preview" class="mt-2 w-full h-28 object-cover rounded"/>
                             </label>
                         </div>
                     </div>
