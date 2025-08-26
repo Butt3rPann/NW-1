@@ -39,6 +39,9 @@ const isMenuOpen = ref(false)
                 {{ item.name }}
             </router-link>
         </div>
+        <router-link to="/signin">
+            <p>signin</p>
+        </router-link>
         <router-link to="/registers">
             <img :src="profileImg" alt="profile" class="w-12 hidden md:block">
         </router-link>
