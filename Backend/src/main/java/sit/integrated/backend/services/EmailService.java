@@ -56,7 +56,7 @@ public class EmailService {
     public void sendVertificationEmail(String to, String vertificationToken) {
         String subject = "Email Vertification";
         String path = "/verify-email";
-        String message = "Please verify this emial address by clicking button below.";
+        String message = "Please verify this email address by clicking button below.";
         sendEmail(to, vertificationToken, subject, path, message);
     }
 }
