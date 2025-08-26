@@ -16,7 +16,7 @@ public class SaleItemSpecifications {
             if (brands == null || brands.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<SaleItem, Brand> brandJoin = root.join("brands", JoinType.INNER);
+            Join<SaleItem, Brand> brandJoin = root.join("brand", JoinType.INNER);
             return brandJoin.get("name").in(brands);
         };
     }
