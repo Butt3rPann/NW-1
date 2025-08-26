@@ -26,16 +26,17 @@ const user = ref({
 })
 
 const invalidMessage = {
-    nickName: 'Nickname must be require.',
-    email: 'Email must be require',
+    nickName: 'Nickname must be required.',
+    email: 'Email is required and must not exceed 100 characters.',
     password: 'Password must be at least 8 characters, including upper, lower, number, and special char',
-    fullName: 'Fullname must be require at least 4 characters and no more than 40 characters.',
-    phoneNumber: 'Mobile must be require',
-    bankAccount: 'Bank Account Number must be require.',
-    bankName: 'Bank name must be require.',
-    idCardNumber: 'National Id must be require.',
-    sellerNationalIdPhotos: 'National Id photos must be require.'
+    fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
+    phoneNumber: 'Mobile must be required',
+    bankAccount: 'Bank Account Number must be required.',
+    bankName: 'Bank name must be required.',
+    idCardNumber: 'National Id must be required.',
+    sellerNationalIdPhotos: 'National Id photos must be required.'
 }
+
 const isNull = ref({
     nickName: false,
     email: false,
@@ -61,7 +62,7 @@ const validatePassword = (password) => {
   const hasLower = /[a-z]/.test(password)
   const hasUpper = /[A-Z]/.test(password)
   const hasNumber = /[0-9]/.test(password)
-  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>/_]/.test(password)
 
   return hasLower && hasUpper && hasNumber && hasSpecial
 }
@@ -131,14 +132,14 @@ const handleClick = async () => {
  
 <template>
 <div class="w-full font-rubik bg-white "> 
-    <div class="flex flex-col items-center h-200 py-28 px-10 md:px-22 lg:px-25  "> 
+    <div class="flex flex-col items-center h-200 py-28 px-10 md:px-22 lg:px-25 "> 
         <PopupMessage message="Email already exists" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <div v-show="user.userType === 'BUYER'">
-            <div class="bg-[#F2EDEC] shadow-md w-220 flex h-150 rounded-lg px-3 pt-3">  
-                <div class="bg-white h-143 w-80 rounded-lg">
+            <div class="bg-[#F2EDEC] shadow-md w-220 flex h-fit rounded-lg px-3">  
+                <div class="bg-white w-80 my-3 rounded-lg">
 
                 </div> 
-                <div class="h-119 w-165 px-7 pt-3 ">
+                <div class="w-165 px-7 my-7">
                     <p class="text-3xl font-semibold">Create your account</p>
                     <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
                         <div>
@@ -149,13 +150,13 @@ const handleClick = async () => {
                         </div>
                     </div>
                     <div class="pt-3">
-                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="30" field="nickName"
+                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                             placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="30" field="email"
+                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="100" field="email"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="25" field="password"
+                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="255" field="password"
                             placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" field="fullName"
+                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                     </div>
                     <div class="flex justify-center gap-4 pt-2">
@@ -166,8 +167,8 @@ const handleClick = async () => {
             </div>
         </div>
         <div v-show="user.userType === 'SELLER'">
-            <div class="bg-[#F2EDEC] shadow-md w-220 flex h-150 rounded-lg px-3 pt-3 grid-cols-2">  
-                <div class=" px-7 pt-3 w-100">
+            <div class="bg-[#F2EDEC] shadow-md w-220 flex justify-center h-fit rounded-lg p-7 grid-cols-2">  
+                <div class=" px-4 w-1/2">
                     <p class="text-3xl font-semibold">Create your account</p>
                     <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
                         <div>
@@ -178,13 +179,13 @@ const handleClick = async () => {
                         </div>
                     </div>
                     <div class="pt-3">
-                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="30" field="nickName"
+                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                             placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="30" field="email"
+                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="100" field="email"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="25" field="password"
+                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="255" field="password"
                             placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" field="fullName"
+                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/> 
                     </div>
                     <div class="flex justify-center gap-4 pt-2">
@@ -192,14 +193,14 @@ const handleClick = async () => {
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
-                <div class=" px-5 w-100">
-                    <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="40" field="phoneNumber"
+                <div class=" px-4 w-1/2">
+                    <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
                         placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.bankAccount" label="Bank Accout No" :required="true" inputType="text" :maxlength="40" field="bankAccount"
+                    <FormInput v-model="user.bankAccount" label="Bank Accout No" :required="true" inputType="text" :maxlength="50" field="bankAccount"
                         placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="40" field="bankName"
+                    <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
                         placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.idCardNumber" label="National Card No" :required="true" inputType="text" :maxlength="40" field="idCardNumber"
+                    <FormInput v-model="user.idCardNumber" label="National Card No" :required="true" inputType="text" :maxlength="25" field="idCardNumber"
                         placeholder="Enter national Id" :invalidMessage="invalidMessage.idCardNumber" className="itbms-card-no" @disabledButton="handleDisabledButton"/>
                     <div >
                         <p>National Card Photo</p>
