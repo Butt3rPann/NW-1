@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +24,9 @@ import sit.integrated.backend.utils.UserStatus;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    private Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder(
+            16, 16,
+            8, 1024 * 128, 2);
 
     @Autowired
     private SellerRepository sellerRepository;
@@ -80,8 +84,9 @@ public class UserService {
 
         userRequestDto.setId(null);
         userRequestDto.setStatus(UserStatus.INACTIVE);
-
+        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         User user = userRepository.save(modelMapper.map(userRequestDto, User.class));
+
         UserResponseDto response = modelMapper.map(user, UserResponseDto.class);
         if (user.getUserType().equals(Role.SELLER)) {
             Seller seller = modelMapper.map(userRequestDto, Seller.class);
