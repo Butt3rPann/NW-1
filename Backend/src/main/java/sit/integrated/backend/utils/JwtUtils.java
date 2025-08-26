@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Component
 public class JwtUtils {
-    @Value("#{${app.security.jwt.token-max-interval-in-minute}*1000*60}")
+    @Value("#{${app.security.jwt.token-max-interval-in-minute}*1000*60*24}")
     private long MAX_TOKEN_INTERVAL;
 
     @Value("${app.security.jwt.key-id}")
