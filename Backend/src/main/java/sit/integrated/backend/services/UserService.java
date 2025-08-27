@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
-import sit.integrated.backend.dtos.UserSigninDto;
 import sit.integrated.backend.entities.Buyer;
 import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.entities.User;
@@ -109,12 +108,4 @@ public class UserService {
         }
     }
 
-    public UserResponseDto loginUser(UserSigninDto signinDto) {
-        User user = userRepository.findByEmail(signinDto.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password incorrect"));
-        if (!passwordEncoder.matches(signinDto.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
-        }
-        return modelMapper.map(user, UserResponseDto.class);
-    }
 }

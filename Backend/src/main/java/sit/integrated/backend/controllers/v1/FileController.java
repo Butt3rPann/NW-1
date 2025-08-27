@@ -9,7 +9,6 @@ import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.utils.FileStorageProperties;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequestMapping("/v1")
 public class FileController {
     @Autowired
