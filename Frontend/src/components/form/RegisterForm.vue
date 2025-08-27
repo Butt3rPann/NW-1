@@ -117,7 +117,7 @@ const handleClick = async () => {
             }
         }
 
-        const addedUser = await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/signin`, formData)
+        const addedUser = await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/registers`, formData)
         if (addedUser.status === 400 || addedUser.status === 500) {
             isShowPopUp.value = true
             throw new Error(addedUser.message || 'Save failed')
