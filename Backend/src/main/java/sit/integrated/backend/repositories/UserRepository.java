@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.entities.User;
 import sit.integrated.backend.utils.UserStatus;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
 
@@ -14,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("UPDATE User u SET u.status = ?2 WHERE u.email = ?1")
     int updateStatusByEmail(String email, UserStatus status);
+
+    Optional<User> findByEmail(String email);
 }
