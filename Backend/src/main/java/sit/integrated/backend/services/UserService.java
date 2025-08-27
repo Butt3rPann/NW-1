@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
-import sit.integrated.backend.dtos.UserSigninDto;
+import sit.integrated.backend.dtos.UserSignInDto;
 import sit.integrated.backend.entities.Buyer;
 import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.entities.User;
@@ -114,10 +114,19 @@ public class UserService {
         }
     }
 
-    public UserResponseDto loginUser(UserSigninDto userSigninDro) {
-        User user = userRepository.findByEmail(userSigninDro.getEmail())
+    public UserResponseDto loginUser(UserSignInDto userSigninDto) {
+        String email = userSigninDto.getEmail();
+        String password = userSigninDto.getPassword();
+        if (email.isEmpty() || email.length() > 50 ||
+                !email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
+        }
+        if (password.isEmpty() || password.length() > 14) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
+        }
+        User user = userRepository.findByEmail(userSigninDto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password incorrect"));
-        if (!passwordEncoder.matches(userSigninDro.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userSigninDto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
         }
         return modelMapper.map(user, UserResponseDto.class);

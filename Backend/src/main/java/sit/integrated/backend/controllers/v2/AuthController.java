@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sit.integrated.backend.dtos.UserResponseDto;
-import sit.integrated.backend.dtos.UserSigninDto;
+import sit.integrated.backend.dtos.UserSignInDto;
 import sit.integrated.backend.services.UserService;
 
 @RestController
@@ -14,8 +14,8 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@ModelAttribute UserSigninDto userSigninDto) {
+    @PostMapping("/signin")
+    public ResponseEntity<UserResponseDto> login(@ModelAttribute UserSignInDto userSigninDto) {
         UserResponseDto response = userService.loginUser(userSigninDto);
         return ResponseEntity.ok(response);
     }
