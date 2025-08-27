@@ -10,6 +10,8 @@ import BrandList from "@/pages/BrandList.vue";
 import EditBrandForm from "@/components/brand/EditBrandForm.vue";
 import RegisterForm from "@/components/form/RegisterForm.vue";
 import VerifyEmail from "@/pages/VerifyEmail.vue";
+import SignIn from "@/pages/SignIn.vue";
+
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -67,7 +69,12 @@ const routes = [
         path: '/verify-email',
         name: 'VerifyEmail',
         component: VerifyEmail
-    }
+    },
+    {
+        path: '/signin',
+        name: 'SignIn',
+        component: SignIn
+    },
 ]
 const router = createRouter({history,routes})
 export default router
