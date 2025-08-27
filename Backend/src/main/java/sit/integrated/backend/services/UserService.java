@@ -114,19 +114,10 @@ public class UserService {
         }
     }
 
-    public UserResponseDto loginUser(UserSignInDto userSigninDto) {
-        String email = userSigninDto.getEmail();
-        String password = userSigninDto.getPassword();
-        if (email.isEmpty() || email.length() > 50 ||
-                !email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
-        }
-        if (password.isEmpty() || password.length() > 14) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
-        }
-        User user = userRepository.findByEmail(userSigninDto.getEmail())
+    public UserResponseDto signInUser(UserSignInDto userSignInDto) {
+        User user = userRepository.findByEmail(userSignInDto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password incorrect"));
-        if (!passwordEncoder.matches(userSigninDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userSignInDto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
         }
         return modelMapper.map(user, UserResponseDto.class);

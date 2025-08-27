@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
+import sit.integrated.backend.dtos.UserSignInDto;
 import sit.integrated.backend.services.EmailService;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.UserService;
@@ -61,5 +62,11 @@ public class UserController {
         userService.updateStatus(email);
         user.setStatus(UserStatus.ACTIVE);
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/users/authentications")
+    public ResponseEntity<UserResponseDto> signInUser(@ModelAttribute UserSignInDto userSignInDto) {
+        UserResponseDto response = userService.signInUser(userSignInDto);
+        return ResponseEntity.ok(response);
     }
 }
