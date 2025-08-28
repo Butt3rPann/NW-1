@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,9 @@ public class UserService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public UserResponseDto getUserById(Integer id) {
         UserResponseDto user = modelMapper.map(userRepository.findById(id), UserResponseDto.class);
@@ -114,7 +119,7 @@ public class UserService {
         }
     }
 
-    public UserResponseDto signInUser(UserSignInDto userSigninDto) {
+    public void authenticateUser(UserSignInDto userSigninDto) {
         String email = userSigninDto.getEmail();
         String password = userSigninDto.getPassword();
         if (email.isEmpty() || email.length() > 50 ||
@@ -129,6 +134,7 @@ public class UserService {
         if (!passwordEncoder.matches(userSigninDto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
         }
-        return modelMapper.map(user, UserResponseDto.class);
+        UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(email, password);
+        authenticationManager.authenticate(upat);
     }
 }
