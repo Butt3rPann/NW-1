@@ -10,7 +10,7 @@ import BrandList from "@/pages/BrandList.vue";
 import EditBrandForm from "@/components/brand/EditBrandForm.vue";
 import RegisterForm from "@/components/form/RegisterForm.vue";
 import VerifyEmail from "@/pages/VerifyEmail.vue";
-import SignIn from "@/pages/SignIn.vue";
+import SignIn from "@/pages/Signin.vue";
 
 
 const history = createWebHistory('/nw1/')

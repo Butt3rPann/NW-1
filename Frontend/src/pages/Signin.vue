@@ -18,12 +18,17 @@ const isNull = ref({
     password: false
 })
 
-const disabled = ref(false)
 const isShowPopUp = ref(false)
 
 const handleDisabledButton = (field, value) => {
     isNull.value[field] = value
 }
+
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+const disabled = computed(() => {
+  return !(isValidEmail(user.value.email) || user.value.password !== '')
+})
 
 const handleClick = async () => {
   isShowPopUp.value = false
@@ -46,8 +51,16 @@ const handleClick = async () => {
         throw new Error(addedUser.message || 'Email or Password is incorrect')
     }
 
-    disabled.value = true
-    router.push({ name: 'SaleItems', query: { loggedIn: 'true' } })
+    if (addedUser.status === 400) {
+        isShowPopUp.value = true
+        throw new Error(addedUser.message || 'Email or Password is incorrect')
+    }
+
+    else  {
+        isShowPopUp.value = true
+        throw new Error(addedUser.message || 'There is a problem. Please try again later.')
+    }
+
     } catch (error) {
         console.log(error)
     }
@@ -66,11 +79,11 @@ const cancel = () => {
             <div class="flex flex-col">
             <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email"
                 placeholder="Enter email"  className="itbms-email" @disabledButton="handleDisabledButton"/>
-            <FormInput v-model="user.password" label="Password" :required="true" inputType="text" :maxlength="15" field="password"
+            <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password"
                 placeholder="Enter password"  className="itbms-password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
-                <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                <BaseButton @click="handleClick" text="Submit" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
                 <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
             </div>
         </div>
