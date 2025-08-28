@@ -20,6 +20,6 @@ public class UserRequestDto {
     private String idCardNumber;
     private Role userType;
     private MultipartFile idCardImageFront;
-    private MultipartFile  idCardImageBack;
+    private MultipartFile idCardImageBack;
     private UserStatus status;
 }
