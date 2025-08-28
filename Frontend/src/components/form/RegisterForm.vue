@@ -117,7 +117,7 @@ const handleClick = async () => {
             }
         }
 
-        const addedUser = await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/registers`, formData)
+        const addedUser = await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/users/register`, formData)
         if (addedUser.status === 400 || addedUser.status === 500) {
             isShowPopUp.value = true
             throw new Error(addedUser.message || 'Save failed')
@@ -152,9 +152,9 @@ const handleClick = async () => {
                     <div class="pt-3">
                         <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                             placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="100" field="email"
+                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="255" field="password"
+                        <FormInput v-model="user.password" label="Password" :required="true" inputType="text" :maxlength="14" field="password"
                             placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   

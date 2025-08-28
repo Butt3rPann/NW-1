@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref , computed  } from 'vue'
 import { useRouter } from 'vue-router'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
@@ -27,24 +27,30 @@ const handleDisabledButton = (field, value) => {
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 const disabled = computed(() => {
-  return !(isValidEmail(user.value.email) || user.value.password !== '')
+  return !(isValidEmail(user.value.email) && user.value.password !== '')
 })
 
 const handleClick = async () => {
   isShowPopUp.value = false
   try {
-    const formData = new FormData()
+    const body = {}
     for (const key in user.value) {
-        const value = user.value[key]
-            if (value !== '' && value !== null) {
-            formData.append(key, value)
+      const value = user.value[key]
+      if (value !== '' && value !== null) {
+        body[key] = value
       }
     }
 
-    const addedUser = await uploadFormData(
-        `${import.meta.env.VITE_APP_URL}/v2/signin`,
-        formData
-    )
+    const addedUser = await fetch(
+        `${import.meta.env.VITE_APP_URL}/v2/users/authentications`,
+        {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+        }
+    ).then(res => res.json())
 
     if (addedUser.status === 401) {
         isShowPopUp.value = true
@@ -79,7 +85,7 @@ const cancel = () => {
             <div class="flex flex-col">
             <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email"
                 placeholder="Enter email"  className="itbms-email" @disabledButton="handleDisabledButton"/>
-            <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password"
+            <FormInput v-model="user.password" label="Password" :required="true" inputType="text"  :maxlength="14" field="password"
                 placeholder="Enter password"  className="itbms-password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
