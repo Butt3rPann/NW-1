@@ -6,12 +6,14 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
+
 import sit.integrated.backend.dtos.UserSignInDto;
 import sit.integrated.backend.entities.Buyer;
 import sit.integrated.backend.entities.Seller;
@@ -27,9 +29,9 @@ import sit.integrated.backend.utils.UserStatus;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    private Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder(
-            16, 16,
-            8, 1024 * 128, 2);
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private SellerRepository sellerRepository;
@@ -81,6 +83,13 @@ public class UserService {
                 throw new IllegalArgumentException("Missing required fields for Seller");
             }
         }
+        if (user.getEmail().length() > 50 || user.getEmail().isBlank() ||
+                !user.getEmail().matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
+        }
+        if (user.getPassword().isBlank() || user.getPassword().length() > 14) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
+        }
     }
 
     @Transactional
@@ -119,22 +128,19 @@ public class UserService {
         }
     }
 
-    public void authenticateUser(UserSignInDto userSigninDto) {
-        String email = userSigninDto.getEmail();
-        String password = userSigninDto.getPassword();
-        if (email.isEmpty() || email.length() > 50 ||
-                !email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
+    public void authenticateUser(UserSignInDto user) {
+        if (user.getEmail() == null || user.getEmail().length() > 50 || user.getEmail().isBlank() ||
+                !user.getEmail().matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
         }
-        if (password.isEmpty() || password.length() > 14) {
+        if (user.getPassword() == null || user.getPassword().isBlank() || user.getPassword().length() > 14) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
         }
-        User user = userRepository.findByEmail(userSigninDto.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password incorrect"));
-        if (!passwordEncoder.matches(userSigninDto.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
+        UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        try {
+            authenticationManager.authenticate(upat);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
-        UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(email, password);
-        authenticationManager.authenticate(upat);
     }
 }
