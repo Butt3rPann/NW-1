@@ -34,7 +34,7 @@ const handleClick = async () => {
     isShowPopUp.value = false
     try { 
         const loginUser = await postData(`${import.meta.env.VITE_APP_URL}/v2/users/authentications`, user.value)
-        if () {
+        if (x) {
             // router.push({ name: 'SaleItems', query: { loginUser: 'true' } })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true

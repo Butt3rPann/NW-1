@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +23,11 @@ import sit.integrated.backend.exceptions.EmailAlreadyExistsException;
 import sit.integrated.backend.repositories.BuyerRepository;
 import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.repositories.UserRepository;
+import sit.integrated.backend.utils.JwtUtils;
 import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.UserStatus;
+
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -44,6 +48,12 @@ public class UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
 
     public UserResponseDto getUserById(Integer id) {
         UserResponseDto user = modelMapper.map(userRepository.findById(id), UserResponseDto.class);
@@ -142,5 +152,21 @@ public class UserService {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
+    }
+
+    public Map<String, Object> refreshToken(String refreshToken) {
+        jwtUtils.verifyToken(refreshToken);
+        Map<String, Object> claims = jwtUtils.getJWTClaimsSet(refreshToken);
+        jwtUtils.isExpired(claims);
+        if (! jwtUtils.isValidClaims(claims) || ! "REFRESH_TOKEN".equals(claims.get("typ"))) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED
+                    , "Invalid refresh token");
+        }
+
+        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername((String) claims.get("email"));
+        Role role = (Role) claims.get("role");
+        String nickname = (String) claims.get("nickname");
+
+        return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname));
     }
 }

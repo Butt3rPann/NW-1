@@ -42,7 +42,7 @@ public class UserController {
             List<MultipartFile> files = Arrays.asList(user.getIdCardImageFront(), user.getIdCardImageBack());
             fileService.storeNationalId(files, userDto.getId());
         }
-        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateToken(userDto.getId(), userDto.getEmail(), userDto.getUserType(), TokenType.EMAIL_TOKEN));
+        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
