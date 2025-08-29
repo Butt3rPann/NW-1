@@ -1,5 +1,5 @@
 package sit.integrated.backend.utils;
 
 public enum TokenType {
-    EMAIL_TOKEN
+    EMAIL_TOKEN, ACCESS_TOKEN, REFRESH_TOKEN
 }

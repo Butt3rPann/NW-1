@@ -22,7 +22,7 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
-    @Size(max = 100)
+    @Size(max = 50)
     @NotNull
     @Column(name = "email", nullable = false, length = 100)
     private String email;

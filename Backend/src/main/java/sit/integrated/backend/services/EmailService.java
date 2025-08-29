@@ -19,7 +19,8 @@ public class EmailService {
 
     private void sendEmail(String to, String token, String subject, String path, String message) {
         try {
-            String url = "http://intproj24.sit.kmutt.ac.th/nw1" + path + "?jwtToken=" + token;
+            String url = "localhost:5173" + path + "?jwtToken=" + token;
+//            String url = "http://intproj24.sit.kmutt.ac.th/nw1" + path + "?jwtToken=" + token;
 
             String content = """
                 <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
