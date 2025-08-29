@@ -3,8 +3,8 @@ import { ref , computed  } from 'vue'
 import { useRouter } from 'vue-router'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
-import { uploadFormData } from '@/libs/fetchUtils'
 import PopupMessage from '../components/elements/PopupMessage.vue'
+import { postData } from '@/libs/fetchUtils'
 
 const router = useRouter()
 
@@ -27,46 +27,22 @@ const handleDisabledButton = (field, value) => {
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 const disabled = computed(() => {
-  return !(isValidEmail(user.value.email) && user.value.password !== '')
+  return !(isValidEmail(user.value.email) || user.value.password !== '')
 })
 
 const handleClick = async () => {
-  isShowPopUp.value = false
-  try {
-    const body = {}
-    for (const key in user.value) {
-      const value = user.value[key]
-      if (value !== '' && value !== null) {
-        body[key] = value
-      }
-    }
-
-    const addedUser = await fetch(
-        `${import.meta.env.VITE_APP_URL}/v2/users/authentications`,
-        {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
+    isShowPopUp.value = false
+    try { 
+        const loginUser = await postData(`${import.meta.env.VITE_APP_URL}/v2/users/authentications`, user.value)
+        if () {
+            // router.push({ name: 'SaleItems', query: { loginUser: 'true' } })
+        } else if (loginUser.status === 401 || loginUser.status === 400) {
+            isShowPopUp.value = true
+            throw new Error(loginUser.message || 'Email or Password is incorrect')
+        } else {
+            isShowPopUp.value = true
+            throw new Error(loginUser.message || 'There is a problem. Please try again later.')
         }
-    ).then(res => res.json())
-
-    if (addedUser.status === 401) {
-        isShowPopUp.value = true
-        throw new Error(addedUser.message || 'Email or Password is incorrect')
-    }
-
-    if (addedUser.status === 400) {
-        isShowPopUp.value = true
-        throw new Error(addedUser.message || 'Email or Password is incorrect')
-    }
-
-    else  {
-        isShowPopUp.value = true
-        throw new Error(addedUser.message || 'There is a problem. Please try again later.')
-    }
-
     } catch (error) {
         console.log(error)
     }
@@ -85,11 +61,11 @@ const cancel = () => {
             <div class="flex flex-col">
             <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email"
                 placeholder="Enter email"  className="itbms-email" @disabledButton="handleDisabledButton"/>
-            <FormInput v-model="user.password" label="Password" :required="true" inputType="text"  :maxlength="14" field="password"
+            <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password"
                 placeholder="Enter password"  className="itbms-password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
-                <BaseButton @click="handleClick" text="Submit" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
+                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
                 <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
             </div>
         </div>

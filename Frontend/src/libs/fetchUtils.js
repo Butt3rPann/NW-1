@@ -54,21 +54,21 @@ async function getItemById(url, id) {
   }
 }
 
-async function addItem(url, newItem) {
+async function postData(url, data) {
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        ...newItem
-      })
+      body: JSON.stringify(data)
     })
-    const addedItem = await res.json()
-    return addedItem
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`)
+    }
+    return await res.json()
   } catch (error) {
-    throw new Error('can not add your item')
+      throw new Error('Failed to POST data')
   }
 }
 
@@ -127,4 +127,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-export { getItems, getItemById, addItem , editItem , deleteItemById, uploadFormData, updateFormData}
+export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData}
