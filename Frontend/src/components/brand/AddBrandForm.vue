@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import BrandForm from '@/components/form/BrandForm.vue'
-import { addItem } from '@/libs/fetchUtils'
+import { postData } from '@/libs/fetchUtils'
 import { ref } from 'vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 
@@ -18,7 +18,7 @@ const handleNewBrand = async (newBrand) => {
         }
     })
     try {
-        const addedBrand = await addItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, addedItem)
+        const addedBrand = await postData(`${import.meta.env.VITE_APP_URL}/v1/brands`, addedItem)
         if (addedBrand.status === 400 || addedBrand.status === 500) {
             throw new Error(addedBrand.message)
         }

@@ -1,14 +1,14 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { addItem } from '@/libs/fetchUtils';
+import { postData } from '@/libs/fetchUtils';
 
 const route = useRoute();
 const res = ref({})
 
 onMounted(async () => {
     try {
-        res.value = await addItem(`${import.meta.env.VITE_APP_URL}/v2/users/verify-email?jwtToken=${route.query.jwtToken}`)
+        res.value = await postData(`${import.meta.env.VITE_APP_URL}/v2/users/verify-email?jwtToken=${route.query.jwtToken}`)
     } catch (error) {
         console.log(error);
     }
