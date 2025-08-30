@@ -56,23 +56,15 @@ public class SaleItemSpecifications {
         };
     }
 
-    public static Specification<SaleItem> hasKeyWord(List<String> keywords) {
+    public static Specification<SaleItem> hasKeyWord(String keyword) {
         return (root, query, cb) -> {
-            if (keywords == null || keywords.isEmpty()) {
+            if (keyword == null || keyword.isBlank()) {
                 return cb.conjunction();
             }
-
-            Predicate predicate = cb.conjunction();
-            for (String keyword : keywords) {
-                if (keyword == null || keyword.isBlank()) continue;
-
-                Predicate wordMatch =
-                        cb.or(cb.like(cb.lower(root.get("description")), "%" + keyword.toLowerCase() + "%"),
-                                cb.like(cb.lower(root.get("model")), "%" + keyword.toLowerCase() + "%"),
-                                cb.like(cb.lower(root.get("color")), "%" + keyword.toLowerCase() + "%"));
-                predicate = cb.and(predicate, wordMatch);
-            }
-            return predicate;
+            String pattern = "%" + keyword.toLowerCase() + "%";
+            return cb.or(cb.like(cb.lower(root.get("description")), pattern),
+                         cb.like(cb.lower(root.get("model")), pattern),
+                         cb.like(cb.lower(root.get("color")), pattern));
         };
     }
 }
