@@ -15,7 +15,6 @@ import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.UserService;
 import sit.integrated.backend.utils.JwtUtils;
 import sit.integrated.backend.utils.Role;
-import sit.integrated.backend.utils.TokenType;
 import sit.integrated.backend.utils.UserStatus;
 
 import java.util.Arrays;
@@ -70,8 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/users/authentications")
-    public ResponseEntity<Void> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
-        userService.authenticateUser(userSignInDto);
-        return ResponseEntity.ok(null);
+    public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
+        return ResponseEntity.ok(userService.authenticateUser(userSignInDto));
     }
 }

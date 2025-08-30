@@ -23,9 +23,6 @@ public class JwtUtils {
     @Value("#{${app.security.jwt.token-max-interval-in-minute}*1000*60*24}")
     private long MAX_EMAIL_TOKEN_INTERVAL;
 
-    @Value("#{${app.security.jwt.token-max-interval-in-minute}*1000*30}")
-    private long MAX_ACCESS_TOKEN_INTERVAL;
-
     @Value("${app.security.jwt.key-id}")
     private String KEY_ID;
 
@@ -48,7 +45,7 @@ public class JwtUtils {
             JWSSigner signer = new RSASSASigner(rsaPrivateJWK);
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .subject(email)
-                    .issuer("http://intproj24.sit.kmutt.ac.th/nw1")
+                    .issuer("https://intproj24.sit.kmutt.ac.th/nw1")
                     .expirationTime(new Date(new Date().getTime() + MAX_EMAIL_TOKEN_INTERVAL))
                     .issueTime(new Date(new Date().getTime()))
                     .claim("typ", TokenType.EMAIL_TOKEN.toString())
@@ -65,13 +62,13 @@ public class JwtUtils {
         }
     }
 
-    public String generateToken(UserDetails user, Role role, String nickname) {
+    public String generateToken(UserDetails user, Role role, String nickname, Long tokenAgeInMiliseconds) {
         try {
             JWSSigner signer = new RSASSASigner(rsaPrivateJWK);
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .issuer("http://intproj24.sit.kmutt.ac.th/nw1")
+                    .issuer("https://intproj24.sit.kmutt.ac.th/nw1")
                     .issueTime(new Date(new Date().getTime()))
-                    .expirationTime(new Date(new Date().getTime() + MAX_ACCESS_TOKEN_INTERVAL))
+                    .expirationTime(new Date(new Date().getTime() + tokenAgeInMiliseconds))
                     .claim("nickname", nickname)
                     .claim("id", ((AuthUserDetail) user).getId())
                     .claim("email", user.getUsername())
@@ -122,7 +119,7 @@ public class JwtUtils {
 
     public boolean isValidClaims(Map<String, Object> jwtClaims) {
         return jwtClaims.containsKey("iat")
-                && "http://intproj24.sit.kmutt.ac.th/nw1"
+                && "https://intproj24.sit.kmutt.ac.th/nw1"
                 .equals(jwtClaims.get("iss"))
                 && jwtClaims.containsKey("uid")
                 && (Long) jwtClaims.get("uid") > 0;
