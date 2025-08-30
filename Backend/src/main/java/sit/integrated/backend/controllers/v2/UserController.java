@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 import sit.integrated.backend.dtos.UserSignInDto;
@@ -14,7 +15,6 @@ import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.UserService;
 import sit.integrated.backend.utils.JwtUtils;
 import sit.integrated.backend.utils.Role;
-import sit.integrated.backend.utils.TokenType;
 import sit.integrated.backend.utils.UserStatus;
 
 import java.util.Arrays;
@@ -42,7 +42,11 @@ public class UserController {
             List<MultipartFile> files = Arrays.asList(user.getIdCardImageFront(), user.getIdCardImageBack());
             fileService.storeNationalId(files, userDto.getId());
         }
-        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()));
+        String url = ServletUriComponentsBuilder.fromCurrentRequest()
+                .replacePath("/nw1/verify-email")
+                .replaceQueryParam("jwtToken", jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()))
+                .toUriString();
+        emailService.sendVertificationEmail(userDto.getEmail(), url);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
@@ -65,8 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/users/authentications")
-    public ResponseEntity<Void> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
-        userService.authenticateUser(userSignInDto);
-        return ResponseEntity.ok(null);
+    public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
+        return ResponseEntity.ok(userService.authenticateUser(userSignInDto));
     }
 }

@@ -16,6 +16,7 @@ import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 
 import sit.integrated.backend.dtos.UserSignInDto;
+import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.Buyer;
 import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.entities.User;
@@ -93,13 +94,7 @@ public class UserService {
                 throw new IllegalArgumentException("Missing required fields for Seller");
             }
         }
-        if (user.getEmail().length() > 50 || user.getEmail().isBlank() ||
-                !user.getEmail().matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
-        }
-        if (user.getPassword().isBlank() || user.getPassword().length() > 14) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
-        }
+        validateEmailAndPassword(user.getEmail(), user.getPassword());
     }
 
     @Transactional
@@ -138,17 +133,22 @@ public class UserService {
         }
     }
 
-    public void authenticateUser(UserSignInDto user) {
-        if (user.getEmail() == null || user.getEmail().length() > 50 || user.getEmail().isBlank() ||
-                !user.getEmail().matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")) {
+    public void validateEmailAndPassword(String email, String password) {
+        if (email == null || email.isBlank() || email.length() > 50
+                || !email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
+                || password == null || password.isBlank() || password.length() > 14) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
         }
-        if (user.getPassword() == null || user.getPassword().isBlank() || user.getPassword().length() > 14) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
-        }
+    }
+
+    public Map<String, Object> authenticateUser(UserSignInDto user) {
+        validateEmailAndPassword(user.getEmail(), user.getPassword());
         UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         try {
             authenticationManager.authenticate(upat);
+            UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(user.getEmail());
+            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24),
+                          "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30));
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
@@ -159,14 +159,13 @@ public class UserService {
         Map<String, Object> claims = jwtUtils.getJWTClaimsSet(refreshToken);
         jwtUtils.isExpired(claims);
         if (! jwtUtils.isValidClaims(claims) || ! "REFRESH_TOKEN".equals(claims.get("typ"))) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED
-                    , "Invalid refresh token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
         }
 
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername((String) claims.get("email"));
         Role role = (Role) claims.get("role");
         String nickname = (String) claims.get("nickname");
 
-        return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname));
+        return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname, (long) 60*1000*30));
     }
 }

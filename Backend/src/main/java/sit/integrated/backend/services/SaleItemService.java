@@ -36,12 +36,12 @@ public class SaleItemService {
         return saleItemRepository.findAll(Sort.by("createdOn").ascending().and(Sort.by("id")));
     }
 
-    public Specification<SaleItem> findFilteredItems(List<String> brands, List<Integer> filterStorages, boolean hasNull, Integer filterPriceLower, Integer filterPriceUpper, List<String> keywords) {
+    public Specification<SaleItem> findFilteredItems(List<String> brands, List<Integer> filterStorages, boolean hasNull, Integer filterPriceLower, Integer filterPriceUpper, String keyword) {
         return Specification.where(SaleItemSpecifications.hasBrand(brands)
                 .and(SaleItemSpecifications.hasPriceLessThanOrEqual(filterPriceUpper))
                 .and(SaleItemSpecifications.hasPriceGreaterThanOrEqual(filterPriceLower))
                 .and(SaleItemSpecifications.hasStorages(filterStorages, hasNull))
-                .and(SaleItemSpecifications.hasKeyWord(keywords)));
+                .and(SaleItemSpecifications.hasKeyWord(keyword)));
     }
 
     public Page<SaleItem> getSaleItems(List<String> brands, List<Integer> filterStorages, Integer filterPriceLower, Integer filterPriceUpper, String keyword, String sortField, String sortDirection,  Integer page, Integer size) {
@@ -49,10 +49,7 @@ public class SaleItemService {
         if (brands == null && filterStorages == null && filterPriceLower == null && filterPriceUpper == null && (keyword == null || keyword.isBlank())) {
             return saleItemRepository.findAll(PageRequest.of(page, size, sort));
         } else {
-            List<String> keywords = (keyword == null || keyword.isBlank())
-                    ? Collections.emptyList()
-                    : Arrays.asList(keyword.trim().split("\\s+"));
-            return saleItemRepository.findAll(findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, keywords), PageRequest.of(page, size, sort));
+            return saleItemRepository.findAll(findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, keyword), PageRequest.of(page, size, sort));
         }
     }
 
