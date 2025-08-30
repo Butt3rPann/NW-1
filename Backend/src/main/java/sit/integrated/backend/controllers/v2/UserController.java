@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 import sit.integrated.backend.dtos.UserSignInDto;
@@ -42,7 +43,11 @@ public class UserController {
             List<MultipartFile> files = Arrays.asList(user.getIdCardImageFront(), user.getIdCardImageBack());
             fileService.storeNationalId(files, userDto.getId());
         }
-        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()));
+        String url = ServletUriComponentsBuilder.fromCurrentRequest()
+                .replacePath("/nw1/verify-email")
+                .replaceQueryParam("jwtToken", jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()))
+                .toUriString();
+        emailService.sendVertificationEmail(userDto.getEmail(), url);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
