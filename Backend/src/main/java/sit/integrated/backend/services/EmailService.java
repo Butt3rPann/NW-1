@@ -17,8 +17,13 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
-    private void sendEmail(String to, String subject, String message, String url) {
+    @Value("${app.base-Url}")
+    private String baseUrl;
+
+    private void sendEmail(String to, String token, String subject, String path, String message) {
         try {
+            String url = baseUrl + path + "?jwtToken=" + token;
+
             String content = """
                 <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
                     <h2 style="color: #2E86C1;">Verify Your Email Address</h2>
@@ -51,9 +56,10 @@ public class EmailService {
     }
 
     @Async
-    public void sendVertificationEmail(String to, String url) {
+    public void sendVertificationEmail(String to, String vertificationToken) {
         String subject = "Email Vertification";
+        String path = "/verify-email";
         String message = "Please verify this email address by clicking button below.";
-        sendEmail(to, subject, message, url);
+        sendEmail(to, vertificationToken, subject, path, message);
     }
 }

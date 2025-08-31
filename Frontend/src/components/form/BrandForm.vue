@@ -80,7 +80,7 @@ const cancel = () => {
       </div>
       <div class="flex justify-center gap-4 pt-2">
         <BaseButton @click="handleClick" text="Save" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
-         <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"/>
+        <BaseButton @click="cancel" v-model="newBrand.isActive" text="Cancel" class="itbms-cancel-button w-full"/>
       </div>
     </div>
   </div>

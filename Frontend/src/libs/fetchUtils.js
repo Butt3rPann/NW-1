@@ -63,9 +63,6 @@ async function postData(url, data) {
       },
       body: JSON.stringify(data)
     })
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`)
-    }
     return await res.json()
   } catch (error) {
       throw new Error('Failed to POST data')

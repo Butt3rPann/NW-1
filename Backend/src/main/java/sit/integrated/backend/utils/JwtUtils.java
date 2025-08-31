@@ -62,7 +62,7 @@ public class JwtUtils {
         }
     }
 
-    public String generateToken(UserDetails user, Role role, String nickname, Long tokenAgeInMiliseconds) {
+    public String generateToken(UserDetails user, Role role, String nickname, Long tokenAgeInMiliseconds, TokenType typ) {
         try {
             JWSSigner signer = new RSASSASigner(rsaPrivateJWK);
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
@@ -73,7 +73,7 @@ public class JwtUtils {
                     .claim("id", ((AuthUserDetail) user).getId())
                     .claim("email", user.getUsername())
                     .claim("role", role)
-                    .claim("typ", TokenType.ACCESS_TOKEN.toString())
+                    .claim("typ", typ.toString())
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .keyID(rsaPrivateJWK.getKeyID()).build(), claimsSet);
