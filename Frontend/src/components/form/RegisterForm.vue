@@ -31,7 +31,7 @@ const user = ref({
 const invalidMessage = {
     nickName: 'Nickname must be required.',
     email: 'Email is required and must not exceed 100 characters.',
-    password: 'Password must be at least 8 characters, including upper, lower, number, and special char',
+    password: 'Password must be required, max 14 characters, with uppercase, lowercase, number, and special character',
     fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
     phoneNumber: 'Mobile must be required',
     bankAccount: 'Bank Account Number must be required.',
@@ -60,7 +60,7 @@ const handleDisabledButton = (field, value) => {
 const disabled = ref(true)
 
 const validatePassword = (password) => {
-  if (password.length < 8) return false
+  if (password.length > 14) return false
 
   const hasLower = /[a-z]/.test(password)
   const hasUpper = /[A-Z]/.test(password)
@@ -135,86 +135,53 @@ const handleClick = async () => {
  
 <template>
 <div class="w-full font-rubik bg-white "> 
-    <div class="flex flex-col items-center h-fit pb-20 pt-30 px-10 md:px-22 lg:px-25 "> 
+    <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 "> 
         <PopupMessage message="Email already exists" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-        <div v-show="user.userType === 'BUYER'">
-            <div class="bg-white shadow-[0_0_15px_rgba(0,0,0,0.2)] w-300 flex h-fit rounded-lg">  
-                <div class="bg-[#91B3FA]/60 w-5/12 flex items-center justify-center">
-                    <img :src="registerBuyer" alt="registerImg" class="w-85">
-                </div> 
-                <div class="w-7/12 px-7 my-7 text-[#332A1E]">
+        <div class="bg-white border border-gray-200 shadow-md w-full max-w-300 flex h-fit rounded-lg overflow-hidden">  
+            <div class="w-5/12 flex items-center justify-center" :class="user.userType == 'BUYER' ? 'bg-[#91B3FA]/60' : 'bg-[#C4C3F7]'">
+                <img :src="user.userType == 'BUYER' ? registerBuyer : registerSeller" alt="registerImg" class="w-85">
+            </div> 
+            <div class="w-7/12 px-7 my-7 text-[#332A1E]">
+                <div class="flex flex-col items-center gap-2 mb-3">
                     <p class="text-3xl font-semibold">Create your account</p>
                     <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
                         <div class="flex space-x-4">
                             <label>
-                              <input type="radio" v-model="user.userType" value="BUYER" class="hidden peer"/>
-                              <div class="px-4 py-2 border text-[#6F879C] border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] peer-checked:text-white">Buyer</div>
+                            <input type="radio" v-model="user.userType" value="BUYER" class="hidden peer"/>
+                            <div class="px-4 py-2 border text-[#6F879C] text-sm sm:text-base lg:text-lg border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] peer-checked:text-white">Buyer</div>
                             </label>
-                        
+
                             <label>
-                              <input type="radio" v-model="user.userType" value="SELLER" class="hidden peer"/>
-                              <div class="px-4 py-2 border text-[#6F879C] border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] hover:bg-[#6F879C]/10 peer-checked:text-white">Seller</div>
+                            <input type="radio" v-model="user.userType" value="SELLER" class="hidden peer"/>
+                            <div class="px-4 py-2 border text-[#6F879C] text-sm sm:text-base lg:text-lg border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] peer-checked:text-white">Seller</div>
                             </label>
                         </div>
-                    </div>
-                    <div class="pt-3">
-                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
-                            placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email"
-                            placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password"
-                            placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
-                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
-                    </div>
-                    <div class="flex justify-center gap-4 pt-2">
-                        <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
-                        <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div v-show="user.userType === 'SELLER'">
-            <div class="bg-white shadow-[0_0_15px_rgba(0,0,0,0.2)] w-300 flex justify-center  rounded-lg">  
-                <div class="bg-[#C4C3F7] w-5/12 flex items-center justify-center">
-                    <img :src="registerSeller" alt="registerImg" class="w-95">
-                </div> 
-                <div class="w-7/12 px-7 my-7 text-[#332A1E]">
-                    <p class="text-3xl font-semibold">Create your account</p>
-                    <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
-                        <div class="flex space-x-4">
-                            <label>
-                              <input type="radio" v-model="user.userType" value="BUYER" class="hidden peer"/>
-                              <div class="px-4 py-2 border text-[#6F879C] border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] hover:bg-[#6F879C]/10 peer-checked:text-white">Buyer</div>
-                            </label>
-                        
-                            <label>
-                              <input type="radio" v-model="user.userType" value="SELLER" class="hidden peer"/>
-                              <div class="px-4 py-2 border text-[#6F879C] border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] peer-checked:text-white">Seller</div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 pt-3">
-                        <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
-                            placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="100" field="email"
-                            placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="255" field="password"
-                            placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
-                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>
+                <div class="pt-3" :class="{'grid grid-cols-2 gap-4 py-4' : user.userType == 'SELLER'}">
+                    <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
+                        placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
+                    <FormInput v-model="user.email" label="Email" :required="true" inputType="email" :maxlength="50" field="email"
+                        placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
+                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :trim="false"
+                        placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
+                    <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
+                        placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
+                    <template v-if="user.userType == 'SELLER'">
                         <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
                             placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.bankAccount" label="Bank Accout No" :required="true" inputType="text" :maxlength="50" field="bankAccount"
+                        <FormInput v-model="user.bankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
                             placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
                             placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.idCardNumber" label="National Card No" :required="true" inputType="text" :maxlength="25" field="idCardNumber"
+                        <FormInput v-model="user.idCardNumber" label="National Card" :required="true" inputType="text" :maxlength="25" field="idCardNumber"
                             placeholder="Enter national Id" :invalidMessage="invalidMessage.idCardNumber" className="itbms-card-no" @disabledButton="handleDisabledButton"/>
-                    </div>
-                    <p class="text-[#332A1E] font-medium text-sm sm:text-base lg:text-lg mb-1">National Card Photo<span class="text-red-700">*</span></p>
+                    </template>
+                </div>
+                <template v-if="user.userType == 'SELLER'">
+                    <p class="text-[#332A1E] font-medium text-sm sm:text-base lg:text-lg mb-2">National Card Photo<span class="text-red-700">*</span></p>
                     <div class="flex gap-6">
-                        <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C]">
+                        <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
                             <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-front" @change="handleFrontUpload" />
                             <div v-if="!frontPreview" class="flex flex-col justify-center items-center">
                                 <img :src="upload" alt="upload" class="w-5">
@@ -222,7 +189,7 @@ const handleClick = async () => {
                             </div>
                             <img v-if="frontPreview" :src="frontPreview" alt="Front preview" class="w-full h-full object-cover rounded"/>
                         </label>
-                        <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C]">
+                        <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
                             <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-back" @change="handleBackUpload" />
                             <div v-if="!backPreview" class="flex flex-col justify-center items-center">
                                 <img :src="upload" alt="upload" class="w-5">
@@ -231,11 +198,15 @@ const handleClick = async () => {
                             <img v-if="backPreview" :src="backPreview" alt="Back preview" class="w-full h-full object-cover rounded"/>
                         </label>
                     </div>
-                    <div class="flex justify-center gap-4 pt-6">
-                        <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
-                        <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
-                    </div>
+                </template>
+                <div class="flex justify-center gap-4 mt-8">
+                    <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                    <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                 </div>
+                <p class="text-center mt-5 text-sm sm:text-base lg:text-lg">
+                    Already have an account?
+                    <span class="underline cursor-pointer text-[#6F879C]" @click="router.push({ name: 'SignIn' })">Log in</span>
+                </p>
             </div>
         </div>
     </div> 

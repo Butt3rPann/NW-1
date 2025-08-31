@@ -5,6 +5,10 @@ import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import PopupMessage from '../components/elements/PopupMessage.vue'
 import { postData } from '@/libs/fetchUtils'
+import { useUserStore } from '@/stores/UserStore'
+
+const userStore = useUserStore()
+const { storeToken } = userStore
 
 const router = useRouter()
 
@@ -13,7 +17,7 @@ const user = ref({
   password: ''
 })
 
-const isNull = ref({
+const invalid = ref({
     email: false,
     password: false
 })
@@ -21,27 +25,40 @@ const isNull = ref({
 const isShowPopUp = ref(false)
 
 const handleDisabledButton = (field, value) => {
-    isNull.value[field] = value
+    invalid.value[field] = value
 }
 
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+const invalidMessage = {
+  email: 'Please enter a valid email address.',
+  password: 'Password cannot be blank and must be at most 14 characters.'
+}
 
 const disabled = computed(() => {
-  return !(isValidEmail(user.value.email) || user.value.password !== '')
+    const anyInvalid = Object.values(invalid.value).some(value => value === true)
+    const hasEmptyField = (user.value.email === '' || user.value.password === '')
+
+    return anyInvalid || hasEmptyField
 })
+
+const errorMessage = ref('')
 
 const handleClick = async () => {
     isShowPopUp.value = false
     try { 
         const loginUser = await postData(`${import.meta.env.VITE_APP_URL}/v2/users/authentications`, user.value)
-        if (x) {
-            // router.push({ name: 'SaleItems', query: { loginUser: 'true' } })
+        if (loginUser.access_token) {
+            storeToken(loginUser.access_token)
+            console.log(loginUser)
+            router.push({ name: 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
-            throw new Error(loginUser.message || 'Email or Password is incorrect')
+            errorMessage.value = 'Email or Password is incorrect'
+        } else if (loginUser.status === 403) {
+            isShowPopUp.value = true
+            errorMessage.value = "You need to activate your accout before signing in."
         } else {
             isShowPopUp.value = true
-            throw new Error(loginUser.message || 'There is a problem. Please try again later.')
+            errorMessage.value = 'There is a problem. Please try again later.'
         }
     } catch (error) {
         console.log(error)
@@ -54,20 +71,25 @@ const cancel = () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white ">
-    <div class="flex flex-col items-center h-190">
-        <PopupMessage message="Email or Password is incorrect":isShowPopup="isShowPopUp" :isSuccess="false" class="fixed top-10 left-1/2 transform -translate-x-1/2"/>
-        <div class="bg-[#F2EDEC] shadow-md w-220 flex h-100 rounded-lg px-3 py-40">
+<div class="w-full font-rubik bg-white text-[#332A1E]"> 
+    <div class="flex flex-col items-center justify-center h-screen pb-20 pt-30 px-10 md:px-22 lg:px-25"> 
+        <PopupMessage :message="errorMessage" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
+        <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-120 px-10 space-y-5">
+            <p class="text-3xl font-semibold text-center">Log in</p>
             <div class="flex flex-col">
-            <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email"
-                placeholder="Enter email"  className="itbms-email" @disabledButton="handleDisabledButton"/>
-            <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password"
-                placeholder="Enter password"  className="itbms-password" @disabledButton="handleDisabledButton"/>
+                <FormInput v-model="user.email" label="Email" :required="true" inputType="email" :maxlength="50" field="email"
+                    placeholder="Enter email"  className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
+                <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password" :trim="false"
+                    placeholder="Enter password"  className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
                 <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
                 <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
             </div>
+            <p class="text-center text-sm sm:text-base lg:text-lg">
+                Don't have an account? 
+                <span class="underline cursor-pointer text-[#6F879C]" @click="router.push({ name: 'Registers' })">Sign up</span>
+            </p>
         </div>
     </div>
 </div>

@@ -29,7 +29,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         String nickname = user.getUserType().equals(Role.SELLER) ? sellerRepository.getNickname(user.getId()) : buyerRepository.getNickname(user.getId());
-        return new AuthUserDetail(user.getId(), user.getEmail(), user.getPassword(), user.getUserType(), nickname, List.of(new SimpleGrantedAuthority(user.getUserType().name())));
+        return new AuthUserDetail(user.getId(), user.getEmail(), user.getPassword(), user.getUserType(), nickname, user.getStatus(), List.of(new SimpleGrantedAuthority(user.getUserType().name())));
     }
 
 }

@@ -3,6 +3,11 @@ import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 import logoImg from '@/assets/images/logo.png'
 import profileImg from '@/assets/images/profile.png'
+import { useUserStore } from '@/stores/UserStore'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { nickName } = storeToRefs(userStore)
 
 const route = useRoute()
 
@@ -25,7 +30,7 @@ const isMenuOpen = ref(false)
                 <p class="font-bold text-base md:text-lg lg:text-xl xl:text-[1.5rem]">ITB-MSHOP</p>
             </div>    
         </router-link>
-        <div class="space-y-1 md:hidden" @click="isMenuOpen = !isMenuOpen">
+        <div class="space-y-1 md:hidden py-2 px-1" @click="isMenuOpen = !isMenuOpen">
             <div class="menuIcon"></div>
             <div class="menuIcon"></div>
             <div class="menuIcon"></div>
@@ -39,18 +44,33 @@ const isMenuOpen = ref(false)
                 {{ item.name }}
             </router-link>
         </div>
-        <router-link to="/signin">
-            <p>signin</p>
-        </router-link>
-        <router-link to="/registers">
-            <img :src="profileImg" alt="profile" class="w-12 hidden md:block">
-        </router-link>
-        <div v-if="isMenuOpen" class="absolute left-0 top-14 bg-[#6F879C] text-xs md:hidden font-medium flex items-center flex-col w-full gap-3 py-4">
+        <div class="hidden md:flex gap-3 font-medium" v-if="nickName === ''">
+            <router-link to="/signin">
+                <p>Login</p>
+            </router-link>
+            <p>|</p>
+            <router-link to="/registers">
+                <p>Signup</p>
+            </router-link>
+        </div>
+        <div v-else class="hidden md:flex justify-center items-center gap-2">
+            <img :src="profileImg" class="w-10"/>
+            <p>{{ nickName }}</p>
+        </div>
+        <div v-if="isMenuOpen" class="absolute left-0 top-14 bg-[#6F879C] text-xs md:hidden font-medium flex items-center flex-col w-full gap-3 py-5">
             <router-link v-for="item in navItems" :key="item.name" :to="{ name: item.pathname }" @click="isMenuOpen = false" class="w-full flex justify-center transition-all duration-150">
                 <span class="inline-block transition-all duration-150 p-1"  :class="{'border-b-2 border-white' : route.name === item.pathname}">
                     {{ item.name }}
                 </span>
             </router-link>
+            <div class="flex justify-center items-center gap-3 font-medium" v-if="nickName === ''">
+                <router-link to="/signin" @click="isMenuOpen = false"  class="px-4 py-1 bg-white text-[#6F879C] rounded hover:bg-gray-200 transition-colors">
+                    Login
+                </router-link>
+                <router-link to="/registers" @click="isMenuOpen = false"  class="px-4 py-1 bg-white text-[#6F879C] rounded hover:bg-gray-200 transition-colors">
+                    Signup
+                </router-link>
+            </div>
         </div>
     </div>
     <div v-if="isMenuOpen" class="fixed w-screen h-full bg-black opacity-35 z-40" @click="isMenuOpen = false"/>

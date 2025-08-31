@@ -26,6 +26,7 @@ import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.repositories.UserRepository;
 import sit.integrated.backend.utils.JwtUtils;
 import sit.integrated.backend.utils.Role;
+import sit.integrated.backend.utils.TokenType;
 import sit.integrated.backend.utils.UserStatus;
 
 import java.util.Map;
@@ -147,8 +148,11 @@ public class UserService {
         try {
             authenticationManager.authenticate(upat);
             UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(user.getEmail());
-            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24),
-                          "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30));
+            if (((AuthUserDetail) userDetails).getStatus().equals(UserStatus.INACTIVE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account is inactive.");
+            }
+            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24, TokenType.ACCESS_TOKEN),
+                          "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30, TokenType.REFRESH_TOKEN));
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
@@ -166,6 +170,6 @@ public class UserService {
         Role role = (Role) claims.get("role");
         String nickname = (String) claims.get("nickname");
 
-        return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname, (long) 60*1000*30));
+        return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname, (long) 60*1000*30, TokenType.ACCESS_TOKEN));
     }
 }

@@ -1,12 +1,13 @@
 package sit.integrated.backend.controllers.v2;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 import sit.integrated.backend.dtos.UserSignInDto;
@@ -42,11 +43,7 @@ public class UserController {
             List<MultipartFile> files = Arrays.asList(user.getIdCardImageFront(), user.getIdCardImageBack());
             fileService.storeNationalId(files, userDto.getId());
         }
-        String url = ServletUriComponentsBuilder.fromCurrentRequest()
-                .replacePath("/nw1/verify-email")
-                .replaceQueryParam("jwtToken", jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()))
-                .toUriString();
-        emailService.sendVertificationEmail(userDto.getEmail(), url);
+        emailService.sendVertificationEmail(userDto.getEmail(), jwtUtils.generateEmailToken(userDto.getId(), userDto.getEmail(), userDto.getUserType()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
@@ -70,6 +67,14 @@ public class UserController {
 
     @PostMapping("/users/authentications")
     public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
-        return ResponseEntity.ok(userService.authenticateUser(userSignInDto));
+        Map<String, Object> tokens = userService.authenticateUser(userSignInDto);
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
+                .httpOnly(true)
+                .secure(true)
+                .path("/nw1/itb-mshop/v2/users/refresh-token")
+                .maxAge(60 * 60 * 24)
+                .sameSite("Strict")
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(tokens);
     }
 }
