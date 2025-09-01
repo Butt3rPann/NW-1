@@ -67,14 +67,6 @@ public class UserController {
 
     @PostMapping("/users/authentications")
     public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
-        Map<String, Object> tokens = userService.authenticateUser(userSignInDto);
-        ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
-                .httpOnly(true)
-                .secure(true)
-                .path("/nw1/itb-mshop/v2/users/refresh-token")
-                .maxAge(60 * 60 * 24)
-                .sameSite("Strict")
-                .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(tokens);
+        return ResponseEntity.ok(userService.authenticateUser(userSignInDto));
     }
 }

@@ -3,17 +3,25 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useUserStore = defineStore('user', () => {
-    const accessToken = ref('')
     const nickName = ref('')
-    const decoded = ref('')
-     
-    function storeToken(token) {
-        accessToken.value = token
-        decoded.value = jwtDecode(token)
-        nickName.value = decoded.value.nickname
+    const access_token = ref('')
+    
+    function storeAccessToken(token) {
+        localStorage.setItem('access_token', token)
+        nickName.value = jwtDecode(token).nickname
     }
 
-    return {accessToken, storeToken, nickName, decoded}
+    function getAccessToken() {
+        return localStorage.getItem('access_token')
+    }
+
+    function getNickname() {
+        access_token.value = getAccessToken()
+        nickName.value = access_token.value ? jwtDecode(access_token.value).nickname : ''
+        return nickName.value
+    }
+
+    return { nickName, storeAccessToken, getAccessToken, getNickname }
 })
 
 if (import.meta.hot) {
