@@ -76,9 +76,9 @@ const handleClick = async () => {
             <p class="text-3xl font-semibold text-center">Log in</p>
             <div class="flex flex-col">
                 <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" :trim="false" inputmode="email" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}"
-                    placeholder="Enter email"  className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
+                    placeholder="Enter email" :limitLength="50"  className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
                 <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password" :trim="false"
-                    placeholder="Enter password"  className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
+                    placeholder="Enter password" :limitLength="14" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
                 <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
