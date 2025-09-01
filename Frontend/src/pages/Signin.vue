@@ -53,10 +53,10 @@ const handleClick = async () => {
             router.push({ name: 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
-            errorMessage.value = 'Email or Password is incorrect'
+            errorMessage.value = 'Email or Password is incorrect.'
         } else if (loginUser.status === 403) {
             isShowPopUp.value = true
-            errorMessage.value = "You need to activate your accout before signing in."
+            errorMessage.value = 'You need to activate your accout before signing in.'
         } else {
             isShowPopUp.value = true
             errorMessage.value = 'There is a problem. Please try again later.'
@@ -81,7 +81,7 @@ const handleClick = async () => {
                     placeholder="Enter password" :limitLength="14" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
-                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
+                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-signin-button w-full"/>
             </div>
             <p class="text-center text-sm sm:text-base lg:text-lg">
                 Don't have an account? 
