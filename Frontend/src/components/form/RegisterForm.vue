@@ -60,7 +60,7 @@ const handleDisabledButton = (field, value) => {
 const disabled = ref(true)
 
 const validatePassword = (password) => {
-  if (password.length > 14) return false
+  if (password.length < 8) return false
 
   const hasLower = /[a-z]/.test(password)
   const hasUpper = /[A-Z]/.test(password)
@@ -161,9 +161,9 @@ const handleClick = async () => {
                 <div class="pt-3" :class="{'grid grid-cols-2 gap-4 py-4' : user.userType == 'SELLER'}">
                     <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                         placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.email" label="Email" :required="true" inputType="email" :maxlength="50" field="email"
+                    <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}"
                         placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :trim="false"
+                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :minlength="8"
                         placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
                     <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                         placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   

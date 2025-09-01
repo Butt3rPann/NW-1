@@ -6,9 +6,10 @@ import BaseButton from '@/components/elements/BaseButton.vue'
 import PopupMessage from '../components/elements/PopupMessage.vue'
 import { postData } from '@/libs/fetchUtils'
 import { useUserStore } from '@/stores/UserStore'
+import { CookieUtils } from '@/libs/CookieUtils'
 
 const userStore = useUserStore()
-const { storeToken } = userStore
+const { storeAccessToken } = userStore
 
 const router = useRouter()
 
@@ -47,8 +48,8 @@ const handleClick = async () => {
     try { 
         const loginUser = await postData(`${import.meta.env.VITE_APP_URL}/v2/users/authentications`, user.value)
         if (loginUser.access_token) {
-            storeToken(loginUser.access_token)
-            console.log(loginUser)
+            storeAccessToken(loginUser.access_token)
+            CookieUtils.set('refresh_token', loginUser.refresh_token, { maxAge: 60*60*24 })
             router.push({ name: 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
@@ -77,7 +78,7 @@ const cancel = () => {
         <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-120 px-10 space-y-5">
             <p class="text-3xl font-semibold text-center">Log in</p>
             <div class="flex flex-col">
-                <FormInput v-model="user.email" label="Email" :required="true" inputType="email" :maxlength="50" field="email"
+                <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" :trim="false" inputmode="email" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}"
                     placeholder="Enter email"  className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
                 <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password" :trim="false"
                     placeholder="Enter password"  className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>

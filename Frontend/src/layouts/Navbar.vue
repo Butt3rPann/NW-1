@@ -7,6 +7,7 @@ import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
+const { getNickname } = userStore
 const { nickName } = storeToRefs(userStore)
 
 const route = useRoute()
@@ -44,7 +45,7 @@ const isMenuOpen = ref(false)
                 {{ item.name }}
             </router-link>
         </div>
-        <div class="hidden md:flex gap-3 font-medium" v-if="nickName === ''">
+        <div class="hidden md:flex gap-3 font-medium" v-if="getNickname() === ''">
             <router-link to="/signin">
                 <p>Login</p>
             </router-link>
@@ -63,7 +64,7 @@ const isMenuOpen = ref(false)
                     {{ item.name }}
                 </span>
             </router-link>
-            <div class="flex justify-center items-center gap-3 font-medium" v-if="nickName === ''">
+            <div class="flex justify-center items-center gap-3 font-medium" v-if="getNickname() === ''">
                 <router-link to="/signin" @click="isMenuOpen = false"  class="px-4 py-1 bg-white text-[#6F879C] rounded hover:bg-gray-200 transition-colors">
                     Login
                 </router-link>

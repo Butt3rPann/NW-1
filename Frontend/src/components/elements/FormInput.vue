@@ -18,6 +18,7 @@ const props = defineProps({
     placeholder: String,
     className: String,
     maxlength: Number,
+    minlength: Number,
     invalidMessage: String,
     min: Number,
     max: Number,
@@ -25,7 +26,9 @@ const props = defineProps({
     trim: {
         type: Boolean,
         default: true
-    }
+    },
+    inputmode: String,
+    pattern: String
 })
 
 const inputValue = defineModel()
@@ -37,7 +40,7 @@ const emit = defineEmits(['disabledButton'])
 function handleBlur() {
     if (inputValue.value === '' && props.required) {
         isValid.value = false
-    } else if (inputValue.value.length > props.maxlength) {
+    } else if (inputValue.value.length > props.maxlength || (props.min && inputValue.value.length < props.min)) {
         isValid.value = false
     } else if (inputRef.value && inputValue.value !== '') {
         isValid.value = inputRef.value.checkValidity() 
@@ -66,12 +69,12 @@ const charCount = computed(() => {
                 `${className} appearance-none py-2 md:py-3 w-full text-sm md:text-base text-[#332A1E]/80 border-[#332A1E]/20 bg-white border rounded-xs px-3 md:px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] min-h-[6rem] selection:bg-[#2684FF]/30`,
                 { 'border-red-400' : !isValid }
             ]"/>
-        <input v-else-if="trim" :type="inputType" :required="required" v-model.trim="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step"
+        <input v-else-if="trim" :type="inputType" :inputmode="inputmode" :pattern="pattern" :required="required" v-model.trim="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step"
             :class="[
                 `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full text-sm md:text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] selection:bg-[#2684FF]/30`,
                 { 'border-red-400' : !isValid }
             ]"/>
-        <input v-else :type="inputType" :required="required" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step"
+        <input v-else :type="inputType" :required="required" :inputmode="inputmode" :pattern="pattern" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step"
             :class="[
                 `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full text-sm md:text-base bg-white text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 focus:outline-none focus:ring-2 focus:ring-[#2684FF] selection:bg-[#2684FF]/30`,
                 { 'border-red-400' : !isValid }
