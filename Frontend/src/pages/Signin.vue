@@ -66,9 +66,6 @@ const handleClick = async () => {
     }
 }
 
-const cancel = () => {
-    router.push({ name: 'Homepage' })
-}
 </script>
  
 <template>
@@ -85,7 +82,6 @@ const cancel = () => {
             </div>
             <div class="flex justify-center gap-4 pt-2">
                 <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
-                <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
             </div>
             <p class="text-center text-sm sm:text-base lg:text-lg">
                 Don't have an account? 
