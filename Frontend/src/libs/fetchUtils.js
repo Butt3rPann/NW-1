@@ -63,7 +63,11 @@ async function postData(url, data) {
       },
       body: JSON.stringify(data)
     })
-    return await res.json()
+    if (!res.ok) {
+      return { status : res.status }
+    }
+    const item = await res.json()
+    return item
   } catch (error) {
       throw new Error('Failed to POST data')
   }

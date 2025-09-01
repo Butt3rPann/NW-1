@@ -53,10 +53,10 @@ const handleClick = async () => {
             router.push({ name: 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
-            errorMessage.value = 'Email or Password is incorrect'
+            errorMessage.value = 'Email or Password is incorrect.'
         } else if (loginUser.status === 403) {
             isShowPopUp.value = true
-            errorMessage.value = "You need to activate your accout before signing in."
+            errorMessage.value = 'You need to activate your accout before signing in.'
         } else {
             isShowPopUp.value = true
             errorMessage.value = 'There is a problem. Please try again later.'

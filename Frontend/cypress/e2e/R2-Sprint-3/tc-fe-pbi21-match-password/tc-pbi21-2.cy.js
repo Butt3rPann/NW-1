@@ -54,6 +54,6 @@ describe(`TC-FE-PBI21-MATCH-PASSWORD-2\n
             expect(response.statusCode).to.equal(401)
         })
 
-        cy.get('.itbms-message').contains('Email or Pasword is incorrect.')
+        cy.get('.itbms-message').contains('Email or Password is incorrect.')
     })
 })
