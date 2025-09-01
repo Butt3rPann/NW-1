@@ -135,9 +135,9 @@ public class UserService {
     }
 
     public void validateEmailAndPassword(String email, String password) {
-        if (email == null || email.isBlank() || email.length() > 50
-                || !email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
-                || password == null || password.isBlank() || password.length() > 14) {
+        if (email == null || email.length() == 0 || email.length() > 50
+                || !email.trim().matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
+                || password == null || password.length() == 0 || password.length() > 14) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
         }
     }
