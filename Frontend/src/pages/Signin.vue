@@ -81,7 +81,7 @@ const handleClick = async () => {
                     placeholder="Enter password" :limitLength="14" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
             </div>
             <div class="flex justify-center gap-4 pt-2">
-                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full"/>
+                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-signin-button w-full"/>
             </div>
             <p class="text-center text-sm sm:text-base lg:text-lg">
                 Don't have an account? 
