@@ -135,9 +135,9 @@ public class UserService {
     }
 
     public void validateEmailAndPassword(String email, String password) {
-        if (email == null || email.length() == 0 || email.length() > 50
-                || !email.trim().matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
-                || password == null || password.length() == 0 || password.length() > 14) {
+        if (email == null || email.isEmpty() || email.length() > 50
+                || !email.trim().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
+                || password == null || password.isEmpty() || password.length() > 14) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
         }
     }
@@ -151,8 +151,8 @@ public class UserService {
             if (((AuthUserDetail) userDetails).getStatus().equals(UserStatus.INACTIVE)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account is inactive.");
             }
-            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24, TokenType.ACCESS_TOKEN),
-                          "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30, TokenType.REFRESH_TOKEN));
+            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30, TokenType.ACCESS_TOKEN),
+                          "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24, TokenType.REFRESH_TOKEN));
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
