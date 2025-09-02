@@ -39,15 +39,6 @@ const isValid = ref(true)
 const emit = defineEmits(['disabledButton'])
 
 function handleBlur() {
-    if (props.field === 'email' && !props.trim && inputValue.value.length > props.maxlength) {
-        const atIndex = inputValue.value.lastIndexOf('@')
-        const front = inputValue.value.slice(0, props.maxlength - (inputValue.value.length - atIndex))
-        const back = inputValue.value.slice(atIndex)
-        inputValue.value = front + back
-        isValid.value = true
-        emit('disabledButton', props.field, !isValid.value)
-        return
-    }
     if (inputValue.value === '' && props.required) {
         isValid.value = false
     } else if (inputValue.value.length > props.maxlength || (props.min && inputValue.value.length < props.min)) {
