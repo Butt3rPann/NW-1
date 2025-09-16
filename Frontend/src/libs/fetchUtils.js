@@ -63,9 +63,6 @@ async function postData(url, data) {
       },
       body: JSON.stringify(data)
     })
-    if (!res.ok) {
-      return { status : res.status }
-    }
     const item = await res.json()
     return item
   } catch (error) {

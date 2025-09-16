@@ -8,7 +8,7 @@ const res = ref({})
 
 onMounted(async () => {
     try {
-        res.value = await postData(`${import.meta.env.VITE_APP_URL}/v2/users/verify-email?jwtToken=${route.query.jwtToken}`)
+        res.value = await postData(`${import.meta.env.VITE_APP_URL}/v2/auth/verify-email?jwtToken=${route.query.jwtToken}`)
     } catch (error) {
         console.log(error);
     }

@@ -58,7 +58,8 @@ public class UserService {
     private JwtUserDetailsService jwtUserDetailsService;
 
     public UserResponseDto getUserById(Integer id) {
-        UserResponseDto user = modelMapper.map(userRepository.findById(id), UserResponseDto.class);
+        User u = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User Does not Exist"));
+        UserResponseDto user = modelMapper.map(u, UserResponseDto.class);
         if (user.getUserType().equals(Role.SELLER)) {
             Seller seller = sellerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
             user.setNickName(seller.getNickName());
