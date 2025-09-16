@@ -36,7 +36,7 @@ public class UserController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("/users/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<UserResponseDto> createUser(@ModelAttribute UserRequestDto user) {
         UserResponseDto userDto = userService.createUser(user);
         if (user.getUserType().equals(Role.SELLER)) {
@@ -47,26 +47,34 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
-    @PostMapping("/users/verify-email")
+    @PostMapping("/auth/verify-email")
     public ResponseEntity<UserResponseDto> verifyToken(@RequestParam String jwtToken) {
         jwtUtils.verifyToken(jwtToken);
         Map<String, Object> claims = jwtUtils.getJWTClaimsSet(jwtToken);
         if (jwtUtils.isExpired(claims)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT token expired");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token");
         }
         String email = claims.get("email").toString();
         Integer id = Integer.valueOf(claims.get("userId").toString());
         UserResponseDto user = userService.getUserById(id);
         if (user.getIsActive()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already verified");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already active");
         }
         userService.updateStatus(email);
         user.setStatus(UserStatus.ACTIVE);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/users/authentications")
+    @PostMapping("/auth/login")
     public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
-        return ResponseEntity.ok(userService.authenticateUser(userSignInDto));
+        Map<String, Object> tokens = userService.authenticateUser(userSignInDto);
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
+                .httpOnly(true)
+                .secure(true)
+                .path("/nw1/itb-mshop/v2/auth/refresh-token")
+                .maxAge(60 * 60 * 24)
+                .sameSite("Strict")
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(Map.entry("access_token", tokens.get("access_token")));
     }
 }

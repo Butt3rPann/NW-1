@@ -90,16 +90,16 @@ public class JwtUtils {
             JWSVerifier verifier = new RSASSAVerifier(rsaPublicJWK);
             boolean passed = signedJWT.verify(verifier);
             if(!passed) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Verified Error, Invalid JWT");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token");
             }
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
             Integer userId = claims.getIntegerClaim("userId");
             String email = claims.getStringClaim("email");
             if (userId == null || email == null || email.isBlank()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token claims: userId or email missing");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token");
             }
         } catch (JOSEException | ParseException ex) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Verified Error, Invalid JWT", ex);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token", ex);
         }
     }
 
