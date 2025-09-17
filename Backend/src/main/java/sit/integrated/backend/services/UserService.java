@@ -12,10 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import sit.integrated.backend.dtos.UserRequestDto;
-import sit.integrated.backend.dtos.UserResponseDto;
+import sit.integrated.backend.dtos.*;
 
-import sit.integrated.backend.dtos.UserSignInDto;
 import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.Buyer;
 import sit.integrated.backend.entities.Seller;
@@ -30,6 +28,7 @@ import sit.integrated.backend.utils.TokenType;
 import sit.integrated.backend.utils.UserStatus;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -71,6 +70,34 @@ public class UserService {
             user.setFullName(buyer.getFullName());
         }
         return user;
+    }
+
+    public BuyerResponseDto getUserProfileById(Integer id) {
+        Optional<Buyer> buyerOpt = buyerRepository.findById(id);
+        if (buyerOpt.isPresent()) {
+            Buyer buyer = buyerOpt.get();
+            if (!buyer.getUser().getStatus().equals(UserStatus.ACTIVE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not active");
+            }
+            BuyerResponseDto dto = modelMapper.map(buyer, BuyerResponseDto.class);
+            dto.setEmail(buyer.getUser().getEmail());
+            dto.setUserType(Role.BUYER);
+            return dto;
+        }
+
+        Optional<Seller> sellerOpt = sellerRepository.findById(id);
+        if (sellerOpt.isPresent()) {
+            Seller seller = sellerOpt.get();
+            if (!seller.getUser().getStatus().equals(UserStatus.ACTIVE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not active");
+            }
+            SellerResponseDto dto = modelMapper.map(seller, SellerResponseDto.class);
+            dto.setEmail(seller.getUser().getEmail());
+            dto.setUserType(Role.SELLER);
+            return dto;
+        }
+
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
     }
 
     public void isUserExists(String email) {
