@@ -22,26 +22,27 @@ import sit.integrated.backend.services.JwtUserDetailsService;
 public class WebSecurityConfig {
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+    @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.headers(httpSecurityHeadersConfigurer ->
-                httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig ->
-                        frameOptionsConfig.disable()));
         http.csrf(crsf -> crsf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .anyRequest().permitAll()
-                )
+                        .requestMatchers("/v2/seller/**").hasAnyAuthority("SELLER")
+                        .anyRequest().permitAll())
+                .authenticationProvider(authenticationProvider(jwtUserDetailsService))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(JwtUserDetailsService jwtUserDetailsService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -49,6 +50,7 @@ public class WebSecurityConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
