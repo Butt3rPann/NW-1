@@ -94,8 +94,8 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUserProfile(@PathVariable Integer id, @RequestBody ProfileDto profileDto) {
-        Object updatedUser = userService.updateUserProfileById(id, profileDto);
+    public ResponseEntity<BuyerResponseDto> updateUserProfile(@PathVariable Integer id, @RequestBody UserProfileDto userProfileDto) {
+        BuyerResponseDto updatedUser = userService.updateUserProfileById(id, userProfileDto);
         Integer tokenUserId = ((AuthUserDetail) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
