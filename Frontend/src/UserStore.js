@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', () => {
     const userType = ref(null)
     
     function storeAccessToken(token) {
-        localStorage.setItem('access_token', token)
+        
         nickName.value = jwtDecode(token).nickname
         userId.value = jwtDecode(token).id
         userType.value = jwtDecode(token).role
