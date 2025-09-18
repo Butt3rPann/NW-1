@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
+import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.repositories.SaleItemRepository;
+import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.utils.SaleItemSpecifications;
 
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.List;
 public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
+    @Autowired
+    private SellerRepository sellerRepository;
     @Autowired
     ModelMapper modelMapper;
 
@@ -78,5 +82,13 @@ public class SaleItemService {
     public void deleteSaleItem (Integer id) {
         isSaleItemExists(id);
         saleItemRepository.deleteById(id);
+    }
+
+    public SaleItemDetailDto createSaleItemBySeller(SaleItemFormDto formDto, Integer sellerId) {
+        formDto.setId(null);
+        Seller seller = sellerRepository.findById(sellerId).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
+        SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
+        saleItem.setSeller(seller);
+        return modelMapper.map(saleItemRepository.save(saleItem), SaleItemDetailDto.class);
     }
 }

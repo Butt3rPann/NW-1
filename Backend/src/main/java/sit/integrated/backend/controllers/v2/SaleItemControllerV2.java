@@ -5,15 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
+import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.utils.ListMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
@@ -68,7 +72,9 @@ public class SaleItemControllerV2 {
     @PostMapping( "/sale-items")
     public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemFormDto formDto,
                                                             @RequestParam(required = false) List<MultipartFile> images) {
-        SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
+        AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer tokenUserId = userDetail.getId();
+        SaleItemDetailDto saleItem = saleItemService.createSaleItemBySeller(formDto, tokenUserId);
         if (images != null && !images.isEmpty()) {
             fileService.storeSaleItem(images, saleItem.getId());
         }

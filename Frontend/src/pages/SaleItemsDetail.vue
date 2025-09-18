@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { deleteItemById, getItemById } from '@/libs/fetchUtils.js'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import ItemDetailRow from '@/components/sale-item/sale-item-detail/ItemDetailRow.vue'
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import { formatLocalTime } from '@/libs/datetimeUtils'
 import backArrowIcon from '@/assets/images/backArrow.png'
 import editIcon from "@/assets/images/edit.png"
@@ -14,6 +14,7 @@ import PopupMessage from '@/components/elements/PopupMessage.vue'
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import boxImg from '@/assets/images/box.png'
+import productNotFound from '@/assets/images/product-not-found.png'
 
 const { params: { saleItemId } } = useRoute()
 
@@ -30,7 +31,7 @@ onMounted(async () => {
         selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn)
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
 
-        if (selectedItem.value.saleItemImages.length > 0) {
+        if (selectedItem.value.saleItemImages && selectedItem.value.saleItemImages.length > 0) {
             phones.value.mainImage = `${import.meta.env.VITE_APP_URL}/v1/files/${selectedItem.value.saleItemImages[0].fileName}?t=${Date.now()}`  
             phones.value.thumbnail = selectedItem.value.saleItemImages.map(file => `${import.meta.env.VITE_APP_URL}/v1/files/${file.fileName}?t=${Date.now()}`)
         }
@@ -143,7 +144,10 @@ function closeDelConfirm() {
         </div>
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" message="Do you want to delete this sale item?" @delete="deleteSaleItem"/>
     </div>
-    <ItemNotFound title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItems" v-else/>
+    <ErrorMessage title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItems" v-else :img="productNotFound">
+        <span>Sale Item</span><br/>
+        <span>Not Found</span>
+    </ErrorMessage>
 </div>
 </template>
 

@@ -3,7 +3,8 @@ import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { updateFormData, getItemById } from '@/libs/fetchUtils'
 import SaleItemForm from '@/components/form/SaleItemForm.vue'
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
+import productNotFound from '@/assets/images/product-not-found.png'
 
 const router = useRouter()
 const { params: { id } } = useRoute()
@@ -90,7 +91,10 @@ const handleEditSaleItem = async (editedItem, saleItemImg, dataChanged, imagesCh
         </p>
         <SaleItemForm @submitAction="handleEditSaleItem" :saleItemData="saleItem" :pathName="prevPathName" :params="prevParams" :imageData="imageData" :filePath="filePath"/>
     </div>
-    <ItemNotFound v-else title="Sale Item" description="The requested sale item does not exist." :backPathName="prevPathName === 'SaleItemsList' ? prevPathName : 'SaleItems'" />
+    <ErrorMessage v-else title="Sale Item" description="The requested sale item does not exist." :backPathName="prevPathName === 'SaleItemsList' ? prevPathName : 'SaleItems'" :img="productNotFound">
+        <span>Sale Item</span><br/>
+        <span>Not Found</span>
+    </ErrorMessage>
 </template>
 
 <style scoped></style>
