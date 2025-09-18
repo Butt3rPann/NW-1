@@ -4,7 +4,7 @@ import lombok.Data;
 import sit.integrated.backend.utils.Role;
 
 @Data
-public class ProfileDto {
+public class UserProfileDto {
     private Integer id;
     private String email;
     private String fullName;
