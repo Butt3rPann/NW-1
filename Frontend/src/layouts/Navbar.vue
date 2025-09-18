@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 import logoImg from '@/assets/images/logo.png'
 import profileImg from '@/assets/images/profile.png'
-import { useUserStore } from '@/UserStore'
+import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
