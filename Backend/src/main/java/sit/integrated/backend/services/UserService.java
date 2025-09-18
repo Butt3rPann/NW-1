@@ -14,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 
-import sit.integrated.backend.entities.AuthUserDetail;
-import sit.integrated.backend.entities.Buyer;
-import sit.integrated.backend.entities.Seller;
-import sit.integrated.backend.entities.User;
+import sit.integrated.backend.entities.*;
 import sit.integrated.backend.exceptions.EmailAlreadyExistsException;
 import sit.integrated.backend.repositories.BuyerRepository;
 import sit.integrated.backend.repositories.SellerRepository;
@@ -199,5 +196,64 @@ public class UserService {
         String nickname = (String) claims.get("nickname");
 
         return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname, (long) 60*1000*30, TokenType.ACCESS_TOKEN));
+    }
+
+    public void validateUserProfile(UserProfileDto userProfileDto) {
+        if (userProfileDto.getNickName() == null ||
+                userProfileDto.getEmail() == null ||
+                userProfileDto.getFullName() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
+        }
+
+        if (!userProfileDto.getEmail().trim().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
+        }
+
+        if (userProfileDto.getUserType() != null && userProfileDto.getUserType().equals(Role.SELLER)) {
+            if (userProfileDto.getPhoneNumber() == null ||
+                    userProfileDto.getBankAccount() == null ||
+                    userProfileDto.getBankName() == null ||
+                    userProfileDto.getIdCardNumber() == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
+            }
+        }
+    }
+    @Transactional
+    public UserProfileDto updateUserProfileById(Integer id, UserProfileDto userProfileDto) {
+        validateUserProfile(userProfileDto);
+        Optional<Buyer> buyerOpt = buyerRepository.findById(id);
+        if (buyerOpt.isPresent()) {
+            Buyer buyer = buyerOpt.get();
+            if (!buyer.getUser().getStatus().equals(UserStatus.ACTIVE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not active");
+            }
+            modelMapper.map(userProfileDto, buyer);
+            User user = buyer.getUser();
+            modelMapper.map(userProfileDto, user);
+            userRepository.save(user);
+            buyerRepository.save(buyer);
+            UserProfileDto dto = modelMapper.map(buyer, UserProfileDto.class);
+            dto.setEmail(buyer.getUser().getEmail());
+            dto.setUserType(Role.BUYER);
+            return dto;
+        }
+
+        Optional<Seller> sellerOpt = sellerRepository.findById(id);
+        if (sellerOpt.isPresent()) {
+            Seller seller = sellerOpt.get();
+            if (!seller.getUser().getStatus().equals(UserStatus.ACTIVE)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not active");
+            }
+            modelMapper.map(userProfileDto, seller);
+            User user = seller.getUser();
+            modelMapper.map(userProfileDto, user);
+            userRepository.save(user);
+            sellerRepository.save(seller);
+            UserProfileDto dto = modelMapper.map(seller, UserProfileDto.class);
+            dto.setEmail(seller.getUser().getEmail());
+            dto.setUserType(Role.SELLER);
+            return dto;
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
     }
 }

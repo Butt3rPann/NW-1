@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v2;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,10 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import sit.integrated.backend.dtos.BuyerResponseDto;
-import sit.integrated.backend.dtos.UserRequestDto;
-import sit.integrated.backend.dtos.UserResponseDto;
-import sit.integrated.backend.dtos.UserSignInDto;
+import sit.integrated.backend.dtos.*;
+import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.services.EmailService;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.UserService;
@@ -83,15 +82,28 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<BuyerResponseDto> getUserProfile(@PathVariable Integer id) {
-        Integer tokenUserId = (Integer) SecurityContextHolder
+        Integer tokenUserId = ((AuthUserDetail) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
-                .getPrincipal();
+                .getPrincipal()).getId();
 
         if (!Objects.equals(id, tokenUserId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
         }
-        return ResponseEntity.ok(userService.getUserProfileById(id));
+        return ResponseEntity.ok(userService.getUserProfileById(id)) ;
 
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserProfileDto> updateUserProfile(@PathVariable Integer id, @RequestBody UserProfileDto userProfileDto) {
+        UserProfileDto updatedUser = userService.updateUserProfileById(id, userProfileDto);
+        Integer tokenUserId = ((AuthUserDetail) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal()).getId();
+        if (!Objects.equals(id, tokenUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
+        }
+        return ResponseEntity.ok(updatedUser);
     }
 }
