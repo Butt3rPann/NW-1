@@ -57,6 +57,10 @@ public class SaleItem {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
     @CreationTimestamp
     @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
     private Instant createdOn;

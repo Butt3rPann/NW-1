@@ -49,7 +49,35 @@ async function getItemById(url, id) {
     const item = await data.json()
     return item
   } catch (error) {
-    if (data.status === 404) return undefined
+    throw new Error('The requested item does not exist')
+  }
+}
+
+async function getItemByIdWithToken(url, access_token, page, size) {
+  try {
+    const headers = new Headers();
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
+
+    const params = new URLSearchParams()
+    params.append('page', page)
+    if (size) {
+      params.append('size', size)
+    }
+    const fullUrl = params.toString() ? `${url}?${params.toString()}` : url
+    const data = await fetch(fullUrl, {
+      headers
+    })
+
+    if (!data.ok) {
+      throw new Error(`Request failed: ${response.status}`);
+    }
+
+    const item = await data.json()
+    return item
+  } catch (error) {
     throw new Error('The requested item does not exist')
   }
 }
@@ -125,4 +153,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData}
+export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}

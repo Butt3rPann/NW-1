@@ -51,7 +51,6 @@ public class SaleItemControllerV2 {
             filterPriceUpper = filterPriceLower;
         }
 
-        // String[] keywords = (searchKeyWord != null && !searchKeyWord.isBlank()) ? searchKeyWord.split(" ") : null;
         Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, searchKeyWord, sortField, sortDirection, page, size);
         PageDto<SaleItemDetailDto> dtos = listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper);
         dtos.getContent().forEach(item -> item.setSaleItemImages(fileService.getSaleItemImages(item.getId())));
