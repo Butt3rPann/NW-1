@@ -1,12 +1,10 @@
 package sit.integrated.backend.dtos;
 
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 import sit.integrated.backend.utils.Role;
-import sit.integrated.backend.utils.UserStatus;
 
 @Data
-public class UserProfileDto {
+public class ProfileDto {
     private Integer id;
     private String email;
     private String fullName;

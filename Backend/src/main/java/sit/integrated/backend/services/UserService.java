@@ -198,41 +198,41 @@ public class UserService {
         return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname, (long) 60*1000*30, TokenType.ACCESS_TOKEN));
     }
 
-    public void validateUserProfile(UserProfileDto userProfileDto) {
-        if (userProfileDto.getNickName() == null ||
-                userProfileDto.getEmail() == null ||
-                userProfileDto.getFullName() == null) {
+    public void validateUserProfile(ProfileDto profileDto) {
+        if (profileDto.getNickName() == null ||
+                profileDto.getEmail() == null ||
+                profileDto.getFullName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
         }
 
-        if (!userProfileDto.getEmail().trim().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+        if (!profileDto.getEmail().trim().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
         }
 
-        if (userProfileDto.getUserType() != null && userProfileDto.getUserType().equals(Role.SELLER)) {
-            if (userProfileDto.getPhoneNumber() == null ||
-                    userProfileDto.getBankAccount() == null ||
-                    userProfileDto.getBankName() == null ||
-                    userProfileDto.getIdCardNumber() == null) {
+        if (profileDto.getUserType() != null && profileDto.getUserType().equals(Role.SELLER)) {
+            if (profileDto.getPhoneNumber() == null ||
+                    profileDto.getBankAccount() == null ||
+                    profileDto.getBankName() == null ||
+                    profileDto.getIdCardNumber() == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
             }
         }
     }
     @Transactional
-    public UserProfileDto updateUserProfileById(Integer id, UserProfileDto userProfileDto) {
-        validateUserProfile(userProfileDto);
+    public Object updateUserProfileById(Integer id, ProfileDto profileDto) {
+        validateUserProfile(profileDto);
         Optional<Buyer> buyerOpt = buyerRepository.findById(id);
         if (buyerOpt.isPresent()) {
             Buyer buyer = buyerOpt.get();
             if (!buyer.getUser().getStatus().equals(UserStatus.ACTIVE)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not active");
             }
-            modelMapper.map(userProfileDto, buyer);
+            modelMapper.map(profileDto, buyer);
             User user = buyer.getUser();
-            modelMapper.map(userProfileDto, user);
+            modelMapper.map(profileDto, user);
             userRepository.save(user);
             buyerRepository.save(buyer);
-            UserProfileDto dto = modelMapper.map(buyer, UserProfileDto.class);
+            BuyerResponseDto dto = modelMapper.map(buyer, BuyerResponseDto.class);
             dto.setEmail(buyer.getUser().getEmail());
             dto.setUserType(Role.BUYER);
             return dto;
@@ -244,12 +244,12 @@ public class UserService {
             if (!seller.getUser().getStatus().equals(UserStatus.ACTIVE)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not active");
             }
-            modelMapper.map(userProfileDto, seller);
+            modelMapper.map(profileDto, seller);
             User user = seller.getUser();
-            modelMapper.map(userProfileDto, user);
+            modelMapper.map(profileDto, user);
             userRepository.save(user);
             sellerRepository.save(seller);
-            UserProfileDto dto = modelMapper.map(seller, UserProfileDto.class);
+            ProfileDto dto = modelMapper.map(seller, ProfileDto.class);
             dto.setEmail(seller.getUser().getEmail());
             dto.setUserType(Role.SELLER);
             return dto;

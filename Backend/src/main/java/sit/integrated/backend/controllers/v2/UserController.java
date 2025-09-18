@@ -1,6 +1,5 @@
 package sit.integrated.backend.controllers.v2;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -95,8 +94,8 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserProfileDto> updateUserProfile(@PathVariable Integer id, @RequestBody UserProfileDto userProfileDto) {
-        UserProfileDto updatedUser = userService.updateUserProfileById(id, userProfileDto);
+    public ResponseEntity<?> updateUserProfile(@PathVariable Integer id, @RequestBody ProfileDto profileDto) {
+        Object updatedUser = userService.updateUserProfileById(id, profileDto);
         Integer tokenUserId = ((AuthUserDetail) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
