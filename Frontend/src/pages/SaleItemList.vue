@@ -9,7 +9,7 @@ import ItemNotFound from '@/components/elements/ItemNotFound.vue'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
-import { useUserStore } from '@/UserStore'
+import { useUserStore } from '@/stores/UserStore'
 
 const route = useRoute()
 const userStore = useUserStore()

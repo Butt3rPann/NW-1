@@ -9,7 +9,7 @@ import Shipping from '@/assets/images/shipping.png'
 import Ticket from '@/assets/images/ticket.png'
 import Seller from '@/assets/images/seller.png'
 import rightVector from '@/assets/images/rigt-vector.png'
-import { useUserStore } from '@/UserStore'
+import { useUserStore } from '@/stores/UserStore'
 
 const saleItems = ref([])
 const saleItemImgs = ref([])
