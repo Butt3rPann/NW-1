@@ -5,7 +5,7 @@ import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import PopupMessage from '../components/elements/PopupMessage.vue'
 import { postData } from '@/libs/fetchUtils'
-import { useUserStore } from '@/stores/UserStore'
+import { useUserStore } from '@/UserStore'
 
 const userStore = useUserStore()
 const { storeAccessToken } = userStore

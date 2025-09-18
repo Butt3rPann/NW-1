@@ -9,9 +9,13 @@ import Shipping from '@/assets/images/shipping.png'
 import Ticket from '@/assets/images/ticket.png'
 import Seller from '@/assets/images/seller.png'
 import rightVector from '@/assets/images/rigt-vector.png'
+import { useUserStore } from '@/UserStore'
 
 const saleItems = ref([])
 const saleItemImgs = ref([])
+
+const userStore = useUserStore()
+const { getUserType } = userStore
 
 onMounted(async () => {
     try {
@@ -47,7 +51,7 @@ onMounted(async () => {
                             <p class="font-medium md:font-semibold text-[9px] md:text-sm lg:text-base">SHOP NOW</p>
                         </button>
                     </router-link>
-                    <router-link :to="{ name: 'SaleItemsList' }">
+                    <router-link :to="{ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' }">
                         <button class="itbms-shopnow text-[#F0EDEC] bg-[#6F879C] flex items-center justify-center w-fit py-2 px-2 md:py-3 md:px-3 lg:py-4 lg:px-4 rounded-md">
                             <img :src="Seller" alt="Seller" class="w-3 md:w-5 mr-1">
                             <p class="font-medium md:font-semibold text-[9px] md:text-sm lg:text-base">SELLER</p>

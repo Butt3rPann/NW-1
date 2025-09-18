@@ -14,9 +14,6 @@ import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.repositories.SaleItemRepository;
 import sit.integrated.backend.utils.SaleItemSpecifications;
 
-
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,6 +48,11 @@ public class SaleItemService {
         } else {
             return saleItemRepository.findAll(findFilteredItems(brands, filterStorages, filterStorages != null && filterStorages.contains(null), filterPriceLower, filterPriceUpper, keyword), PageRequest.of(page, size, sort));
         }
+    }
+
+    public Page<SaleItem> getSaleItemsBySeller(Integer sellerId, String sortField, String sortDirection, Integer page, Integer size) {
+        Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
+        return saleItemRepository.getSaleItemsBySeller(sellerId, PageRequest.of(page, size, sort));
     }
 
     public SaleItem getSaleItemDetail(Integer id) {
