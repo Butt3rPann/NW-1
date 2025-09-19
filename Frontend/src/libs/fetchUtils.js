@@ -45,7 +45,6 @@ async function getItems(url, sortField, sortDirection, brands, filterStorages, f
 
 async function getItemById(url, id) {
   const token = localStorage.getItem('access_token')
-  
   try {
     const data = await fetch(`${url}/${id}`, {
       headers: {
@@ -105,8 +104,14 @@ async function postData(url, data) {
   }
 }
 
-async function editItem(url, id, editItem) {
+async function editItem(url, id, editItem, access_token) {
   try {
+    const headers = new Headers();
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
+
     const res = await fetch(`${url}/${id}`, {
       method: 'PUT',
       headers: {

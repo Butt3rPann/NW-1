@@ -199,21 +199,21 @@ public class UserService {
     }
 
     public void validateUserProfile(UserProfileDto userProfileDto) {
+        if (userProfileDto.getIdCardNumber() == null) {
+            userProfileDto.setIdCardNumber("");
+        }
         if (userProfileDto.getNickName() == null ||
                 userProfileDto.getEmail() == null ||
                 userProfileDto.getFullName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
         }
-
         if (!userProfileDto.getEmail().trim().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
         }
-
         if (userProfileDto.getUserType() != null && userProfileDto.getUserType().equals(Role.SELLER)) {
             if (userProfileDto.getPhoneNumber() == null ||
                     userProfileDto.getBankAccount() == null ||
-                    userProfileDto.getBankName() == null ||
-                    userProfileDto.getIdCardNumber() == null) {
+                    userProfileDto.getBankName() == null ) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid data");
             }
         }
