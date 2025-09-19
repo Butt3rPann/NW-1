@@ -3,6 +3,7 @@ package sit.integrated.backend.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,6 +33,7 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/v2/seller/**").hasAnyAuthority("SELLER")
+                        .requestMatchers(HttpMethod.POST, "/v2/sale-items").hasAnyAuthority("SELLER")
                         .anyRequest().permitAll())
                 .authenticationProvider(authenticationProvider(jwtUserDetailsService))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

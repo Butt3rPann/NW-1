@@ -3,8 +3,13 @@ import { useRouter } from 'vue-router'
 import SaleItemForm from '@/components/form/SaleItemForm.vue'
 import { uploadFormData } from '@/libs/fetchUtils'
 import { ref } from 'vue'
+import { useUserStore } from '@/stores/UserStore'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
+import forbidden from '@/assets/images/forbidden.png'
 
 const router = useRouter()
+const userStore = useUserStore()
+const { getAccessToken, getUserType } = userStore
 
 const prevPath = ref(null)
 const prevPathName = ref(null)
@@ -22,8 +27,8 @@ const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
         saleItemImg.map(img => img.imageFile).forEach(f => formData.append('images', f))
         if (newSaleItem.model !== null) formData.append('model', newSaleItem.model)
         if (newSaleItem.brand.id !== null && newSaleItem.brand.name !== null)  {
-        formData.append('brand.id', newSaleItem.brand.id)
-        formData.append('brand.name', newSaleItem.brand.name)
+            formData.append('brand.id', newSaleItem.brand.id)
+            formData.append('brand.name', newSaleItem.brand.name)
         }
         if (newSaleItem.description !== null) formData.append('description', newSaleItem.description)
         if (newSaleItem.price !== null) formData.append('price', newSaleItem.price)
@@ -33,7 +38,7 @@ const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
         if (newSaleItem.color !== null) formData.append('color', newSaleItem.color)
         if (newSaleItem.quantity !== null) formData.append('quantity', newSaleItem.quantity)
 
-        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, formData)
+        await uploadFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, formData, getAccessToken())
         router.push({ name: prevPathName.value, query: { added: 'true' } })
     } catch (error) {
         console.log(error)
@@ -42,14 +47,17 @@ const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
 </script>
 
 <template>
-    <div class="px-10 md:px-22 lg:px-25 pt-22 md:pt-30 pb-13 font-rubik bg-white">
-        <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
-            <router-link :to="{ name: 'SaleItems' }"><span class="text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
-            <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>
-            <span class="text-[#6F879C]">New Sale Item</span>
-        </p>
-        <SaleItemForm @submitAction="handleNewSaleItem" :pathName="prevPathName" :filePath="[]" :imageData="[]"/>
+    <div v-if="getUserType() === 'SELLER'" class="px-10 md:px-22 lg:px-25 pt-22 md:pt-30 pb-13 font-rubik bg-white">
+            <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
+                <router-link :to="{ name: 'SaleItems' }"><span class="text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
+                <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>
+                <span class="text-[#6F879C]">New Sale Item</span>
+            </p>
+            <SaleItemForm @submitAction="handleNewSaleItem" :pathName="prevPathName" :filePath="[]" :imageData="[]"/>
     </div>
+    <ErrorMessage v-else title="Sale Item" description="You don't have permission to access this server" backPathName="BrandList" :img="forbidden">
+        Forbidden
+    </ErrorMessage>
 </template>
 
 <style scoped></style>

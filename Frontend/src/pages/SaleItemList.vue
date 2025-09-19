@@ -5,15 +5,20 @@ import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue'
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
 import { useUserStore } from '@/stores/UserStore'
+import productNotFound from '@/assets/images/product-not-found.png'
 
 const route = useRoute()
 const userStore = useUserStore()
-const { getUserId, getAccessToken } = userStore
+const { getUserId, getAccessToken, getUserType } = userStore
+
+if (getUserType() !== 'SELLER') {
+    router.push({ name: 'SaleItems' })
+}
 
 const currentPage = ref(1)
 
@@ -230,7 +235,10 @@ watch(currentPage, async () => {
         </div>
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" message="Do you want to delete this sale item?" @delete="deleteSaleItem"/>
     </div>
-    <ItemNotFound title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItemsList" v-else/>
+    <ErrorMessage title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItemsList" v-else :img="productNotFound">
+        <span>Sale Item</span><br/>
+        <span>Not Found</span>
+    </ErrorMessage>
 </div>
 </template>
  

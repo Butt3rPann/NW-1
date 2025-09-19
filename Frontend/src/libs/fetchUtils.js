@@ -127,11 +127,17 @@ async function deleteItemById(url, id) {
   }
 }
 
-async function uploadFormData(url, formData) {
+async function uploadFormData(url, formData, access_token) {
   try {
+    const headers = new Headers();
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
     const res = await fetch(url, {
       method: 'POST',
-      body: formData
+      body: formData,
+      headers
     })
     const addedItem = await res.json()
     return addedItem
