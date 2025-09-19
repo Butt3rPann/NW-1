@@ -38,8 +38,10 @@ onMounted(async () => {
                     <p class="text-xl">{{ user.fullName }}</p>
                 </div>  
                  
-            </div>           
-            <BaseButton :icon="editIcon" text="Edit Profile"/>
+            </div>     
+            <router-link :to="{ name: 'EditProfile' }">
+              <BaseButton :icon="editIcon" text="Edit Profile"/>
+            </router-link>       
         </div>
         <div v-if="user.userType === 'BUYER'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <div class="bg-white col-span-full w-full h-fit p-6 shadow-md rounded-3xl">
