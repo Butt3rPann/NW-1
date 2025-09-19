@@ -11,7 +11,6 @@ import EditBrandForm from "@/components/brand/EditBrandForm.vue";
 import RegisterForm from "@/components/form/RegisterForm.vue";
 import VerifyEmail from "@/pages/VerifyEmail.vue";
 import SignIn from "../pages/Signin.vue";
-import EditProfileForm from "@/components/form/EditProfileForm.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -74,6 +73,11 @@ const routes = [
         path: '/signin',
         name: 'SignIn',
         component: SignIn
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile
     },
     {
         path: '/profile/edit',
