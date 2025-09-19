@@ -1,16 +1,19 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, onMounted, watch } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
-import registerBuyer from '@/assets/images/registerBuyer.png'
-import registerSeller from '@/assets/images/registerSeller.png'
 import PopupMessage from '../elements/PopupMessage.vue'
-import { useRouter } from 'vue-router'
-import upload from '@/assets/images/upload.png'
+import { useRouter  } from 'vue-router'
+import { editItem, getItemById} from '@/libs/fetchUtils'
+import { useUserStore } from '@/stores/UserStore'
 
 const router = useRouter()
-const frontPreview = ref(null)
-const backPreview = ref(null)
+const message = ref('')
+const isShowPopup = ref(false)
+const isSuccess = ref(true)
+
+const userStore = useUserStore()
+const { getUserId, getAccessToken } = userStore
 
 const user = ref({
   nickName: '',
@@ -20,10 +23,7 @@ const user = ref({
   phoneNumber: '',
   bankAccount: '',
   bankName: '',
-  idCardNumber: '',
   userType: 'BUYER',
-  idCardImageFront: null,
-  idCardImageBack: null
 })
 
 const invalidMessage = {
@@ -34,8 +34,6 @@ const invalidMessage = {
     phoneNumber: 'Mobile must be required',
     bankAccount: 'Bank Account Number must be required.',
     bankName: 'Bank name must be required.',
-    idCardNumber: 'National Id must be required.',
-    sellerNationalIdPhotos: 'National Id photos must be required.'
 }
 
 const isNull = ref({
@@ -46,9 +44,6 @@ const isNull = ref({
     phoneNumber: false,
     bankAccount: false,
     bankName: false,
-    idCardNumber: false,
-    idCardImageFront: false,
-    idCardImageBack: false
 })
 
 const handleDisabledButton = (field, value) => {
@@ -57,31 +52,41 @@ const handleDisabledButton = (field, value) => {
 
 const disabled = ref(true)
 
-const validatePassword = (password) => {
-  if (password.length < 8) return false
+onMounted(async () => {
+    try {
+        user.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), getAccessToken())
+    } catch (error) {
+        console.log(error)
+    }
+})
 
-  const hasLower = /[a-z]/.test(password)
-  const hasUpper = /[A-Z]/.test(password)
-  const hasNumber = /[0-9]/.test(password)
-  const hasSpecial = /[!@#$%^&*(),.?":{}|<>/_]/.test(password)
+const handleUpdateProfile = async () => {
+    try {
+        const editedUser = { ...user.value }
 
-  return hasLower && hasUpper && hasNumber && hasSpecial
-}
+        console.log('Payload:', editedUser)
 
-const handleFrontUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    user.value.idCardImageFront = file
-    frontPreview.value = previewBinaryFile(file)
-  }
-}
+        const updated = await editItem(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), editedUser, getAccessToken())
+        if (updated.status === 400 || updated.status === 500) throw new Error(updated.message)
 
-const handleBackUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    user.value.idCardImageBack = file
-    backPreview.value = previewBinaryFile(file)
-  } 
+        const freshUser = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), getAccessToken())
+        userStore.setUser(freshUser)
+        
+        message.value = 'Profile data is updated successfully.'
+        isSuccess.value = true
+        isShowPopup.value = true
+        setTimeout(() => {
+            isShowPopup.value = false
+            router.push({ name: 'Homepage' })
+        }, 1500)
+
+    } catch (error) {
+        console.log(error)
+        message.value = 'Failed to update profile.'
+        isSuccess.value = false
+        isShowPopup.value = true
+        setTimeout(() => isShowPopup.value = false, 1500)
+    }
 }
 
 watchEffect(() => {
@@ -90,15 +95,13 @@ watchEffect(() => {
         isNull.value[key] = !value
     }
     const requiredField = user.value.userType === 'SELLER'
-            ? ['nickName', 'email', 'password', 'fullName', 'phoneNumber', 'bankAccount', 'bankName', 'idCardNumber', 'sellerNationalIdPhotos']
-            : ['nickName', 'email', 'password', 'fullName']
+            ? ['nickName', 'email', 'fullName', 'phoneNumber', 'bankAccount', 'bankName']
+            : ['nickName', 'email', 'fullName']
 
     const hasEmptyField = requiredField.some(field => isNull.value[field] === true)
     const isFullnameValid = user.value.fullName && user.value.fullName.length >= 4
-    const isPasswordValid = validatePassword(user.value.password)
-    const hasTwoFile = user.value.userType === 'SELLER'? (user.value.idCardImageFront !== null && user.value.idCardImageBack != null): true
 
-    disabled.value = hasEmptyField || !isFullnameValid || !isPasswordValid || !hasTwoFile
+    disabled.value = hasEmptyField || !isFullnameValid
 })
 
 const cancel = () => {
@@ -106,7 +109,6 @@ const cancel = () => {
 }
 
 const isShowPopUp = ref(false)
-h
 
 </script>
  
@@ -119,26 +121,12 @@ h
                 <div class="w-full px-7 my-7 text-[#332A1E]">
                     <div class="flex flex-col items-center gap-2 mb-3">
                         <p class="text-3xl font-semibold">Edit your profile</p>
-                        <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
-                            <div class="flex space-x-4">
-                                <label>
-                                    <input type="radio" v-model="user.userType" value="BUYER" class="hidden peer"/>
-                                    <div class="px-4 py-2 border text-[#6F879C] text-sm sm:text-base lg:text-lg border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] peer-checked:text-white">Buyer</div>
-                                </label>
-                                <label>
-                                    <input type="radio" v-model="user.userType" value="SELLER" class="hidden peer"/>
-                                    <div class="px-4 py-2 border text-[#6F879C] text-sm sm:text-base lg:text-lg border-[#6F879C] rounded-lg cursor-pointer transition peer-checked:bg-[#6F879C] peer-checked:text-white">Seller</div>
-                                </label>
-                            </div>
-                        </div>
                     </div>
-                    <div class="pt-3" :class="{'grid grid-cols-2 gap-4 py-4' : user.userType == 'SELLER'}">
+                    <div class="pt-3" :class="{'grid grid-cols-2 gap-4 py-3' : user.userType == 'SELLER'}">
                         <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                             placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :minlength="8"
-                            placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                         <template v-if="user.userType == 'SELLER'">
@@ -148,33 +136,10 @@ h
                                 placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
                             <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
                                 placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
-                            <FormInput v-model="user.idCardNumber" label="National Card" :required="true" inputType="text" :maxlength="25" field="idCardNumber"
-                                placeholder="Enter national Id" :invalidMessage="invalidMessage.idCardNumber" className="itbms-card-no" @disabledButton="handleDisabledButton"/>
                         </template>
                     </div>
-                    <template v-if="user.userType == 'SELLER'">
-                        <p class="text-[#332A1E] font-medium text-sm sm:text-base lg:text-lg mb-2">National Card Photo<span class="text-red-700">*</span></p>
-                        <div class="flex gap-6">
-                            <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
-                                <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-front" @change="handleFrontUpload" />
-                                <div v-if="!frontPreview" class="flex flex-col justify-center items-center">
-                                    <img :src="upload" alt="upload" class="w-5">
-                                    <span class="text-gray-700">Front side</span>   
-                                </div>
-                                <img v-if="frontPreview" :src="frontPreview" alt="Front preview" class="w-full h-full object-cover rounded"/>
-                            </label>
-                            <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
-                                <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-back" @change="handleBackUpload" />
-                                <div v-if="!backPreview" class="flex flex-col justify-center items-center">
-                                    <img :src="upload" alt="upload" class="w-5">
-                                    <span class="text-gray-700">Back side</span>  
-                                </div>                           
-                                <img v-if="backPreview" :src="backPreview" alt="Back preview" class="w-full h-full object-cover rounded"/>
-                            </label>
-                        </div>
-                    </template>
-                    <div class="flex justify-center gap-4 mt-8">
-                        <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                    <div class="flex justify-center gap-4 mt-1">
+                        <BaseButton @click="handleUpdateProfile" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
