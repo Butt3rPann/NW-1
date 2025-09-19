@@ -56,10 +56,10 @@ CREATE TABLE IF NOT EXISTS sale_items (
     color VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     quantity INT NOT NULL DEFAULT 1,
     CHECK (quantity >= 0),
-    sellerId INT,
+    seller_id INT,
     createdOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (brandId) REFERENCES brands(id),
-    FOREIGN KEY (sellerId) REFERENCES sellers(user_id)
+    FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 

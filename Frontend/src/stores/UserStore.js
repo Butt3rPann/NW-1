@@ -27,8 +27,8 @@ export const useUserStore = defineStore('user', () => {
 
     function getUserId() {
         access_token.value = getAccessToken()
-        nickName.value = access_token.value ? jwtDecode(access_token.value).id : null
-        return nickName.value
+        userId.value = access_token.value ? jwtDecode(access_token.value).id : null
+        return userId.value
     }
 
     function getUserType() {
