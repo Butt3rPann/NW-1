@@ -44,8 +44,15 @@ async function getItems(url, sortField, sortDirection, brands, filterStorages, f
 }
 
 async function getItemById(url, id) {
+  const token = localStorage.getItem('access_token')
+  
   try {
-    const data = await fetch(`${url}/${id}`)
+    const data = await fetch(`${url}/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (data.status === 404) return undefined
     const item = await data.json()
     return item
   } catch (error) {
