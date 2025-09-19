@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect, onMounted, watch } from 'vue'
+import { ref, watchEffect, onMounted, computed } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import PopupMessage from '../elements/PopupMessage.vue'
@@ -16,34 +16,32 @@ const userStore = useUserStore()
 const { getUserId, getAccessToken } = userStore
 
 const user = ref({
-  nickName: '',
-  email: '',
-  password: '',
-  fullName: '',
-  phoneNumber: '',
-  bankAccount: '',
-  bankName: '',
-  userType: 'BUYER',
+    email: '',
+    fullName: '',
+    phoneNumber: '',
+    bankAccount: '',
+    bankName: '',
+    userType: 'BUYER',
+    nickName: ''
 })
 
 const invalidMessage = {
-    nickName: 'Nickname must be required.',
     email: 'Email is required and must not exceed 100 characters.',
     password: 'Password must be required, max 14 characters, with uppercase, lowercase, number, and special character',
     fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
     phoneNumber: 'Mobile must be required',
     bankAccount: 'Bank Account Number must be required.',
     bankName: 'Bank name must be required.',
+    nickName: 'Nickname must be required.'
 }
 
 const isNull = ref({
-    nickName: false,
     email: false,
-    password: false,
     fullName: false,
     phoneNumber: false,
     bankAccount: false,
     bankName: false,
+    nickName: false
 })
 
 const handleDisabledButton = (field, value) => {
@@ -55,6 +53,8 @@ const disabled = ref(true)
 onMounted(async () => {
     try {
         user.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), getAccessToken())
+        maskedPhoneNumber.value = maskNumber(user.value.phoneNumber)
+        maskedBankAccount.value = maskNumber(user.value.bankAccount)
     } catch (error) {
         console.log(error)
     }
@@ -64,21 +64,12 @@ const handleUpdateProfile = async () => {
     try {
         const editedUser = { ...user.value }
 
-        console.log('Payload:', editedUser)
+        console.log('EditedUser:', editedUser)
 
         const updated = await editItem(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), editedUser, getAccessToken())
         if (updated.status === 400 || updated.status === 500) throw new Error(updated.message)
 
-        const freshUser = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), getAccessToken())
-        userStore.setUser(freshUser)
-        
-        message.value = 'Profile data is updated successfully.'
-        isSuccess.value = true
-        isShowPopup.value = true
-        setTimeout(() => {
-            isShowPopup.value = false
-            router.push({ name: 'Homepage' })
-        }, 1500)
+        router.push({ name: 'Profile' })
 
     } catch (error) {
         console.log(error)
@@ -87,6 +78,22 @@ const handleUpdateProfile = async () => {
         isShowPopup.value = true
         setTimeout(() => isShowPopup.value = false, 1500)
     }
+}
+
+const maskedPhoneNumber = ref('')
+const maskedBankAccount = ref('')
+
+const maskNumber = (number) => {
+  const numStr = String(number)
+  const length = numStr.length
+  let result = ''
+
+  for (let i = 0; i < length; i++) {
+    const isTargetDigit = i === length - 2 || i === length - 3 || i === length - 4;
+    result += isTargetDigit ? numStr[i] : 'x'
+  }
+
+  return result
 }
 
 watchEffect(() => {
@@ -130,9 +137,9 @@ const isShowPopUp = ref(false)
                         <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                         <template v-if="user.userType == 'SELLER'">
-                            <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
+                            <FormInput v-model="maskedPhoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
                                 placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
-                            <FormInput v-model="user.bankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
+                            <FormInput v-model="maskedBankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
                                 placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
                             <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
                                 placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
