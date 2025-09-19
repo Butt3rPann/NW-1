@@ -7,8 +7,9 @@ import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import WarningMessage from '@/components/elements/WarningMessage.vue'
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import emptySaleItems from '@/assets/images/emptySaleItems.png'
+import productNotFound from '@/assets/images/product-not-found.png'
 
 const brands = ref([])
 const showNotFound = ref(false)
@@ -137,7 +138,10 @@ async function deleteBrand() {
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" :message="`Do you want to delete ${brandToDelete} brand?`" class="itbms-message" @delete="deleteBrand" />
         <WarningMessage v-if="showCannotDeletePopup" @close="closeDelConfirm" :message="`Delete ${brandToDelete} is not allowed. There are sale items with ${brandToDelete} brand.`"/>
     </div>
-    <ItemNotFound v-else title="Brands" description="An error has occurred, the brand does not exist." backPathName="BrandList" />
+    <ErrorMessage v-else title="Brand" description="An error has occurred, the brand does not exist." backPathName="BrandList" :img="productNotFound">
+        <span>Brand</span><br/>
+        <span>Not Found</span>
+    </ErrorMessage>
 </div>
 </template>
 

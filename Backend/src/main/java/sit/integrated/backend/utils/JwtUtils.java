@@ -50,7 +50,7 @@ public class JwtUtils {
                     .issueTime(new Date(new Date().getTime()))
                     .claim("typ", TokenType.EMAIL_TOKEN.toString())
                     .claim("role", role.toString())
-                    .claim("userId", id)
+                    .claim("id", id)
                     .claim("email", email)
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
@@ -93,7 +93,7 @@ public class JwtUtils {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token");
             }
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
-            Integer userId = claims.getIntegerClaim("userId");
+            Integer userId = claims.getIntegerClaim("id");
             String email = claims.getStringClaim("email");
             if (userId == null || email == null || email.isBlank()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token");
@@ -121,7 +121,7 @@ public class JwtUtils {
         return jwtClaims.containsKey("iat")
                 && "https://intproj24.sit.kmutt.ac.th/nw1"
                 .equals(jwtClaims.get("iss"))
-                && jwtClaims.containsKey("uid")
-                && (Long) jwtClaims.get("uid") > 0;
+                && jwtClaims.containsKey("id")
+                && ((Long) jwtClaims.get("id")) > 0;
     }
 }

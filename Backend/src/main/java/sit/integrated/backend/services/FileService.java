@@ -30,7 +30,7 @@ public class FileService {
                                         .normalize();
         try {
             if (!Files.exists(this.fileStorageLocation)) {
-                Files.createDirectory(this.fileStorageLocation);
+                Files.createDirectories(this.fileStorageLocation);
             }
         } catch (IOException ex) {
             throw new RuntimeException("Can’t create the directory where the uploaded files will be stored.", ex);
@@ -128,6 +128,9 @@ public class FileService {
     }
 
     public List<String> getMatchedFiles(String pattern) {
+        if (!Files.exists(this.fileStorageLocation)) {
+            return Collections.emptyList();
+        }
         List<String> fileNames = new ArrayList<>();
         FileVisitor<Path> matcherVisitor = new SimpleFileVisitor<>() {
             @Override

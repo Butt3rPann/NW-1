@@ -11,18 +11,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
+import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.repositories.SaleItemRepository;
+import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.utils.SaleItemSpecifications;
 
-
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
+    @Autowired
+    private SellerRepository sellerRepository;
     @Autowired
     ModelMapper modelMapper;
 
@@ -53,6 +54,11 @@ public class SaleItemService {
         }
     }
 
+    public Page<SaleItem> getSaleItemsBySeller(Integer sellerId, String sortField, String sortDirection, Integer page, Integer size) {
+        Sort sort = (sortField == null ? Sort.by("createdOn", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
+        return saleItemRepository.getSaleItemsBySeller(sellerId, PageRequest.of(page, size, sort));
+    }
+
     public SaleItem getSaleItemDetail(Integer id) {
         return saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("SaleItem not found for this id :: " + id));
     }
@@ -76,5 +82,13 @@ public class SaleItemService {
     public void deleteSaleItem (Integer id) {
         isSaleItemExists(id);
         saleItemRepository.deleteById(id);
+    }
+
+    public SaleItemDetailDto createSaleItemBySeller(SaleItemFormDto formDto, Integer sellerId) {
+        formDto.setId(null);
+        Seller seller = sellerRepository.findById(sellerId).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
+        SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
+        saleItem.setSeller(seller);
+        return modelMapper.map(saleItemRepository.save(saleItem), SaleItemDetailDto.class);
     }
 }

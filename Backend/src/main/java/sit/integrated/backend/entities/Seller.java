@@ -11,6 +11,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -65,5 +67,8 @@ public class Seller {
     @UpdateTimestamp
     @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
     private Instant updatedOn;
+
+    @OneToMany(mappedBy = "seller")
+    private Set<SaleItem> saleItems = new LinkedHashSet<>();
 
 }

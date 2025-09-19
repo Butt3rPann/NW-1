@@ -5,12 +5,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import sit.integrated.backend.dtos.UserRequestDto;
-import sit.integrated.backend.dtos.UserResponseDto;
-import sit.integrated.backend.dtos.UserSignInDto;
+import sit.integrated.backend.dtos.*;
+import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.services.EmailService;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.UserService;
@@ -21,6 +21,7 @@ import sit.integrated.backend.utils.UserStatus;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
@@ -55,7 +56,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Token");
         }
         String email = claims.get("email").toString();
-        Integer id = Integer.valueOf(claims.get("userId").toString());
+        Integer id = Integer.valueOf(claims.get("id").toString());
         UserResponseDto user = userService.getUserById(id);
         if (user.getIsActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already active");
@@ -76,5 +77,32 @@ public class UserController {
                 .sameSite("Strict")
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(Map.entry("access_token", tokens.get("access_token")));
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<BuyerResponseDto> getUserProfile(@PathVariable Integer id) {
+        Integer tokenUserId = ((AuthUserDetail) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal()).getId();
+
+        if (!Objects.equals(id, tokenUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
+        }
+        return ResponseEntity.ok(userService.getUserProfileById(id)) ;
+
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<BuyerResponseDto> updateUserProfile(@PathVariable Integer id, @RequestBody UserProfileDto userProfileDto) {
+        BuyerResponseDto updatedUser = userService.updateUserProfileById(id, userProfileDto);
+        Integer tokenUserId = ((AuthUserDetail) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal()).getId();
+        if (!Objects.equals(id, tokenUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
+        }
+        return ResponseEntity.ok(updatedUser);
     }
 }
