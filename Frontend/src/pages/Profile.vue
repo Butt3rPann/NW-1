@@ -8,10 +8,17 @@ import mailIcon from '@/assets/images/mailIcon.png'
 import bankIcon from '@/assets/images/bankIcon.png'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import editIcon from "@/assets/images/edit.png"
+import { useRoute } from 'vue-router'
+import PopupMessage from '@/components/elements/PopupMessage.vue'
 
 const userStore = useUserStore()
 const user = ref({})
 const id = ref(0)
+const route = useRoute()
+
+const message = ref('')
+const isShowPopup = ref(false)
+const isSuccess = ref(false)
 
 onMounted(async () => {
   id.value = userStore.getUserId()
@@ -22,6 +29,15 @@ onMounted(async () => {
     } catch (error) {
       console.log(error)
     }
+      if (route.query.updated === 'true') {
+      message.value = 'Profile data is updated successfully.'
+      isSuccess.value = true
+      isShowPopup.value = true
+
+      setTimeout(() => {
+        isShowPopup.value = false
+      }, 1500)
+    }
   }
 })
 
@@ -29,6 +45,7 @@ onMounted(async () => {
  
 <template>
 <div class="w-full h-screen font-rubik flex flex-col items-center justify-center text-[#332A1E] bg-white pb-20 pt-30 px-10 md:px-22 lg:px-25">
+  <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
     <div class="w-3/4 h-fit p-10 shadow-md rounded-3xl bg-gray-100">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
