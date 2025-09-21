@@ -14,6 +14,7 @@ const isSuccess = ref(true)
 
 const userStore = useUserStore()
 const { getUserId, getAccessToken } = userStore
+const oldUser = ref(null)
 
 const user = ref({
     email: '',
@@ -53,6 +54,7 @@ const disabled = ref(true)
 onMounted(async () => {
     try {
         user.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), getAccessToken())
+        oldUser.value = JSON.parse(JSON.stringify(user.value))
         maskedPhoneNumber.value = maskNumber(user.value.phoneNumber)
         maskedBankAccount.value = maskNumber(user.value.bankAccount)
     } catch (error) {
@@ -63,13 +65,10 @@ onMounted(async () => {
 const handleUpdateProfile = async () => {
     try {
         const editedUser = { ...user.value }
-
-        console.log('EditedUser:', editedUser)
-
         const updated = await editItem(`${import.meta.env.VITE_APP_URL}/v2/users`, getUserId(), editedUser, getAccessToken())
         if (updated.status === 400 || updated.status === 500) throw new Error(updated.message)
 
-        router.push({ name: 'Profile' })
+        router.push({ name: 'Profile', query: { updated: 'true' } })
 
     } catch (error) {
         console.log(error)
@@ -107,22 +106,20 @@ watchEffect(() => {
 
     const hasEmptyField = requiredField.some(field => isNull.value[field] === true)
     const isFullnameValid = user.value.fullName && user.value.fullName.length >= 4
+    const unchanged = JSON.stringify(user.value) === JSON.stringify(oldUser.value)
 
-    disabled.value = hasEmptyField || !isFullnameValid
+    disabled.value = hasEmptyField || !isFullnameValid || unchanged
 })
 
 const cancel = () => {
     router.push({ name: 'Homepage' })
 }
-
-const isShowPopUp = ref(false)
-
 </script>
  
 <template>
 <div class="w-full font-rubik bg-white ">
     <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 ">
-        <PopupMessage message="Profile data is updated successfully." :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
+        <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <div class="bg-white border border-gray-200 shadow-md w-full max-w-180 flex h-fit rounded-lg overflow-hidden">
             <div class="bg-white border border-gray-200 shadow-md w-full max-w-180 flex h-fit rounded-lg overflow-hidden">  
                 <div class="w-full px-7 my-7 text-[#332A1E]">
@@ -133,16 +130,16 @@ const isShowPopUp = ref(false)
                         <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                             placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                            placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
+                            placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" readonly/>
                         <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                         <template v-if="user.userType == 'SELLER'">
                             <FormInput v-model="maskedPhoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
-                                placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
+                                placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" readonly/>
                             <FormInput v-model="maskedBankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
-                                placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
+                                placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" readonly/>
                             <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
-                                placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
+                                placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" readonly/>
                         </template>
                     </div>
                     <div class="flex justify-center gap-4 mt-1">

@@ -107,6 +107,7 @@ async function postData(url, data) {
 async function editItem(url, id, editItem, access_token) {
   try {
     const headers = new Headers();
+    headers.append("content-type", "application/json");
     if (access_token) {
       const authHeader = `Bearer ${access_token}`
       headers.append("Authorization", authHeader)
@@ -114,9 +115,7 @@ async function editItem(url, id, editItem, access_token) {
 
     const res = await fetch(`${url}/${id}`, {
       method: 'PUT',
-      headers: {
-        'content-type': 'application/json'
-      },
+      headers,
       body: JSON.stringify({
         ...editItem
       })
