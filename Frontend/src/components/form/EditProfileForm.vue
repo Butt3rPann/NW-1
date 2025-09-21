@@ -100,14 +100,19 @@ watchEffect(() => {
 })
 
 const cancel = () => {
-    router.push({ name: 'Homepage' })
+    router.push({ name: 'Profile' })
 }
 </script>
  
 <template>
-<div class="w-full h-screen font-rubik bg-white pt-10">
+<div class="w-full min-h-screen font-rubik bg-white pt-10">
     <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 ">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
+        <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
+            <router-link :to="{ name: 'SaleItems' }"><span class="itbms-home text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
+            <span class="text-[#332A1E]/50 mx-3"> > </span>
+            <span class="text-[#6F879C]">Profile</span>
+        </p>    
         <div class="bg-white border border-gray-200 shadow-md w-full max-w-180 flex h-fit rounded-lg overflow-hidden">
             <div class="bg-white border border-gray-200 shadow-md w-full max-w-180 flex h-fit rounded-lg overflow-hidden">  
                 <div class="w-full px-7 my-7 text-[#332A1E]">
@@ -120,14 +125,16 @@ const cancel = () => {
                         <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                             placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" readonly/>
                         <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
-                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
+                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>  
+                        <FormInput v-model="user.userType" label="Type" :required="true" inputType="text" field="userType"
+                            placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-type" readonly/>  
                         <template v-if="user.userType == 'SELLER'">
                             <FormInput v-model="maskedPhoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
                                 placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" readonly/>
                             <FormInput v-model="maskedBankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
-                                placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" readonly/>
+                                placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bankAccount" readonly/>
                             <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
-                                placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" readonly/>
+                                placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bankName" readonly/>
                         </template>
                     </div>
                     <div class="flex justify-center gap-4 mt-1">
