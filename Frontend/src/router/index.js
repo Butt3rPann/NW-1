@@ -13,6 +13,7 @@ import VerifyEmail from "@/pages/VerifyEmail.vue";
 import SignIn from "../pages/Signin.vue";
 import Profile from "@/pages/Profile.vue";
 import EditProfileForm from "@/components/form/EditProfileForm.vue";
+import { useUserStore } from "@/stores/UserStore";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -34,17 +35,35 @@ const routes = [
     {
         path: '/sale-items/add',
         name: 'AddSaleItem',
-        component: AddSaleItemForm
+        component: AddSaleItemForm,
+        beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (userStore.getUserType() !== "SELLER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path: '/sale-items/:id/edit',
         name: 'EditSaleItem',
-        component: EditSaleItemForm
+        component: EditSaleItemForm,
+                beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (userStore.getUserType() !== "SELLER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path: '/sale-items/list',
         name: 'SaleItemsList',
-        component: SaleItemList
+        component: SaleItemList,
+        beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (userStore.getUserType() !== "SELLER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path: '/brands',
@@ -86,10 +105,18 @@ const routes = [
         name: 'EditProfile',
         component: EditProfileForm
     },
-    {
-        path: '/logout',
-        name: 'Logout',
-    }
+    // {
+    //     path: '/logout',
+    //     name: 'Logout',
+    // }
 ]
 const router = createRouter({history,routes})
+
+router.beforeEach((to, from) => {
+    const isLoggedIn = !!localStorage.getItem('access_token')
+    if (!isLoggedIn && (to.name === 'Profile' || to.name === 'EditProfile')) {
+        return { name: 'SignIn' }
+    }
+})
+
 export default router

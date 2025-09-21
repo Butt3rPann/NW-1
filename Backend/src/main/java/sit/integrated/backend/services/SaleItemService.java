@@ -84,6 +84,7 @@ public class SaleItemService {
         saleItemRepository.deleteById(id);
     }
 
+    @Transactional
     public SaleItemDetailDto createSaleItemBySeller(SaleItemFormDto formDto, Integer sellerId) {
         formDto.setId(null);
         Seller seller = sellerRepository.findById(sellerId).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));

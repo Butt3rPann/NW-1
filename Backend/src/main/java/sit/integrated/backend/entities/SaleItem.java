@@ -57,6 +57,7 @@ public class SaleItem {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     private Seller seller;

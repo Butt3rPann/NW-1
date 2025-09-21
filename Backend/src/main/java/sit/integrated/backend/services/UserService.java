@@ -218,6 +218,7 @@ public class UserService {
             }
         }
     }
+
     @Transactional
     public BuyerResponseDto updateUserProfileById(Integer id, UserProfileDto userProfileDto) {
         validateUserProfile(userProfileDto);
