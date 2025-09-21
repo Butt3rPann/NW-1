@@ -11,6 +11,7 @@ import editIcon from "@/assets/images/edit.png"
 import { useRoute } from 'vue-router'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import { maskNumber } from '@/libs/utilities'
+import router from '@/router'
 
 const userStore = useUserStore()
 const user = ref({})
@@ -33,22 +34,19 @@ onMounted(async () => {
       type.value = user.value.userType[0] + user.value.userType.slice(1).toLowerCase()
       phone.value = maskNumber(user.value.phoneNumber)
       bankNo.value = maskNumber(user.value.bankAccount)
-      
     } catch (error) {
       console.log(error)
-    }
-      if (route.query.updated === 'true') {
-      message.value = 'Profile data is updated successfully.'
-      isSuccess.value = true
-      isShowPopup.value = true
-
-      setTimeout(() => {
-        isShowPopup.value = false
-      }, 1500)
     }
   }
 })
 
+if (route.query.updated === 'true') {
+  message.value = 'Profile data is updated successfully.'
+  router.replace({ query: { } })
+  isSuccess.value = true
+  isShowPopup.value = true
+  setTimeout(() => isShowPopup.value = false , 1500)
+}
 </script>
  
 <template>
