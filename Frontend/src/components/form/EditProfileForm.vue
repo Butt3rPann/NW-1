@@ -6,6 +6,7 @@ import PopupMessage from '../elements/PopupMessage.vue'
 import { useRouter  } from 'vue-router'
 import { editItem, getItemById} from '@/libs/fetchUtils'
 import { useUserStore } from '@/stores/UserStore'
+import { maskNumber } from '@/libs/utilities'
 
 const router = useRouter()
 const message = ref('')
@@ -82,19 +83,6 @@ const handleUpdateProfile = async () => {
 const maskedPhoneNumber = ref('')
 const maskedBankAccount = ref('')
 
-const maskNumber = (number) => {
-  const numStr = String(number)
-  const length = numStr.length
-  let result = ''
-
-  for (let i = 0; i < length; i++) {
-    const isTargetDigit = i === length - 2 || i === length - 3 || i === length - 4;
-    result += isTargetDigit ? numStr[i] : 'x'
-  }
-
-  return result
-}
-
 watchEffect(() => {
     for(const key in isNull.value) {
         const value = user.value[key]
@@ -117,7 +105,7 @@ const cancel = () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white ">
+<div class="w-full h-screen font-rubik bg-white pt-10">
     <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 ">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <div class="bg-white border border-gray-200 shadow-md w-full max-w-180 flex h-fit rounded-lg overflow-hidden">
