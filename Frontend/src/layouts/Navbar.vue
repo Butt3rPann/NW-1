@@ -54,10 +54,13 @@ const isMenuOpen = ref(false)
                 <p>Signup</p>
             </router-link>
         </div>
-        <div v-else>
-            <router-link :to="{ name: 'Profile' }" class="hidden md:flex justify-center items-center gap-2">
+        <div v-else class="flex justify-center items-center">
+            <router-link :to="{ name: 'Profile' }" class="itbms-profile hidden md:flex justify-center items-center gap-2">
                 <img :src="profileImg" class="w-10"/>
-                <p>{{ nickName }}</p>   
+                <p class="itbms-nickname">{{ nickName }}</p>   
+            </router-link>
+            <router-link :to="{ name: 'Logout' }">
+                <p class="itbms-logout ml-5">Logout</p>
             </router-link>
         </div>
         <div v-if="isMenuOpen" class="absolute left-0 top-14 bg-[#6F879C] text-xs md:hidden font-medium flex items-center flex-col w-full gap-3 py-5">
