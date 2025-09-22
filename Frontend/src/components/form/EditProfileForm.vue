@@ -138,7 +138,7 @@ const cancel = () => {
                         </template>
                     </div>
                     <div class="flex justify-center gap-4 mt-1">
-                        <BaseButton @click="handleUpdateProfile" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                        <BaseButton @click="handleUpdateProfile" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
