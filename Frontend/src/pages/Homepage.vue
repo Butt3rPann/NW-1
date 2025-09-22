@@ -51,7 +51,7 @@ onMounted(async () => {
                             <p class="font-medium md:font-semibold text-[9px] md:text-sm lg:text-base">SHOP NOW</p>
                         </button>
                     </router-link>
-                    <router-link :to="{ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' }">
+                    <router-link :to="{ name: 'SaleItemsList' }" v-if="getUserType() === 'SELLER'">
                         <button class="itbms-shopnow text-[#F0EDEC] bg-[#6F879C] flex items-center justify-center w-fit py-2 px-2 md:py-3 md:px-3 lg:py-4 lg:px-4 rounded-md">
                             <img :src="Seller" alt="Seller" class="w-3 md:w-5 mr-1">
                             <p class="font-medium md:font-semibold text-[9px] md:text-sm lg:text-base">SELLER</p>

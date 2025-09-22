@@ -4,12 +4,10 @@ import SaleItemForm from '@/components/form/SaleItemForm.vue'
 import { uploadFormData } from '@/libs/fetchUtils'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/UserStore'
-import ErrorMessage from '@/components/elements/ErrorMessage.vue'
-import forbidden from '@/assets/images/forbidden.png'
 
 const router = useRouter()
 const userStore = useUserStore()
-const { getAccessToken, getUserType } = userStore
+const { getAccessToken } = userStore
 
 const prevPath = ref(null)
 const prevPathName = ref(null)
@@ -47,17 +45,14 @@ const handleNewSaleItem = async (newSaleItem, saleItemImg) => {
 </script>
 
 <template>
-    <div v-if="getUserType() === 'SELLER'" class="px-10 md:px-22 lg:px-25 pt-22 md:pt-30 pb-13 font-rubik bg-white">
-            <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
-                <router-link :to="{ name: 'SaleItems' }"><span class="text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
-                <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>
-                <span class="text-[#6F879C]">New Sale Item</span>
-            </p>
-            <SaleItemForm @submitAction="handleNewSaleItem" :pathName="prevPathName" :filePath="[]" :imageData="[]"/>
+    <div class="px-10 md:px-22 lg:px-25 pt-22 md:pt-30 pb-13 font-rubik bg-white">
+        <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
+            <router-link :to="{ name: 'SaleItems' }"><span class="text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
+            <span class="text-[#332A1E]/50 mx-2 md:mx-3"> > </span>
+            <span class="text-[#6F879C]">New Sale Item</span>
+        </p>
+        <SaleItemForm @submitAction="handleNewSaleItem" :pathName="prevPathName" :filePath="[]" :imageData="[]"/>
     </div>
-    <ErrorMessage v-else title="Sale Item" description="You don't have permission to access this server" backPathName="BrandList" :img="forbidden">
-        Forbidden
-    </ErrorMessage>
 </template>
 
 <style scoped></style>

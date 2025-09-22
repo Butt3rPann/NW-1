@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS sale_items (
     color VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     quantity INT NOT NULL DEFAULT 1,
     CHECK (quantity >= 0),
-    seller_id INT,
+    seller_id INT NOT NULL,
     createdOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (brandId) REFERENCES brands(id),

@@ -14,11 +14,7 @@ import productNotFound from '@/assets/images/product-not-found.png'
 
 const route = useRoute()
 const userStore = useUserStore()
-const { getUserId, getAccessToken, getUserType } = userStore
-
-if (getUserType() !== 'SELLER') {
-    router.push({ name: 'SaleItems' })
-}
+const { getUserId, getAccessToken } = userStore
 
 const currentPage = ref(1)
 

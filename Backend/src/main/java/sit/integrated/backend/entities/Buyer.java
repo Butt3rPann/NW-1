@@ -43,7 +43,7 @@ public class Buyer {
     private Instant createdOn;
 
     @UpdateTimestamp
-    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
+    @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
 
 }
