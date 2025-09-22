@@ -8,10 +8,10 @@ INSERT INTO users (user_id, email, password, user_type, status) VALUES
 ('5', 'itbkk.somsak@ad.sit.kmutt.ac.th', '$argon2id$v=19$m=16384,t=2,p=1$Ta0wVuU6rIlMLoe5Nw/vbg$cKhkVmuREm196rNQJxa3nHGwS83It5omM/dzMBx1s/A', 'SELLER', 'ACTIVE');
 
 INSERT INTO sellers (user_id, nick_name, full_name, phone_number, bank_account, bank_name, id_card_number) VALUES
-('3', 'Somsuan', 'Somsuan Hundee', '834567890', '371234567', 'Bankok Bank', '1000111100222'),
-('4', 'Somsuk', 'Somsuk  Fundee', '845678901', '2371234567', 'Saim Commercial Bank', '1000111100333'),
-('5', 'Somsak', 'Soksak  Saksit', '856789012', '373456789', 'Bankok Bank', '1000111100444');
+('3', 'Somsuan', 'Somsuan Hundee', '0834567890', '0371234567', 'Bangkok Bank', '1000111100222'),
+('4', 'Somsuk', 'Somsuk Fundee', '0845678901', '2371234567', 'Siam Commercial Bank', '1000111100333'),
+('5', 'Somsak', 'Somsak Saksit', '0856789012', '0373456789', 'Bangkok Bank', '1000111100444');
 
 INSERT INTO buyers (user_id, nick_name, full_name) VALUES
 ('1', 'Somchai', 'Somchai Jaidee'),
-('2', 'Somkiat', 'Somkiat  Luckchart');
+('2', 'Somkiat', 'Somkiat Luckchart');

@@ -62,7 +62,8 @@ function logout() {
         <div v-else class="flex justify-center items-center">
             <router-link :to="{ name: 'Profile' }" class="itbms-profile hidden md:flex justify-center items-center gap-2">
                 <img :src="profileImg" class="w-10"/>
-                <p class="itbms-nickname">{{ nickName }}</p>   
+		<!-- <p class="itbms-nickname">{{ nickName }}</p> -->
+		<p>{{ nickName }}</p>
             </router-link>
             <!-- <router-link :to="{ name: 'Logout' }"> -->
             <div @click="logout">

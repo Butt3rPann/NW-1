@@ -93,7 +93,7 @@ if (route.query.updated === 'true') {
               </div>
             </div>
         </div>
-        <div v-if="user.userType === 'SELLER'" class="mt-6">
+        <div v-else-if="user.userType === 'SELLER'" class="mt-6">
             <div class="bg-white p-8 shadow-md rounded-3xl">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="border-r-2 border-gray-200 pr-5">
