@@ -30,7 +30,6 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(crsf -> crsf.disable())
-                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/v2/seller/**").hasAnyAuthority("SELLER")
                         .requestMatchers(HttpMethod.POST, "/v2/sale-items").hasAnyAuthority("SELLER")

@@ -11,6 +11,10 @@ import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
 import sortNone from "@/assets/images/sort-none.png"
 import sortAsc from "@/assets/images/sort-asc.png"
 import sortDesc from "@/assets/images/sort-desc.png"
+import { useUserStore } from '@/stores/UserStore'
+
+const userStore = useUserStore()
+const { getUserType } = userStore
 
 const saleItems = ref([])
 const route = useRoute()
@@ -308,7 +312,7 @@ watch(searchKeyword, () => {
     <div class="font-rubik px-7 md:px-13 lg:px-19 xl:px-26 pb-15 space-y-7 pt-22 md:pt-30">
         <div class="flex flex-col md:flex-row md:justify-between md:items-center">
             <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#332A1E] mb-3 md:mb-0">Products</p>
-            <router-link :to="{ name: 'AddSaleItem' }" class="w-fit">
+            <router-link :to="{ name: 'AddSaleItem' }" class="w-fit" v-if="getUserType() === 'SELLER'">
                 <BaseButton :icon="addIcon" text="Add Sale Item" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" class="itbms-sale-item-add"/>
             </router-link>
         </div>
