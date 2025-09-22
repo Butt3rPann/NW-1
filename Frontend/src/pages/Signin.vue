@@ -8,7 +8,7 @@ import { postData } from '@/libs/fetchUtils'
 import { useUserStore } from '@/stores/UserStore'
 
 const userStore = useUserStore()
-const { storeAccessToken } = userStore
+const { storeAccessToken, getUserType } = userStore
 
 const router = useRouter()
 
@@ -48,7 +48,7 @@ const handleClick = async () => {
         const loginUser = await postData(`${import.meta.env.VITE_APP_URL}/v2/auth/login`, user.value)
         if (loginUser.access_token) {
             storeAccessToken(loginUser.access_token)
-            router.push({ name: 'SaleItems' })
+	    router.push({ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
             errorMessage.value = 'Email or Password is incorrect.'
