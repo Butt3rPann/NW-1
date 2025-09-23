@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.entities.Seller;
+import sit.integrated.backend.repositories.BrandRepository;
 import sit.integrated.backend.repositories.SaleItemRepository;
 import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.utils.SaleItemSpecifications;
-
 import java.util.List;
 
 @Service
@@ -25,7 +25,9 @@ public class SaleItemService {
     @Autowired
     private SellerRepository sellerRepository;
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
+    @Autowired
+    private BrandRepository brandRepository;
 
     public void isSaleItemExists(Integer id) {
         if(!saleItemRepository.existsById(id)) {
@@ -87,6 +89,9 @@ public class SaleItemService {
     @Transactional
     public SaleItemDetailDto createSaleItemBySeller(SaleItemFormDto formDto, Integer sellerId) {
         formDto.setId(null);
+	if(!brandRepository.existsById(formDto.getBrand().getId())) {
+            throw new ResourceNotFoundException("Brand not found for this id :: " + formDto.getBrand().getId());
+        }
         Seller seller = sellerRepository.findById(sellerId).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
         saleItem.setSeller(seller);
