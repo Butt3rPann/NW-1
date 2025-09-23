@@ -50,7 +50,7 @@ onMounted(async () => {
 
 async function getSaleItems() {
     try {
-        response.value = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/seller/${getUserId()}/sale-items`, getAccessToken(), currentPage.value - 1)
+        response.value = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/sellers/${getUserId()}/sale-items`, getAccessToken(), currentPage.value - 1)
         saleItems.value = response.value.content
         totalPage.value = response.value.totalPages
     } catch (error) {
