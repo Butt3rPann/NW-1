@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/v2")
 public class SaleItemControllerV2 {
     @Autowired

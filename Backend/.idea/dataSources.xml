@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-<<<<<<< Updated upstream
-    <data-source source="LOCAL" name="itbms@localhost" uuid="90fcacad-f84c-4a42-82ca-2326846ee96c">
-=======
-    <data-source source="LOCAL" name="itbms@localhost" uuid="c5465f0b-e878-481e-b6c2-58628de1091c">
->>>>>>> Stashed changes
+    <data-source source="LOCAL" name="itbms@localhost" uuid="fe88c279-2a90-4019-830a-75406a1ddc7b">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/src/main/resources/application.properties</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/itbms</jdbc-url>
       <jdbc-additional-properties>
