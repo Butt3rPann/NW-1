@@ -14,5 +14,9 @@ public class SellerService {
     public Seller getSellerById(Integer id) {
         return sellerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("seller not found"));
     }
+
+    public Seller getSellerBySaleItemId(Integer saleItemId) {
+        return sellerRepository.findBySaleItemId(saleItemId);
+    }
 }
 

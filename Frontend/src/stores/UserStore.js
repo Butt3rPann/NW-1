@@ -19,10 +19,6 @@ export const useUserStore = defineStore('user', () => {
         return localStorage.getItem('access_token')
     }
 
-    function removeAccessToken() {
-        localStorage.removeItem('access_token')
-    }
-
     function getNickname() {
         access_token.value = getAccessToken()
         nickName.value = access_token.value ? jwtDecode(access_token.value).nickname : ''
@@ -41,7 +37,7 @@ export const useUserStore = defineStore('user', () => {
         return userType.value
     }
 
-    return { nickName, storeAccessToken, getAccessToken, removeAccessToken, getNickname, userId, getUserId, userType, getUserType }
+    return { nickName, storeAccessToken, getAccessToken, getNickname, userId, getUserId, userType, getUserType }
 })
 
 if (import.meta.hot) {
