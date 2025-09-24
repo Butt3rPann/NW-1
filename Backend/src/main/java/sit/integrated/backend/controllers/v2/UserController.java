@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/v2")
 public class UserController {
 
@@ -102,5 +103,17 @@ public class UserController {
         }
         BuyerResponseDto updatedUser = userService.updateUserProfileById(id, userProfileDto);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostMapping("/auth/logout")
+    public ResponseEntity<Void> logout() {
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/nw1/itb-mshop/v2/auth/refresh-token")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 }
