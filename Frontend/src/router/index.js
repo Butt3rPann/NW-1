@@ -104,11 +104,7 @@ const routes = [
         path: '/profile/edit',
         name: 'EditProfile',
         component: EditProfileForm
-    },
-    // {
-    //     path: '/logout',
-    //     name: 'Logout',
-    // }
+    }
 ]
 const router = createRouter({history,routes})
 
