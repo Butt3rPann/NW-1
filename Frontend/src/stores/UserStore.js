@@ -37,7 +37,15 @@ export const useUserStore = defineStore('user', () => {
         return userType.value
     }
 
-    return { nickName, storeAccessToken, getAccessToken, getNickname, userId, getUserId, userType, getUserType }
+    function removeAccessToken() {
+        localStorage.removeItem('access_token')
+        access_token.value = ''
+        nickName.value = ''
+        userId.value = null
+        userType.value = null
+    }
+
+    return { nickName, storeAccessToken, getAccessToken, removeAccessToken, getNickname, userId, getUserId, userType, getUserType }
 })
 
 if (import.meta.hot) {
