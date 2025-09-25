@@ -178,24 +178,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-async function logoutUser(url, access_token) {
-  try {
-    const headers = new Headers();
-    if (access_token) {
-      const authHeader = `Bearer ${access_token}`;
-      headers.append("Authorization", authHeader);
-    }
-    const res = await fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers
-    });
-    const data = await res.json();
-    return data
-  } catch (error) {
-    throw new Error('Logout request failed');
-  }
-}
-
-
 export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}

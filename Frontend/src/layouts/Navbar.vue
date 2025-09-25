@@ -5,9 +5,10 @@ import logoImg from '@/assets/images/logo.png'
 import profileImg from '@/assets/images/profile.png'
 import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 
 const userStore = useUserStore()
-const { getNickname} = userStore
+const { getNickname, removeAccessToken} = userStore
 const { nickName } = storeToRefs(userStore)
 
 const route = useRoute()
@@ -22,10 +23,10 @@ const navItems = [
 
 const isMenuOpen = ref(false)
 
-// const handleLogout = () => {
-//     removeAccessToken()
-//     router.push({ name: '' })  
-// }
+ const handleLogout = () => {
+    removeAccessToken()
+    router.push({ name: 'SaleItems' })  
+ }
 </script>
 
 <template>
@@ -64,9 +65,9 @@ const isMenuOpen = ref(false)
                 <img :src="profileImg" class="w-10"/>
 		        <p>{{ nickName }}</p>
             </router-link>
-            <router-link :to="{ name: 'Logout' }" class="itbms-logout ml-5 cursor-pointer">
+            <div @click="handleLogout" class="itbms-logout ml-5 cursor-pointer" >
                 Logout
-            </router-link>
+            </div>
         </div>
         <div v-if="isMenuOpen" class="absolute left-0 top-14 bg-[#6F879C] text-xs md:hidden font-medium flex items-center flex-col w-full gap-3 py-5">
             <router-link v-for="item in navItems" :key="item.name" :to="{ name: item.pathname }" @click="isMenuOpen = false" class="w-full flex justify-center transition-all duration-150">

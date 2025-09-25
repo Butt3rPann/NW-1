@@ -104,15 +104,6 @@ const routes = [
         path: '/profile/edit',
         name: 'EditProfile',
         component: EditProfileForm
-    },
-    {
-        path: '/signout',
-        name: 'Logout',
-        beforeEnter: (to, from,next) => {
-            const userStore = useUserStore()
-            userStore.removeAccessToken() 
-            next({ name: 'SaleItems' })      
-        }
     }
 ]
 const router = createRouter({history,routes})
