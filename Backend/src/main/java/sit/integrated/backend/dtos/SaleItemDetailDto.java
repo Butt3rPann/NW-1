@@ -18,6 +18,7 @@ public class SaleItemDetailDto {
     private Integer quantity;
     private Integer storageGb;
     private String color;
+    private SellerDto seller;
     private List<SaleItemImageDto> saleItemImages;
     private Instant createdOn;
     private Instant updatedOn;

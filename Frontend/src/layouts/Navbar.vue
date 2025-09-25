@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
-const { getNickname, removeAccessToken } = userStore
+const { getNickname } = userStore
 const { nickName } = storeToRefs(userStore)
 
 const route = useRoute()
@@ -21,11 +21,6 @@ const navItems = [
 ]
 
 const isMenuOpen = ref(false)
-
-function logout() {
-    removeAccessToken()
-    window.location.reload()
-}
 </script>
 
 <template>
@@ -62,14 +57,11 @@ function logout() {
         <div v-else class="flex justify-center items-center">
             <router-link :to="{ name: 'Profile' }" class="itbms-profile hidden md:flex justify-center items-center gap-2">
                 <img :src="profileImg" class="w-10"/>
-		<!-- <p class="itbms-nickname">{{ nickName }}</p> -->
-		<p>{{ nickName }}</p>
+		        <p>{{ nickName }}</p>
             </router-link>
-            <!-- <router-link :to="{ name: 'Logout' }"> -->
-            <div @click="logout">
+            <div>
                 <p class="itbms-logout ml-5">Logout</p>
-            </div>  
-            <!-- </router-link> -->
+            </div>
         </div>
         <div v-if="isMenuOpen" class="absolute left-0 top-14 bg-[#6F879C] text-xs md:hidden font-medium flex items-center flex-col w-full gap-3 py-5">
             <router-link v-for="item in navItems" :key="item.name" :to="{ name: item.pathname }" @click="isMenuOpen = false" class="w-full flex justify-center transition-all duration-150">

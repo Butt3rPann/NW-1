@@ -14,6 +14,7 @@ import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
+import sit.integrated.backend.services.SellerService;
 import sit.integrated.backend.utils.ListMapper;
 
 import java.util.List;
@@ -31,6 +32,8 @@ public class SaleItemControllerV2 {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
+    @Autowired
+    private SellerService sellerService;
 
     @GetMapping("/sale-items")
     public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(@RequestParam(required = false) String sortField,
@@ -66,6 +69,7 @@ public class SaleItemControllerV2 {
         SaleItem saleItem = saleItemService.getSaleItemDetail(id);
         SaleItemDetailDto saleItemDetailDto = modelMapper.map(saleItem, SaleItemDetailDto.class);
         saleItemDetailDto.setSaleItemImages(fileService.getSaleItemImages(id));
+        saleItemDetailDto.setSeller(modelMapper.map(sellerService.getSellerBySaleItemId(id), SellerDto.class));
         return ResponseEntity.ok(saleItemDetailDto);
     }
 

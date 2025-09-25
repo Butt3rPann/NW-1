@@ -15,8 +15,11 @@ import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import boxImg from '@/assets/images/box.png'
 import productNotFound from '@/assets/images/product-not-found.png'
+import { useUserStore } from '@/stores/UserStore'
 
 const { params: { saleItemId } } = useRoute()
+const userStore = useUserStore()
+const { getUserId } = userStore
 
 const selectedItem = ref({})
 
@@ -123,7 +126,7 @@ function closeDelConfirm() {
                         <ItemDetailRow label="ScreenSizeInch" :value="selectedItem.screenSizeInch" unit="Inches" valueClass="itbms-screenSizeInch" unitClass="itbms-screenSizeInch-unit" />
                         <ItemDetailRow label="Color" :value="selectedItem.color" valueClass="itbms-color" />
                     </div>
-                    <div class="flex justify-center items-center gap-10 m-4">
+                    <div v-if="getUserId() === selectedItem.seller.id" class="flex justify-center items-center gap-10 m-4">
                         <router-link :to="{ name: 'EditSaleItem', params: { id: saleItemId } }">
                             <BaseButton :icon="editIcon" text="Edit" class="itbms-edit-button"/>
                         </router-link>
