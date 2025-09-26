@@ -11,7 +11,7 @@ import org.hibernate.annotations.Immutable;
 public class ViewStoragegb {
 
     @Id
-    @Column(name = "storageGb")
+    @Column(name = "storage_gb")
     private Integer storageGb;
 
 }

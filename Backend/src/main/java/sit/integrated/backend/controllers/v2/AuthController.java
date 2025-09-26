@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 import sit.integrated.backend.dtos.UserSignInDto;
+import sit.integrated.backend.services.AuthService;
 import sit.integrated.backend.services.EmailService;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.UserService;
@@ -28,6 +29,8 @@ import java.util.Map;
 public class AuthController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthService authService;
     @Autowired
     private FileService fileService;
     @Autowired
@@ -55,7 +58,7 @@ public class AuthController {
         }
         String email = claims.get("email").toString();
         Integer id = Integer.valueOf(claims.get("id").toString());
-        UserResponseDto user = userService.getUserById(id);
+        UserResponseDto user = userService.getUserResponseDtoById(id);
         if (user.getIsActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already active");
         }
@@ -66,7 +69,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
-        Map<String, Object> tokens = userService.authenticateUser(userSignInDto);
+        Map<String, Object> tokens = authService.authenticateUser(userSignInDto);
         ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
                 .httpOnly(true)
                 .secure(true)

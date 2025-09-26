@@ -11,11 +11,12 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.SaleItem;
+import sit.integrated.backend.entities.Seller;
+import sit.integrated.backend.entities.User;
 import sit.integrated.backend.services.SaleItemService;
-import sit.integrated.backend.services.SellerService;
+import sit.integrated.backend.services.UserService;
 import sit.integrated.backend.utils.ListMapper;
 
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -29,7 +30,7 @@ public class SellerController {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    private SellerService sellerService;
+    private UserService userService;
 
     @GetMapping("/sellers/{id}/sale-items")
     public ResponseEntity<PageDto<SaleItemListDto>> getSaleItems(@PathVariable Integer id,
@@ -44,7 +45,9 @@ public class SellerController {
         }
         Page<SaleItem> saleItems = saleItemService.getSaleItemsBySeller(id, sortField, sortDirection, page, size);
         PageDto<SaleItemListDto> dtos = listMapper.toPageDto(saleItems, SaleItemListDto.class, modelMapper);
-        dtos.getContent().forEach(item -> item.setSeller(modelMapper.map(sellerService.getSellerById(id), SellerDto.class)));
+        User user = userService.getUserById(id);
+        SellerDto sellerDto = modelMapper.map(user, SellerDto.class);
+        dtos.getContent().forEach(item -> item.setSeller(sellerDto));
         return ResponseEntity.ok(dtos);
     }
 }

@@ -50,7 +50,7 @@ if (route.query.updated === 'true') {
 </script>
  
 <template>
-<div class="w-full h-screen font-rubik flex flex-col items-center justify-center text-[#332A1E] bg-white pb-20 pt-30 px-10 md:px-22 lg:px-25">
+<div class="w-full font-rubik flex flex-col items-center justify-center text-[#332A1E] bg-white pb-20 pt-30 px-10 md:px-22 lg:px-25">
     <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
     <div class="mt-5 mr-auto items-start justify-start">
         <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
@@ -59,7 +59,7 @@ if (route.query.updated === 'true') {
             <span class="text-[#6F879C]">Profile</span>
         </p>        
     </div>
-    <p class="mb-2 text-2xl font-semibold"><span class="itbms-type">{{ type }} </span> Profile</p>
+    <p class="mb-3 text-3xl font-semibold"><span class="itbms-type">{{ type }} </span> Profile</p>
     <div class="w-3/4 h-fit p-10 shadow-md rounded-3xl bg-gray-100">
         <div class="flex items-center justify-between">
             <div class="flex items-center">

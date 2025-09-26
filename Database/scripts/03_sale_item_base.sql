@@ -1,6 +1,6 @@
 USE itbms;
 
-INSERT INTO sale_items (id, model, brandId, description, price, ramGb, screenSizeInch, storageGb, color, quantity, seller_id) VALUES 
+INSERT INTO sale_items (sale_item_id, model, brand_id, description, price, ram_gb, screen_size_inch, storage_gb, color, quantity, seller_id) VALUES 
 (1,'iPhone 14 Pro Max',2,'ไอโฟนเรือธงรุ่นล่าสุด มาพร้อม Dynamic Island จอใหญ่สุดในตระกูล กล้องระดับโปร',42900,6,6.70,512,'Space Black',5, 3),
 (2,'iPhone 14',2,'ไอโฟนรุ่นใหม่ล่าสุด รองรับ 5G เร็วแรง ถ่ายภาพสวยทุกสภาพแสง',29700,6,6.10,256,'Midnight',8, 4),
 (3,'iPhone 13 Pro',2,'ไอโฟนรุ่นโปร จอ ProMotion 120Hz กล้องระดับมืออาชีพ',33000,6,6.10,256,'Sierra Blue',3, 3),

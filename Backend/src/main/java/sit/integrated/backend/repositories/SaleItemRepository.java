@@ -9,6 +9,6 @@ import sit.integrated.backend.entities.SaleItem;
 
 
 public interface SaleItemRepository extends JpaRepository<SaleItem, Integer>, JpaSpecificationExecutor<SaleItem> {
-    @Query("SELECT sa FROM SaleItem sa WHERE sa.seller.userId = ?1 ORDER BY sa.createdOn ASC, sa.id ASC")
+    @Query("SELECT sa FROM SaleItem sa WHERE sa.user.id = ?1")
     Page<SaleItem> getSaleItemsBySeller(Integer sellerId, Pageable pageable);
 }

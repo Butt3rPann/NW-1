@@ -19,7 +19,7 @@ import java.time.Instant;
 public class SaleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "sale_item_id", nullable = false)
     private Integer id;
 
     @Size(max = 60)
@@ -29,7 +29,7 @@ public class SaleItem {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "brandId", nullable = false)
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @NotNull
@@ -40,13 +40,13 @@ public class SaleItem {
     @Column(name = "price", nullable = false)
     private Integer price;
 
-    @Column(name = "ramGb")
+    @Column(name = "ram_gb")
     private Integer ramGb;
 
-    @Column(name = "screenSizeInch", precision = 4, scale = 2)
+    @Column(name = "screen_size_inch", precision = 4, scale = 2)
     private BigDecimal screenSizeInch;
 
-    @Column(name = "storageGb")
+    @Column(name = "storage_gb")
     private Integer storageGb;
 
     @Size(max = 40)
@@ -60,7 +60,7 @@ public class SaleItem {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
-    private Seller seller;
+    private User user;
 
     @CreationTimestamp
     @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)

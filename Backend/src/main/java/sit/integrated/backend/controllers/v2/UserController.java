@@ -24,10 +24,10 @@ public class UserController {
                 .getContext()
                 .getAuthentication()
                 .getPrincipal()).getId();
-
         if (!Objects.equals(id, tokenUserId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
         }
+
         return ResponseEntity.ok(userService.getUserProfileById(id)) ;
 
     }
@@ -35,11 +35,11 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<BuyerResponseDto> updateUserProfile(@PathVariable Integer id, @RequestBody UserProfileDto userProfileDto) {
         AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(userDetail);
         Integer tokenUserId = userDetail.getId();
         if (!Objects.equals(id, tokenUserId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
         }
+
         BuyerResponseDto updatedUser = userService.updateUserProfileById(id, userProfileDto);
         return ResponseEntity.ok(updatedUser);
     }

@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { ref} from 'vue'
+import { ref } from 'vue'
 import logoImg from '@/assets/images/logo.png'
 import profileImg from '@/assets/images/profile.png'
 import { useUserStore } from '@/stores/UserStore'
@@ -8,7 +8,7 @@ import { storeToRefs } from 'pinia'
 import router from '@/router'
 
 const userStore = useUserStore()
-const { getNickname, removeAccessToken} = userStore
+const { getNickname, removeAccessToken } = userStore
 const { nickName } = storeToRefs(userStore)
 
 const route = useRoute()
@@ -60,12 +60,12 @@ const isMenuOpen = ref(false)
                 <p>Signup</p>
             </router-link>
         </div>
-        <div v-else class="flex justify-center items-center">
+        <div v-else class="hidden md:flex gap-7 font-medium items-center">
             <router-link :to="{ name: 'Profile' }" class="itbms-profile hidden md:flex justify-center items-center gap-2">
                 <img :src="profileImg" class="w-10"/>
 		        <p>{{ nickName }}</p>
             </router-link>
-            <div @click="handleLogout" class="itbms-logout ml-5 cursor-pointer" >
+            <div @click="handleLogout" class="itbms-logout cursor-pointer">
                 Logout
             </div>
         </div>

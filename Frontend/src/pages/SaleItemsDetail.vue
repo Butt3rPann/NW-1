@@ -126,7 +126,7 @@ function closeDelConfirm() {
                         <ItemDetailRow label="ScreenSizeInch" :value="selectedItem.screenSizeInch" unit="Inches" valueClass="itbms-screenSizeInch" unitClass="itbms-screenSizeInch-unit" />
                         <ItemDetailRow label="Color" :value="selectedItem.color" valueClass="itbms-color" />
                     </div>
-                    <div v-if="getUserId() === selectedItem.seller.id" class="flex justify-center items-center gap-10 m-4">
+                    <div v-if="getUserId() === selectedItem?.seller?.id" class="flex justify-center items-center gap-10 m-4">
                         <router-link :to="{ name: 'EditSaleItem', params: { id: saleItemId } }">
                             <BaseButton :icon="editIcon" text="Edit" class="itbms-edit-button"/>
                         </router-link>
