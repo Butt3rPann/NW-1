@@ -67,6 +67,7 @@ public class SaleItemControllerV2 {
         SaleItem saleItem = saleItemService.getSaleItemDetail(id);
         SaleItemDetailDto saleItemDetailDto = modelMapper.map(saleItem, SaleItemDetailDto.class);
         saleItemDetailDto.setSaleItemImages(fileService.getSaleItemImages(id));
+        saleItemDetailDto.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), SellerDto.class));
         return ResponseEntity.ok(saleItemDetailDto);
     }
 

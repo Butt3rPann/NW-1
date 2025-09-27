@@ -14,6 +14,7 @@ import SignIn from "../pages/Signin.vue";
 import Profile from "@/pages/Profile.vue";
 import EditProfileForm from "@/components/form/EditProfileForm.vue";
 import { useUserStore } from "@/stores/UserStore";
+import Cart from "@/pages/Cart.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -47,7 +48,7 @@ const routes = [
         path: '/sale-items/:id/edit',
         name: 'EditSaleItem',
         component: EditSaleItemForm,
-                beforeEnter: (to, from) => {
+        beforeEnter: (to, from) => {
             const userStore = useUserStore()
             if (userStore.getUserType() !== "SELLER") {
                 return { name: 'SaleItems' }
@@ -104,13 +105,20 @@ const routes = [
         path: '/profile/edit',
         name: 'EditProfile',
         component: EditProfileForm
+    },
+    {
+        path: '/cart',
+        name: 'Cart',
+        component: Cart
     }
 ]
 const router = createRouter({history,routes})
 
 router.beforeEach((to, from) => {
     const isLoggedIn = !!localStorage.getItem('access_token')
-    if (!isLoggedIn && (to.name === 'Profile' || to.name === 'EditProfile')) {
+    if (!isLoggedIn && (to.name === 'Profile' || 
+                        // to.name === 'Cart' ||
+                        to.name === 'EditProfile')) {
         return { name: 'SignIn' }
     }
 })
