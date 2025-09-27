@@ -30,16 +30,6 @@ public class Seller {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Size(max = 40)
-    @NotNull
-    @Column(name = "nick_name", nullable = false, length = 40)
-    private String nickName;
-
-    @Size(max = 60)
-    @NotNull
-    @Column(name = "full_name", nullable = false, length = 60)
-    private String fullName;
-
     @Size(max = 20)
     @NotNull
     @Column(name = "phone_number", nullable = false, length = 20)
@@ -67,8 +57,4 @@ public class Seller {
     @UpdateTimestamp
     @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
-
-    @OneToMany(mappedBy = "seller")
-    private Set<SaleItem> saleItems = new LinkedHashSet<>();
-
 }

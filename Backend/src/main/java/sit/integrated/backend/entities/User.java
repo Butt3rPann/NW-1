@@ -11,6 +11,8 @@ import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.UserStatus;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -37,6 +39,16 @@ public class User {
     @Column(name = "user_type", nullable = false)
     private Role userType;
 
+    @Size(max = 40)
+    @NotNull
+    @Column(name = "nick_name", nullable = false, length = 40)
+    private String nickName;
+
+    @Size(max = 60)
+    @NotNull
+    @Column(name = "full_name", nullable = false, length = 60)
+    private String fullName;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -49,4 +61,7 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
     private Instant updatedOn;
+
+    @OneToMany(mappedBy = "user")
+    private Set<SaleItem> saleItems = new LinkedHashSet<>();
 }

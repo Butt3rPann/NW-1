@@ -8,17 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.SaleItem;
 import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
-import sit.integrated.backend.services.SellerService;
+import sit.integrated.backend.services.UserService;
 import sit.integrated.backend.utils.ListMapper;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
@@ -33,7 +31,7 @@ public class SaleItemControllerV2 {
     @Autowired
     private ListMapper listMapper;
     @Autowired
-    private SellerService sellerService;
+    private UserService userService;
 
     @GetMapping("/sale-items")
     public ResponseEntity<PageDto<SaleItemDetailDto>> getSaleItems(@RequestParam(required = false) String sortField,
@@ -69,7 +67,6 @@ public class SaleItemControllerV2 {
         SaleItem saleItem = saleItemService.getSaleItemDetail(id);
         SaleItemDetailDto saleItemDetailDto = modelMapper.map(saleItem, SaleItemDetailDto.class);
         saleItemDetailDto.setSaleItemImages(fileService.getSaleItemImages(id));
-        saleItemDetailDto.setSeller(modelMapper.map(sellerService.getSellerBySaleItemId(id), SellerDto.class));
         return ResponseEntity.ok(saleItemDetailDto);
     }
 

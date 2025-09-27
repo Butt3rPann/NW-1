@@ -142,8 +142,8 @@ const cancel = () => {
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 </template>

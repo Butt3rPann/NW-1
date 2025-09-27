@@ -106,7 +106,7 @@ public class JwtUtils {
     public Map<String, Object> getJWTClaimsSet(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            return  signedJWT.getJWTClaimsSet().getClaims();
+            return signedJWT.getJWTClaimsSet().getClaims();
         } catch (ParseException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT (Can't parsed)", ex);
         }

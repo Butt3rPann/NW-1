@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.SaleItem;
-import sit.integrated.backend.entities.Seller;
+import sit.integrated.backend.entities.User;
 import sit.integrated.backend.repositories.BrandRepository;
 import sit.integrated.backend.repositories.SaleItemRepository;
-import sit.integrated.backend.repositories.SellerRepository;
+import sit.integrated.backend.repositories.UserRepository;
 import sit.integrated.backend.utils.SaleItemSpecifications;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class SaleItemService {
     @Autowired
     private SaleItemRepository saleItemRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -89,12 +89,12 @@ public class SaleItemService {
     @Transactional
     public SaleItemDetailDto createSaleItemBySeller(SaleItemFormDto formDto, Integer sellerId) {
         formDto.setId(null);
-	if(!brandRepository.existsById(formDto.getBrand().getId())) {
+	    if (!brandRepository.existsById(formDto.getBrand().getId())) {
             throw new ResourceNotFoundException("Brand not found for this id :: " + formDto.getBrand().getId());
         }
-        Seller seller = sellerRepository.findById(sellerId).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
         SaleItem saleItem = modelMapper.map(formDto, SaleItem.class);
-        saleItem.setSeller(seller);
+        User user = userRepository.findById(sellerId).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
+        saleItem.setUser(user);
         return modelMapper.map(saleItemRepository.save(saleItem), SaleItemDetailDto.class);
     }
 }

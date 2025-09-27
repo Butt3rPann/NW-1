@@ -1,6 +1,6 @@
 USE itbms;
 
-INSERT INTO brands (id, name, websiteUrl, isActive, countryOfOrigin) VALUES 
+INSERT INTO brands (brand_id, name, website_url, isActive, country_of_origin) VALUES 
 (1,'Samsung','https://www.samsung.com',1,'South Korea'),
 (2,'Apple','https://www.apple.com',1,'United States'),
 (3,'Xiaomi','https://www.mi.com',1,'China'),

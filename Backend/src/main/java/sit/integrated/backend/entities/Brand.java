@@ -20,7 +20,7 @@ import java.util.Set;
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "brand_id", nullable = false)
     private Integer id;
 
     @Size(max = 30)
@@ -29,7 +29,7 @@ public class Brand {
     private String name;
 
     @Size(max = 40)
-    @Column(name = "websiteUrl", length = 40)
+    @Column(name = "website_url", length = 40)
     private String websiteUrl;
 
     @ColumnDefault("1")
@@ -37,7 +37,7 @@ public class Brand {
     private Boolean isActive;
 
     @Size(max = 80)
-    @Column(name = "countryOfOrigin", length = 80)
+    @Column(name = "country_of_origin", length = 80)
     private String countryOfOrigin;
 
     @CreationTimestamp
