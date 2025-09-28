@@ -1,4 +1,4 @@
-<script setup>
+ <script setup>
 import ListModel from '@/components/model/ListModel.vue'
 
 defineProps({
@@ -22,7 +22,8 @@ defineProps({
                 <p class="itbms-model">{{ slotProps.itemInList.model }}</p>                
                 <p>
                     <span class="itbms-ramGb ">{{ slotProps.itemInList.ramGb ?? '-' }}</span>/<span class="itbms-storageGb">{{ slotProps.itemInList.storageGb ?? '-' }}</span>
-                    <span class="itbms-storageGb-unit">GB</span>
+                    <span class="itbms-storageGb-unit">GB </span>
+                    <span class="itbms-color">{{ slotProps.itemInList.color }}</span>
                 </p>
             </div>
             <p class="text-[#6F879C] text-[0.7rem] md:text-[0.7rem] lg:text-[0.9rem]">
