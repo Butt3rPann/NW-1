@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     int updateStatusByEmail(String email, UserStatus status);
 
     Optional<User> findByEmail(String email);
+
+    @Query("SELECT s.user FROM SaleItem s WHERE s.id = ?1")
+    User getUserBySaleItemId(Integer saleItemId);
 }

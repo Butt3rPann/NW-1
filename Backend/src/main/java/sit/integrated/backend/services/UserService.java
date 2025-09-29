@@ -156,4 +156,8 @@ public class UserService {
     public User getUserById(Integer id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("seller not found"));
     }
+
+    public User getUserBySaleItemId(Integer id) {
+        return userRepository.getUserBySaleItemId(id);
+    }
 }

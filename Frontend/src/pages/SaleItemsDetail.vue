@@ -15,11 +15,12 @@ import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import boxImg from '@/assets/images/box.png'
 import productNotFound from '@/assets/images/product-not-found.png'
+import cart from '@/assets/images/cart.png'
 import { useUserStore } from '@/stores/UserStore'
 
 const { params: { saleItemId } } = useRoute()
 const userStore = useUserStore()
-const { getUserId } = userStore
+const { getUserId, addToCart } = userStore
 
 const selectedItem = ref({})
 
@@ -76,6 +77,34 @@ const showDelConfirm = ref(false)
 function closeDelConfirm() {
     showDelConfirm.value = false
 }
+
+const cartQty = ref(1)
+
+const incCartQty = () => {
+    if (cartQty.value < selectedItem.value.quantity) {
+        cartQty.value += 1
+    }
+}
+
+const decCartQty = () => {
+    if (cartQty.value !== 1) {
+        cartQty.value -= 1
+    }
+}
+
+function addItemToCart() {
+    const item = {
+        id: selectedItem.value.id,
+        brandName: selectedItem.value.brandName,
+        model: selectedItem.value.model,
+        storageGb : selectedItem.value.storageGb,
+        color: selectedItem.value.color,
+        quantity: cartQty.value,
+        maxQuantity: selectedItem.value.quantity,
+        priceEach: selectedItem.value.price
+    }
+    addToCart(selectedItem.value.seller.id, selectedItem.value.seller.userName, item)
+}
 </script>
 
 <template>
@@ -101,6 +130,12 @@ function closeDelConfirm() {
                     <div class="border-b-3 border-[#E5E8F4] pb-4.5 space-y-3">
                         <p class="itbms-brand text-[#A4A4A3] text-base lg:text-lg xl:text-xl">{{ selectedItem.brandName }}</p>
                         <p class="itbms-model text-[#332A1E] font-bold text-2xl md:text-3xl xl:text-4xl">{{ selectedItem.model }}</p>
+                        <div class="flex gap-2 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                                <path fill="#332A1E" d="M6.123 7.25L6.914 2H2.8L1.081 6.5q-.08.24-.081.5c0 1.104 1.15 2 2.571 2c1.31 0 2.393-.764 2.552-1.75M10 9c1.42 0 2.571-.896 2.571-2q-.001-.062-.005-.121L12.057 2H7.943l-.51 4.875L7.429 7c0 1.104 1.151 2 2.571 2m5 1.046V14H5v-3.948c-.438.158-.92.248-1.429.248c-.195 0-.384-.023-.571-.049V16.6c0 .77.629 1.4 1.398 1.4H15.6c.77 0 1.4-.631 1.4-1.4v-6.348a4 4 0 0 1-.571.049A4.2 4.2 0 0 1 15 10.046M18.92 6.5L17.199 2h-4.113l.79 5.242C14.03 8.232 15.113 9 16.429 9C17.849 9 19 8.104 19 7q-.001-.26-.08-.5" />
+                            </svg>
+                            <p class="itbms-nickname font-medium">{{ selectedItem.seller.userName }}</p>
+                        </div>
                         <p class="itbms-description text-[#6F879C] text-sm md:text-base lg:text-lg font-light">{{ selectedItem.description }}</p>
                     </div>
                     <div class="flex justify-between border-b-3 py-5 gap-3 border-[#E5E8F4] flex-col lg:flex-row">
@@ -131,6 +166,14 @@ function closeDelConfirm() {
                             <BaseButton :icon="editIcon" text="Edit" class="itbms-edit-button"/>
                         </router-link>
                         <BaseButton @click="showDelConfirm = true" :icon="trashIcon" text="Delete" textColor="text-[#D27B7B]" borderColor="border-[#D27B7B]" class="itbms-delete-button"/>
+                    </div>
+                    <div class="flex my-4 text-sm md:text-base lg:text-lg justify-center gap-7">
+                        <div class="flex gap-5 items-center border-2 border-[#6F879C] rounded-md">
+                            <button @click="decCartQty" class="itbms-dec-qty-button py-2.5 px-4 border-r border-[#6F879C] text-[#6F879C] font-medium" :class="cartQty === 1 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-[#6F879C]/15'">-</button>
+                            <p class="itbms-add-to-cart-quantity">{{ cartQty }}</p>
+                            <button @click="incCartQty" class="itbms-inc-qty-button py-2.5 px-4 border-l border-[#6F879C] text-[#6F879C] font-medium" :class="cartQty === selectedItem.quantity ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-[#6F879C]/15'">+</button>
+                        </div>
+                        <BaseButton @click="addItemToCart" :icon="cart" text="Add to Cart" bg-color="bg-[#6F879C]" text-color="text-[#FFFFFF]" class="itbms-add-to-cart-button w-full"/>
                     </div>
                     <div class="text-xs lg:text-sm space-y-1 md:gap-7 flex items-center flex-col md:flex-row justify-between mt-3">
                         <div class="flex gap-1">

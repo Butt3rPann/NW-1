@@ -23,10 +23,10 @@ const navItems = [
 
 const isMenuOpen = ref(false)
 
- const handleLogout = () => {
-    removeAccessToken()
-    router.push({ name: 'SaleItems' })  
- }
+const handleLogout = () => {
+   removeAccessToken()
+   router.push({ name: 'SaleItems' })  
+}
 </script>
 
 <template>
@@ -42,7 +42,7 @@ const isMenuOpen = ref(false)
             <div class="menuIcon"></div>
             <div class="menuIcon"></div>
         </div>
-        <div class="hidden md:flex md:items-center text-xs md:text-sm lg:text-base xl:text-lg font-medium md:gap-4 lg:gap-10 xl:gap-14">
+        <div class="hidden md:flex md:items-center text-xs md:text-sm lg:text-base xl:text-lg font-medium md:gap-4 lg:gap-10 xl:gap-12">
             <router-link v-for="item in navItems" :key="item.name" :to="{ name: item.pathname }"
                 class="p-1 transition-all duration-150" 
                 :class="route.name === item.pathname
@@ -61,11 +61,19 @@ const isMenuOpen = ref(false)
             </router-link>
         </div>
         <div v-else class="hidden md:flex gap-7 font-medium items-center">
+            <router-link :to="{ name: 'Cart' }">
+                <div class="relative">
+                    <p class="absolute -top-1.5 -right-1.5 px-[0.30rem] rounded-full bg-[#D27B7B] text-[#F0EDEC] text-xs">1</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="#F0EDEC" d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2" />
+                    </svg>
+                </div>
+            </router-link>
             <router-link :to="{ name: 'Profile' }" class="itbms-profile hidden md:flex justify-center items-center gap-2">
                 <img :src="profileImg" class="w-10"/>
 		        <p>{{ nickName }}</p>
             </router-link>
-            <div @click="handleLogout" class="itbms-logout cursor-pointer">
+            <div @click="handleLogout" class="itbms-logout border py-1 px-2 rounded-md cursor-pointer">
                 Logout
             </div>
         </div>
