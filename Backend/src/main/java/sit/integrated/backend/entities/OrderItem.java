@@ -35,5 +35,4 @@ public class OrderItem {
     @Lob
     @Column(name = "description", nullable = false)
     private String description;
-
 }
