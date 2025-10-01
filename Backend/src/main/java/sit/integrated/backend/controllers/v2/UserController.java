@@ -68,6 +68,7 @@ public class UserController {
         }
         Page<Order> orders = orderService.getOrdersByBuyer(id, sortField, sortDirection, page, size);
         PageDto<OrderDto> dtos = listMapper.toPageDto(orders, OrderDto.class, modelMapper);
+        dtos.getContent().forEach(order -> order.getOrderItems().forEach(item -> item.setNo(order.getId())));
         return ResponseEntity.ok(dtos);
     }
 }

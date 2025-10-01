@@ -4,6 +4,7 @@ import lombok.Data;
 import sit.integrated.backend.utils.OrderStatus;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,10 +16,6 @@ public class OrderRequestDto {
     private Instant orderDate;
     private String shippingAddress;
     private String orderNote;
-    private Set<OrderItemDto> orderItems;
+    private List<OrderItemDto> orderItems;
     private OrderStatus orderStatus;
-
-    private void setOrderStatus() {
-        this.orderStatus = OrderStatus.COMPLETED;
-    }
 }

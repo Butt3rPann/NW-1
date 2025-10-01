@@ -43,7 +43,6 @@ public class SaleItemControllerV2 {
                                                                    @RequestParam(required = false) String searchKeyWord,
                                                                    @RequestParam Integer page,
                                                                    @RequestParam(required = false, defaultValue = "10") Integer size) {
-
         if (filterStorages != null && filterStorages.contains(-1)) {
             filterStorages = filterStorages.stream().map(value -> value == -1 ? null : value).toList();
         }

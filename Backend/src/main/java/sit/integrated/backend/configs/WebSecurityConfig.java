@@ -32,9 +32,10 @@ public class WebSecurityConfig {
         http.csrf(crsf -> crsf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.GET, "/v2/sale-items", "/v2/sale-items/*").permitAll()
+                        .requestMatchers("/v2/sale-items", "/v2/sale-items/*").hasAnyAuthority("SELLER")
                         .requestMatchers("/v2/sellers/**").hasAnyAuthority("SELLER")
-                        .requestMatchers(HttpMethod.POST, "/v2/sale-items").hasAnyAuthority("SELLER")
-                        .requestMatchers("/v2/users/**").hasAnyAuthority("SELLER", "BUYER")
+                        .requestMatchers("/v2/users/**", "/v2/orders/**").hasAnyAuthority("SELLER", "BUYER")
                         .anyRequest().permitAll())
                 .authenticationProvider(authenticationProvider(jwtUserDetailsService))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
