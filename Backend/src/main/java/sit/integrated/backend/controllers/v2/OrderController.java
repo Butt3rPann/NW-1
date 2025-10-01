@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.OrderRequestDto;
 import sit.integrated.backend.dtos.OrderResponseDto;
 import sit.integrated.backend.entities.AuthUserDetail;
@@ -21,9 +22,7 @@ public class OrderController {
 
     @PostMapping("/orders")
     public ResponseEntity<List<OrderResponseDto>> placeOrders (@RequestBody List<OrderRequestDto> orderRequests) {
-        AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = userDetail.getId();
-        List<OrderResponseDto> responses = orderService.placeOrders(userId, orderRequests);
+        List<OrderResponseDto> responses = orderService.placeOrders(orderRequests);
         return ResponseEntity.status(HttpStatus.CREATED).body(responses);
     }
 }

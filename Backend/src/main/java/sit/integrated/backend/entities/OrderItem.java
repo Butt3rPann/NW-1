@@ -10,15 +10,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
-    @EmbeddedId
-    private OrderItemId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_item_id", nullable = false)
+    private Integer id;
 
-    @MapsId("orderId")
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @MapsId("saleItemId")
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sale_item_id", nullable = false)
     private SaleItem saleItem;

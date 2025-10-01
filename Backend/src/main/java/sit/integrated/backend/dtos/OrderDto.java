@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class OrderDto {
+    @JsonIgnore
+    private Integer id;
     private Integer buyerId;
     private Integer sellerId;
     private Instant orderDate;
@@ -15,4 +17,14 @@ public class OrderDto {
     private String orderNote;
     private List<OrderItemDto> orderItems;
     private String orderStatus;
+    @JsonIgnore
+    private User user;
+
+    public Integer getBuyerId() {
+        return user != null ? user.getId() : null;
+    }
+
+    public Integer getSellerId() {
+        return orderItems.stream().findFirst().map(OrderItemDto::getSaleItemUserId).orElse(null);
+    }
 }

@@ -65,12 +65,12 @@ CREATE TABLE IF NOT EXISTS orders (
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS order_items (
+	order_item_id INT AUTO_INCREMENT PRIMARY KEY,
 	order_id INT NOT NULL,
     sale_item_id INT NOT NULL,
     price INT NOT NULL,
     quantity INT NOT NULL,
     description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    PRIMARY KEY (order_id, sale_item_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (sale_item_id) REFERENCES sale_items(sale_item_id)
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

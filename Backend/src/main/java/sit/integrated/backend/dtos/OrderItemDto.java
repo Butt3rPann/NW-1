@@ -12,4 +12,8 @@ public class OrderItemDto {
     private Integer price;
     private Integer quantity;
     private String description;
+    @JsonIgnore
+    private Order order;
+    @JsonIgnore
+    private Integer saleItemUserId;
 }

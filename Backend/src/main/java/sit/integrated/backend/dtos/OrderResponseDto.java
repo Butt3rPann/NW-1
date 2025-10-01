@@ -1,6 +1,8 @@
 package sit.integrated.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import sit.integrated.backend.entities.User;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -15,6 +17,6 @@ public class OrderResponseDto {
     private Instant orderDate;
     private String shippingAddress;
     private String orderNote;
-    private Set<OrderItemDto> orderItems;
+    private List<OrderItemDto> orderItems;
     private String orderStatus;
 }
