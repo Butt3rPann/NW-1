@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.OrderItemDto;
@@ -19,11 +20,9 @@ import sit.integrated.backend.repositories.OrderItemRepository;
 import sit.integrated.backend.repositories.OrderRepository;
 import sit.integrated.backend.repositories.SaleItemRepository;
 import sit.integrated.backend.repositories.UserRepository;
+import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.utils.OrderStatus;
-
-import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -98,5 +97,40 @@ public class OrderService {
             responses.add(response);
         }
         return responses;
+    }
+
+    public Order getOrderById(Integer id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found for id " + id));
+
+        AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Integer tokenUserId = userDetail.getId();
+        if (!Objects.equals(order.getUser().getId(), tokenUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched to order");
+        }
+        return order;
+    }
+
+    public OrderResponseDto getOrderResponseById(Integer id) {
+        Order order = getOrderById(id);
+
+        User seller = order.getOrderItems()
+                .stream()
+                .findFirst()
+                .map(item -> item.getSaleItem().getUser())
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found for this order"));
+
+        OrderResponseDto dto = modelMapper.map(order, OrderResponseDto.class);
+        SellerOrderDto sellerDto = modelMapper.map(seller, SellerOrderDto.class);
+
+        dto.setSeller(sellerDto);
+        dto.setBuyerId(order.getUser().getId());
+        dto.getOrderItems().forEach(item -> item.setNo(order.getId()));
+
+        return dto;
     }
 }
