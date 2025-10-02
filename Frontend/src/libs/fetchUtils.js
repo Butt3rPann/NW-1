@@ -96,44 +96,23 @@ async function getItemByIdWithToken(url, access_token, page, size) {
   }
 }
 
-async function postData(url, data) {
+async function postData(url, data, access_token) {
   try {
+    const headers = new Headers();
+    headers.append("content-type", "application/json");
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
     const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
+      headers,
       body: JSON.stringify(data)
     })
     const item = await res.json()
     return item
   } catch (error) {
       throw new Error('Failed to POST data')
-  }
-}
-
-async function postDataWithToken(url, data, access_token) {
-  try {
-    const headers = new Headers();
-    headers.append("content-type", "application/json");
-    if (access_token) {
-      const authHeader = `Bearer ${access_token}`;
-      headers.append("Authorization", authHeader);
-    }
-
-    const res = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(data)
-    });
-
-    if (!res.ok) {
-      throw new Error(`Request failed: ${res.status}`);
-    }
-
-    return await res.json();
-  } catch (error) {
-    throw new Error('Failed to POST data with token');
   }
 }
 

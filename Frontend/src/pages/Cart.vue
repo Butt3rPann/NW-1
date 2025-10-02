@@ -3,7 +3,7 @@ import BaseButton from '@/components/elements/BaseButton.vue';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { getItems, postDataWithToken } from '@/libs/fetchUtils'
+import { getItems, postData, postDataWithToken } from '@/libs/fetchUtils'
 
 const userStore = useUserStore()
 const { removeFromCart, storeCart, getAccessToken, getUserId } = userStore
@@ -95,7 +95,7 @@ const placeOrder = async () => {
   }).filter(o => o !== null)
 
   try {
-    await postDataWithToken(`${import.meta.env.VITE_APP_URL}/v2/orders`, orders, getAccessToken())
+    await postData(`${import.meta.env.VITE_APP_URL}/v2/orders`, orders, getAccessToken())
     alert("Order placed successfully!")
 
   } catch (error) {
