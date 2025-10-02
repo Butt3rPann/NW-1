@@ -182,4 +182,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-export { getItems, getItemById, postData, postDataWithToken, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
+export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
