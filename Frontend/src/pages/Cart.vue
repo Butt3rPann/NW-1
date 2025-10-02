@@ -1,14 +1,108 @@
 <script setup>
 import BaseButton from '@/components/elements/BaseButton.vue';
-import { ref } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
+import { getItems, postData, postDataWithToken } from '@/libs/fetchUtils'
 
 const userStore = useUserStore()
-const { removeFromCart, storeCart } = userStore
+const { removeFromCart, storeCart, getAccessToken, getUserId } = userStore
 const { cart } = storeToRefs(userStore)
 
-const checkbox = ref(true)
+const selectAll = ref(false)
+const sellerChecks = ref([])
+const itemChecks = ref([])
+
+onMounted(async () => {
+  try {
+    cart.value = await getItems(`${import.meta.env.VITE_APP_URL}/v2/sa`) 
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+const updateSelectAll = () => {
+  selectAll.value = sellerChecks.value.every(checked => checked)
+}
+
+watch(cart, (newCart) => {
+  sellerChecks.value = newCart.map((_, i) => sellerChecks.value[i] ?? false)
+  itemChecks.value = newCart.map((seller, i) =>
+    seller.saleItems.map((_, j) => itemChecks.value[i]?.[j] ?? false)
+  )
+  updateSelectAll()
+})
+
+const toggleSelectAll = () => {
+  sellerChecks.value = cart.value.map(() => selectAll.value)
+  itemChecks.value = cart.value.map(seller => seller.saleItems.map(() => selectAll.value))
+}
+
+const toggleSeller = (sellerIndex) => {
+  itemChecks.value[sellerIndex] = itemChecks.value[sellerIndex].map(() => sellerChecks.value[sellerIndex])
+  updateSelectAll()
+}
+
+const toggleItem = (sellerIndex) => {
+  sellerChecks.value[sellerIndex] = itemChecks.value[sellerIndex].every(checked => checked)
+  updateSelectAll()
+  //ส่งค่า parameter ส่ง seller.sellerid from template and then map 
+}
+
+const totalItems = computed(() => {
+  let count = 0
+  cart.value.forEach((seller, si) => {
+    seller.saleItems.forEach((item, ii) => {
+      if (itemChecks.value[si]?.[ii]) {
+        count += item.quantity
+      }
+    })
+  })
+  return count
+})
+
+const totalPrice = computed(() => {
+  let sum = 0
+  cart.value.forEach((seller, si) => {
+    seller.saleItems.forEach((item, ii) => {
+      if (itemChecks.value[si]?.[ii]) {
+        sum += item.priceEach * item.quantity
+      }
+    })
+  })
+  return sum
+})
+
+const placeOrder = async () => {
+  const buyerId = getUserId()
+  const orders = cart.value.map((seller, si) => {
+    const selectedItems = seller.saleItems.filter((_, ii) => itemChecks.value[si]?.[ii])
+    if (selectedItems.length === 0) return null
+
+    return {
+      buyerId,
+      sellerId: seller.sellerId,
+      orderDate: new Date().toISOString(),
+      shippingAddress: "บ้านใครก็ไม่รู้",
+      orderNote: "ส่งด่วน",
+      orderItems: selectedItems.map(item => ({
+        saleItemId: item.id,
+        price: item.priceEach,
+        quantity: item.quantity,
+        description: item.description
+      }))
+    }
+  }).filter(o => o !== null)
+
+  try {
+    await postData(`${import.meta.env.VITE_APP_URL}/v2/orders`, orders, getAccessToken())
+    alert("Order placed successfully!")
+
+  } catch (error) {
+    console.error(error)
+    alert("Failed to place order")
+  }
+}
 
 const decCartQty = (indexOfSeller, indexOfItem) => {
     const quantity = cart.value[indexOfSeller].saleItems[indexOfItem].quantity
@@ -28,7 +122,7 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
         cart.value[indexOfSeller].saleItems[indexOfItem].quantity += 1
         storeCart()
     }
-}
+}   
 </script>
  
 <template>
@@ -38,21 +132,21 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
             <div class="md:w-2/3 h-fit space-y-3">
                 <div class="flex gap-3 border border-[#332A1E]/10 shadow-sm rounded-md p-3">
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" v-model="checkbox" class="hidden peer itbms-select-all">
+                        <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" class="hidden peer itbms-select-all">
                         <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
-                            <svg v-if="checkbox" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
+                            <svg v-if="selectAll" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                 <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                             </svg>
                         </div>
                     </label>
                     <p class="font-medium text-sm xl:text-base">Select All</p>
                 </div>
-                <div v-for="(seller, indexOfSeller) in cart" :key="indexOfSeller.id" class="itbms-row border border-[#332A1E]/10 shadow-sm rounded-md px-3 pt-3">
+                <div v-for="(seller, indexOfSeller) in cart" :key="seller.sellerId" class="itbms-row border border-[#332A1E]/10 shadow-sm rounded-md px-3 pt-3">
                     <div class="flex gap-3 pb-3 border-b border-[#6F879C]/30">
                         <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" v-model="checkbox" class="hidden peer itbms-select-nickname">
+                            <input type="checkbox" v-model="sellerChecks[indexOfSeller]" @change="toggleSeller(indexOfSeller)" class="hidden peer itbms-select-nickname">
                             <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
-                                <svg v-if="checkbox" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
+                                <svg v-if="sellerChecks[indexOfSeller]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                     <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                                 </svg>
                             </div>
@@ -64,12 +158,12 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
                             <p class="itbms-nickname font-medium text-sm xl:text-base">{{ seller.sellerName }}</p>
                         </div>
                     </div>
-                    <div v-for="(item, indexOfItem) in seller.saleItems" :key="indexOfItem.id" class="px-4 pt-4" >
+                    <div v-for="(item, indexOfItem) in seller.saleItems" :key="item.id" class="px-4 pt-4" >
                         <div class="itbms-item-row flex gap-4 items-center min-h-20 pb-4" :class="indexOfItem !== seller.saleItems.length - 1 ? 'border-b border-[#332A1E]/10' : ''">
                             <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" v-model="checkbox" class="hidden peer">
+                                <input v-if="itemChecks[indexOfSeller]" type="checkbox"v-model="itemChecks[indexOfSeller][indexOfItem]"@change="toggleItem(indexOfSeller)"class="hidden peer"/>
                                 <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
-                                    <svg v-if="checkbox" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
+                                    <svg v-if="itemChecks[indexOfSeller][indexOfItem]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                         <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                                     </svg>
                                 </div>
@@ -101,17 +195,17 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
                 <div class="text-md sm:text-sm lg:text-lg space-y-1">
                     <div class="flex justify-between">
                         <p class="font-medium">Total items :</p>
-                        <p class="itbms-total-order-items">2</p>
+                        <p class="itbms-total-order-items">{{ totalItems }}</p>
                     </div>
                     <div class="flex justify-between">
                         <p class="font-medium">Total price :</p>
                         <p class="flex gap-2">
                             <span>Bath</span>
-                            <span class="itbms-total-order-price">62,700</span>
+                            <span class="itbms-total-order-price">{{ totalPrice }}</span>
                         </p>
                     </div>
                 </div>
-                <BaseButton text="Place order" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-place-order-button w-full"/>
+                <BaseButton text="Place order" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-place-order-button w-full" @click="placeOrder"/>
             </div>
         </div>
     </div>

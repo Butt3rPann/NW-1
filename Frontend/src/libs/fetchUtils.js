@@ -96,13 +96,17 @@ async function getItemByIdWithToken(url, access_token, page, size) {
   }
 }
 
-async function postData(url, data) {
+async function postData(url, data, access_token) {
   try {
+    const headers = new Headers();
+    headers.append("content-type", "application/json");
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
     const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
+      headers,
       body: JSON.stringify(data)
     })
     const item = await res.json()
@@ -178,4 +182,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
+export { getItems, getItemById, postData, postDataWithToken, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
