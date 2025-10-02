@@ -112,6 +112,31 @@ async function postData(url, data) {
   }
 }
 
+async function postDataWithToken(url, data, access_token) {
+  try {
+    const headers = new Headers();
+    headers.append("content-type", "application/json");
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`;
+      headers.append("Authorization", authHeader);
+    }
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      throw new Error(`Request failed: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    throw new Error('Failed to POST data with token');
+  }
+}
+
 async function editItem(url, id, editItem, access_token) {
   try {
     const headers = new Headers();
@@ -178,4 +203,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
+export { getItems, getItemById, postData, postDataWithToken, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
