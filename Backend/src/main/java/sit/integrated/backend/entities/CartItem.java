@@ -8,17 +8,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "order_items")
-public class OrderItem {
+@Table(name = "cart_items")
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id", nullable = false)
+    @Column(name = "cart_id", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -26,14 +26,19 @@ public class OrderItem {
     private SaleItem saleItem;
 
     @NotNull
-    @Column(name = "price", nullable = false)
-    private Integer price;
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    private String description;
 
     @NotNull
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @NotNull
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
-    private String description;
+    @Column(name = "max_quantity", nullable = false)
+    private Integer maxQuantity;
+
+    @NotNull
+    @Column(name = "price_each", nullable = false)
+    private Integer priceEach;
+
 }

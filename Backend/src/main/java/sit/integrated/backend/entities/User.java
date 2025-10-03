@@ -64,4 +64,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<SaleItem> saleItems = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<CartItem> cartItems = new LinkedHashSet<>();
+
 }
