@@ -10,6 +10,9 @@ const userStore = useUserStore()
 const { removeFromCart, storeCart, getAccessToken, getUserId } = userStore
 const { cart } = storeToRefs(userStore)
 
+console.log(cart.value);
+
+
 const selectAll = ref(false)
 const sellerChecks = ref([])
 const itemChecks = ref([])
