@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS orders (
     shipping_address VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     order_note TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, 
     order_status ENUM('COMPLETED', 'CANCELED') NOT NULL,
+    createdOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 

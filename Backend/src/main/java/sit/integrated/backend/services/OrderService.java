@@ -11,16 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import sit.integrated.backend.dtos.OrderItemDto;
-import sit.integrated.backend.dtos.OrderRequestDto;
-import sit.integrated.backend.dtos.OrderResponseDto;
-import sit.integrated.backend.dtos.SellerOrderDto;
+import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.*;
 import sit.integrated.backend.repositories.OrderItemRepository;
 import sit.integrated.backend.repositories.OrderRepository;
 import sit.integrated.backend.repositories.SaleItemRepository;
 import sit.integrated.backend.repositories.UserRepository;
 import sit.integrated.backend.entities.AuthUserDetail;
+import sit.integrated.backend.utils.ListMapper;
 import sit.integrated.backend.utils.OrderStatus;
 import java.util.*;
 
@@ -36,13 +34,30 @@ public class OrderService {
     private SaleItemRepository saleItemRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ListMapper listMapper;
 
-    public Page<Order> getOrdersByBuyer(Integer buyerId, String sortField, String sortDirection, Integer page, Integer size) {
+    public PageDto<OrderResponseDto> getOrdersByBuyer(Integer buyerId, Integer page, Integer size) {
         if (!userRepository.existsById(buyerId)) {
             throw new ResourceNotFoundException("User not found with id " + buyerId);
         }
-        Sort sort = (sortField == null ? Sort.by("orderDate", "id") : Sort.by(Sort.Direction.fromString(sortDirection), sortField).and(Sort.by("id")));
-        return orderRepository.findOrdersByUserId(buyerId, PageRequest.of(page, size, sort));
+        Sort sort =  Sort.by("orderDate").descending().and(Sort.by("id"));
+        Page<Order> orders = orderRepository.findOrdersByUserId(buyerId, PageRequest.of(page, size, sort));
+        PageDto<OrderResponseDto> dtos = listMapper.toPageDto(orders, OrderResponseDto.class, modelMapper);
+        for (int i = 0; i < orders.getContent().size(); i++) {
+            Order order = orders.getContent().get(i);
+            OrderResponseDto dto = dtos.getContent().get(i);
+
+            User seller = order.getOrderItems()
+                    .stream()
+                    .findFirst()
+                    .map(item -> item.getSaleItem().getUser())
+                    .orElseThrow(() -> new ResourceNotFoundException("Seller not found for this order"));
+            dto.setBuyerId(order.getUser().getId());
+            dto.setSeller(modelMapper.map(seller, SellerDto.class));
+            dto.getOrderItems().forEach(item -> item.setNo(order.getId()));
+        }
+        return dtos;
     }
 
     public void validateOrderRequest(List<OrderRequestDto> orderRequests) {
@@ -92,7 +107,7 @@ public class OrderService {
             OrderResponseDto response = modelMapper.map(order, OrderResponseDto.class);
             response.setBuyerId(order.getUser().getId());
             User seller = userRepository.findById(request.getSellerId()).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
-            response.setSeller(modelMapper.map(seller, SellerOrderDto.class));
+            response.setSeller(modelMapper.map(seller, SellerDto.class));
             response.getOrderItems().forEach(item -> item.setNo(order.getId()));
             responses.add(response);
         }
@@ -115,7 +130,7 @@ public class OrderService {
         return order;
     }
 
-    public OrderResponseDto getOrderResponseById(Integer id) {
+    public OrderDto getOrderResponseById(Integer id) {
         Order order = getOrderById(id);
 
         User seller = order.getOrderItems()
@@ -124,7 +139,7 @@ public class OrderService {
                 .map(item -> item.getSaleItem().getUser())
                 .orElseThrow(() -> new ResourceNotFoundException("Seller not found for this order"));
 
-        OrderResponseDto dto = modelMapper.map(order, OrderResponseDto.class);
+        OrderDto dto = modelMapper.map(order, OrderDto.class);
         SellerOrderDto sellerDto = modelMapper.map(seller, SellerOrderDto.class);
 
         dto.setSeller(sellerDto);
