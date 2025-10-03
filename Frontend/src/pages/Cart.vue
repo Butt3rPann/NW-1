@@ -1,9 +1,10 @@
 <script setup>
 import BaseButton from '@/components/elements/BaseButton.vue';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
 import { storeToRefs } from 'pinia';
-import { getItems, postData, postDataWithToken } from '@/libs/fetchUtils'
+import { postData } from '@/libs/fetchUtils'
+import PopupMessage from '../components/elements/PopupMessage.vue'
 
 const userStore = useUserStore()
 const { removeFromCart, storeCart, getAccessToken, getUserId } = userStore
@@ -13,13 +14,8 @@ const selectAll = ref(false)
 const sellerChecks = ref([])
 const itemChecks = ref([])
 
-onMounted(async () => {
-  try {
-    cart.value = await getItems(`${import.meta.env.VITE_APP_URL}/v2/sa`) 
-  } catch (error) {
-    console.error(error)
-  }
-})
+const isShowPopUp = ref(false)
+const errorMessage = ref('')
 
 const updateSelectAll = () => {
   selectAll.value = sellerChecks.value.every(checked => checked)
@@ -31,7 +27,7 @@ watch(cart, (newCart) => {
     seller.saleItems.map((_, j) => itemChecks.value[i]?.[j] ?? false)
   )
   updateSelectAll()
-})
+}, { immediate: true })
 
 const toggleSelectAll = () => {
   sellerChecks.value = cart.value.map(() => selectAll.value)
@@ -46,7 +42,6 @@ const toggleSeller = (sellerIndex) => {
 const toggleItem = (sellerIndex) => {
   sellerChecks.value[sellerIndex] = itemChecks.value[sellerIndex].every(checked => checked)
   updateSelectAll()
-  //ส่งค่า parameter ส่ง seller.sellerid from template and then map 
 }
 
 const totalItems = computed(() => {
@@ -74,6 +69,7 @@ const totalPrice = computed(() => {
 })
 
 const placeOrder = async () => {
+  isShowPopUp.value = false
   const buyerId = getUserId()
   const orders = cart.value.map((seller, si) => {
     const selectedItems = seller.saleItems.filter((_, ii) => itemChecks.value[si]?.[ii])
@@ -83,24 +79,32 @@ const placeOrder = async () => {
       buyerId,
       sellerId: seller.sellerId,
       orderDate: new Date().toISOString(),
-      shippingAddress: "บ้านใครก็ไม่รู้",
+      shippingAddress: "บ้านเนเน่",
       orderNote: "ส่งด่วน",
       orderItems: selectedItems.map(item => ({
         saleItemId: item.id,
         price: item.priceEach,
         quantity: item.quantity,
-        description: item.description
+        description: "ทดสอบ"
       }))
     }
   }).filter(o => o !== null)
 
   try {
-    await postData(`${import.meta.env.VITE_APP_URL}/v2/orders`, orders, getAccessToken())
-    alert("Order placed successfully!")
-
+    const placeOrder = await postData(`${import.meta.env.VITE_APP_URL}/v2/orders`, orders, getAccessToken())
+    if (placeOrder.status === 201){
+      alert("Order placed successfully!")
+    } else if (placeOrder.status === 404){
+      isShowPopUp.value = true
+      errorMessage.value = 'Seller cannot buy their own products'
+    } else if (placeOrder.status === 409){
+      isShowPopUp.value = true
+      const firstOrderWithItems = orders[0]
+      const firstItemId = firstOrderWithItems?.orderItems[0]?.saleItemId
+      errorMessage.value = 'Not enough stock for item ' + firstItemId
+    } 
   } catch (error) {
     console.error(error)
-    alert("Failed to place order")
   }
 }
 
@@ -123,10 +127,15 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
         storeCart()
     }
 }   
+
+const hasSelectedItems = computed(() => {
+  return itemChecks.value.some(seller => seller.some(item => item))
+})
 </script>
  
 <template>
     <div class="w-full min-h-screen font-rubik flex flex-col items-center text-[#332A1E] gap-10 bg-white pb-20 pt-25 px-10 md:pt-30 md:px-12 lg:pt-35 lg:px-25">
+      <PopupMessage :message="errorMessage" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
         <p class="text-2xl sm:text-3xl lg:text-4xl font-bold">Shopping Cart</p>
         <div class="flex flex-col md:flex-row w-full gap-5 lg:gap-10 xl:gap-15">
             <div class="md:w-2/3 h-fit space-y-3">
@@ -161,9 +170,9 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
                     <div v-for="(item, indexOfItem) in seller.saleItems" :key="item.id" class="px-4 pt-4" >
                         <div class="itbms-item-row flex gap-4 items-center min-h-20 pb-4" :class="indexOfItem !== seller.saleItems.length - 1 ? 'border-b border-[#332A1E]/10' : ''">
                             <label class="inline-flex items-center cursor-pointer">
-                                <input v-if="itemChecks[indexOfSeller]" type="checkbox"v-model="itemChecks[indexOfSeller][indexOfItem]"@change="toggleItem(indexOfSeller)"class="hidden peer"/>
+                                <input v-if="itemChecks[indexOfSeller]" type="checkbox" v-model="itemChecks[indexOfSeller][indexOfItem]"@change="toggleItem(indexOfSeller)"class="hidden peer"/>
                                 <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
-                                    <svg v-if="itemChecks[indexOfSeller][indexOfItem]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
+                                    <svg v-if="itemChecks[indexOfSeller]?.[indexOfItem]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                         <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                                     </svg>
                                 </div>
@@ -205,7 +214,7 @@ const incCartQty = (indexOfSeller, indexOfItem) => {
                         </p>
                     </div>
                 </div>
-                <BaseButton text="Place order" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-place-order-button w-full" @click="placeOrder"/>
+                <BaseButton text="Place order" bgColor="bg-[#6F879C] disabled:bg-[#ABBCC9]" textColor="text-white" class="itbms-place-order-button w-full disabled:border-[#ABBCC9]" @click="placeOrder" :disabled="!hasSelectedItems"/>
             </div>
         </div>
     </div>
