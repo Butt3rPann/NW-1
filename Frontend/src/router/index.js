@@ -15,6 +15,7 @@ import Profile from "@/pages/Profile.vue";
 import EditProfileForm from "@/components/form/EditProfileForm.vue";
 import { useUserStore } from "@/stores/UserStore";
 import Cart from "@/pages/Cart.vue";
+import OrderList from "@/pages/OrderList.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -110,6 +111,11 @@ const routes = [
         path: '/cart',
         name: 'Cart',
         component: Cart
+    },
+    {
+        path: '/your-orders',
+        name: 'OrderList',
+        component: OrderList
     }
 ]
 const router = createRouter({history,routes})

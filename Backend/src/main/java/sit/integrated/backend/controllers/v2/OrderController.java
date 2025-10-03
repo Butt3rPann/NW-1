@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sit.integrated.backend.dtos.OrderDto;
 import sit.integrated.backend.dtos.OrderRequestDto;
 import sit.integrated.backend.dtos.OrderResponseDto;
 import sit.integrated.backend.services.OrderService;
@@ -23,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Integer id) {
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrderResponseById(id));
     }
 }

@@ -1,8 +1,6 @@
 package sit.integrated.backend.controllers.v2;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,10 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.AuthUserDetail;
-import sit.integrated.backend.entities.Order;
 import sit.integrated.backend.services.OrderService;
 import sit.integrated.backend.services.UserService;
-import sit.integrated.backend.utils.ListMapper;
 import java.util.Objects;
 
 @RestController
@@ -23,10 +19,6 @@ public class UserController {
     private UserService userService;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private ListMapper listMapper;
 
     @GetMapping("/users/{id}")
     public ResponseEntity<BuyerResponseDto> getUserProfile(@PathVariable Integer id) {
@@ -55,9 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/orders")
-    public ResponseEntity<PageDto<OrderDto>> getAllUserOrders(@PathVariable Integer id,
-                                                              @RequestParam(required = false) String sortField,
-                                                              @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+    public ResponseEntity<PageDto<OrderResponseDto>> getAllUserOrders(@PathVariable Integer id,
                                                               @RequestParam Integer page,
                                                               @RequestParam(required = false, defaultValue = "10") Integer size) {
         AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -65,9 +55,7 @@ public class UserController {
         if (!Objects.equals(id, tokenUserId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request user id not matched");
         }
-        Page<Order> orders = orderService.getOrdersByBuyer(id, sortField, sortDirection, page, size);
-        PageDto<OrderDto> dtos = listMapper.toPageDto(orders, OrderDto.class, modelMapper);
-        dtos.getContent().forEach(order -> order.getOrderItems().forEach(item -> item.setNo(order.getId())));
+        PageDto<OrderResponseDto> dtos = orderService.getOrdersByBuyer(id, page, size);
         return ResponseEntity.ok(dtos);
     }
 }
