@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.AuthUserDetail;
+import sit.integrated.backend.services.CartItemService;
 import sit.integrated.backend.services.OrderService;
 import sit.integrated.backend.services.UserService;
+
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -19,6 +22,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private CartItemService cartItemService;
 
     @GetMapping("/users/{id}")
     public ResponseEntity<BuyerResponseDto> getUserProfile(@PathVariable Integer id) {
@@ -57,5 +62,10 @@ public class UserController {
         }
         PageDto<OrderResponseDto> dtos = orderService.getOrdersByBuyer(id, page, size);
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/users/{id}/carts")
+    public ResponseEntity<List<CartSellerWithItemsDto>> getCartItems(@PathVariable Integer id) {
+        return ResponseEntity.ok(cartItemService.getAllCartItem(id));
     }
 }

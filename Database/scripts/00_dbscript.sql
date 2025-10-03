@@ -54,11 +54,14 @@ CREATE TABLE IF NOT EXISTS sale_items (
     FOREIGN KEY (seller_id) REFERENCES users(user_id)
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS cartItems (
+CREATE TABLE IF NOT EXISTS cart_items (
 	cart_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     sale_item_id INT NOT NULL,
-	description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+	model VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    brand_name VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    color VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    storage_gb INT,
     quantity INT NOT NULL,
     max_quantity INT NOT NULL,
     price_each INT NOT NULL,

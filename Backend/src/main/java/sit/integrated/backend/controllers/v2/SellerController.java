@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.entities.SaleItem;
-import sit.integrated.backend.entities.Seller;
 import sit.integrated.backend.entities.User;
 import sit.integrated.backend.services.SaleItemService;
 import sit.integrated.backend.services.UserService;
