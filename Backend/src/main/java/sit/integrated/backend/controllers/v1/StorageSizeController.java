@@ -11,7 +11,6 @@ import sit.integrated.backend.services.StorageSizeService;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequestMapping("/v1")
 public class StorageSizeController {
     @Autowired

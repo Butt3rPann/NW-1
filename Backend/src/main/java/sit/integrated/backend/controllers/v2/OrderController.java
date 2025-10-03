@@ -11,7 +11,6 @@ import sit.integrated.backend.services.OrderService;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequestMapping("/v2")
 public class OrderController {
     @Autowired
