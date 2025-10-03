@@ -11,6 +11,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -69,6 +71,9 @@ public class SaleItem {
     @UpdateTimestamp
     @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
     private Instant updatedOn;
+
+    @OneToMany(mappedBy = "saleItem")
+    private Set<CartItem> cartItems = new LinkedHashSet<>();
 
     public void setQuantity(Integer quantity) {
         if (quantity == null || quantity < 0) {
