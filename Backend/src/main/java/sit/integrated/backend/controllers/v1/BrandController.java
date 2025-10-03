@@ -14,7 +14,6 @@ import sit.integrated.backend.utils.ListMapper;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequestMapping("/v1")
 public class BrandController {
     @Autowired
