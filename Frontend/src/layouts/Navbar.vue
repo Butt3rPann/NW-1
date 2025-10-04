@@ -1,15 +1,16 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import logoImg from '@/assets/images/logo.png'
 import profileImg from '@/assets/images/profile.png'
 import { useUserStore } from '@/stores/UserStore'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
+import { getItemByIdWithToken } from '@/libs/fetchUtils'
 
 const userStore = useUserStore()
-const { getNickname, removeAccessToken, getCartItemCount } = userStore
-const { nickName } = storeToRefs(userStore)
+const { getNickname, removeAccessToken, getUserId, getAccessToken, getCartItemCount } = userStore
+const { nickName, cartItemCount } = storeToRefs(userStore)
 
 const route = useRoute()
 
@@ -27,6 +28,18 @@ const handleLogout = () => {
    removeAccessToken()
    router.push({ name: 'SaleItems' })  
 }
+
+onMounted(async () => {
+    try {
+        const isLoggedIn = !!localStorage.getItem('access_token')
+        if (isLoggedIn) {
+            const data = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/users/${getUserId()}/carts`, getAccessToken());
+            userStore.setCart(data);
+        }
+    } catch (error) {
+        console.log(error);
+  }
+})
 </script>
 
 <template>

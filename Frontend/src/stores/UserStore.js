@@ -47,49 +47,45 @@ export const useUserStore = defineStore('user', () => {
 
     const cart = ref([])
 
-    function getCart() {
-        return JSON.parse(localStorage.getItem('cart')) || []
+    function setCart(newCart) {
+        cart.value = newCart;
     }
 
-    function storeCart() {
-        localStorage.setItem('cart', JSON.stringify(cart.value))
-    }
-
-    function addToCart(sellerId, sellerName, item) {
-        cart.value = getCart()
-        const indexOfSeller = cart.value.findIndex(obj => obj.sellerId === sellerId)
+    function addToCart(item) {
+        const {seller, ...cartItem} = item
+        const indexOfSeller = cart.value.findIndex(obj => obj.seller.id === seller.id)
         if (indexOfSeller !== -1) {
-            const indexOfItem = cart.value[indexOfSeller].saleItems.findIndex(obj => obj.id === item.id)
+            const indexOfItem = cart.value[indexOfSeller].cartItems.findIndex(obj => obj.saleItemId === cartItem.saleItemId)
             if (indexOfItem !== -1) {
-                cart.value[indexOfSeller].saleItems[indexOfItem].quantity += item.quantity
+                cart.value[indexOfSeller].cartItems[indexOfItem].quantity = cartItem.quantity
             } else {
-                cart.value[indexOfSeller].saleItems.push(item)
+                cart.value[indexOfSeller].cartItems.push(cartItem)
             }
         } else {
-            cart.value.push({ sellerId: sellerId, sellerName: sellerName, saleItems: [item] })
+            cart.value.push({ seller, cartItems: [cartItem] })
         }
-        storeCart()
     }
 
     function removeFromCart(indexOfSeller, indexOfItem) {
-        cart.value = getCart()
-        if (cart.value[indexOfSeller].saleItems.length === 1) {
+        if (cart.value[indexOfSeller].cartItems.length === 1) {
             cart.value.splice(indexOfSeller, 1)
         } else { 
-            cart.value[indexOfSeller].saleItems.splice(indexOfItem, 1)
+            cart.value[indexOfSeller].cartItems.splice(indexOfItem, 1)
         }
-        storeCart()
+    }
+
+    function updateCartItemQty(indexOfSeller, indexOfItem, newQty) {
+        cart.value[indexOfSeller].cartItems[indexOfItem].quantity = newQty
     }
 
     function getCartItemCount() {
-        cart.value = getCart()
-        return cart.value.reduce((total, seller) => total + seller.saleItems.reduce((sum, item) => sum + item.quantity, 0), 0)
+        return cart.value.reduce((total, seller) => total + seller.cartItems.reduce((sum, item) => sum + item.quantity, 0), 0)
     }
 
     return { nickName, storeAccessToken, getAccessToken, removeAccessToken, getNickname, 
              userId, getUserId, 
              userType, getUserType,
-             cart, getCart, addToCart, removeFromCart, storeCart, getCartItemCount }
+             cart, setCart, addToCart, removeFromCart, getCartItemCount, updateCartItemQty }
 })
 
 if (import.meta.hot) {

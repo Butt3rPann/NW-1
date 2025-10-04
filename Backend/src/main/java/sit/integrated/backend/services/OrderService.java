@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.*;
-import sit.integrated.backend.repositories.OrderItemRepository;
-import sit.integrated.backend.repositories.OrderRepository;
-import sit.integrated.backend.repositories.SaleItemRepository;
-import sit.integrated.backend.repositories.UserRepository;
+import sit.integrated.backend.repositories.*;
 import sit.integrated.backend.entities.AuthUserDetail;
 import sit.integrated.backend.utils.ListMapper;
 import sit.integrated.backend.utils.OrderStatus;
@@ -36,6 +33,8 @@ public class OrderService {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     public PageDto<OrderResponseDto> getOrdersByBuyer(Integer buyerId, Integer page, Integer size) {
         if (!userRepository.existsById(buyerId)) {
@@ -103,6 +102,10 @@ public class OrderService {
                 orderItem.setOrder(order);
                 orderItem.setSaleItem(saleItem);
                 orderItemRepository.save(orderItem);
+                int rowsDeleted = cartItemRepository.deleteByUserAndSaleItem(request.getBuyerId(), item.getSaleItemId());
+                if (rowsDeleted == 0) {
+                    throw new ResourceNotFoundException("Cart item with sale item id " + item.getSaleItemId() + " not found.");
+                }
             }
             OrderResponseDto response = modelMapper.map(order, OrderResponseDto.class);
             response.setBuyerId(order.getUser().getId());

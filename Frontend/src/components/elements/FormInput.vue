@@ -33,6 +33,14 @@ const props = defineProps({
     readonly: { 
         type: Boolean,
         default: false
+    },
+    labelSize: {
+        type: String,
+        default: 'text-sm sm:text-base lg:text-lg'
+    },
+    inputSize: {
+        type: String,
+        default: 'text-sm md:text-base'
     }
 })
 
@@ -68,24 +76,24 @@ const charCount = computed(() => {
 
 <template>
     <div class="font-rubik flex flex-col w-full">
-        <label class="text-[#332A1E] font-medium text-sm sm:text-base lg:text-lg mb-1">{{ label }}
+        <label class="text-[#332A1E] font-medium mb-1" :class="labelSize">{{ label }}
             <span v-if="required === true" class="text-red-700">*</span>
         </label>
         <textarea v-if="inputType === 'textarea'" v-model.trim="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :readonly="readonly"
             :class="[
-                `${className} appearance-none py-2 md:py-3 w-full text-sm md:text-base text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 min-h-[6rem] selection:bg-[#2684FF]/30 focus:outline-none`,
+                `${className} appearance-none py-2 md:py-3 w-full ${inputSize} text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 min-h-[6rem] selection:bg-[#2684FF]/30 focus:outline-none`,
                 { 'border-red-400' : !isValid },
                 readonly ? 'bg-gray-100' : 'bg-white focus:ring-2 focus:ring-[#2684FF]'
             ]"/>
         <input v-else-if="trim" :type="inputType" :inputmode="inputmode" :required="required" v-model.trim="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :maxlength="limitLength" :min="min" :max="max" :step="step" :readonly="readonly"
             :class="[
-                `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full text-sm md:text-base text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 selection:bg-[#2684FF]/30 focus:outline-none`,
+                `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full ${inputSize} text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 selection:bg-[#2684FF]/30 focus:outline-none`,
                 { 'border-red-400' : !isValid },
                 readonly ? 'bg-gray-100' : 'bg-white focus:ring-2 focus:ring-[#2684FF]'
             ]"/>
         <input v-else :type="inputType" :required="required" :inputmode="inputmode" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step" :maxlength="limitLength" :readonly="readonly"
             :class="[
-                `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full text-sm md:text-base text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 selection:bg-[#2684FF]/30 focus:outline-noneq`,
+                `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full ${inputSize} text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 selection:bg-[#2684FF]/30 focus:outline-noneq`,
                 { 'border-red-400' : !isValid },
                 readonly ? 'bg-gray-100' : 'bg-white focus:ring-2 focus:ring-[#2684FF]'
             ]"/>
