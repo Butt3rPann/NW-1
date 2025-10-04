@@ -129,7 +129,7 @@ const router = createRouter({history,routes})
 router.beforeEach((to, from) => {
     const isLoggedIn = !!localStorage.getItem('access_token')
     if (!isLoggedIn && (to.name === 'Profile' || 
-                        // to.name === 'Cart' ||
+                        to.name === 'Cart' ||
                         to.name === 'EditProfile')) {
         return { name: 'SignIn' }
     }

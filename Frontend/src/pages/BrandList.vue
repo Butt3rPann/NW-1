@@ -45,13 +45,13 @@ const showCannotDeletePopup = ref(false)
 async function deleteBrandById(id, name) {
     try {
         deletedId.value = id
-	brandToDelete.value = name
-	const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
-	if (brand.noOfSaleItems > 0) {
-	    showCannotDeletePopup.value = true
-        } else {
-	    showDelConfirm.value = true
-    }
+        brandToDelete.value = name
+        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
+        if (brand.noOfSaleItems > 0) {
+            showCannotDeletePopup.value = true
+            } else {
+            showDelConfirm.value = true
+        }
     } catch (error) {
         console.error(error)
   }

@@ -57,7 +57,7 @@ async function getItemById(url, id) {
     })
 
     if (!data.ok) {
-      throw new Error(`Request failed: ${response.status}`);
+      throw new Error(`Request failed: ${data.status}`);
     }
 
     const item = await data.json()
@@ -74,7 +74,7 @@ async function getItemByIdWithToken(url, access_token, page, size) {
       const authHeader = `Bearer ${access_token}`
       headers.append("Authorization", authHeader)
     }
-
+    
     const params = new URLSearchParams()
     params.append('page', page)
     if (size) {
@@ -84,11 +84,11 @@ async function getItemByIdWithToken(url, access_token, page, size) {
     const data = await fetch(fullUrl, {
       headers
     })
-
+    
     if (!data.ok) {
-      throw new Error(`Request failed: ${response.status}`);
+      throw new Error(`Request failed: ${data.status}`);
     }
-
+    
     const item = await data.json()
     return item
   } catch (error) {
@@ -139,6 +139,32 @@ async function editItem(url, id, editItem, access_token) {
   }
 }
 
+async function patchItem(url, id, partialItem, accessToken) {
+  try {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    if (accessToken) {
+      headers.append("Authorization", `Bearer ${accessToken}`);
+    }
+
+    const response = await fetch(`${url}/${id}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify(partialItem)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to patch item: ${response.status}`);
+    }
+
+    const updatedItem = await response.json();
+    return updatedItem;
+  } catch (error) {
+    throw new Error("Cannot patch this item");
+  }
+}
+
+
 async function deleteItemById(url, id) {
   try {
     const res = await fetch(`${url}/${id}`, {
@@ -182,4 +208,4 @@ async function updateFormData(url, id, formData) {
   }
 }
 
-export { getItems, getItemById, postData, editItem , deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
+export { getItems, getItemById, postData, editItem, patchItem, deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}

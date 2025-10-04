@@ -15,6 +15,7 @@ import sit.integrated.backend.entities.CartItem;
 import sit.integrated.backend.entities.User;
 import sit.integrated.backend.repositories.CartItemRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,16 +30,19 @@ public class CartItemService {
     public List<CartSellerWithItemsDto> getAllCartItem(Integer userId) {
         List<CartItem> carts =  cartItemRepository.getCartItemsByUserId(userId);
         Map<User, List<CartItem>> itemsGroupBySeller = carts.stream().collect(Collectors.groupingBy(item -> item.getSaleItem().getUser()));
-        return itemsGroupBySeller.entrySet().stream().map(entry -> {
-            User seller = entry.getKey();
-            List<CartItem> items = entry.getValue();
-            CartSellerWithItemsDto dto = new CartSellerWithItemsDto();
-            dto.setSeller(modelMapper.map(seller, SellerDto.class));
-            dto.setCartItems(items.stream()
-                    .map(item -> modelMapper.map(item, CartItemDto.class))
-                    .collect(Collectors.toList()));
-            return dto;
-        }).collect(Collectors.toList());
+        return itemsGroupBySeller.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(User::getId)))
+                .map(entry -> {
+                    User seller = entry.getKey();
+                    List<CartItem> items = entry.getValue();
+                    CartSellerWithItemsDto dto = new CartSellerWithItemsDto();
+                    dto.setSeller(modelMapper.map(seller, SellerDto.class));
+                    dto.setCartItems(items.stream()
+                            .sorted(Comparator.comparing(CartItem::getId))
+                            .map(item -> modelMapper.map(item, CartItemDto.class))
+                            .collect(Collectors.toList()));
+                    return dto;
+                }).collect(Collectors.toList());
     }
 
     public CartItem addToCart(CartRequestDto request) {

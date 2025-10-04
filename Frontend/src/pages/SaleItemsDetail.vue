@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { deleteItemById, getItemById } from '@/libs/fetchUtils.js'
+import { deleteItemById, getItemById, postData } from '@/libs/fetchUtils.js'
 import OptionsPhone from '@/components/sale-item/sale-item-detail/OptionsPhone.vue'
 import ItemDetailRow from '@/components/sale-item/sale-item-detail/ItemDetailRow.vue'
 import ErrorMessage from '@/components/elements/ErrorMessage.vue'
@@ -20,7 +20,7 @@ import { useUserStore } from '@/stores/UserStore'
 
 const { params: { saleItemId } } = useRoute()
 const userStore = useUserStore()
-const { getUserId, addToCart } = userStore
+const { getUserId, addToCart, getAccessToken } = userStore
 
 const selectedItem = ref({})
 
@@ -92,19 +92,27 @@ const decCartQty = () => {
     }
 }
 
-function addItemToCart() {
-    const item = {
-        id: selectedItem.value.id,
-        brandName: selectedItem.value.brandName,
-        model: selectedItem.value.model,
-        storageGb : selectedItem.value.storageGb,
-        color: selectedItem.value.color,
-        quantity: cartQty.value,
-        maxQuantity: selectedItem.value.quantity,
-        priceEach: selectedItem.value.price
+const addItemToCart = async () => {
+    try {
+        const addedItem = await postData(
+            `${import.meta.env.VITE_APP_URL}/v2/carts`, 
+            {
+                userId: getUserId(),
+                saleItemId: selectedItem.value.id,
+                model: selectedItem.value.model,
+                brandName: selectedItem.value.brandName,
+                color: selectedItem.value.color,
+                storageGb : selectedItem.value.storageGb,
+                quantity: cartQty.value,
+                maxQuantity: selectedItem.value.quantity,
+                priceEach: selectedItem.value.price
+            }, 
+            getAccessToken())
+        addToCart(addedItem)
+    } catch (error) {
+        console.log(error);
     }
-    addToCart(selectedItem.value.seller.id, selectedItem.value.seller.userName, item)
-}
+} 
 </script>
 
 <template>
@@ -173,7 +181,7 @@ function addItemToCart() {
                             <p class="itbms-add-to-cart-quantity">{{ cartQty }}</p>
                             <button @click="incCartQty" class="itbms-inc-qty-button py-2.5 px-4 border-l border-[#6F879C] text-[#6F879C] font-medium" :class="cartQty === selectedItem.quantity ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-[#6F879C]/15'">+</button>
                         </div>
-                        <BaseButton @click="addItemToCart" :icon="cart" text="Add to Cart" bg-color="bg-[#6F879C]" text-color="text-[#FFFFFF]" class="itbms-add-to-cart-button w-full"/>
+                        <BaseButton @click="addItemToCart" :icon="cart" text="Add to Cart" bg-color="bg-[#6F879C]" text-color="text-[#FFFFFF]" class="itbms-add-to-cart-button w-full" :disabled="selectedItem.quantity <= 0"/>
                     </div>
                     <div class="text-xs lg:text-sm space-y-1 md:gap-7 flex items-center flex-col md:flex-row justify-between mt-3">
                         <div class="flex gap-1">

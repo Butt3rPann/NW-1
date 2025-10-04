@@ -4,8 +4,9 @@ import { useRouter } from 'vue-router'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import PopupMessage from '../components/elements/PopupMessage.vue'
-import { postData } from '@/libs/fetchUtils'
+import { postData, getItemByIdWithToken } from '@/libs/fetchUtils'
 import { useUserStore } from '@/stores/UserStore'
+import { jwtDecode } from 'jwt-decode'
 
 const userStore = useUserStore()
 const { storeAccessToken, getUserType } = userStore
@@ -48,6 +49,9 @@ const handleClick = async () => {
         const loginUser = await postData(`${import.meta.env.VITE_APP_URL}/v2/auth/login`, user.value)
         if (loginUser.access_token) {
             storeAccessToken(loginUser.access_token)
+            const userId = jwtDecode(loginUser.access_token).id
+            const cart = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/users/${userId}/carts`, loginUser.access_token);
+            userStore.setCart(cart);
 	    router.push({ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
