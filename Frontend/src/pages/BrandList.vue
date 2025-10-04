@@ -46,7 +46,7 @@ async function deleteBrandById(id, name) {
     try {
         deletedId.value = id
         brandToDelete.value = name
-        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
+        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, localStorage.getItem('access_token'))
         if (brand.noOfSaleItems > 0) {
             showCannotDeletePopup.value = true
             } else {

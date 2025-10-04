@@ -9,7 +9,7 @@ const selectedOrder = ref({})
 
 onMounted(async () => {
     try {
-       selectedOrder.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/orders`, orderId) 
+       selectedOrder.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/orders`, orderId, localStorage.getItem('access_token')) 
        console.log(selectedOrder.value);
     } catch(error) {
         console.log(error)

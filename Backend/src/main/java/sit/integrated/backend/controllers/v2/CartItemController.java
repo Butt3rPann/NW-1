@@ -22,7 +22,7 @@ public class CartItemController {
     @PostMapping("/carts")
     public ResponseEntity<CartResponseDto> addToCart(@RequestBody CartRequestDto cartRequestDto) {
         CartResponseDto response = modelMapper.map(cartItemService.addToCart(cartRequestDto), CartResponseDto.class);
-        response.setSeller(modelMapper.map(userService.getUserBySaleItemId(cartRequestDto.getSaleItemId()), SellerDto.class));
+        response.setSeller(modelMapper.map(userService.getUserBySaleItemId(cartRequestDto.getSaleItemId()), UserDto.class));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -30,7 +30,7 @@ public class CartItemController {
     public ResponseEntity<CartResponseDto> updateCartItemQuantity(@PathVariable Integer id,
                                                                   @RequestBody UpdateCartItemQuantityDto updateCartItemQuantityDto) {
         CartResponseDto response = modelMapper.map(cartItemService.updateCartItemQuantity(id, updateCartItemQuantityDto.getQuantity()), CartResponseDto.class);
-        response.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), SellerDto.class));
+        response.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), UserDto.class));
         return ResponseEntity.ok(response);
     }
 

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CartResponseDto {
     private Integer id;
-    private SellerDto seller;
+    private UserDto seller;
     private Integer saleItemId;
     private String model;
     private String brandName;
