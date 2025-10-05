@@ -32,6 +32,8 @@ const phones = ref({
 onMounted(async () => {
     try {
         selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemId)
+        console.log(selectedItem.value);
+        
         selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn)
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
 
@@ -64,7 +66,7 @@ const showNotFound = ref(false)
 
 async function deleteSaleItem(){
     try {
-        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemId)
+        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemId, getAccessToken())
         if (status === 404) showNotFound.value = true
         else router.push({name: 'SaleItems', query: {deleted: 'true'}})
     } catch (error) {

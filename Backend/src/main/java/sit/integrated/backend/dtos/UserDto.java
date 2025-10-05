@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
-public class SellerDto {
+public class UserDto {
     private Integer id;
     @JsonIgnore
     private String nickName;

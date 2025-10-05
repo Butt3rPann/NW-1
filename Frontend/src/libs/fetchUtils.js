@@ -43,8 +43,7 @@ async function getItems(url, sortField, sortDirection, brands, filterStorages, f
   }
 }
 
-async function getItemById(url, id) {
-  const access_token = localStorage.getItem('access_token')
+async function getItemById(url, id, access_token) {
   try {
     const headers = new Headers();
     if (access_token) {
@@ -167,8 +166,14 @@ async function patchItem(url, id, partialItem, accessToken) {
 
 async function deleteItemById(url, id) {
   try {
+    const headers = new Headers();
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
     const res = await fetch(`${url}/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers
     })
     return res.status
   } catch (error) {

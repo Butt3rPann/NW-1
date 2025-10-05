@@ -40,7 +40,7 @@ public class OrderService {
         if (!userRepository.existsById(buyerId)) {
             throw new ResourceNotFoundException("User not found with id " + buyerId);
         }
-        Sort sort =  Sort.by("orderDate").descending().and(Sort.by("id"));
+        Sort sort = Sort.by("orderDate").descending().and(Sort.by("id"));
         Page<Order> orders = orderRepository.findOrdersByUserId(buyerId, PageRequest.of(page, size, sort));
         PageDto<OrderResponseDto> dtos = listMapper.toPageDto(orders, OrderResponseDto.class, modelMapper);
         for (int i = 0; i < orders.getContent().size(); i++) {
@@ -53,7 +53,7 @@ public class OrderService {
                     .map(item -> item.getSaleItem().getUser())
                     .orElseThrow(() -> new ResourceNotFoundException("Seller not found for this order"));
             dto.setBuyerId(order.getUser().getId());
-            dto.setSeller(modelMapper.map(seller, SellerDto.class));
+            dto.setSeller(modelMapper.map(seller, UserDto.class));
             dto.getOrderItems().forEach(item -> item.setNo(order.getId()));
         }
         return dtos;
@@ -110,7 +110,7 @@ public class OrderService {
             OrderResponseDto response = modelMapper.map(order, OrderResponseDto.class);
             response.setBuyerId(order.getUser().getId());
             User seller = userRepository.findById(request.getSellerId()).orElseThrow(() -> new ResourceNotFoundException("Seller not found"));
-            response.setSeller(modelMapper.map(seller, SellerDto.class));
+            response.setSeller(modelMapper.map(seller, UserDto.class));
             response.getOrderItems().forEach(item -> item.setNo(order.getId()));
             responses.add(response);
         }
@@ -150,5 +150,19 @@ public class OrderService {
         dto.getOrderItems().forEach(item -> item.setNo(order.getId()));
 
         return dto;
+    }
+
+    public PageDto<SellerOrdersResponseDto> getAllSellerOrders(Integer sid, Integer page, Integer size) {
+        if (!userRepository.existsById(sid)) {
+            throw new ResourceNotFoundException("Seller not found");
+        }
+        Sort sort = Sort.by("orderDate").descending().and(Sort.by("id"));
+        Page<Order> orders = orderRepository.findOrdersBySeller(sid, PageRequest.of(page, size, sort));
+        PageDto<SellerOrdersResponseDto> response = listMapper.toPageDto(orders, SellerOrdersResponseDto.class, modelMapper);
+        response.getContent().forEach(order -> {
+            order.setSellerId(sid);
+            order.getOrderItems().forEach(item -> item.setNo(order.getId()));
+        });
+        return response;
     }
 }

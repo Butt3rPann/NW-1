@@ -16,7 +16,7 @@ const isSuccess = ref(true)
 
 onMounted(async () => {
     try {
-        brand.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
+        brand.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, localStorage.getItem('access_token'))
     } catch (error) {
         console.log(error);
     }

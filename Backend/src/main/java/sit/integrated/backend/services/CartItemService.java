@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.CartItemDto;
 import sit.integrated.backend.dtos.CartRequestDto;
 import sit.integrated.backend.dtos.CartSellerWithItemsDto;
-import sit.integrated.backend.dtos.SellerDto;
+import sit.integrated.backend.dtos.UserDto;
 import sit.integrated.backend.entities.CartItem;
 import sit.integrated.backend.entities.User;
 import sit.integrated.backend.repositories.CartItemRepository;
@@ -36,7 +36,7 @@ public class CartItemService {
                     User seller = entry.getKey();
                     List<CartItem> items = entry.getValue();
                     CartSellerWithItemsDto dto = new CartSellerWithItemsDto();
-                    dto.setSeller(modelMapper.map(seller, SellerDto.class));
+                    dto.setSeller(modelMapper.map(seller, UserDto.class));
                     dto.setCartItems(items.stream()
                             .sorted(Comparator.comparing(CartItem::getId))
                             .map(item -> modelMapper.map(item, CartItemDto.class))

@@ -11,6 +11,6 @@ public class SaleItemListDto {
     private Integer storageGb;
     private Integer ramGb;
     private String color;
-    private SellerDto seller;
+    private UserDto seller;
 }
 

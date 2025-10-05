@@ -30,7 +30,7 @@ const imageData = ref([])
 
 onMounted(async () => {
     try {
-        saleItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id)
+        saleItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, localStorage.getItem('access_token'))
         saleItem.value.saleItemImages.forEach(img => {
             imageData.value.push({order: img.imageViewOrder, fileName: img.fileName, status: 'ONLINE', imageFile: null})
         })

@@ -57,7 +57,7 @@ public class SaleItemControllerV2 {
         Page<SaleItem> saleItems = saleItemService.getSaleItems(filterBrands, filterStorages, filterPriceLower, filterPriceUpper, searchKeyWord, sortField, sortDirection, page, size);
         PageDto<SaleItemDetailDto> dtos = listMapper.toPageDto(saleItems, SaleItemDetailDto.class, modelMapper);
         dtos.getContent().forEach(item -> item.setSaleItemImages(fileService.getSaleItemImages(item.getId())));
-        dtos.getContent().forEach(item -> item.setSeller(modelMapper.map(userService.getUserBySaleItemId(item.getId()), SellerDto.class)));
+        dtos.getContent().forEach(item -> item.setSeller(modelMapper.map(userService.getUserBySaleItemId(item.getId()), UserDto.class)));
         return ResponseEntity.ok(dtos);
     }
 
@@ -66,7 +66,7 @@ public class SaleItemControllerV2 {
         SaleItem saleItem = saleItemService.getSaleItemDetail(id);
         SaleItemDetailDto saleItemDetailDto = modelMapper.map(saleItem, SaleItemDetailDto.class);
         saleItemDetailDto.setSaleItemImages(fileService.getSaleItemImages(id));
-        saleItemDetailDto.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), SellerDto.class));
+        saleItemDetailDto.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), UserDto.class));
         return ResponseEntity.ok(saleItemDetailDto);
     }
 
