@@ -40,7 +40,7 @@ public class OrderService {
         if (!userRepository.existsById(buyerId)) {
             throw new ResourceNotFoundException("User not found with id " + buyerId);
         }
-        Sort sort = Sort.by("orderDate").descending().and(Sort.by("id"));
+        Sort sort = Sort.by("id").descending();
         Page<Order> orders = orderRepository.findOrdersByUserId(buyerId, PageRequest.of(page, size, sort));
         PageDto<OrderResponseDto> dtos = listMapper.toPageDto(orders, OrderResponseDto.class, modelMapper);
         for (int i = 0; i < orders.getContent().size(); i++) {
@@ -88,6 +88,7 @@ public class OrderService {
             User buyer = userRepository.findById(request.getBuyerId()).orElseThrow(() -> new ResourceNotFoundException("Buyer not found"));
             Order order = modelMapper.map(request, Order.class);
             order.setOrderStatus(OrderStatus.COMPLETED);
+            order.setShippingAddress(buyer.getFullName() + ", " + order.getShippingAddress());
             order.setUser(buyer);
             orderRepository.save(order);
             for (OrderItemDto item : request.getOrderItems()) {

@@ -55,14 +55,14 @@ const totalPrice = (order) => {
             <li
               v-for="(item, index) in order.orderItems"
               :key="index"
-              class="Itbms-item-row flex justify-between text-base"
+              class="itbms-item-row flex justify-between text-base"
             >
               <div class="flex items-center">
                 <div class="bg-[#FAF6F5] rounded-sm w-25 h-20 flex justify-center items-center">
                   <img src="/saleItemImage/demoImg1.png" class="max-w-12 max-h-15"/>
                 </div>
-                <p class="Itbms-item-description ml-3">{{ item.description }}</p>
-                <p class="ml-1">(x<span class="Itbms-item-quantity">{{ item.quantity }}</span>)</p>
+                <p class="itbms-item-description ml-3">{{ item.description }}</p>
+                <p class="ml-1">(x<span class="itbms-item-quantity">{{ item.quantity }}</span>)</p>
               </div>
               <p>฿ <span class="itbms-item-total-price">{{ (item.price * item.quantity).toLocaleString() }}</span></p>
             </li>
@@ -70,8 +70,8 @@ const totalPrice = (order) => {
         </div>
 
         <div class="mb-5 text-sm text-gray-600">
-          <p class="font-semibold">Address: <span class="Itbms-shipping-address"> {{ order.shippingAddress }}</span></p>
-          <p v-if="order.orderNote" class="font-semibold mt-1">Note: <span class="Itbms-order-note"> {{ order.orderNote }}</span></p>
+          <p class="font-semibold">Address: <span class="itbms-shipping-address"> {{ order.shippingAddress }}</span></p>
+          <p v-if="order.orderNote" class="font-semibold mt-1">Note: <span class="itbms-order-note"> {{ order.orderNote }}</span></p>
         </div>
 
         <div class="flex justify-between items-center border-t border-[#ABBCC9] pt-3 mt-3">

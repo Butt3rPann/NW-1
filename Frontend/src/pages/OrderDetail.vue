@@ -49,14 +49,14 @@ const totalPrice = (order) => {
                     <li
                         v-for="(item, index) in selectedOrder.orderItems"
                         :key="index"
-                        class="Itbms-item-row mt-2 flex justify-between items-center text-base"
+                        class="itbms-item-row mt-2 flex justify-between items-center text-base"
                     >
                         <div class="flex items-center">
                         <div class="bg-[#FAF6F5] rounded-sm w-25 h-20 flex justify-center items-center">
                             <img src="/saleItemImage/demoImg1.png" class="max-w-12 max-h-15"/>
                         </div>
                         <div class="flex flex-col ml-3">
-                            <p class="Itbms-item-description">{{ item.description }} <span class="ml-1">(x<span class="Itbms-item-quantity">{{ item.quantity }}</span>)</span></p>
+                            <p class="itbms-item-description">{{ item.description }} <span class="ml-1">(x<span class="itbms-item-quantity">{{ item.quantity }}</span>)</span></p>
                             <p class="text-sm text-gray-500">Unit Price: <span class="itbms-item-price">{{ item.price.toLocaleString() }}</span></p>
                         </div>
                         </div>
@@ -70,8 +70,8 @@ const totalPrice = (order) => {
                 </div>
                 <div class="p-4 pb-2 bg-white border-1 border-[#ABBCC9] rounded-lg shadow-2xs">
                     <p class="text-xl font-bold mb-3">Delivery Address</p>
-                    <p class="Itbms-shipping-address">{{ selectedOrder.shippingAddress }}</p>
-                    <p v-show="selectedOrder.orderNote" class="text-base font-bold mb-3 mt-3 border-t pt-3 border-gray-300">Note: <span class="Itbms-order-note font-medium">{{ selectedOrder.orderNote }}</span></p>
+                    <p class="itbms-shipping-address">{{ selectedOrder.shippingAddress }}</p>
+                    <p v-show="selectedOrder.orderNote" class="text-base font-bold mb-3 mt-3 border-t pt-3 border-gray-300">Note: <span class="itbms-order-note font-medium">{{ selectedOrder.orderNote }}</span></p>
                 </div>
             </div>
             <div class="space-y-4 overflow-hidden">

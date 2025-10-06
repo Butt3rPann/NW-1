@@ -20,7 +20,7 @@ import { useUserStore } from '@/stores/UserStore'
 
 const { params: { saleItemId } } = useRoute()
 const userStore = useUserStore()
-const { getUserId, addToCart, getAccessToken } = userStore
+const { getUserId, addToCart, getAccessToken, isLoggedIn } = userStore
 
 const selectedItem = ref({})
 
@@ -32,8 +32,6 @@ const phones = ref({
 onMounted(async () => {
     try {
         selectedItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, saleItemId)
-        console.log(selectedItem.value);
-        
         selectedItem.value.createdOn = formatLocalTime(selectedItem.value.createdOn)
         selectedItem.value.updatedOn = formatLocalTime(selectedItem.value.updatedOn)
 
@@ -95,6 +93,10 @@ const decCartQty = () => {
 }
 
 const addItemToCart = async () => {
+    if (!isLoggedIn()) {
+        router.push({ name : 'SignIn'})
+        return
+    }
     try {
         const addedItem = await postData(
             `${import.meta.env.VITE_APP_URL}/v2/carts`, 

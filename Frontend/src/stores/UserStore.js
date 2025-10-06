@@ -7,6 +7,10 @@ export const useUserStore = defineStore('user', () => {
     const access_token = ref('')
     const userId = ref(null)
     const userType = ref(null)
+
+    function isLoggedIn() {
+        return !!localStorage.getItem('access_token')
+    }
     
     function storeAccessToken(token) {
         localStorage.setItem('access_token', token)
@@ -82,7 +86,7 @@ export const useUserStore = defineStore('user', () => {
         return cart.value.reduce((total, seller) => total + seller.cartItems.reduce((sum, item) => sum + item.quantity, 0), 0)
     }
 
-    return { nickName, storeAccessToken, getAccessToken, removeAccessToken, getNickname, 
+    return { nickName, storeAccessToken, getAccessToken, removeAccessToken, getNickname, isLoggedIn,
              userId, getUserId, 
              userType, getUserType,
              cart, setCart, addToCart, removeFromCart, getCartItemCount, updateCartItemQty }

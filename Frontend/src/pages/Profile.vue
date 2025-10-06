@@ -144,6 +144,9 @@ if (route.query.updated === 'true') {
             </div>
         </div>
     </div>
+    <router-link :to="{ name: 'OrderList' }">
+        <BaseButton text="View Orders" bgColor="bg-[#6F879C]" textColor="text-[#FFFFFF]" class="mt-7"/>
+    </router-link>
 </div>
 </template>
  

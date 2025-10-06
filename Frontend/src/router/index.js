@@ -63,7 +63,9 @@ const routes = [
         component: SaleItemList,
         beforeEnter: (to, from) => {
             const userStore = useUserStore()
-            if (userStore.getUserType() !== "SELLER") {
+            if (!userStore.isLoggedIn()) {
+                return { name: 'SignIn' }
+            } else if (userStore.getUserType() === "BUYER") {
                 return { name: 'SaleItems' }
             }
         }
