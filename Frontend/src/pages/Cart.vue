@@ -181,6 +181,17 @@ const hasSelectedItems = computed(() => {
 
 const address = ref(null)
 const note = ref(null)
+
+address.value = localStorage.getItem('cartAddress') || ''
+note.value = localStorage.getItem('cartNote') || ''
+
+watch(address, (newValue) => {
+  localStorage.setItem('cartAddress', newValue)
+})
+
+watch(note, (newValue) => {
+  localStorage.setItem('cartNote', newValue)
+})
 </script>
  
 <template>
