@@ -8,6 +8,7 @@ import PopupMessage from '../components/elements/PopupMessage.vue'
 import FormInput from '@/components/elements/FormInput.vue';
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue';
 import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
+import router from '@/router';
 
 const userStore = useUserStore()
 const { removeFromCart, getAccessToken, getUserId, updateCartItemQty, setCart } = userStore
@@ -98,7 +99,7 @@ const placeOrder = async () => {
         if (placeOrder.length) {
             isSuccess.value = true
             isShowPopUp.value = true
-            popupMessage.value = 'Order placed successfully'
+            popupMessage.value = 'Your order has been successfully processed.'
             setCart(cart.value.map((seller, si) => {
                 const checks = itemChecks.value[si]
                 if (checks.every(v => v === true)) {
@@ -107,6 +108,9 @@ const placeOrder = async () => {
                 const remainingItems = seller.cartItems.filter((_, ii) => !checks[ii])
                 return { ...seller, cartItems: remainingItems }
             }).filter(o => o !== null))
+            if (!cart.value.length) {
+                router.push({ name : 'SaleItems'})
+            }
         } else if (placeOrder.status === 404){
             isShowPopUp.value = true
             popupMessage.value = 'Seller cannot buy their own products'
@@ -148,6 +152,9 @@ async function deleteCartItem() {
         if (status === 204) {
             removeFromCart(deletedIndexOfSeller.value, deletedIndexOfItem.value)
             showDelConfirm.value = false
+            if (!cart.value.length) {
+                router.push({ name : 'SaleItems'})
+            }
         }
     } catch (error) {
         console.log(error);
@@ -231,7 +238,7 @@ watch(note, (newValue) => {
                         <div v-for="(item, indexOfItem) in c.cartItems" :key="item.id" class="px-4 pt-4" >
                             <div class="itbms-item-row flex gap-4 items-center min-h-20 pb-4" :class="indexOfItem !== c.cartItems.length - 1 ? 'border-b border-[#332A1E]/10' : ''">
                                 <label class="inline-flex items-center cursor-pointer">
-                                    <input v-if="itemChecks[indexOfSeller]" type="checkbox" v-model="itemChecks[indexOfSeller][indexOfItem]"@change="toggleItem(indexOfSeller)"class="hidden peer"/>
+                                    <input v-if="itemChecks[indexOfSeller]" type="checkbox" v-model="itemChecks[indexOfSeller][indexOfItem]" @change="toggleItem(indexOfSeller)"class="hidden peer"/>
                                     <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
                                         <svg v-if="itemChecks[indexOfSeller]?.[indexOfItem]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                             <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
@@ -281,7 +288,7 @@ watch(note, (newValue) => {
                             </p>
                         </div>
                     </div>
-                    <BaseButton text="Place order" bgColor="bg-[#6F879C] disabled:bg-[#ABBCC9]" textColor="text-white" class="itbms-place-order-button w-full disabled:border-[#ABBCC9]" @click="placeOrder" :disabled="!hasSelectedItems"/>
+                    <BaseButton text="Place order" bgColor="bg-[#6F879C] disabled:bg-[#ABBCC9]" textColor="text-white" class="itbms-place-order-button w-full disabled:border-[#ABBCC9]" @click="placeOrder" :disabled="!hasSelectedItems || !address"/>
                 </div>
             </div>
             <div v-else class="flex flex-col items-center text-center gap-7 py-18">

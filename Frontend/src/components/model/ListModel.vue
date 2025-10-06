@@ -1,9 +1,10 @@
 <script setup>
 import { postData } from '@/libs/fetchUtils'
+import router from '@/router'
 import { useUserStore } from '@/stores/UserStore'
 
 const userStore = useUserStore()
-const { addToCart, getAccessToken, getUserId } = userStore
+const { addToCart, getAccessToken, getUserId, isLoggedIn } = userStore
 
 const props = defineProps({
     items: {
@@ -21,6 +22,10 @@ const props = defineProps({
 const baseUrl = import.meta.env.VITE_APP_URL
 
 const addItemToCart = async (item) => {
+    if (!isLoggedIn()) {
+        router.push({ name : 'SignIn'})
+        return
+    }
     try {
         const addedItem = await postData(
             `${import.meta.env.VITE_APP_URL}/v2/carts`, 
