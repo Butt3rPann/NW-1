@@ -39,9 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 try {
                     jwtUtils.verifyToken(jwtToken);
                     Map<String, Object> claims = jwtUtils.getJWTClaimsSet(jwtToken);
-                    System.out.println(jwtUtils.isExpired(claims));
                     if (jwtUtils.isExpired(claims)) {
-                        System.out.println("hey");
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
                         return;
                     }
