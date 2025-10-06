@@ -164,7 +164,7 @@ async function patchItem(url, id, partialItem, accessToken) {
 }
 
 
-async function deleteItemById(url, id) {
+async function deleteItemById(url, id, access_token) {
   try {
     const headers = new Headers();
     if (access_token) {
