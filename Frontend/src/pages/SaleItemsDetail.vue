@@ -179,7 +179,7 @@ const addItemToCart = async () => {
                         </router-link>
                         <BaseButton @click="showDelConfirm = true" :icon="trashIcon" text="Delete" textColor="text-[#D27B7B]" borderColor="border-[#D27B7B]" class="itbms-delete-button"/>
                     </div>
-                    <div class="flex my-4 text-sm md:text-base lg:text-lg justify-center gap-7">
+                    <div v-else class="flex my-4 text-sm md:text-base lg:text-lg justify-center gap-7">
                         <div class="flex gap-5 items-center border-2 border-[#6F879C] rounded-md">
                             <button @click="decCartQty" class="itbms-dec-qty-button py-2.5 px-4 border-r border-[#6F879C] text-[#6F879C] font-medium" :class="cartQty === 1 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-[#6F879C]/15'">-</button>
                             <p class="itbms-add-to-cart-quantity">{{ cartQty }}</p>
