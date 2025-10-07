@@ -108,9 +108,6 @@ const placeOrder = async () => {
                 const remainingItems = seller.cartItems.filter((_, ii) => !checks[ii])
                 return { ...seller, cartItems: remainingItems }
             }).filter(o => o !== null))
-            if (!cart.value.length) {
-                router.push({ name : 'SaleItems'})
-            }
         } else if (placeOrder.status === 404){
             isShowPopUp.value = true
             popupMessage.value = 'Seller cannot buy their own products'
