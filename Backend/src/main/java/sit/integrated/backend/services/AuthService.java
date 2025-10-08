@@ -53,13 +53,16 @@ public class AuthService {
     public Map<String, Object> refreshToken(String refreshToken) {
         jwtUtils.verifyToken(refreshToken);
         Map<String, Object> claims = jwtUtils.getJWTClaimsSet(refreshToken);
-        jwtUtils.isExpired(claims);
+        if (jwtUtils.isExpired(claims)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired");
+        }
         if (! jwtUtils.isValidClaims(claims) || ! "REFRESH_TOKEN".equals(claims.get("typ"))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
         }
 
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername((String) claims.get("email"));
-        Role role = (Role) claims.get("role");
+        String roleStr = (String) claims.get("role");
+        Role role = Role.valueOf(roleStr);
         String nickname = (String) claims.get("nickname");
 
         return Map.of("access_token", jwtUtils.generateToken(userDetails, role, nickname, (long) 60*1000*30, TokenType.ACCESS_TOKEN));
