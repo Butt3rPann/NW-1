@@ -87,16 +87,25 @@ public class OrderService {
             }
             User buyer = userRepository.findById(request.getBuyerId()).orElseThrow(() -> new ResourceNotFoundException("Buyer not found"));
             Order order = modelMapper.map(request, Order.class);
-            order.setOrderStatus(OrderStatus.COMPLETED);
+            boolean hasInsufficientStock = request.getOrderItems().stream()
+                    .anyMatch(item -> {
+                        SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
+                        return saleItem.getQuantity() < item.getQuantity();
+                    });
+            if (hasInsufficientStock) {
+                order.setOrderStatus(OrderStatus.CANCELED);
+            } else {
+                order.setOrderStatus(OrderStatus.COMPLETED);
+            }
             order.setShippingAddress(buyer.getFullName() + ", " + order.getShippingAddress());
             order.setUser(buyer);
             orderRepository.save(order);
             for (OrderItemDto item : request.getOrderItems()) {
                 SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId()).orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
-                if (saleItem.getQuantity() < item.getQuantity()) {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Not enough stock for item " + saleItem.getId());
+                if (!hasInsufficientStock) {
+                    saleItem.setQuantity(saleItem.getQuantity() - item.getQuantity());
                 }
-                saleItem.setQuantity(saleItem.getQuantity() - item.getQuantity());
                 saleItemRepository.save(saleItem);
                 OrderItem orderItem = modelMapper.map(item, OrderItem.class);
                 orderItem.setId(null);
@@ -117,6 +126,7 @@ public class OrderService {
         }
         return responses;
     }
+
 
     public Order getOrderById(Integer id) {
         Order order = orderRepository.findById(id)
