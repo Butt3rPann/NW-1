@@ -86,35 +86,27 @@ public class OrderService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seller cannot buy their own products");
             }
             User buyer = userRepository.findById(request.getBuyerId()).orElseThrow(() -> new ResourceNotFoundException("Buyer not found"));
-            boolean hasInsufficientStock = request.getOrderItems().stream()
-                    .anyMatch(item -> {
-                        SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId())
-                                .orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
-                        return saleItem.getQuantity() < item.getQuantity();
-                    });
             Order order = modelMapper.map(request, Order.class);
             order.setShippingAddress(buyer.getFullName() + ", " + order.getShippingAddress());
             order.setUser(buyer);
-            if (hasInsufficientStock) {
-                order.setOrderStatus(OrderStatus.CANCELED);
-                orderRepository.save(order);
-            } else {
-                order.setOrderStatus(OrderStatus.COMPLETED);
-                orderRepository.save(order);
-                for (OrderItemDto item : request.getOrderItems()) {
-                    SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId())
-                            .orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
+            for (OrderItemDto item : request.getOrderItems()) {
+                SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId()).orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
+                if (saleItem.getQuantity() < item.getQuantity()) {
+                    order.setOrderStatus(OrderStatus.CANCELED);
+                } else {
+                    order.setOrderStatus(OrderStatus.COMPLETED);
                     saleItem.setQuantity(saleItem.getQuantity() - item.getQuantity());
-                    saleItemRepository.save(saleItem);
-                    OrderItem orderItem = modelMapper.map(item, OrderItem.class);
-                    orderItem.setId(null);
-                    orderItem.setOrder(order);
-                    orderItem.setSaleItem(saleItem);
-                    orderItemRepository.save(orderItem);
-                    int rowsDeleted = cartItemRepository.deleteByUserAndSaleItem(request.getBuyerId(), item.getSaleItemId());
-                    if (rowsDeleted == 0) {
-                        throw new ResourceNotFoundException("Cart item with sale item id " + item.getSaleItemId() + " not found.");
-                    }
+                }
+                orderRepository.save(order);
+                saleItemRepository.save(saleItem);
+                OrderItem orderItem = modelMapper.map(item, OrderItem.class);
+                orderItem.setId(null);
+                orderItem.setOrder(order);
+                orderItem.setSaleItem(saleItem);
+                orderItemRepository.save(orderItem);
+                int rowsDeleted = cartItemRepository.deleteByUserAndSaleItem(request.getBuyerId(), item.getSaleItemId());
+                if (rowsDeleted == 0) {
+                    throw new ResourceNotFoundException("Cart item with sale item id " + item.getSaleItemId() + " not found.");
                 }
             }
             OrderResponseDto response = modelMapper.map(order, OrderResponseDto.class);
