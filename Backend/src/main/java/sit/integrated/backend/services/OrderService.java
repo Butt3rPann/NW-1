@@ -87,17 +87,25 @@ public class OrderService {
             }
             User buyer = userRepository.findById(request.getBuyerId()).orElseThrow(() -> new ResourceNotFoundException("Buyer not found"));
             Order order = modelMapper.map(request, Order.class);
+            boolean hasInsufficientStock = request.getOrderItems().stream()
+                    .anyMatch(item -> {
+                        SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
+                        return saleItem.getQuantity() < item.getQuantity();
+                    });
+            if (hasInsufficientStock) {
+                order.setOrderStatus(OrderStatus.CANCELED);
+            } else {
+                order.setOrderStatus(OrderStatus.COMPLETED);
+            }
             order.setShippingAddress(buyer.getFullName() + ", " + order.getShippingAddress());
             order.setUser(buyer);
+            orderRepository.save(order);
             for (OrderItemDto item : request.getOrderItems()) {
                 SaleItem saleItem = saleItemRepository.findById(item.getSaleItemId()).orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
-                if (saleItem.getQuantity() < item.getQuantity()) {
-                    order.setOrderStatus(OrderStatus.CANCELED);
-                } else {
-                    order.setOrderStatus(OrderStatus.COMPLETED);
+                if (!hasInsufficientStock) {
                     saleItem.setQuantity(saleItem.getQuantity() - item.getQuantity());
                 }
-                orderRepository.save(order);
                 saleItemRepository.save(saleItem);
                 OrderItem orderItem = modelMapper.map(item, OrderItem.class);
                 orderItem.setId(null);
@@ -118,6 +126,7 @@ public class OrderService {
         }
         return responses;
     }
+
 
     public Order getOrderById(Integer id) {
         Order order = orderRepository.findById(id)
