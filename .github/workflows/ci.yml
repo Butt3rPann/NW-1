@@ -8,43 +8,23 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: cd & pwd
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.SSH_HOST }} 
-          username: ${{ secrets.SSH_USERNAME }} 
-          key: ${{ secrets.SSH_PRIVATE_KEY }} 
-          command_timeout: 2m
-          script: | 
-            cd /NW-1 
-            pwd
+        run: | 
+          cd /NW-1 
+          pwd
 
       - name: checkout & pull
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 2m
-          script: |
-            cd /NW-1
-            git checkout release/2.0.0
-            git pull
+        run: |
+          git checkout release/2.0.0
+          git pull
 
       - name: docker up
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-            #command_timeout: 15m
-          script: |
-            cd /NW-1
-            docker compose down -v
-            docker compose up -d --build -d
-            sleep 20
+        run: |
+          docker compose down -v
+          docker compose up -d --build -d
+          sleep 20
