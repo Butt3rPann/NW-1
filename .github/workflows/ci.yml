@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: cd & pwd
+        uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SSH_HOST }} 
           username: ${{ secrets.SSH_USERNAME }} 
@@ -24,6 +25,7 @@ jobs:
             pwd
 
       - name: checkout & pull
+        uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -35,6 +37,7 @@ jobs:
             git pull
 
       - name: docker up
+        uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
