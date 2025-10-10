@@ -13,17 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          timeout: 30s
-          command_timeout: 15m
-          script: |
-            cd /NW-1
-            git checkout release/2.0.0
-            git pull
-            docker compose down -v
-            docker compose up --build -d
+      - name: pwd
+        run: pwd
+
+          #      - name: Deploy over SSH
+          #uses: appleboy/ssh-action@v1.0.0
+          #with:
+          #host: ${{ secrets.SSH_HOST }}
+          #username: ${{ secrets.SSH_USERNAME }}
+          #key: ${{ secrets.SSH_PRIVATE_KEY }}
+          #timeout: 30s
+          #command_timeout: 15m
+          #script: |
+          # cd /NW-1
+          # git checkout release/2.0.0
+          # git pull
+          # docker compose down -v
+          # docker compose up --build -d
