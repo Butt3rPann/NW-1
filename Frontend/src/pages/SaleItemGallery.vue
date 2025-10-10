@@ -1,7 +1,7 @@
 <script setup>
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
 import { getItems } from '@/libs/fetchUtils'
-import { onMounted, ref, watch, computed} from 'vue'
+import { onMounted, ref, watch} from 'vue'
 import addIcon from '@/assets/images/add.png'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import router from '@/router'
