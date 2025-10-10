@@ -13,15 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Allow git to use /NW-1
+        run: git config --global --add safe.directory /NW-1
+      
       - name: checkout & pull
+        working-directory: /NW-1
         run: |
-          cd /NW-1
           git fetch --all --prune
           git checkout -B release/2.0.0 origin/release/2.0.0
 
       - name: docker compose
+        working-directory: /NW-1
         run: |
-          cd /NW-1
           docker compose down -v
           docker compose up -d --build -d
           sleep 20
