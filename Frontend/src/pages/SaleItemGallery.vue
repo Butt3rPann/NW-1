@@ -57,26 +57,11 @@ const goToPage = async (page) => {
     currentPage.value = page
     await getSaleItems()
 }
-const prevPage = async (isFirstPage) => {
-    if (!isFirstPage) {
-        currentPage.value -= 1
-        await getSaleItems()
-    }
-}
-const nextPage = async (isLastPage) => {
-    if (!isLastPage) {
-        currentPage.value += 1
-        await getSaleItems()
-    }
-}
-const lastPage = async (totalPage) => {
-    currentPage.value = totalPage
-    await getSaleItems()
-}
 const resetPage = async() => { 
     currentPage.value = 1 
     await getSaleItems()
 }
+
 const changeSort = (type) => {
     currentSort.value = type
     resetPage()
@@ -427,7 +412,7 @@ watch(searchKeyword, () => {
             <img :src="emptySaleItemsImg" alt="EmptySaleItems" class=" w-36">
             <p class="text-xl text-[#ABBCC9]">no sale item</p>
         </div>
-        <Pagination :totalPage="totalPage" :currentPage="currentPage" :currentSize="currentSize" @goToPage="goToPage" @prevPage="prevPage" @nextPage="nextPage" @lastPage="lastPage"/>
+        <Pagination :totalPage="totalPage" :currentPage="currentPage" :currentSize="currentSize" @changePage="goToPage"/>
     </div>
 </div>
 </template>
