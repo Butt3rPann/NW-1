@@ -17,13 +17,16 @@ jobs:
         run: | 
           cd /NW-1 
           pwd
+        working-directory: /NW-1
 
       - name: checkout & pull
+        working-directory: /NW-1
         run: |
           git fetch --all --prune
           git checkout -B release/2.0.0 origin/release/2.0.0
 
       - name: docker compose
+        working-directory: /NW-1
         run: |
           docker compose down -v
           docker compose up -d --build -d
