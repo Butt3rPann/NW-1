@@ -20,10 +20,10 @@ jobs:
 
       - name: checkout & pull
         run: |
-          git checkout release/2.0.0
-          git pull
+          git fetch --all --prune
+          git checkout -B release/2.0.0 origin/release/2.0.0
 
-      - name: docker up
+      - name: docker compose
         run: |
           docker compose down -v
           docker compose up -d --build -d
