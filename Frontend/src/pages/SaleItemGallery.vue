@@ -1,7 +1,7 @@
 <script setup>
 import SaleItemCard from '@/components/sale-item/SaleItemCard.vue'
 import { getItems } from '@/libs/fetchUtils'
-import { onMounted, ref, watch, computed} from 'vue'
+import { onMounted, ref, watch} from 'vue'
 import addIcon from '@/assets/images/add.png'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import router from '@/router'
@@ -12,6 +12,7 @@ import sortNone from "@/assets/images/sort-none.png"
 import sortAsc from "@/assets/images/sort-asc.png"
 import sortDesc from "@/assets/images/sort-desc.png"
 import { useUserStore } from '@/stores/UserStore'
+import Pagination from '@/components/elements/Pagination.vue'
 
 const userStore = useUserStore()
 const { getUserType } = userStore
@@ -56,26 +57,11 @@ const goToPage = async (page) => {
     currentPage.value = page
     await getSaleItems()
 }
-const prevPage = async (isFirstPage) => {
-    if (!isFirstPage) {
-        currentPage.value -= 1
-        await getSaleItems()
-    }
-}
-const nextPage = async (isLastPage) => {
-    if (!isLastPage) {
-        currentPage.value += 1
-        await getSaleItems()
-    }
-}
-const lastPage = async (totalPage) => {
-    currentPage.value = totalPage
-    await getSaleItems()
-}
 const resetPage = async() => { 
     currentPage.value = 1 
     await getSaleItems()
 }
+
 const changeSort = (type) => {
     currentSort.value = type
     resetPage()
@@ -120,22 +106,6 @@ const applyCustomPriceFilter = () => {
     currentUpperPriceFilter.value = maxPrice.value
 }
 
-const pageNumbers = computed(() => {
-    const numbers = []
-
-    let startNumber = Math.max(1, currentPage.value - 9)
-    const endNumber = Math.min(totalPage.value, startNumber + 9)
-
-    if(endNumber - startNumber < 9) {
-        startNumber = Math.max(1, endNumber - 9)
-    }
-
-    for(let i = startNumber; i <= endNumber; i++) {
-        numbers.push(i)
-    }
-
-    return numbers
-})
 
 const searchKeyword = ref('')
 
@@ -442,38 +412,7 @@ watch(searchKeyword, () => {
             <img :src="emptySaleItemsImg" alt="EmptySaleItems" class=" w-36">
             <p class="text-xl text-[#ABBCC9]">no sale item</p>
         </div>
-        <div v-show="totalPage > 1" class="flex flex-wrap justify-center items-center gap-2 mt-8">
-            <button @click="goToPage(1)" :disabled="currentPage === 1" :class="['itbms-page-first flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-md border',
-            currentPage === 1? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 md:w-5 md:h-5">
-                    <path d="m11 17-5-5 5-5"></path>
-                    <path d="m18 17-5-5 5-5"></path>
-                </svg>
-            </button>
-            <button @click="prevPage(response.first)" :disabled="currentPage === 1" :class="['itbms-page-prev flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-md border',
-            currentPage === 1? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 md:w-5 md:h-5">
-                    <path d="m15 18-6-6 6-6"></path>
-                </svg>
-            </button>
-            <button @click="goToPage(number)" v-for="(number, index) in pageNumbers" :key="number" :class="[`itbms-page-${index} flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-md border text-sm md:text-base`,
-            currentPage === number? 'bg-[#6F879C] text-white border-[#6F879C]': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
-                {{ number }}
-            </button>
-            <button @click="nextPage(response.last)" :disabled="currentPage === totalPage" :class="['itbms-page-next flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-md border',
-            currentPage === totalPage? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 md:w-5 md:h-5">
-                    <path d="m9 18 6-6-6-6"></path>
-                </svg>
-            </button>
-            <button @click="lastPage(totalPage)" :disabled="currentPage === totalPage" :class="['itbms-page-last flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-md border',
-            currentPage === totalPage? 'text-gray-400 border-gray-200 cursor-not-allowed': 'text-[#332A1E] border-gray-300 hover:bg-gray-100']">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 md:w-5 md:h-5">
-                    <path d="m13 17 5-5-5-5"></path>
-                    <path d="m6 17 5-5-5-5"></path>
-                </svg>
-            </button>
-        </div>
+        <Pagination :totalPage="totalPage" :currentPage="currentPage" :currentSize="currentSize" @changePage="goToPage"/>
     </div>
 </div>
 </template>
