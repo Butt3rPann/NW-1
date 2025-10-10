@@ -3,24 +3,28 @@ name: Deployment
 on:
   push:
     branches:
-      - release/2.0.0
+      - main
+  pull_request:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /NW-1
-            git checkout release/2.0.0
-            git pull
-            docker compose down -v
-            docker compose up --build -d
+      - name: Allow git to use /NW-1
+        run: git config --global --add safe.directory /NW-1
+      
+      - name: checkout & pull
+        working-directory: /NW-1
+        run: |
+          git fetch --all --prune
+          git checkout -B release/2.0.0 origin/release/2.0.0
+
+      - name: docker compose
+        working-directory: /NW-1
+        run: |
+          docker compose down -v
+          docker compose up -d --build -d
+          sleep 20
