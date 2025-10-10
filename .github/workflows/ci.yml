@@ -3,7 +3,8 @@ name: Deployment
 on:
   push:
     branches:
-      - release/2.0.0
+      - main
+  pull_request:
 
 jobs:
   build-and-test:
@@ -18,6 +19,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 30s
+          command_timeout: 15m
           script: |
             cd /NW-1
             git checkout release/2.0.0
