@@ -4,11 +4,13 @@ import BrandForm from '@/components/form/BrandForm.vue'
 import { postData } from '@/libs/fetchUtils'
 import { ref } from 'vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
+import { useUserStore } from '@/stores/UserStore'
 
 const router = useRouter()
 const message = ref('')
 const isShowPopup = ref(false)
 const isSuccess = ref(true)
+const userStore = useUserStore()
 
 const handleNewBrand = async (newBrand) => {
     const addedItem = {...newBrand}
@@ -18,7 +20,7 @@ const handleNewBrand = async (newBrand) => {
         }
     })
     try {
-        const addedBrand = await postData(`${import.meta.env.VITE_APP_URL}/v1/brands`, addedItem)
+        const addedBrand = await postData(`${import.meta.env.VITE_APP_URL}/v1/brands`, addedItem, userStore.getAccessToken())
         if (addedBrand.status === 400 || addedBrand.status === 500) {
             throw new Error(addedBrand.message)
         }
