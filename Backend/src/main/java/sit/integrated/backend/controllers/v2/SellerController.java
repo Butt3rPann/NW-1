@@ -55,12 +55,13 @@ public class SellerController {
     @GetMapping("/sellers/{sid}/orders")
     public ResponseEntity<PageDto<SellerOrdersResponseDto>> getOrders(@PathVariable Integer sid,
                                                                       @RequestParam Integer page,
-                                                                      @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                                                      @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                                      @RequestParam(required = false, defaultValue = "all") String tab) {
         AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer tokenUserId = userDetail.getId();
         if (!Objects.equals(sid, tokenUserId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched");
         }
-        return ResponseEntity.ok(orderService.getAllSellerOrders(sid, page, size));
+        return ResponseEntity.ok(orderService.getAllSellerOrders(sid, page, size, tab));
     }
 }

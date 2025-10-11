@@ -86,10 +86,21 @@ export const useUserStore = defineStore('user', () => {
         return cart.value.reduce((total, seller) => total + seller.cartItems.reduce((sum, item) => sum + item.quantity, 0), 0)
     }
 
+    const sellerOrdersCount = ref(0)
+
+    function setSellerOrdersCount(count) {
+        sellerOrdersCount.value = count
+    }
+
+    function getSellerOrdersCount() {
+        return sellerOrdersCount.value
+    }
+
     return { nickName, storeAccessToken, getAccessToken, removeAccessToken, getNickname, isLoggedIn,
              userId, getUserId, 
              userType, getUserType,
-             cart, setCart, addToCart, removeFromCart, getCartItemCount, updateCartItemQty }
+             cart, setCart, addToCart, removeFromCart, getCartItemCount, updateCartItemQty,
+             sellerOrdersCount, setSellerOrdersCount, getSellerOrdersCount}
 })
 
 if (import.meta.hot) {

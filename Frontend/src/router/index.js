@@ -17,6 +17,7 @@ import { useUserStore } from "@/stores/UserStore";
 import Cart from "@/pages/Cart.vue";
 import OrderList from "@/pages/OrderList.vue";
 import OrderDetail from "@/pages/OrderDetail.vue";
+import SellerOrderList from "@/pages/SellerOrderList.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -124,6 +125,11 @@ const routes = [
         path: '/your-orders/:orderId',
         name: 'OrderDetail',
         component: OrderDetail
+    },
+    {
+        path: '/sale-orders',
+        name: 'SaleOrderList',
+        component: SellerOrderList
     }
 ]
 const router = createRouter({history,routes})

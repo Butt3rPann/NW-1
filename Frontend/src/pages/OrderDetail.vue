@@ -2,15 +2,25 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getItemById } from '@/libs/fetchUtils.js'
+import { useUserStore } from '@/stores/UserStore'
+
+const userStore = useUserStore()
+const { getAccessToken } = userStore
 
 const { params: { orderId } } = useRoute()
 
 const selectedOrder = ref({})
+const previousPath = ref('')
+
+onMounted(() => {
+  if (window.history.state?.back) {
+    previousPath.value = window.history.state.back
+  }
+})
 
 onMounted(async () => {
     try {
-       selectedOrder.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/orders`, orderId, localStorage.getItem('access_token')) 
-       console.log(selectedOrder.value);
+       selectedOrder.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/orders`, orderId, getAccessToken()) 
     } catch(error) {
         console.log(error)
     }
@@ -27,7 +37,8 @@ const totalPrice = (order) => {
     <div class="itbms-row">
         <div class="mt-20 mb-5">
             <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
-                <router-link :to="{ name: 'OrderList' }"><span class="itbms-your-orders-button text-[#332A1E] cursor-pointer">Your Orders</span></router-link>
+                <router-link v-if="previousPath.includes('sale-orders')" :to="{ name: 'SaleOrderList' }"><span class="itbms-your-orders-button text-[#332A1E] cursor-pointer">Seller Orders List</span></router-link>
+                <router-link v-else :to="{ name: 'OrderList' }"><span class="itbms-your-orders-button text-[#332A1E] cursor-pointer">Your Orders</span></router-link>
                 <span class="text-[#332A1E]/50 mx-3"> > </span>
                 <router-link :to="{ name: 'OrderDetail', params: { orderId } }"><span class="itbms-back-button text-[#6F879C]">Order Details</span></router-link>
             </p>

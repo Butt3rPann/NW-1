@@ -138,7 +138,10 @@ public class OrderService {
                 .getPrincipal();
 
         Integer tokenUserId = userDetail.getId();
-        if (!Objects.equals(order.getUser().getId(), tokenUserId)) {
+        boolean isBuyer = Objects.equals(order.getUser().getId(), tokenUserId);
+        boolean isSeller = order.getOrderItems().stream()
+                .anyMatch(item -> Objects.equals(item.getSaleItem().getUser().getId(), tokenUserId));
+        if (!isBuyer && !isSeller) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Request user id not matched to order");
         }
         return order;
@@ -163,12 +166,19 @@ public class OrderService {
         return dto;
     }
 
-    public PageDto<SellerOrdersResponseDto> getAllSellerOrders(Integer sid, Integer page, Integer size) {
+    public PageDto<SellerOrdersResponseDto> getAllSellerOrders(Integer sid, Integer page, Integer size, String tab) {
         if (!userRepository.existsById(sid)) {
             throw new ResourceNotFoundException("Seller not found");
         }
+        Page<Order> orders;
         Sort sort = Sort.by("orderDate").descending().and(Sort.by("id"));
-        Page<Order> orders = orderRepository.findOrdersBySeller(sid, PageRequest.of(page, size, sort));
+        orders = switch (tab) {
+            case "complete" ->
+                    orderRepository.findOrdersBySellerAndOrderStatus(sid, OrderStatus.COMPLETED, PageRequest.of(page, size, sort));
+            case "canceled" ->
+                    orderRepository.findOrdersBySellerAndOrderStatus(sid, OrderStatus.CANCELED, PageRequest.of(page, size, sort));
+            default -> orderRepository.findOrdersBySeller(sid, PageRequest.of(page, size, sort));
+        };
         PageDto<SellerOrdersResponseDto> response = listMapper.toPageDto(orders, SellerOrdersResponseDto.class, modelMapper);
         response.getContent().forEach(order -> {
             order.setSellerId(sid);
