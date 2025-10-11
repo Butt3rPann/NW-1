@@ -113,27 +113,28 @@ async function postData(url, data, access_token) {
       body: JSON.stringify(data)
     })
     if (res.status === 401) {
-      console.log("do1");
+      console.log("Token expired. Refreshing token...")
       const newToken = await refreshToken()
-      console.log(newToken);
+      if (!newToken) {
+        throw new Error('Failed to refresh token');
+      }
       const retryHeaders = new Headers(headers)
       retryHeaders.set('Authorization', `Bearer ${newToken}`)
-      res = await fetch(url, {
+      const newRes = await fetch(url, {
         method: 'POST',
         headers: retryHeaders,
         body: JSON.stringify(data)
       })
-      if (res.status === 401) {
+      if (newRes.status === 401) {
         throw new Error('Unauthorized even after refresh');
       }
-      console.log('sucess')
-      return await res.json()
+      console.log('Success after refresh')
+      return await newRes.json()
     }
     const item = await res.json()
     return item
   } catch (error) {
-      console.log("do");
-      
+      console.error("POST error:", error)
       throw new Error('Failed to POST data')
   }
 }
