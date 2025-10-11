@@ -5,6 +5,7 @@ import { updateFormData, getItemById } from '@/libs/fetchUtils'
 import SaleItemForm from '@/components/form/SaleItemForm.vue'
 import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import productNotFound from '@/assets/images/product-not-found.png'
+import { useUserStore } from '@/stores/UserStore'
 
 const router = useRouter()
 const { params: { id } } = useRoute()
@@ -12,6 +13,7 @@ const saleItem = ref({})
 const prevPath = ref(null)
 const prevPathName = ref(null)
 const prevParams = ref(null)
+const userStore = useUserStore()
 
 const previousPage = () => {
     prevPath.value = router.options.history.state.back
@@ -30,7 +32,7 @@ const imageData = ref([])
 
 onMounted(async () => {
     try {
-        saleItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, localStorage.getItem('access_token'))
+        saleItem.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, userStore.getAccessToken())
         saleItem.value.saleItemImages.forEach(img => {
             imageData.value.push({order: img.imageViewOrder, fileName: img.fileName, status: 'ONLINE', imageFile: null})
         })
@@ -70,7 +72,7 @@ const handleEditSaleItem = async (editedItem, saleItemImg, dataChanged, imagesCh
             if (editedItem.quantity !== null) formData.append('saleItem.quantity', editedItem.quantity)
         }
 
-        await updateFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, formData)
+        await updateFormData(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, id, formData, userStore.getAccessToken())
         if (prevPathName.value === 'SaleItemsList') {
             router.push({ name: prevPathName.value , query: { edited: 'true' }})
         } else {

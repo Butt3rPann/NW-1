@@ -88,7 +88,7 @@ function closeDelConfirm() {
 
 async function deleteSaleItem(){
     try {
-        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, deletedId.value)
+        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, deletedId.value, userStore.getAccessToken())
         if (status === 404) {
             showNotFound.value = true
         } else {

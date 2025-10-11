@@ -10,9 +10,11 @@ import WarningMessage from '@/components/elements/WarningMessage.vue'
 import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import emptySaleItems from '@/assets/images/emptySaleItems.png'
 import productNotFound from '@/assets/images/product-not-found.png'
+import { useUserStore } from '@/stores/UserStore'
 
 const brands = ref([])
 const showNotFound = ref(false)
+const userStore = useUserStore()
 
 onMounted(async () => {
     try {
@@ -46,7 +48,7 @@ async function deleteBrandById(id, name) {
     try {
         deletedId.value = id
         brandToDelete.value = name
-        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, localStorage.getItem('access_token'))
+        const brand = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, userStore.getAccessToken())
         if (brand.noOfSaleItems > 0) {
             showCannotDeletePopup.value = true
             } else {
@@ -68,7 +70,7 @@ function closeDelConfirm() {
 async function deleteBrand() {
     isShowPopup.value = false
     try {
-        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, deletedId.value)
+        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, deletedId.value, userStore.getAccessToken())
         if (status === 404) {
             return showNotFound.value = true
         } else {
