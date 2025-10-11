@@ -72,9 +72,11 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
                 .httpOnly(true)
                 .secure(true)
-                .path("/nw1/itb-mshop/v2/auth/refresh")
+//                .secure(false)
+                .path("/")
                 .maxAge(60 * 60 * 24)
                 .sameSite("Strict")
+//                .sameSite("Lax")
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(Map.entry("access_token", tokens.get("access_token")));
     }
@@ -84,9 +86,11 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", "")
                 .httpOnly(true)
                 .secure(true)
-                .path("/nw1/itb-mshop/v2/auth/refresh")
+//                .secure(false)
+                .path("/")
                 .maxAge(0)
                 .sameSite("Strict")
+//                .sameSite("Lax")
                 .build();
         return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
