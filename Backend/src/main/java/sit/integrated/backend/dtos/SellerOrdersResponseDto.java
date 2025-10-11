@@ -19,6 +19,7 @@ public class SellerOrdersResponseDto {
     private String shippingAddress;
     private String orderNote;
     private List<OrderItemDto> orderItems;
+    private String orderStatus;
 
     public Instant getPaymentDate() { return createdOn; }
     public UserDto getBuyer() { return user;}

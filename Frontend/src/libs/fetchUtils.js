@@ -68,7 +68,7 @@ async function getItemById(url, id, access_token) {
   }
 }
 
-async function getItemByIdWithToken(url, access_token, page, size) {
+async function getItemByIdWithToken(url, access_token, page, size, tab) {
   try {
     const headers = new Headers();
     if (access_token) {
@@ -80,6 +80,9 @@ async function getItemByIdWithToken(url, access_token, page, size) {
     params.append('page', page)
     if (size) {
       params.append('size', size)
+    }
+    if (tab) {
+      params.append('tab', tab)
     }
     const fullUrl = params.toString() ? `${url}?${params.toString()}` : url
     const data = await fetch(fullUrl, {

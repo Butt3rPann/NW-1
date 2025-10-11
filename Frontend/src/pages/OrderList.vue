@@ -11,22 +11,41 @@ const id = ref(0)
 const orders = ref([])
 const response = ref({})
 const currentPage = ref(1)
+const currentSize = ref(3)
 const totalPage = ref(0)
 const ordersComplete = computed(() => 
   orders.value.filter(order => order.orderStatus === 'COMPLETED')
 )
 
-onMounted(async () => {
+const goToPage = async (page) => {
+    currentPage.value = page
+    await getSellerOrders()
+}
+
+async function getAllOrders() {
     id.value = getUserId()
     if(id.value) {
         try {
-            response.value = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/users/${id.value}/orders`, getAccessToken(), currentPage.value - 1)
+            response.value = await getItemByIdWithToken(
+                `${import.meta.env.VITE_APP_URL}/v2/users/${id.value}/orders`, 
+                getAccessToken(), 
+                currentPage.value - 1,
+                currentSize.value
+            )
             orders.value = response.value.content
             totalPage.value = response.value.totalPages
             
         } catch (error) {
             console.log(error)
         }
+    }
+}
+
+onMounted(async () => {
+    try {
+        await getAllOrders()
+    } catch (error) {
+        console.log(error)
     }
 })
 </script>
@@ -39,6 +58,7 @@ onMounted(async () => {
         <img :src="emptyOrdersImg" alt="EmptySaleItems" class=" w-36">
         <p class="text-xl text-[#ABBCC9]">no order</p>
     </div>
+    <Pagination :totalPage="totalPage" :currentPage="currentPage" :currentSize="currentSize" @changePage="goToPage"/>
 </div>
 </template>
  
