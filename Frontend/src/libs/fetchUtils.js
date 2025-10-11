@@ -113,8 +113,13 @@ async function postData(url, data, access_token) {
       console.log("do1");
       const newToken = await refreshToken()
       console.log(newToken);
-      const x =  await postData(url, data, newToken)
-      return await x.json()
+      const res =  await postData(url, data, newToken)
+      if (res.status === 401) {
+        console.log("do5");
+        
+        throw new Error('Unauthorized even after refresh')
+      }
+      return await res.json()
     }
     const item = await res.json()
     return item
@@ -247,7 +252,8 @@ async function refreshToken() {
       router.push({ name : 'SignIn' })
       throw new Error(`Failed to refresh token (status: ${res.status})`);
     }
-    const newToken = await res.json()
+    const data = await res.json()
+    const newToken = data.access_token
     userStore.storeAccessToken(newToken)
     console.log(userStore.getAccessToken());
     return newToken;
