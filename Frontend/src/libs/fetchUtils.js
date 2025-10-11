@@ -119,6 +119,8 @@ async function postData(url, data, access_token) {
     const item = await res.json()
     return item
   } catch (error) {
+      console.log("do");
+      
       throw new Error('Failed to POST data')
   }
 }
@@ -250,6 +252,8 @@ async function refreshToken() {
     console.log(userStore.getAccessToken());
     return newToken;
   } catch (error) {
+    console.log("dodo");
+    
     throw new Error('Unable to refresh token.');
   }
 }
