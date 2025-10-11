@@ -116,12 +116,17 @@ async function postData(url, data, access_token) {
       console.log("do1");
       const newToken = await refreshToken()
       console.log(newToken);
-      const res =  await postData(url, data, newToken)
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      res = await fetch(url, {
+        method: 'POST',
+        headers: retryHeaders,
+        body: JSON.stringify(data)
+      })
       if (res.status === 401) {
-        console.log("do5");
-        
-        throw new Error('Unauthorized even after refresh')
+        throw new Error('Unauthorized even after refresh');
       }
+      console.log('sucess')
       return await res.json()
     }
     const item = await res.json()
