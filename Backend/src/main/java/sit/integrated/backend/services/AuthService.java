@@ -43,10 +43,10 @@ public class AuthService {
             if (((AuthUserDetail) userDetails).getStatus().equals(UserStatus.INACTIVE)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account is inactive.");
             }
-//            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000, TokenType.ACCESS_TOKEN),
-//                    "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*2, TokenType.REFRESH_TOKEN));
-            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30, TokenType.ACCESS_TOKEN),
-                    "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24, TokenType.REFRESH_TOKEN));
+            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000, TokenType.ACCESS_TOKEN),
+                    "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*2, TokenType.REFRESH_TOKEN));
+//            return Map.of("access_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*30, TokenType.ACCESS_TOKEN),
+//                    "refresh_token", jwtUtils.generateToken(userDetails, ((AuthUserDetail) userDetails).getRole(), ((AuthUserDetail) userDetails).getNickname(), (long) 60*1000*60*24, TokenType.REFRESH_TOKEN));
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
