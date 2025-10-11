@@ -1,3 +1,6 @@
+import router from "@/router"
+import { useUserStore } from "@/stores/UserStore"
+
 async function getItems(url, sortField, sortDirection, brands, filterStorages, filterPriceLower, filterPriceUpper, keyword, page, size) {
   try {
     const params = new URLSearchParams()
@@ -54,11 +57,10 @@ async function getItemById(url, id, access_token) {
     const data = await fetch(`${url}/${id}`, {
       headers
     })
-
-    if (!data.ok) {
-      throw new Error(`Request failed: ${data.status}`);
-    }
-
+    // if (data.status === 401) {
+    //   const newToken = await refreshToken()
+    //   return await getItemById(url, id, newToken)
+    // }
     const item = await data.json()
     return item
   } catch (error) {
@@ -83,11 +85,10 @@ async function getItemByIdWithToken(url, access_token, page, size) {
     const data = await fetch(fullUrl, {
       headers
     })
-    
-    if (!data.ok) {
-      throw new Error(`Request failed: ${data.status}`);
-    }
-    
+    // if (data.status === 401) {
+    //   const newToken = await refreshToken()
+    //   return await getItemByIdWithToken(url, newToken, page, size)
+    // }
     const item = await data.json()
     return item
   } catch (error) {
@@ -108,6 +109,10 @@ async function postData(url, data, access_token) {
       headers,
       body: JSON.stringify(data)
     })
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      return await postData(url, data, newToken)
+    }
     const item = await res.json()
     return item
   } catch (error) {
@@ -130,7 +135,11 @@ async function editItem(url, id, editItem, access_token) {
       body: JSON.stringify({
         ...editItem
       })
-    })
+    })    
+    // if (res.status === 401) {
+    //   const newToken = await refreshToken()
+    //   return await editItem(url, id, editItem, newToken)
+    // }
     const editedItem = await res.json()
     return editedItem
   } catch (error) {
@@ -151,11 +160,10 @@ async function patchItem(url, id, partialItem, accessToken) {
       headers,
       body: JSON.stringify(partialItem)
     });
-
-    if (!response.ok) {
-      throw new Error(`Failed to patch item: ${response.status}`);
-    }
-
+    // if (response.status === 401) {
+    //   const newToken = await refreshToken()
+    //   return await patchItem(url, id, partialItem, newToken)
+    // }
     const updatedItem = await response.json();
     return updatedItem;
   } catch (error) {
@@ -175,6 +183,10 @@ async function deleteItemById(url, id, access_token) {
       method: 'DELETE',
       headers
     })
+    // if (res.status === 401) {
+    //   const newToken = await refreshToken()
+    //   return await deleteItemById(url, id, newToken)
+    // }
     return res.status
   } catch (error) {
     throw new Error('can not delete your item')
@@ -193,6 +205,10 @@ async function uploadFormData(url, formData, access_token) {
       body: formData,
       headers
     })
+    // if (res.status === 401) {
+    //   const newToken = await refreshToken()
+    //   return await uploadFormData(url, formData, newToken)
+    // }
     const addedItem = await res.json()
     return addedItem
   } catch (error) {
@@ -212,5 +228,23 @@ async function updateFormData(url, id, formData) {
     throw new Error('can not edit your item')
   }
 }
+
+async function refreshToken() {
+  try {
+    const userStore = useUserStore()
+    const res = await fetch(`${import.meta.env.VITE_APP_URL}/v2/auth/refresh`, { method : 'POST' , credentials: 'include'})
+    if (!res.ok) {
+      userStore.removeAccessToken()
+      router.push({ name : 'SignIn' })
+      throw new Error(`Failed to refresh token (status: ${res.status})`);
+    }
+    const newToken = await res.json()
+    userStore.storeAccessToken(newToken)
+    return newToken;
+  } catch (error) {
+    throw new Error('Unable to refresh token.');
+  }
+}
+
 
 export { getItems, getItemById, postData, editItem, patchItem, deleteItemById, uploadFormData, updateFormData, getItemByIdWithToken}
