@@ -110,8 +110,11 @@ async function postData(url, data, access_token) {
       body: JSON.stringify(data)
     })
     if (res.status === 401) {
+      console.log("do1");
       const newToken = await refreshToken()
-      return await postData(url, data, newToken)
+      console.log(newToken);
+      const x =  await postData(url, data, newToken)
+      return await x.json()
     }
     const item = await res.json()
     return item
@@ -232,14 +235,19 @@ async function updateFormData(url, id, formData) {
 async function refreshToken() {
   try {
     const userStore = useUserStore()
+    console.log(userStore.getAccessToken());
+    
     const res = await fetch(`${import.meta.env.VITE_APP_URL}/v2/auth/refresh`, { method : 'POST' , credentials: 'include'})
     if (!res.ok) {
+      console.log("do2");
+      
       userStore.removeAccessToken()
       router.push({ name : 'SignIn' })
       throw new Error(`Failed to refresh token (status: ${res.status})`);
     }
     const newToken = await res.json()
     userStore.storeAccessToken(newToken)
+    console.log(userStore.getAccessToken());
     return newToken;
   } catch (error) {
     throw new Error('Unable to refresh token.');
