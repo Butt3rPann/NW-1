@@ -1,7 +1,5 @@
 package sit.integrated.backend.controllers.v2;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,6 @@ import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.UserStatus;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
