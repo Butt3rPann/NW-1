@@ -6,6 +6,7 @@ import { onMounted, ref } from 'vue'
 import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import productNotFound from '@/assets/images/product-not-found.png'
+import { useUserStore } from '@/stores/UserStore'
 
 const router = useRouter()
 const { params: { id } } = useRoute()
@@ -13,10 +14,11 @@ const brand = ref({})
 const message = ref('')
 const isShowPopup = ref(false)
 const isSuccess = ref(true)
+const userStore = useUserStore()
 
 onMounted(async () => {
     try {
-        brand.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, localStorage.getItem('access_token'))
+        brand.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, userStore.getAccessToken())
     } catch (error) {
         console.log(error);
     }
@@ -30,7 +32,7 @@ const handleEditBrand = async (editedBrand) => {
         }
     })
     try {
-        const edited = await editItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, editedItem)
+        const edited = await editItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, editedItem, userStore.getAccessToken())
         if (edited.status === 400 || edited.status === 500) {
             throw new Error(edited.message)
         }

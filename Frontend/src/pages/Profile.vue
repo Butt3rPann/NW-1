@@ -30,7 +30,7 @@ onMounted(async () => {
   
   if (id.value) {
     try {
-      user.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, id.value, localStorage.getItem('access_token'))
+      user.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/users`, id.value, userStore.getAccessToken())
       type.value = user.value.userType[0] + user.value.userType.slice(1).toLowerCase()
       phone.value = maskNumber(user.value.phoneNumber)
       bankNo.value = maskNumber(user.value.bankAccount)

@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,8 +30,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(crsf -> crsf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.GET, "/v2/sale-items", "/v2/sale-items/*").permitAll()
-                        .requestMatchers("/v2/sale-items", "/v2/sale-items/*", "/v2/brands/**").hasAnyAuthority("SELLER")
+                        .requestMatchers(HttpMethod.GET, "/v2/sale-items", "/v2/sale-items/*", "/v2/brands", "/v2/brands/*").permitAll()
+                        .requestMatchers("/v2/sale-items", "/v2/sale-items/*", "/v2/brands", "/v2/brands/*").hasAnyAuthority("SELLER")
                         .requestMatchers("/v2/sellers/**").hasAnyAuthority("SELLER")
                         .requestMatchers("/v2/users/**", "/v2/orders/**").hasAnyAuthority("SELLER", "BUYER")
                         .anyRequest().permitAll())

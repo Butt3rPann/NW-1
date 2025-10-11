@@ -53,15 +53,23 @@ async function getItemById(url, id, access_token) {
       const authHeader = `Bearer ${access_token}`
       headers.append("Authorization", authHeader)
     }
+    const res = await fetch(`${url}/${id}`, { headers })
 
-    const data = await fetch(`${url}/${id}`, {
-      headers
-    })
-    // if (data.status === 401) {
-    //   const newToken = await refreshToken()
-    //   return await getItemById(url, id, newToken)
-    // }
-    const item = await data.json()
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token')
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(`${url}/${id}`, { headers: retryHeaders })
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return await newRes.json()
+    }
+
+    const item = await res.json()
     return item
   } catch (error) {
     throw new Error('The requested item does not exist')
@@ -85,14 +93,25 @@ async function getItemByIdWithToken(url, access_token, page, size, tab) {
       params.append('tab', tab)
     }
     const fullUrl = params.toString() ? `${url}?${params.toString()}` : url
-    const data = await fetch(fullUrl, {
+    const res = await fetch(fullUrl, {
       headers
     })
-    // if (data.status === 401) {
-    //   const newToken = await refreshToken()
-    //   return await getItemByIdWithToken(url, newToken, page, size)
-    // }
-    const item = await data.json()
+
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token')
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(fullUrl, { headers: retryHeaders })
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return await newRes.json()
+    }
+
+    const item = await res.json()
     return item
   } catch (error) {
     throw new Error('The requested item does not exist')
@@ -112,8 +131,8 @@ async function postData(url, data, access_token) {
       headers,
       body: JSON.stringify(data)
     })
+
     if (res.status === 401) {
-      console.log("Token expired. Refreshing token...")
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token');
@@ -128,13 +147,12 @@ async function postData(url, data, access_token) {
       if (newRes.status === 401) {
         throw new Error('Unauthorized even after refresh');
       }
-      console.log('Success after refresh')
       return await newRes.json()
     }
+
     const item = await res.json()
     return item
   } catch (error) {
-      console.error("POST error:", error)
       throw new Error('Failed to POST data')
   }
 }
@@ -151,14 +169,27 @@ async function editItem(url, id, editItem, access_token) {
     const res = await fetch(`${url}/${id}`, {
       method: 'PUT',
       headers,
-      body: JSON.stringify({
-        ...editItem
-      })
+      body: JSON.stringify(editItem)
     })    
-    // if (res.status === 401) {
-    //   const newToken = await refreshToken()
-    //   return await editItem(url, id, editItem, newToken)
-    // }
+
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token')
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(`${url}/${id}`, {
+        method: 'PUT',
+        headers : retryHeaders,
+        body: JSON.stringify(editItem)
+      })   
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return await newRes.json()
+    }
+
     const editedItem = await res.json()
     return editedItem
   } catch (error) {
@@ -174,16 +205,31 @@ async function patchItem(url, id, partialItem, accessToken) {
       headers.append("Authorization", `Bearer ${accessToken}`);
     }
 
-    const response = await fetch(`${url}/${id}`, {
+    const res = await fetch(`${url}/${id}`, {
       method: 'PATCH',
       headers,
       body: JSON.stringify(partialItem)
-    });
-    // if (response.status === 401) {
-    //   const newToken = await refreshToken()
-    //   return await patchItem(url, id, partialItem, newToken)
-    // }
-    const updatedItem = await response.json();
+    })
+
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token')
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(`${url}/${id}`, {
+        method: 'PATCH',
+        headers : retryHeaders,
+        body: JSON.stringify(partialItem)
+      })   
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return await newRes.json()
+    }
+
+    const updatedItem = await res.json();
     return updatedItem;
   } catch (error) {
     throw new Error("Cannot patch this item");
@@ -202,10 +248,24 @@ async function deleteItemById(url, id, access_token) {
       method: 'DELETE',
       headers
     })
-    // if (res.status === 401) {
-    //   const newToken = await refreshToken()
-    //   return await deleteItemById(url, id, newToken)
-    // }
+
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token')
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(`${url}/${id}`, {
+        method: 'DELETE',
+        headers : retryHeaders
+      })   
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return newRes.status
+    }
+
     return res.status
   } catch (error) {
     throw new Error('can not delete your item')
@@ -224,10 +284,25 @@ async function uploadFormData(url, formData, access_token) {
       body: formData,
       headers
     })
-    // if (res.status === 401) {
-    //   const newToken = await refreshToken()
-    //   return await uploadFormData(url, formData, newToken)
-    // }
+
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token');
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(url, {
+        method: 'POST',
+        headers: retryHeaders,
+        body: formData
+      })
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return await newRes.json()
+    }
+
     const addedItem = await res.json()
     return addedItem
   } catch (error) {
@@ -235,12 +310,37 @@ async function uploadFormData(url, formData, access_token) {
   }
 }
 
-async function updateFormData(url, id, formData) {
+async function updateFormData(url, id, formData, access_token) {
   try {
+    const headers = new Headers();
+    if (access_token) {
+      const authHeader = `Bearer ${access_token}`
+      headers.append("Authorization", authHeader)
+    }
     const res = await fetch(`${url}/${id}`, {
       method: 'PUT',
+      headers,
       body: formData
     })
+
+    if (res.status === 401) {
+      const newToken = await refreshToken()
+      if (!newToken) {
+        throw new Error('Failed to refresh token');
+      }
+      const retryHeaders = new Headers(headers)
+      retryHeaders.set('Authorization', `Bearer ${newToken}`)
+      const newRes = await fetch(`${url}/${id}`, {
+        method: 'PUT',
+        headers: retryHeaders,
+        body: formData
+      })
+      if (newRes.status === 401) {
+        throw new Error('Unauthorized even after refresh');
+      }
+      return await newRes.json()
+    }
+
     const editedItem = await res.json()
     return editedItem
   } catch (error) {
@@ -251,12 +351,8 @@ async function updateFormData(url, id, formData) {
 async function refreshToken() {
   try {
     const userStore = useUserStore()
-    console.log(userStore.getAccessToken());
-    
     const res = await fetch(`${import.meta.env.VITE_APP_URL}/v2/auth/refresh`, { method : 'POST' , credentials: 'include'})
     if (!res.ok) {
-      console.log("do2");
-      
       userStore.removeAccessToken()
       router.push({ name : 'SignIn' })
       throw new Error(`Failed to refresh token (status: ${res.status})`);
@@ -264,11 +360,8 @@ async function refreshToken() {
     const data = await res.json()
     const newToken = data.access_token
     userStore.storeAccessToken(newToken)
-    console.log(userStore.getAccessToken());
     return newToken;
   } catch (error) {
-    console.log("dodo");
-    
     throw new Error('Unable to refresh token.');
   }
 }
