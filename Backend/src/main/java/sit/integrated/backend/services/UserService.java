@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.repositories.UserRepository;
 import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.UserStatus;
+import java.security.Principal;
 
 @Service
 public class UserService {
@@ -159,5 +161,20 @@ public class UserService {
 
     public User getUserBySaleItemId(Integer id) {
         return userRepository.getUserBySaleItemId(id);
+    }
+
+    public void changePassword(ChangePasswordRequest request, Principal principal) {
+        UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) principal;
+        AuthUserDetail userDetails = (AuthUserDetail) authToken.getPrincipal();
+        Integer id = userDetails.getId();
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("New password do not match");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }
