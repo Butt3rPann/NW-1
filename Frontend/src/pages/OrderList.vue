@@ -4,6 +4,7 @@ import { getItemByIdWithToken } from '@/libs/fetchUtils'
 import { useUserStore } from '@/stores/UserStore'
 import { ref, onMounted, computed } from 'vue'
 import emptyOrdersImg from '@/assets/images/emptySaleItems.png'
+import Pagination from '@/components/elements/Pagination.vue'
 
 const userStore = useUserStore()
 const { getUserId, getAccessToken } = userStore

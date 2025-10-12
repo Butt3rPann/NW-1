@@ -59,27 +59,8 @@ public class OrderService {
         return dtos;
     }
 
-    public void validateOrderRequest(List<OrderRequestDto> orderRequests) {
-        if (orderRequests == null) {
-            throw new IllegalArgumentException("Missing required fields for Order");
-        }
-        for (OrderRequestDto request : orderRequests) {
-            if (request.getSellerId() == null ||
-                    request.getShippingAddress() == null ||
-                    request.getOrderItems() == null) {
-                throw new IllegalArgumentException("Missing required fields for OrderRequest");
-            }
-            for (OrderItemDto itemDto : request.getOrderItems()) {
-                if (itemDto.getSaleItemId() == null || itemDto.getQuantity() == null) {
-                    throw new IllegalArgumentException("Missing required fields for OrderItem");
-                }
-            }
-        }
-    }
-
     @Transactional
     public List<OrderResponseDto> placeOrders(List<OrderRequestDto> orderRequests) {
-        validateOrderRequest(orderRequests);
         List<OrderResponseDto> responses = new ArrayList<>();
         for (OrderRequestDto request : orderRequests) {
             if (request.getSellerId().equals(request.getBuyerId())) {

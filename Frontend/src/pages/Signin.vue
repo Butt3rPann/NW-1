@@ -52,7 +52,7 @@ const handleClick = async () => {
             const userId = jwtDecode(loginUser.access_token).id
             const cart = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/users/${userId}/carts`, loginUser.access_token);
             userStore.setCart(cart);
-	    router.push({ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' })
+	        router.push({ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
             errorMessage.value = 'Email or Password is incorrect.'

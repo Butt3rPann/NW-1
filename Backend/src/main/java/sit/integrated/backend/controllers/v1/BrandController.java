@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v1;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,12 +39,12 @@ public class BrandController {
     }
 
     @PostMapping("/brands")
-    public ResponseEntity<BrandDetailDto> createBrand(@RequestBody BrandFormDto brandFormDto) {
+    public ResponseEntity<BrandDetailDto> createBrand(@Valid @RequestBody BrandFormDto brandFormDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(brandService.createBrand(brandFormDto));
     }
 
     @PutMapping("/brands/{id}")
-    public ResponseEntity<BrandDetailDto> updateBrand(@PathVariable Integer id, @RequestBody BrandFormDto brandFormDto) {
+    public ResponseEntity<BrandDetailDto> updateBrand(@PathVariable Integer id, @Valid @RequestBody BrandFormDto brandFormDto) {
         return ResponseEntity.ok(brandService.updateBrand(id, brandFormDto));
     }
 

@@ -26,16 +26,7 @@ public class AuthService {
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
-    public void validateEmailAndPassword(String email, String password) {
-        if (email == null || email.isEmpty() || email.length() > 50
-                || !email.trim().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
-                || password == null || password.isEmpty() || password.length() > 14) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or Password is incorrect");
-        }
-    }
-
     public Map<String, Object> authenticateUser(UserSignInDto user) {
-        validateEmailAndPassword(user.getEmail(), user.getPassword());
         UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         try {
             authenticationManager.authenticate(upat);

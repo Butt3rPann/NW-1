@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v1;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,13 +42,13 @@ public class SaleItemControllerV1 {
     }
 
     @PostMapping("/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestBody SaleItemFormDto formDto) {
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@Valid @RequestBody SaleItemFormDto formDto) {
         SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
     }
 
     @PutMapping("/sale-items/{id}")
-    public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemFormDto formDto) {
+    public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id, @Valid @RequestBody SaleItemFormDto formDto) {
         SaleItemDetailDto updatedItem = saleItemService.updateSaleItem(id, formDto);
         return ResponseEntity.ok(updatedItem);
     }

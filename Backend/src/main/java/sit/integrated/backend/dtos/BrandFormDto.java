@@ -1,13 +1,25 @@
 package sit.integrated.backend.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
 @Data
 public class BrandFormDto {
     private Integer id;
+
+    @NotBlank
+    @Size(max = 30)
     private String name;
+
+    @URL
+    @Size(max = 40)
     private String websiteUrl;
+
+    @Size(max = 80)
     private String countryOfOrigin;
+
     private Boolean isActive;
 
     public void setName(String name) {
