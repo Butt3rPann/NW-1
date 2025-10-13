@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v2;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/orders")
-    public ResponseEntity<List<OrderResponseDto>> placeOrders (@RequestBody List<OrderRequestDto> orderRequests) {
+    public ResponseEntity<List<OrderResponseDto>> placeOrders (@Valid @RequestBody List<OrderRequestDto> orderRequests) {
         List<OrderResponseDto> responses = orderService.placeOrders(orderRequests);
         return ResponseEntity.status(HttpStatus.CREATED).body(responses);
     }

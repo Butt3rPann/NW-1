@@ -85,13 +85,13 @@ const charCount = computed(() => {
                 { 'border-red-400' : !isValid },
                 readonly ? 'bg-gray-100' : 'bg-white focus:ring-2 focus:ring-[#2684FF]'
             ]"/>
-        <input v-else-if="trim" :type="inputType" :inputmode="inputmode" :required="required" v-model.trim="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :maxlength="limitLength" :min="min" :max="max" :step="step" :readonly="readonly"
+        <input v-else-if="trim" :type="inputType" :inputmode="inputmode" :required="required" v-model.trim="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :maxlength="limitLength" :minlength="minlength" :min="min" :max="max" :step="step" :readonly="readonly"
             :class="[
                 `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full ${inputSize} text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 selection:bg-[#2684FF]/30 focus:outline-none`,
                 { 'border-red-400' : !isValid },
                 readonly ? 'bg-gray-100' : 'bg-white focus:ring-2 focus:ring-[#2684FF]'
             ]"/>
-        <input v-else :type="inputType" :required="required" :inputmode="inputmode" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step" :maxlength="limitLength" :readonly="readonly"
+        <input v-else :type="inputType" :required="required" :inputmode="inputmode" v-model="inputValue" ref="inputRef" :placeholder="placeholder" @blur="handleBlur" :min="min" :max="max" :step="step" :maxlength="limitLength" :minlength="minlength" :readonly="readonly"
             :class="[
                 `${className} h-[2rem] md:h-[2.5rem] lg:h-[2.75rem] appearance-none w-full ${inputSize} text-[#332A1E]/80 border-[#332A1E]/20 border rounded-xs px-3 md:px-5 mt-1 selection:bg-[#2684FF]/30 focus:outline-noneq`,
                 { 'border-red-400' : !isValid },

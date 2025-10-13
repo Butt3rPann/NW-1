@@ -18,6 +18,7 @@ import Cart from "@/pages/Cart.vue";
 import OrderList from "@/pages/OrderList.vue";
 import OrderDetail from "@/pages/OrderDetail.vue";
 import SellerOrderList from "@/pages/SellerOrderList.vue";
+import ChangePasswordForm from "@/components/form/ChangePasswordForm.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -130,6 +131,11 @@ const routes = [
         path: '/sale-orders',
         name: 'SaleOrderList',
         component: SellerOrderList
+    },
+    {
+        path: '/change-password',
+        name: 'ChangePassword',
+        component: ChangePasswordForm
     }
 ]
 const router = createRouter({history,routes})

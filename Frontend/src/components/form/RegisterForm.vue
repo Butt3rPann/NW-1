@@ -31,7 +31,7 @@ const user = ref({
 const invalidMessage = {
     nickName: 'Nickname must be required.',
     email: 'Email is required and must not exceed 100 characters.',
-    password: 'Password must be required, max 14 characters, with uppercase, lowercase, number, and special character',
+    password: 'Password is required, must be 8–14 characters long, and include uppercase, lowercase, number, and special character.',
     fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
     phoneNumber: 'Mobile must be required',
     bankAccount: 'Bank Account Number must be required.',
@@ -163,9 +163,9 @@ const handleClick = async () => {
                         placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
                     <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                         placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :minlength="8"
+                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :min="8" 
                         placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="60" field="fullName"
+                    <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" :min="4" field="fullName"
                         placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                     <template v-if="user.userType == 'SELLER'">
                         <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"

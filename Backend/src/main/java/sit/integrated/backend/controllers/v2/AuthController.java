@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v2;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class AuthController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<UserResponseDto> createUser(@ModelAttribute UserRequestDto user) {
+    public ResponseEntity<UserResponseDto> createUser(@Valid @ModelAttribute UserRequestDto user) {
         UserResponseDto userDto = userService.createUser(user);
         if (user.getUserType().equals(Role.SELLER)) {
             List<MultipartFile> files = Arrays.asList(user.getIdCardImageFront(), user.getIdCardImageBack());
@@ -69,7 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<Object> authenticateUser(@RequestBody UserSignInDto userSignInDto) {
+    public ResponseEntity<Object> authenticateUser(@Valid @RequestBody UserSignInDto userSignInDto) {
         Map<String, Object> tokens = authService.authenticateUser(userSignInDto);
         ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
                 .httpOnly(true)
@@ -101,6 +102,6 @@ public class AuthController {
     @PostMapping("/auth/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request, Principal principal) {
         userService.changePassword(request, principal);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

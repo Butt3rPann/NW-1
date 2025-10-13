@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v2;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -71,7 +72,7 @@ public class SaleItemControllerV2 {
     }
 
     @PostMapping( "/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@ModelAttribute SaleItemFormDto formDto,
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@Valid @ModelAttribute SaleItemFormDto formDto,
                                                             @RequestParam(required = false) List<MultipartFile> images) {
         AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer tokenUserId = userDetail.getId();
@@ -85,7 +86,7 @@ public class SaleItemControllerV2 {
 
     @PutMapping("/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id,
-                                                            @ModelAttribute SaleItemWithImageInfo request) {
+                                                            @Valid @ModelAttribute SaleItemWithImageInfo request) {
         SaleItemDetailDto saleItemDetailDto =
                 (request.getSaleItem() != null) ? saleItemService.updateSaleItem(id, request.getSaleItem())
                                                 : modelMapper.map(saleItemService.getSaleItemDetail(id), SaleItemDetailDto.class);
