@@ -17,7 +17,7 @@ const totalPrice = (order) => {
  
 <template>
 <div class="rounded-lg text-[#332A1E] p-5 border space-y-5 border-gray-300 cursor-pointer transition duration-200">
-    <div v-for="(order, index) in orders" :key="index" class="itbms-row rounded-lg p-5 border border-gray-300 cursor-pointer hover:shadow-lg transition duration-200 bg-white">
+    <div v-for="(order, index) in orders" :key="index" class="itbms-row itbms-view-button rounded-lg p-5 border border-gray-300 cursor-pointer hover:shadow-lg transition duration-200 bg-white">
       <router-link :to="{ name: 'OrderDetail', params: { orderId: order.orderItems[0].no } }">
         <div class="border-b border-[#ABBCC9]">
           <div class="flex justify-between items-center mb-3">
