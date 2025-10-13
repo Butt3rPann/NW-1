@@ -97,7 +97,7 @@ async function getItemByIdWithToken(url, access_token, page, size, tab) {
       headers
     })
 
-    if (res.status === 401) {
+    if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token')
@@ -132,7 +132,7 @@ async function postData(url, data, access_token) {
       body: JSON.stringify(data)
     })
 
-    if (res.status === 401) {
+    if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token');
@@ -172,7 +172,7 @@ async function editItem(url, id, editItem, access_token) {
       body: JSON.stringify(editItem)
     })    
 
-    if (res.status === 401) {
+    if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token')
@@ -211,7 +211,7 @@ async function patchItem(url, id, partialItem, accessToken) {
       body: JSON.stringify(partialItem)
     })
 
-    if (res.status === 401) {
+    if (res.status === 401 && accessToken) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token')
@@ -249,7 +249,7 @@ async function deleteItemById(url, id, access_token) {
       headers
     })
 
-    if (res.status === 401) {
+    if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token')
@@ -285,7 +285,7 @@ async function uploadFormData(url, formData, access_token) {
       headers
     })
 
-    if (res.status === 401) {
+    if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token');
@@ -323,7 +323,7 @@ async function updateFormData(url, id, formData, access_token) {
       body: formData
     })
 
-    if (res.status === 401) {
+    if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {
         throw new Error('Failed to refresh token');

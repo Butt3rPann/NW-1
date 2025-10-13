@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v2;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class CartItemController {
     private UserService userService;
 
     @PostMapping("/carts")
-    public ResponseEntity<CartResponseDto> addToCart(@RequestBody CartRequestDto cartRequestDto) {
+    public ResponseEntity<CartResponseDto> addToCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
         CartResponseDto response = modelMapper.map(cartItemService.addToCart(cartRequestDto), CartResponseDto.class);
         response.setSeller(modelMapper.map(userService.getUserBySaleItemId(cartRequestDto.getSaleItemId()), UserDto.class));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -28,7 +29,7 @@ public class CartItemController {
 
     @PatchMapping("/carts/{id}")
     public ResponseEntity<CartResponseDto> updateCartItemQuantity(@PathVariable Integer id,
-                                                                  @RequestBody UpdateCartItemQuantityDto updateCartItemQuantityDto) {
+                                                                  @Valid @RequestBody UpdateCartItemQuantityDto updateCartItemQuantityDto) {
         CartResponseDto response = modelMapper.map(cartItemService.updateCartItemQuantity(id, updateCartItemQuantityDto.getQuantity()), CartResponseDto.class);
         response.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), UserDto.class));
         return ResponseEntity.ok(response);
