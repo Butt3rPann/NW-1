@@ -23,6 +23,9 @@ public class JwtUtils {
     @Value("#{${app.security.jwt.token-max-interval-in-minute}*1000*60*24}")
     private long MAX_EMAIL_TOKEN_INTERVAL;
 
+    @Value("#{${app.security.jwt.token-max-interval-in-minute}*1000*15}")
+    private long MAX_RESET_TOKEN_INTERVAL;
+
     @Value("${app.security.jwt.key-id}")
     private String KEY_ID;
 
@@ -74,6 +77,27 @@ public class JwtUtils {
                     .claim("email", user.getUsername())
                     .claim("role", role)
                     .claim("typ", typ.toString())
+                    .build();
+            SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
+                    .keyID(rsaPrivateJWK.getKeyID()).build(), claimsSet);
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String generateResetToken(Integer id, String email) {
+        try {
+            JWSSigner signer = new RSASSASigner(rsaPrivateJWK);
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(email)
+                    .issuer("https://intproj24.sit.kmutt.ac.th/nw1")
+                    .expirationTime(new Date(new Date().getTime() + MAX_RESET_TOKEN_INTERVAL))
+                    .issueTime(new Date(new Date().getTime()))
+                    .claim("typ", TokenType.RESET_TOKEN.toString())
+                    .claim("id", id)
+                    .claim("email", email)
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .keyID(rsaPrivateJWK.getKeyID()).build(), claimsSet);

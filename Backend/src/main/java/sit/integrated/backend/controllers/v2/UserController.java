@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.AuthUserDetail;
-import sit.integrated.backend.services.CartItemService;
-import sit.integrated.backend.services.OrderService;
-import sit.integrated.backend.services.UserService;
+import sit.integrated.backend.services.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +23,10 @@ public class UserController {
     private OrderService orderService;
     @Autowired
     private CartItemService cartItemService;
+    @Autowired
+    private PasswordResetService passwordResetService;
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/users/{id}")
     public ResponseEntity<BuyerResponseDto> getUserProfile(@PathVariable Integer id) {
@@ -69,4 +71,25 @@ public class UserController {
     public ResponseEntity<List<CartSellerWithItemsDto>> getCartItems(@PathVariable Integer id) {
         return ResponseEntity.ok(cartItemService.getAllCartItem(id));
     }
+
+    @PostMapping("/users/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+        String token = passwordResetService.createPasswordResetToken(email);
+
+        emailService.sendForgotPasswordEmail(email, token);
+        return ResponseEntity.ok("Reset password link sent to email");
+    }
+
+    @PostMapping("/users/verify-reset-token")
+    public ResponseEntity<?> verifyToken(@RequestParam String token) {
+        passwordResetService.validateResetToken(token);
+        return ResponseEntity.ok("Valid token");
+    }
+
+    @PostMapping("/users/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
+        return ResponseEntity.ok("Password reset successfully");
+    }
+
 }
