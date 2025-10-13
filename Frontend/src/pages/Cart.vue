@@ -124,8 +124,6 @@ const placeOrder = async () => {
 
 const updateQty = async (indexOfSeller, indexOfItem, cartItemId, newQty) => {
     try {
-        console.log(newQty);
-        
         const updatedItem = await patchItem(`${import.meta.env.VITE_APP_URL}/v2/carts`, cartItemId, {quantity : newQty}, getAccessToken())
         updateCartItemQty(indexOfSeller, indexOfItem, updatedItem.quantity)
     } catch (error) {
