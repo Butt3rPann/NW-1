@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from '@/stores/UserStore'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { getItemById } from '@/libs/fetchUtils.js'
 import profileImg2 from '@/assets/images/profileImg2.png'
 import profileVector from '@/assets/images/profileVector.png'
@@ -47,6 +47,15 @@ if (route.query.updated === 'true') {
   isShowPopup.value = true
   setTimeout(() => isShowPopup.value = false , 1500)
 }
+
+if (route.query.added === 'true') {
+  message.value = 'Password changed successfully.'
+  router.replace({ query: { } })
+  isSuccess.value = true
+  isShowPopup.value = true
+  setTimeout(() => isShowPopup.value = false , 1500)
+}
+
 </script>
  
 <template>
@@ -71,7 +80,7 @@ if (route.query.updated === 'true') {
             </div>     
             <router-link :to="{ name: 'EditProfile' }">
               <BaseButton :icon="editIcon" text="Edit Profile" class="itbms-profile-button"/>
-            </router-link>       
+            </router-link>      
         </div>
         <div v-if="user.userType === 'BUYER'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <div class="bg-white col-span-full w-full h-fit p-6 shadow-md rounded-3xl">

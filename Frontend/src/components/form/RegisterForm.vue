@@ -163,7 +163,7 @@ const handleClick = async () => {
                         placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
                     <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                         placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :min="8"
+                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :min="8" 
                         placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
                     <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" :min="4" field="fullName"
                         placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   

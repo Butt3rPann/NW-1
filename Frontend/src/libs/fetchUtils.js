@@ -131,7 +131,9 @@ async function postData(url, data, access_token) {
       headers,
       body: JSON.stringify(data)
     })
-
+    if (res.status === 204) {
+      return { status: res.status }
+    }
     if (res.status === 401 && access_token) {
       const newToken = await refreshToken()
       if (!newToken) {

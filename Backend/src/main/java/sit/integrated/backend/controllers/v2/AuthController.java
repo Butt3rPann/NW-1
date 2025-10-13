@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import sit.integrated.backend.dtos.ChangePasswordRequest;
 import sit.integrated.backend.dtos.UserRequestDto;
 import sit.integrated.backend.dtos.UserResponseDto;
 import sit.integrated.backend.dtos.UserSignInDto;
@@ -20,6 +21,7 @@ import sit.integrated.backend.utils.JwtUtils;
 import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.UserStatus;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -95,5 +97,11 @@ public class AuthController {
     @PostMapping("/auth/refresh")
     public ResponseEntity<Object> refreshToken(@CookieValue("refresh_token") String refreshToken) {
         return ResponseEntity.ok(authService.refreshToken(refreshToken));
+    }
+
+    @PostMapping("/auth/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request, Principal principal) {
+        userService.changePassword(request, principal);
+        return ResponseEntity.noContent().build();
     }
 }

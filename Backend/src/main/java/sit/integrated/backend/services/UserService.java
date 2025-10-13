@@ -1,14 +1,13 @@
 package sit.integrated.backend.services;
 
-import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 import sit.integrated.backend.dtos.*;
 import sit.integrated.backend.entities.*;
@@ -17,6 +16,7 @@ import sit.integrated.backend.repositories.SellerRepository;
 import sit.integrated.backend.repositories.UserRepository;
 import sit.integrated.backend.utils.Role;
 import sit.integrated.backend.utils.UserStatus;
+import java.security.Principal;
 
 @Service
 public class UserService {
@@ -136,5 +136,20 @@ public class UserService {
 
     public User getUserBySaleItemId(Integer id) {
         return userRepository.getUserBySaleItemId(id);
+    }
+
+    public void changePassword(ChangePasswordRequest request, Principal principal) {
+        UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) principal;
+        AuthUserDetail userDetails = (AuthUserDetail) authToken.getPrincipal();
+        Integer id = userDetails.getId();
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
+        }
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password and confirm password do not match");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }
