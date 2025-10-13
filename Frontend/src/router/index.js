@@ -130,7 +130,15 @@ const routes = [
     {
         path: '/sale-orders',
         name: 'SaleOrderList',
-        component: SellerOrderList
+        component: SellerOrderList,
+        beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (!userStore.isLoggedIn()) {
+                return { name: 'SignIn' }
+            } else if (userStore.getUserType() === "BUYER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path: '/change-password',
