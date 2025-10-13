@@ -62,4 +62,50 @@ public class EmailService {
         String message = "Please verify this email address by clicking button below.";
         sendEmail(to, vertificationToken, subject, path, message);
     }
+
+    private void sendResetPasswordEmail(String to, String token, String subject, String path, String message) {
+        try {
+            String url = baseUrl + path + "?token=" + token; // ใช้ชื่อ param เป็น token
+
+            String content = """
+            <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                <h2 style="color: #2E86C1;">Password Reset Request</h2>
+                <p>Hello,</p>
+                <p>We received a request to reset the password for your account associated with 
+                <strong style="color: #555;">%s</strong>.</p>
+                <p>%s</p>
+                <p style="margin-top: 20px;">
+                    <a href="%s" style="display: inline-block; padding: 10px 20px; background-color: #2E86C1; color: white; text-decoration: none; border-radius: 5px;">
+                        Reset Your Password
+                    </a>
+                </p>
+                <p style="margin-top: 20px; font-size: 0.9em; color: #888;">
+                    Please note: This password reset link is valid for a limited time only.<br/>
+                    If the link has expired, you will need to request a new password reset.
+                </p>
+                <p style="margin-top: 20px;">Thank you,<br/>ITB-MSHOP</p>
+            </div>
+            """.formatted(to, message, url);
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+            mailSender.send(mimeMessage);
+
+        } catch (MessagingException ex) {
+            throw new RuntimeException("Failed to send password reset email. Please try again later.", ex);
+        }
+    }
+
+    @Async
+    public void sendForgotPasswordEmail(String to, String resetToken) {
+        String subject = "Password Reset Request";
+        String path = "/reset-password";
+        String message = "Click the button below to reset your password.";
+        sendResetPasswordEmail(to, resetToken, subject, path, message);
+    }
+
 }

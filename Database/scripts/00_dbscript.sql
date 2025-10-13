@@ -90,3 +90,11 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (sale_item_id) REFERENCES sale_items(sale_item_id)
 ) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE password_resets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  reset_token VARCHAR(1000) NOT NULL,
+  expiryDate TIMESTAMP NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
