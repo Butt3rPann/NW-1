@@ -12,7 +12,6 @@ import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
 import { useUserStore } from '@/stores/UserStore'
 import productNotFound from '@/assets/images/product-not-found.png'
 import Pagination from '@/components/elements/Pagination.vue'
-import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const userStore = useUserStore()

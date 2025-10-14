@@ -31,7 +31,7 @@ const handleDisabledButton = (field, value) => {
 
 const invalidMessage = {
   email: 'Please enter a valid email address.',
-  password: 'Password cannot be blank and must be at most 14 characters.'
+  password: 'Please enter your password.'
 }
 
 const disabled = computed(() => {
@@ -67,7 +67,6 @@ const handleClick = async () => {
         console.log(error)
     }
 }
-
 </script>
  
 <template>
@@ -77,13 +76,14 @@ const handleClick = async () => {
         <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-120 px-10 space-y-5">
             <p class="text-3xl font-semibold text-center">Log in</p>
             <div class="flex flex-col">
-                <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" :trim="false" inputmode="email" pattern="^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$"
-                    placeholder="Enter email" className="itbms-email" :invalidMessage="invalidMessage.email" :limitLength="50" @disabledButton="handleDisabledButton"/>
-                <FormInput v-model="user.password" label="Password" :required="true" inputType="password"  :maxlength="14" field="password" :trim="false"
-                    placeholder="Enter password" :limitLength="14" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
+                <FormInput v-model="user.email" label="Email" :required="true" inputType="text" field="email" :trim="false" inputmode="email" pattern="^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$"
+                    placeholder="Enter email" className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
+                <FormInput v-model="user.password" label="Password" :required="true" inputType="password" field="password" :trim="false" class="pt-3"
+                    placeholder="Enter password" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
+                <p @click="router.push({ name : 'ForgetPassword'})" class="text-right text-sm text-[#6F879C] cursor-pointer">Forget Password?</p>
             </div>
             <div class="flex justify-center gap-4 pt-2">
-                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-signin-button w-full"/>
+                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-signin-button w-full"/>
             </div>
             <p class="text-center text-sm sm:text-base lg:text-lg">
                 Don't have an account? 

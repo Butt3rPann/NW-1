@@ -141,8 +141,8 @@ const goToChangePassword = () => {
                         </template>
                     </div>
                     <div class="flex justify-center gap-4 mt-1">
-                        <BaseButton @click="handleUpdateProfile" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
+                        <BaseButton @click="handleUpdateProfile" text="Submit" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
                     </div>
                 </div>
             </div>

@@ -74,23 +74,22 @@ public class UserController {
     }
 
     @PostMapping("/users/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<Void> forgotPassword(@RequestParam String email) {
         String token = passwordResetService.createPasswordResetToken(email);
-
         emailService.sendForgotPasswordEmail(email, token);
-        return ResponseEntity.ok("Reset password link sent to email");
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/users/verify-reset-token")
     public ResponseEntity<?> verifyToken(@RequestParam String token) {
         passwordResetService.validateResetToken(token);
-        return ResponseEntity.ok("Valid token");
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/users/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
-        passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
-        return ResponseEntity.ok("Password reset successfully");
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request);
+        return ResponseEntity.noContent().build();
     }
 
 }

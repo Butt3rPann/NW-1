@@ -19,6 +19,8 @@ import OrderList from "@/pages/OrderList.vue";
 import OrderDetail from "@/pages/OrderDetail.vue";
 import SellerOrderList from "@/pages/SellerOrderList.vue";
 import ChangePasswordForm from "@/components/form/ChangePasswordForm.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
+import ForgetPasswordForm from "@/components/form/ForgetPasswordForm.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -144,6 +146,23 @@ const routes = [
         path: '/change-password',
         name: 'ChangePassword',
         component: ChangePasswordForm
+    },
+    {
+        path: '/forget-password',
+        name: 'ForgetPassword',
+        component: ForgetPasswordForm
+    },
+    {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        component: ResetPassword,
+        beforeEnter: (to, from, next) => {
+        if (to.query.token) {
+          next();
+        } else {
+          next('/forget-password')
+        }
+      }
     }
 ]
 const router = createRouter({history,routes})

@@ -1,10 +1,12 @@
 package sit.integrated.backend.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import sit.integrated.backend.dtos.ResetPasswordRequest;
 import sit.integrated.backend.entities.PasswordReset;
 import sit.integrated.backend.entities.User;
 import sit.integrated.backend.repositories.PasswordResetRepository;
@@ -27,18 +29,16 @@ public class PasswordResetService {
 
     private static final long EXPIRATION_MINUTES = 15;
 
+    @Transactional
     public String createPasswordResetToken(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         passwordResetRepository.deleteByUser(user);
         String token = jwtUtils.generateResetToken(user.getId(), user.getEmail());
-
         PasswordReset passwordReset = new PasswordReset();
         passwordReset.setUser(user);
         passwordReset.setResetToken(token);
         passwordReset.setExpiryDate(Instant.now().plus(EXPIRATION_MINUTES, ChronoUnit.MINUTES));
         passwordResetRepository.save(passwordReset);
-        System.out.println("Password Reset Token: " + token);
-
         return token;
     }
 
@@ -55,18 +55,18 @@ public class PasswordResetService {
         }
     }
 
-    public void resetPassword(String token, String newPassword) {
-        PasswordReset passwordReset = passwordResetRepository.findByResetToken(token).orElseThrow(() -> new RuntimeException("Invalid reset token"));
-
-        if(passwordReset.isExpired()) {
+    public void resetPassword(ResetPasswordRequest request) {
+        PasswordReset passwordReset = passwordResetRepository.findByResetToken(request.getToken()).orElseThrow(() -> new RuntimeException("Invalid reset token"));
+        if (passwordReset.isExpired()) {
             passwordResetRepository.delete(passwordReset);
             throw new RuntimeException("Reset token expired");
         }
-
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password and confirm password do not match");
+        }
         User user = passwordReset.getUser();
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
-
         passwordResetRepository.delete(passwordReset);
     }
 }
