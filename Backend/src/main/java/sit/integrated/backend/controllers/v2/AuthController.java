@@ -100,7 +100,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/change-password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request, Principal principal) {
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request, Principal principal) {
         userService.changePassword(request, principal);
         return ResponseEntity.noContent().build();
     }

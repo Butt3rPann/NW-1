@@ -15,6 +15,14 @@ const isShowPopup = ref(false)
 const isSuccess = ref(false)
 const message = ref('')
 
+const prop = defineProps({
+  form : {
+    type: String,
+    default: 'change'
+  },
+  resetToken : String
+})
+
 const passwordForm = ref({
   oldPassword: '',
   newPassword: '',
@@ -48,18 +56,18 @@ const validatePassword = (password) => {
   return hasLower && hasUpper && hasNumber && hasSpecial
 }
 
-watch(
-  passwordForm,
-  (newVal) => {
-    invalid.value.newPassword = !validatePassword(newVal.newPassword)
-    invalid.value.confirmPassword =
-      newVal.confirmPassword && newVal.newPassword !== newVal.confirmPassword
-  }
-)
+watch(passwordForm, (newVal) => {
+  invalid.value.newPassword = !validatePassword(newVal.newPassword)
+  invalid.value.confirmPassword =
+    newVal.confirmPassword && newVal.newPassword !== newVal.confirmPassword
+})
 
 const disabled = computed(() => {
   const anyInvalid = Object.values(invalid.value).some(v => v === true)
-  const hasEmpty = Object.values(passwordForm.value).some(v => v === '')
+  const hasEmpty = Object.entries(passwordForm.value).some(([key, value]) => {
+    if (prop.form !== 'change' && key === 'oldPassword') return false;
+    return value === '';
+  });
   return anyInvalid || hasEmpty
 })
 
@@ -72,10 +80,20 @@ const handleSubmit = async () => {
         return
     }
     try {
-        const response = await postData(
-        `${import.meta.env.VITE_APP_URL}/v2/auth/change-password`,passwordForm.value, getAccessToken())
+        const response = prop.form === 'change' 
+          ? await postData(`${import.meta.env.VITE_APP_URL}/v2/auth/change-password`, passwordForm.value, getAccessToken())
+          : await postData(`${import.meta.env.VITE_APP_URL}/v2/users/reset-password`, { token : prop.resetToken, newPassword: passwordForm.value.newPassword, confirmPassword: passwordForm.value.confirmPassword });
+        
         if (response.status === 204) {
-            router.push({ name: 'Profile', query: { added: 'true' } })
+            isShowPopup.value = true
+            isSuccess.value = true
+            message.value = 'Your password has been updated successfully.'
+            setTimeout(() => router.push({ name: 'Profile', query: { added: 'true' } }), 1200)
+            
+        } else {
+            isShowPopup.value = true
+            isSuccess.value = false
+            message.value = `Failed to ${prop.form} password. Please try again.`
         }
     } catch (error) {
         isShowPopup.value = true
@@ -89,25 +107,25 @@ const cancel = () => {
 </script>
 
 <template>
-    <div class="w-full min-h-screen font-rubik bg-white pt-10">
+    <div class="w-full min-h-screen font-rubik bg-white">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-        <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 ">
+        <div class="flex flex-col justify-center items-center h-full min-h-screen pt-20 px-10 md:px-22 lg:px-25">
             <div class="bg-white border border-gray-200 shadow-md w-full max-w-140 flex h-fit rounded-lg overflow-hidden">
                 <div class="w-full px-7 my-7 text-[#332A1E]">
                     <div class="flex flex-col items-center gap-2 mb-3">
-                        <p class="text-3xl font-semibold">Change Password</p>
+                        <p class="text-3xl font-semibold">{{form === 'change' ? 'Change Password' : 'Reset Password'}}</p>
                     </div>
-                    <div class="gap-4 py-3 pt-3">
-                        <FormInput v-model="passwordForm.oldPassword" label="Current Password" :required="true" inputType="text" :min="8" :maxlength="14" field="oldPassword"
+                    <div class="space-y-4 py-3 pt-3">
+                        <FormInput v-if="form === 'change'" v-model="passwordForm.oldPassword" label="Old Password" :required="true" inputType="password" :maxlength="14" field="oldPassword"
                             placeholder="Enter current password" :invalidMessage="invalidMessage.oldPassword" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="passwordForm.newPassword" label="New Password" :required="true" inputType="text" :min="8" :maxlength="14" field="newPassword"
-                            placeholder="Enter new password" :invalidMessage="invalidMessage.newPasswordPassword" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="passwordForm.confirmPassword" label="Confirm Password" :required="true" inputType="text" :min="8" :maxlength="14" field="confirmPassword"
-                            placeholder="Enter confirm password" :invalidMessage="invalidMessage.confirmPasswordPassword" @disabledButton="handleDisabledButton"/>  
+                        <FormInput v-model="passwordForm.newPassword" label="New Password" :required="true" inputType="password" :min="8" :maxlength="14" field="newPassword"
+                            placeholder="Enter new password" :invalidMessage="invalidMessage.newPassword" @disabledButton="handleDisabledButton"/>
+                        <FormInput v-model="passwordForm.confirmPassword" label="Confirm Password" :required="true" inputType="password" :min="8" :maxlength="14" field="confirmPassword"
+                            placeholder="Enter confirm password" :invalidMessage="invalidMessage.confirmPassword" @disabledButton="handleDisabledButton"/>  
                     </div>
                     <div class="flex justify-center gap-4 mt-1">
-                        <BaseButton @click="handleSubmit" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
                         <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
+                        <BaseButton @click="handleSubmit" text="Submit" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
                     </div>
                 </div>
             </div>

@@ -200,7 +200,7 @@ const handleClick = async () => {
                     </div>
                 </template>
                 <div class="flex justify-center gap-4 mt-8">
-                    <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#6F879C]" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
+                    <BaseButton @click="handleClick" text="Submit" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-submit-button w-full" :disabled="disabled"/>
                     <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
                 </div>
                 <p class="text-center mt-5 text-sm sm:text-base lg:text-lg">

@@ -330,8 +330,8 @@ const showInvalidSizeFile = ref(false)
                     </div>
                 </div>
 		        <div class="flex gap-4 pt-2">
-                    <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#6F879C]" class="itbms-save-button" :disabled="disabled"/>
                     <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button"/>
+                    <BaseButton @click="handleClick" text="Save" textColor="text-white" bgColor="bg-[#4bbd80] border-transparent" class="itbms-save-button" :disabled="disabled"/>
                 </div>
             </div>
         </div>

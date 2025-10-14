@@ -45,7 +45,7 @@ public class Brand {
     private Instant createdOn;
 
     @UpdateTimestamp
-    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
+    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = true)
     private Instant updatedOn;
 
     @OneToMany(mappedBy = "brand")

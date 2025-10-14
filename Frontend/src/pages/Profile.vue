@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from '@/stores/UserStore'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getItemById } from '@/libs/fetchUtils.js'
 import profileImg2 from '@/assets/images/profileImg2.png'
 import profileVector from '@/assets/images/profileVector.png'
@@ -153,9 +153,6 @@ if (route.query.added === 'true') {
             </div>
         </div>
     </div>
-    <router-link :to="{ name: 'OrderList' }">
-        <BaseButton text="View Orders" bgColor="bg-[#6F879C]" textColor="text-[#FFFFFF]" class="mt-7"/>
-    </router-link>
 </div>
 </template>
  
