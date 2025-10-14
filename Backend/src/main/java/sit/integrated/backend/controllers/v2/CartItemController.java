@@ -31,7 +31,7 @@ public class CartItemController {
     public ResponseEntity<CartResponseDto> updateCartItemQuantity(@PathVariable Integer id,
                                                                   @Valid @RequestBody UpdateCartItemQuantityDto updateCartItemQuantityDto) {
         CartResponseDto response = modelMapper.map(cartItemService.updateCartItemQuantity(id, updateCartItemQuantityDto.getQuantity()), CartResponseDto.class);
-        response.setSeller(modelMapper.map(userService.getUserBySaleItemId(id), UserDto.class));
+        response.setSeller(modelMapper.map(userService.getUserBySaleItemId(response.getSaleItemId()), UserDto.class));
         return ResponseEntity.ok(response);
     }
 

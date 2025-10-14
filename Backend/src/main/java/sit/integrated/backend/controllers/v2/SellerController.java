@@ -56,7 +56,7 @@ public class SellerController {
     public ResponseEntity<PageDto<SellerOrdersResponseDto>> getOrders(@PathVariable Integer sid,
                                                                       @RequestParam Integer page,
                                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
-                                                                      @RequestParam(required = false, defaultValue = "all") String tab) {
+                                                                      @RequestParam(required = false, defaultValue = "new") String tab) {
         AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer tokenUserId = userDetail.getId();
         if (!Objects.equals(sid, tokenUserId)) {

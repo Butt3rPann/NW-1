@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Data
 public class OrderRequestDto {
+    private Integer id;
     @NotNull
     private Integer buyerId;
 

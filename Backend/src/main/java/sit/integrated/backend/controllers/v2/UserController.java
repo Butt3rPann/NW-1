@@ -57,13 +57,14 @@ public class UserController {
     @GetMapping("/users/{id}/orders")
     public ResponseEntity<PageDto<OrderResponseDto>> getAllUserOrders(@PathVariable Integer id,
                                                                       @RequestParam Integer page,
-                                                                      @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                                                      @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                                      @RequestParam(required = false, defaultValue = "new") String tab) {
         AuthUserDetail userDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer tokenUserId = userDetail.getId();
         if (!Objects.equals(id, tokenUserId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request user id not matched");
         }
-        PageDto<OrderResponseDto> dtos = orderService.getOrdersByBuyer(id, page, size);
+        PageDto<OrderResponseDto> dtos = orderService.getOrdersByBuyer(id, page, size, tab);
         return ResponseEntity.ok(dtos);
     }
 

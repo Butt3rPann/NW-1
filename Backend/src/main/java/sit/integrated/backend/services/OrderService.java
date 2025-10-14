@@ -36,12 +36,12 @@ public class OrderService {
     @Autowired
     private CartItemRepository cartItemRepository;
 
-    public PageDto<OrderResponseDto> getOrdersByBuyer(Integer buyerId, Integer page, Integer size) {
+    public PageDto<OrderResponseDto> getOrdersByBuyer(Integer buyerId, Integer page, Integer size, String tab) {
         if (!userRepository.existsById(buyerId)) {
             throw new ResourceNotFoundException("User not found with id " + buyerId);
         }
-        Sort sort = Sort.by("id").descending();
-        Page<Order> orders = orderRepository.findOrdersByUserId(buyerId, PageRequest.of(page, size, sort));
+        OrderStatus orderStatus = tab.equals("completed") ? OrderStatus.COMPLETED : OrderStatus.CANCELED;
+        Page<Order> orders = orderRepository.findOrdersByUserIdAndOrderStatus(buyerId, orderStatus, PageRequest.of(page, size, Sort.by("id").descending()));
         PageDto<OrderResponseDto> dtos = listMapper.toPageDto(orders, OrderResponseDto.class, modelMapper);
         for (int i = 0; i < orders.getContent().size(); i++) {
             Order order = orders.getContent().get(i);
@@ -79,6 +79,7 @@ public class OrderService {
             } else {
                 order.setOrderStatus(OrderStatus.COMPLETED);
             }
+            order.setSellerViewStatus(false);
             order.setShippingAddress(buyer.getFullName() + ", " + order.getShippingAddress());
             order.setUser(buyer);
             orderRepository.save(order);
@@ -128,8 +129,15 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
     public OrderDto getOrderResponseById(Integer id) {
         Order order = getOrderById(id);
+        if (!order.getSellerViewStatus()) {
+            int rowsUpdated = orderRepository.updateSellerViewStatus(id);
+            if (rowsUpdated == 0) {
+                throw new ResourceNotFoundException("Order with id " + id + " not found.");
+            }
+        }
 
         User seller = order.getOrderItems()
                 .stream()
@@ -154,10 +162,12 @@ public class OrderService {
         Page<Order> orders;
         Sort sort = Sort.by("orderDate").descending().and(Sort.by("id"));
         orders = switch (tab) {
-            case "complete" ->
+            case "completed" ->
                     orderRepository.findOrdersBySellerAndOrderStatus(sid, OrderStatus.COMPLETED, PageRequest.of(page, size, sort));
             case "canceled" ->
                     orderRepository.findOrdersBySellerAndOrderStatus(sid, OrderStatus.CANCELED, PageRequest.of(page, size, sort));
+            case "new" ->
+                    orderRepository.findNewOrdersBySeller(sid, PageRequest.of(page, size, sort));
             default -> orderRepository.findOrdersBySeller(sid, PageRequest.of(page, size, sort));
         };
         PageDto<SellerOrdersResponseDto> response = listMapper.toPageDto(orders, SellerOrdersResponseDto.class, modelMapper);
