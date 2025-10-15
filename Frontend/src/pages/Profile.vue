@@ -20,6 +20,7 @@ const route = useRoute()
 const type = ref('')
 const phone = ref('')
 const bankNo = ref('')
+const { removeAccessToken } = userStore
 
 const message = ref('')
 const isShowPopup = ref(false)
@@ -56,6 +57,10 @@ if (route.query.added === 'true') {
   setTimeout(() => isShowPopup.value = false , 1500)
 }
 
+const handleLogout = () => {
+   removeAccessToken()
+   router.push({ name: 'SaleItems' })  
+}
 </script>
  
 <template>
@@ -80,7 +85,7 @@ if (route.query.added === 'true') {
             </div>     
             <router-link :to="{ name: 'EditProfile' }">
               <BaseButton :icon="editIcon" text="Edit Profile" class="itbms-profile-button"/>
-            </router-link>      
+            </router-link>     
         </div>
         <div v-if="user.userType === 'BUYER'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <div class="bg-white col-span-full w-full h-fit p-6 shadow-md rounded-3xl">
@@ -151,6 +156,11 @@ if (route.query.added === 'true') {
                     </div>           
                 </div>
             </div>
+        </div>
+        <div @click="handleLogout" class="flex gap-2 shadow-md text-[#C43737] py-3 px-4 rounded-2xl bg-[#FFFFFF] mt-4 cursor-pointer itbms-logout-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="w-6 h-6">
+              <path fill="#C43737" d="M569 337C578.4 327.6 578.4 312.4 569 303.1L425 159C418.1 152.1 407.8 150.1 398.8 153.8C389.8 157.5 384 166.3 384 176L384 256L272 256C245.5 256 224 277.5 224 304L224 336C224 362.5 245.5 384 272 384L384 384L384 464C384 473.7 389.8 482.5 398.8 486.2C407.8 489.9 418.1 487.9 425 481L569 337zM224 160C241.7 160 256 145.7 256 128C256 110.3 241.7 96 224 96L160 96C107 96 64 139 64 192L64 448C64 501 107 544 160 544L224 544C241.7 544 256 529.7 256 512C256 494.3 241.7 480 224 480L160 480C142.3 480 128 465.7 128 448L128 192C128 174.3 142.3 160 160 160L224 160z"/></svg>
+            <span class="font-medium">Logout</span>
         </div>
     </div>
 </div>
