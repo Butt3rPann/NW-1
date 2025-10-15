@@ -6,6 +6,7 @@ import OrderCard from '@/components/order/OrderCard.vue'
 import Pagination from '@/components/elements/Pagination.vue'
 import emptyOrdersImg from '@/assets/images/emptySaleItems.png'
 import { storeToRefs } from 'pinia'
+import { useRoute, useRouter } from 'vue-router'
 
 const userStore = useUserStore()
 const { getUserId, getAccessToken, setSellerOrdersCount } = userStore
@@ -18,7 +19,9 @@ const totalPage = ref(0)
 const orders = ref([])
 const response = ref({})
 
-const currentTab = ref('new')
+const route = useRoute()
+const router = useRouter()
+const currentTab = ref(route.query.tab || 'new')
 const tabs = ['new', 'canceled', 'completed']
 
 const goToPage = async (page) => {
@@ -57,6 +60,7 @@ async function changeTab(tab) {
     try {
         currentTab.value = tab
         currentPage.value = 1
+        router.replace({ query: { tab: currentTab.value } })
         await getSellerOrders()
     } catch(error) {
         console.log(error);

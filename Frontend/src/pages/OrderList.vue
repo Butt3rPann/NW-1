@@ -5,16 +5,19 @@ import { useUserStore } from '@/stores/UserStore'
 import { ref, onMounted, computed } from 'vue'
 import emptyOrdersImg from '@/assets/images/emptySaleItems.png'
 import Pagination from '@/components/elements/Pagination.vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const userStore = useUserStore()
 const { getUserId, getAccessToken } = userStore
+const route = useRoute()
+const router = useRouter()
 const id = ref(0)
 const orders = ref([])
 const response = ref({})
 const currentPage = ref(1)
 const currentSize = ref(3)
 const totalPage = ref(0)
-const currentTab = ref('completed')
+const currentTab = ref(route.query.tab || 'completed')
 const tabs = ['completed','canceled']
 
 const goToPage = async (page) => {
@@ -51,7 +54,8 @@ async function changeTab(tab) {
     try {
         currentTab.value = tab
         currentPage.value = 1
-        await getAllOrders()
+        router.replace({ query: { tab: currentTab.value } })
+        await getAllOrders()  
     } catch(error) {
         console.log(error);
     }
@@ -71,7 +75,7 @@ async function changeTab(tab) {
             {{ tab === 'completed' ? 'All Orders': 'Canceled Orders' }}
         </button>
     </div>
-    <OrderCard v-if="orders.length" :orders="orders"/>
+    <OrderCard v-if="orders.length" :orders="orders" :tab="currentTab"/>
     <div v-else class="flex flex-col items-center space-y-3 py-18">
         <img :src="emptyOrdersImg" alt="EmptySaleItems" class=" w-36">
         <p class="text-xl text-[#ABBCC9]">no order</p>

@@ -29,7 +29,7 @@ function goToOrderDetail(orderId) {
     if (props.tab === 'new') {
         setSellerOrdersCount(sellerOrdersCount.value - 1)
     }
-    router.push({ name: 'OrderDetail', params: { orderId: orderId } })
+    router.push({ name: 'OrderDetail', params: { orderId: orderId }, query: { tab: props.tab } })
 }
 
 </script>
