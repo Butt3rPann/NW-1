@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, watch } from 'vue'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import { useRouter } from 'vue-router'
@@ -18,6 +18,7 @@ const user = ref({
   nickName: '',
   email: '',
   password: '',
+  confirmPassword: '',
   fullName: '',
   phoneNumber: '',
   bankAccount: '',
@@ -32,6 +33,7 @@ const invalidMessage = {
     nickName: 'Nickname must be required.',
     email: 'Email is required and must not exceed 100 characters.',
     password: 'Password is required, must be 8–14 characters long, and include uppercase, lowercase, number, and special character.',
+    confirmPassword: 'Passwords do not match',
     fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
     phoneNumber: 'Mobile must be required',
     bankAccount: 'Bank Account Number must be required.',
@@ -44,6 +46,7 @@ const isNull = ref({
     nickName: false,
     email: false,
     password: false,
+    confirmPassword: false,
     fullName: false,
     phoneNumber: false,
     bankAccount: false,
@@ -53,9 +56,16 @@ const isNull = ref({
     idCardImageBack: false
 })
 
+const isCorrectConfirmPassword = ref(false)
+
 const handleDisabledButton = (field, value) => {
     isNull.value[field] = value
 }
+
+watch(user, (newVal) => {
+  isCorrectConfirmPassword.value =
+    newVal.confirmPassword != '' && newVal.password !== newVal.confirmPassword
+}, { deep: true })
 
 const disabled = ref(true)
 
@@ -98,9 +108,10 @@ watchEffect(() => {
     const hasEmptyField = requiredField.some(field => isNull.value[field] === true)
     const isFullnameValid = user.value.fullName && user.value.fullName.length >= 4
     const isPasswordValid = validatePassword(user.value.password)
+    const isConfirmPasswordMatch = user.value.confirmPassword === user.value.password
     const hasTwoFile = user.value.userType === 'SELLER'? (user.value.idCardImageFront !== null && user.value.idCardImageBack != null): true
 
-    disabled.value = hasEmptyField || !isFullnameValid || !isPasswordValid || !hasTwoFile
+    disabled.value = hasEmptyField || !isFullnameValid || !isPasswordValid || !isConfirmPasswordMatch || !hasTwoFile
 })
 
 const cancel = () => {
@@ -114,6 +125,7 @@ const handleClick = async () => {
     try {
         const formData = new FormData()
         for(const key in user.value) {
+            if(key === 'confirmPassword') continue
             const value = user.value[key]
             if(value !== '' && value !== null) {
                 formData.append(key, value)   
@@ -163,8 +175,13 @@ const handleClick = async () => {
                         placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
                     <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                         placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                    <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :min="8" 
+                    <div class="grid grid-cols-2 gap-4 col-span-2">
+                      <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :min="8" 
                         placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
+                    
+                      <FormInput v-model="user.confirmPassword" label="Confirm Password" :required="true" inputType="password" :maxlength="14" field="confirmPassword"
+                        placeholder="Confirm your password" :propsInvalid="isCorrectConfirmPassword" :invalidMessage="invalidMessage.confirmPassword" @disabledButton="handleDisabledButton"/>
+                    </div>
                     <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" :min="4" field="fullName"
                         placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                     <template v-if="user.userType == 'SELLER'">

@@ -120,7 +120,7 @@ if (route.query.added === 'true') {
     isShowPopup.value = true
     sessionStorage.setItem('page', 1)
 } else if (route.query.userAdded === 'true') {
-    message.value = "The user account has been successfully registered."
+    message.value = "Registered successfully, please check the verification email."
     router.replace({ query: { } })
     isShowPopup.value = true
 }
