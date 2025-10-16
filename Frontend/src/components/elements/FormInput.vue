@@ -41,6 +41,9 @@ const props = defineProps({
     inputSize: {
         type: String,
         default: 'text-sm md:text-base'
+    },
+    propsInvalid: {
+        type: Boolean
     }
 })
 
@@ -98,7 +101,7 @@ const charCount = computed(() => {
                 readonly ? 'bg-gray-100' : 'bg-white focus:ring-2 focus:ring-[#2684FF]'
             ]"/>
 	    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-1 sm:mt-1.5 gap-1 sm:gap-2">
-            <p v-if="!isValid" class="itbms-message text-xs text-red-400">{{ invalidMessage }}</p>
+            <p v-if="!isValid || props.propsInvalid" class="itbms-message text-xs text-red-400">{{ invalidMessage }}</p>
             <p :class="['text-xs text-gray-500 ml-auto', {'text-red-400' : inputValue.length > props.maxlength}]" v-if="typeof inputValue === 'string'">{{ charCount }}</p>
         </div>
     </div>
