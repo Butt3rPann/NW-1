@@ -35,10 +35,10 @@ const invalidMessage = {
     password: 'Password is required, must be 8–14 characters long, and include uppercase, lowercase, number, and special character.',
     confirmPassword: 'Passwords do not match',
     fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
-    phoneNumber: 'Mobile must be required',
+    phoneNumber: 'Mobile must be required and must be a valid 10-digit number.',
     bankAccount: 'Bank Account Number must be required.',
     bankName: 'Bank name must be required.',
-    idCardNumber: 'National Id must be required.',
+    idCardNumber: 'National Id must be required and must be a valid 13-digit number.',
     sellerNationalIdPhotos: 'National Id photos must be required.'
 }
 
@@ -185,13 +185,13 @@ const handleClick = async () => {
                     <FormInput v-model="user.fullName" label="Fullname" :required="true" inputType="text" :maxlength="40" :min="4" field="fullName"
                         placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-fullname" @disabledButton="handleDisabledButton"/>   
                     <template v-if="user.userType == 'SELLER'">
-                        <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
+                        <FormInput v-model="user.phoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="10" field="phoneNumber" pattern="^\d{10}$"
                             placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.bankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
                             placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bank-account-no" @disabledButton="handleDisabledButton"/>
                         <FormInput v-model="user.bankName" label="Bank Name" :required="true" inputType="text" :maxlength="100" field="bankName"
                             placeholder="Enter bank name" :invalidMessage="invalidMessage.bankName" className="itbms-bank-name" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="user.idCardNumber" label="National Card" :required="true" inputType="text" :maxlength="25" field="idCardNumber"
+                        <FormInput v-model="user.idCardNumber" label="National Card" :required="true" inputType="text" :maxlength="13" field="idCardNumber" pattern="^\d{13}$"
                             placeholder="Enter national Id" :invalidMessage="invalidMessage.idCardNumber" className="itbms-card-no" @disabledButton="handleDisabledButton"/>
                     </template>
                 </div>

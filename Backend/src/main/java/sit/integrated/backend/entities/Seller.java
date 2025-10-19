@@ -30,9 +30,9 @@ public class Seller {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Size(max = 20)
+    @Size(max = 10)
     @NotNull
-    @Column(name = "phone_number", nullable = false, length = 20)
+    @Column(name = "phone_number", nullable = false, length = 10)
     private String phoneNumber;
 
     @Size(max = 50)
@@ -45,9 +45,9 @@ public class Seller {
     @Column(name = "bank_name", nullable = false, length = 100)
     private String bankName;
 
-    @Size(max = 25)
+    @Size(max = 13)
     @NotNull
-    @Column(name = "id_card_number", nullable = false, length = 25)
+    @Column(name = "id_card_number", nullable = false, length = 13)
     private String idCardNumber;
 
     @CreationTimestamp

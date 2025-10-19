@@ -19,7 +19,8 @@ public class UserProfileDto {
     @NotBlank
     private String fullName;
 
-    @Size(max = 20)
+    @Pattern(regexp = "^\\d{10}$")
+    @Size(max = 10)
     private String phoneNumber;
 
     @Size(max = 50)
@@ -28,7 +29,8 @@ public class UserProfileDto {
     @Size(max = 100)
     private String bankName;
 
-    @Size(max = 25)
+    @Pattern(regexp = "^\\d{13}$")
+    @Size(max = 13)
     private String idCardNumber;
 
     @NotNull

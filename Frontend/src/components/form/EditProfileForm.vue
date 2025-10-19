@@ -31,7 +31,7 @@ const invalidMessage = {
     email: 'Email is required and must not exceed 100 characters.',
     password: 'Password must be required, max 14 characters, with uppercase, lowercase, number, and special character',
     fullName: 'Fullname must be required at least 4 characters and no more than 40 characters.',
-    phoneNumber: 'Mobile must be required',
+    phoneNumber: 'Mobile must be required must be a valid 10-digit number.',
     bankAccount: 'Bank Account Number must be required.',
     bankName: 'Bank name must be required.',
     nickName: 'Nickname must be required.'
@@ -132,7 +132,7 @@ const goToChangePassword = () => {
                         <FormInput v-model="user.userType" label="Type" :required="true" inputType="text" field="userType"
                             placeholder="Enter fullname" :invalidMessage="invalidMessage.fullName" className="itbms-type" readonly/>  
                         <template v-if="user.userType == 'SELLER'">
-                            <FormInput v-model="maskedPhoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="20" field="phoneNumber"
+                            <FormInput v-model="maskedPhoneNumber" label="Mobile Number" :required="true" inputType="text" :maxlength="10" field="phoneNumber" pattern="^\d{10}$"
                                 placeholder="Enter mobile number" :invalidMessage="invalidMessage.phoneNumber" className="itbms-mobile" readonly/>
                             <FormInput v-model="maskedBankAccount" label="Bank Accout" :required="true" inputType="text" :maxlength="50" field="bankAccount"
                                 placeholder="Enter bank accout number" :invalidMessage="invalidMessage.bankAccount" className="itbms-bankAccount" readonly/>
