@@ -109,7 +109,7 @@ const goToChangePassword = () => {
  
 <template>
 <div class="w-full min-h-screen font-rubik bg-white pt-10">
-    <div class="flex flex-col items-center h-fit pb-15 pt-16 md:pt-20 lg:pt-30 px-10 md:px-22 lg:px-25 ">
+    <div class="flex flex-col items-center h-fit pb-8 md:pb-15 pt-12 md:pt-20 lg:pt-30 px-10 md:px-22 lg:px-25 ">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
             <router-link :to="{ name: 'SaleItems' }"><span class="itbms-home text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>

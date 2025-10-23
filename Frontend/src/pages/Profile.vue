@@ -74,7 +74,7 @@ const handleLogout = () => {
         </p>        
     </div>
     <p class="mb-3 text-2xl lg:text-3xl font-semibold"><span class="itbms-type">{{ type }} </span> Profile</p>
-    <div class="w-[98%] md:w-7/8 lg:w-3/4 h-fit p-5 md:p-8 lg:p-10 shadow-md rounded-3xl bg-gray-100">
+    <div class="w-[99%] md:w-7/8 lg:w-3/4 h-fit p-4 md:p-8 lg:p-10 shadow-md rounded-3xl bg-gray-100">
         <div class="flex items-center flex-col md:flex-row md:justify-between lg:justify-between">
             <div class="flex items-center">
                 <img :src="profileImg2" class="w-18 md:w-20 lg:w-25"/>
@@ -109,8 +109,8 @@ const handleLogout = () => {
         </div>
         <div v-else-if="user.userType === 'SELLER'" class="mt-6">
             <div class="bg-white p-8 shadow-md rounded-3xl">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                    <div class="lg:border-r-2 border-gray-200 pr-1 p-2 lg:p-5">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:gap-4">
+                    <div class="lg:border-r-2 border-gray-200 p-1 md:p-3 lg:p-3">
                         <div class="flex items-center mb-2">
                             <img :src="mailIcon" class="w-5"/> 
                             <p class="ml-2 font-semibold text-lg">Contact</p>
@@ -125,7 +125,7 @@ const handleLogout = () => {
                         </div>
                     </div>
                 
-                    <div class="border-t border-t-1 md:border-t-0 lg:border-t-0 lg:border-r-2 border-gray-200 p-2 lg:p-5">
+                    <div class="border-t border-t-1 lg:border-t-0 lg:border-r-2 border-gray-200 p-1 md:p-3 lg:p-3">
                         <div class="flex items-center mb-2">
                             <img :src="profileVector" class="w-4"/> 
                             <p class="ml-2 font-semibold text-lg">Personal Information</p>
@@ -140,7 +140,7 @@ const handleLogout = () => {
                         </div>
                     </div>
                 
-                    <div class="border-t border-t-1 md:border-t-0 lg:border-t-0 border-gray-200 p-2">
+                    <div class="border-t border-t-1 lg:border-t-0 border-gray-200 p-1 md:p-3 lg:p-3">
                         <div class="flex items-center mb-2">
                             <img :src="bankIcon" class="w-5"/> 
                             <p class="ml-2 font-semibold text-lg">Bank Information</p>

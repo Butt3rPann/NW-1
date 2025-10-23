@@ -109,7 +109,7 @@ const cancel = () => {
 <template>
     <div class="w-full min-h-screen font-rubik bg-white">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-        <div class="flex flex-col justify-center items-center h-full min-h-screen pt-20 px-10 md:px-22 lg:px-25">
+        <div class="flex flex-col justify-center items-center h-full pb-5 pt-20 md:pt-23 px-10 md:px-22 lg:px-25">
             <div class="bg-white border border-gray-200 shadow-md w-full max-w-140 flex h-fit rounded-lg overflow-hidden">
                 <div class="w-full px-7 my-7 text-[#332A1E]">
                     <div class="flex flex-col items-center gap-2 mb-3">

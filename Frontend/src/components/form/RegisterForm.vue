@@ -200,7 +200,7 @@ const handleClick = async () => {
                             <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-front" @change="handleFrontUpload" />
                             <div v-if="!frontPreview" class="flex flex-col justify-center items-center">
                                 <img :src="upload" alt="upload" class="w-5">
-                                <span class="text-gray-700">Front side</span>   
+                                <span class="text-sm md:text-md lg:text-lg text-gray-700">Front side</span>   
                             </div>
                             <img v-if="frontPreview" :src="frontPreview" alt="Front preview" class="w-full h-full object-cover rounded"/>
                         </label>
@@ -208,7 +208,7 @@ const handleClick = async () => {
                             <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-back" @change="handleBackUpload" />
                             <div v-if="!backPreview" class="flex flex-col justify-center items-center">
                                 <img :src="upload" alt="upload" class="w-5">
-                                <span class="text-gray-700">Back side</span>  
+                                <span class="text-sm md:text-md lg:text-lg text-gray-700">Back side</span>  
                             </div>                           
                             <img v-if="backPreview" :src="backPreview" alt="Back preview" class="w-full h-full object-cover rounded"/>
                         </label>
