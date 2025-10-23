@@ -109,7 +109,7 @@ const goToChangePassword = () => {
  
 <template>
 <div class="w-full min-h-screen font-rubik bg-white pt-10">
-    <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 ">
+    <div class="flex flex-col items-center h-fit pb-15 pt-16 md:pt-20 lg:pt-30 px-10 md:px-22 lg:px-25 ">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
             <router-link :to="{ name: 'SaleItems' }"><span class="itbms-home text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
@@ -120,7 +120,7 @@ const goToChangePassword = () => {
             <div class="bg-white border border-gray-200 shadow-md w-full max-w-180 flex h-fit rounded-lg overflow-hidden">  
                 <div class="w-full px-7 my-7 text-[#332A1E]">
                     <div class="flex flex-col items-center gap-2 mb-3">
-                        <p class="text-3xl font-semibold">Edit your profile</p>
+                        <p class="text-2xl md:text-3xl lg:text-3xl font-semibold">Edit your profile</p>
                     </div>
                     <div class="pt-3" :class="{'grid grid-cols-2 gap-4 py-3' : user.userType == 'SELLER'}">
                         <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"

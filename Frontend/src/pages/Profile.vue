@@ -66,24 +66,24 @@ const handleLogout = () => {
 <template>
 <div class="w-full font-rubik flex flex-col items-center justify-center text-[#332A1E] bg-white pb-20 pt-30 px-10 md:px-22 lg:px-25">
     <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-    <div class="mt-5 mr-auto items-start justify-start">
+    <div class="mt-0 lg:mt-5 mr-auto items-start justify-start">
         <p class="font-medium text-sm md:text-base lg:text-lg mb-7">
             <router-link :to="{ name: 'SaleItems' }"><span class="itbms-home text-[#332A1E] cursor-pointer">All Sale Items</span></router-link>
             <span class="text-[#332A1E]/50 mx-3"> > </span>
             <span class="text-[#6F879C]">Profile</span>
         </p>        
     </div>
-    <p class="mb-3 text-3xl font-semibold"><span class="itbms-type">{{ type }} </span> Profile</p>
-    <div class="w-3/4 h-fit p-10 shadow-md rounded-3xl bg-gray-100">
-        <div class="flex items-center justify-between">
+    <p class="mb-3 text-2xl lg:text-3xl font-semibold"><span class="itbms-type">{{ type }} </span> Profile</p>
+    <div class="w-[98%] md:w-7/8 lg:w-3/4 h-fit p-5 md:p-8 lg:p-10 shadow-md rounded-3xl bg-gray-100">
+        <div class="flex items-center flex-col md:flex-row md:justify-between lg:justify-between">
             <div class="flex items-center">
-                <img :src="profileImg2" class="w-25"/>
-                <div class="ml-3">
-                    <p class="text-3xl font-bold mb-1">{{ user.nickName }}</p>
-                    <p class="text-xl">{{ user.fullName }}</p>
+                <img :src="profileImg2" class="w-18 md:w-20 lg:w-25"/>
+                <div class="ml-1 md:ml-2 lg:ml-3">
+                    <p class="text-xl md:text-2xl lg:text-3xl font-bold mb-1">{{ user.nickName }}</p>
+                    <p class="text-sm md:text-md lg:text-xl">{{ user.fullName }}</p>
                 </div>            
             </div>     
-            <router-link :to="{ name: 'EditProfile' }">
+            <router-link :to="{ name: 'EditProfile' }" class="mt-2 md:mt-0 lg:mt-0">
               <BaseButton :icon="editIcon" text="Edit Profile" class="itbms-profile-button"/>
             </router-link>     
         </div>
@@ -91,76 +91,76 @@ const handleLogout = () => {
             <div class="bg-white col-span-full w-full h-fit p-6 shadow-md rounded-3xl">
               <div class="flex items-center mb-2">
                 <img :src="profileVector" class="w-5"/> 
-                <p class="ml-2 font-semibold text-lg">Personal Information</p>
+                <p class="ml-2 font-semibold md:text-md lg:text-lg">Personal Information</p>
               </div>
               <div class="mt-6">
                 <p class="text-sm text-gray-500">Nickname</p>
-                <p class="itbms-nickname text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.nickName }}</p>
+                <p class="itbms-nickname text-sm md:text-md lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.nickName }}</p>
               </div>
               <div class="mt-6">
                 <p class="text-sm text-gray-500">Fullname</p>
-                <p class="itbms-fullname text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.fullName }}</p>
+                <p class="itbms-fullname text-sm md:text-md lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.fullName }}</p>
               </div>
               <div class="mt-6">
                 <p class="text-sm text-gray-500">Email</p>
-                <p class="itbms-email text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.email }}</p>
+                <p class="itbms-email text-sm md:text-md lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.email }}</p>
               </div>
             </div>
         </div>
         <div v-else-if="user.userType === 'SELLER'" class="mt-6">
             <div class="bg-white p-8 shadow-md rounded-3xl">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="border-r-2 border-gray-200 pr-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                    <div class="lg:border-r-2 border-gray-200 pr-1 p-2 lg:p-5">
                         <div class="flex items-center mb-2">
                             <img :src="mailIcon" class="w-5"/> 
                             <p class="ml-2 font-semibold text-lg">Contact</p>
                         </div>
-                        <div class="mt-8">
+                        <div class="mt-4 lg:mt-8">
                             <p class="text-sm text-gray-500">Email</p>
-                            <p class="itbms-email text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.email }}</p>
+                            <p class="itbms-email text-sm md:text-lg lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.email }}</p>
                         </div>
-                        <div class="mt-8">
+                        <div class="mt-4 lg:mt-8">
                             <p class="text-sm text-gray-500">Phone</p>
-                            <p class="itbms-mobile text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ phone }}</p>
+                            <p class="itbms-mobile text-sm md:text-lg lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ phone }}</p>
                         </div>
                     </div>
                 
-                    <div class="border-r-2 border-gray-200 pr-5">
+                    <div class="border-t border-t-1 md:border-t-0 lg:border-t-0 lg:border-r-2 border-gray-200 p-2 lg:p-5">
                         <div class="flex items-center mb-2">
                             <img :src="profileVector" class="w-4"/> 
                             <p class="ml-2 font-semibold text-lg">Personal Information</p>
                         </div>
-                        <div class="mt-8">
+                        <div class="mt-4 lg:mt-8">
                             <p class="text-sm text-gray-500">Nickname</p>
-                            <p class="itbms-nickname text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.nickName }}</p>
+                            <p class="itbms-nickname text-sm md:text-lg lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.nickName }}</p>
                         </div>
-                        <div class="mt-8">
+                        <div class="mt-4 lg:mt-8">
                             <p class="text-sm text-gray-500">Fullname</p>
-                            <p class="itbms-fullname text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.fullName }}</p>
+                            <p class="itbms-fullname text-sm md:text-lg lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.fullName }}</p>
                         </div>
                     </div>
                 
-                    <div class="p-2">
+                    <div class="border-t border-t-1 md:border-t-0 lg:border-t-0 border-gray-200 p-2">
                         <div class="flex items-center mb-2">
                             <img :src="bankIcon" class="w-5"/> 
                             <p class="ml-2 font-semibold text-lg">Bank Information</p>
                         </div>
-                        <div class="mt-8">
+                        <div class="mt-4 lg:mt-8">
                             <p class="text-sm text-gray-500">Bank name</p>
-                            <p class="itbms-bankName text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.bankName }}</p>
+                            <p class="itbms-bankName text-sm md:text-lg lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ user.bankName }}</p>
                         </div>
-                        <div class="mt-8">
+                        <div class="mt-4 lg:mt-8">
                             <p class="text-sm text-gray-500">Bank Account</p>
-                            <p class="itbms-bankAccount text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ bankNo }}</p>
+                            <p class="itbms-bankAccount text-sm md:text-lg lg:text-lg w-full bg-gray-50 p-2 pl-4 rounded-md overflow-auto no-scrollbar">{{ bankNo }}</p>
                         </div>
                     </div>           
                 </div>
             </div>
         </div>
         <div @click="handleLogout" class="flex gap-2 shadow-md text-[#C43737] py-3 px-4 rounded-2xl bg-[#FFFFFF] mt-4 cursor-pointer itbms-logout-button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="w-5 h-5 md:w-6 md:h-6 lg:w-6 lg:h-6">
               <path fill="#C43737" d="M569 337C578.4 327.6 578.4 312.4 569 303.1L425 159C418.1 152.1 407.8 150.1 398.8 153.8C389.8 157.5 384 166.3 384 176L384 256L272 256C245.5 256 224 277.5 224 304L224 336C224 362.5 245.5 384 272 384L384 384L384 464C384 473.7 389.8 482.5 398.8 486.2C407.8 489.9 418.1 487.9 425 481L569 337zM224 160C241.7 160 256 145.7 256 128C256 110.3 241.7 96 224 96L160 96C107 96 64 139 64 192L64 448C64 501 107 544 160 544L224 544C241.7 544 256 529.7 256 512C256 494.3 241.7 480 224 480L160 480C142.3 480 128 465.7 128 448L128 192C128 174.3 142.3 160 160 160L224 160z"/></svg>
-            <span class="font-medium">Logout</span>
+            <span class="text-sm md:text-md lg:text-lg font-medium">Logout</span>
         </div>
     </div>
 </div>

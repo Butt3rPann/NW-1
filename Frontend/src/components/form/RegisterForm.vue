@@ -146,16 +146,15 @@ const handleClick = async () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white "> 
-    <div class="flex flex-col items-center h-fit pb-15 pt-30 px-10 md:px-22 lg:px-25 "> 
+<div class="w-full font-rubik bg-white flex flex-col items-center h-fit pb-15 pt-20 md:pt-30 px-10 md:px-22 lg:px-25"> 
         <PopupMessage message="Email already exists" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
         <div class="bg-white border border-gray-200 shadow-md w-full max-w-300 flex h-fit rounded-lg overflow-hidden">  
-            <div class="w-5/12 flex items-center justify-center" :class="user.userType == 'BUYER' ? 'bg-[#91B3FA]/60' : 'bg-[#C4C3F7]'">
+            <div class="hidden flex w-5/12 lg:flex items-center justify-center" :class="user.userType == 'BUYER' ? 'bg-[#91B3FA]/60' : 'bg-[#C4C3F7]'">
                 <img :src="user.userType == 'BUYER' ? registerBuyer : registerSeller" alt="registerImg" class="w-85">
             </div> 
-            <div class="w-7/12 px-7 my-7 text-[#332A1E]">
-                <div class="flex flex-col items-center gap-2 mb-3">
-                    <p class="text-3xl font-semibold">Create your account</p>
+            <div class="w-full lg:w-7/12 px-7 my-7 text-[#332A1E]">
+                <div class="flex flex-col items-center gap-1 md:gap-2 mb-2 md:mb-3">
+                    <p class="text-xl md:text-3xl font-semibold">Create your account</p>
                     <div class="itbms-account-type pt-2 flex space-x-20 text-[18px]">
                         <div class="flex space-x-4">
                             <label>
@@ -170,15 +169,14 @@ const handleClick = async () => {
                         </div>
                     </div>
                 </div>
-                <div class="pt-3" :class="{'grid grid-cols-2 gap-4 py-4' : user.userType == 'SELLER'}">
+                <div class="pt-3" :class="{'grid grid-col md:grid-cols-2 gap-1 md:gap-4 py-4' : user.userType == 'SELLER'}">
                     <FormInput v-model="user.nickName" label="Nickname" :required="true" inputType="text" :maxlength="40" field="nickName"
                         placeholder="Enter nickname" :invalidMessage="invalidMessage.nickName" className="itbms-nickname" @disabledButton="handleDisabledButton"/>
                     <FormInput v-model="user.email" label="Email" :required="true" inputType="text" :maxlength="50" field="email" inputmode="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                         placeholder="Enter email" :invalidMessage="invalidMessage.email" className="itbms-email" @disabledButton="handleDisabledButton"/>
-                    <div class="grid grid-cols-2 gap-4 col-span-2">
+                    <div class="grid grid-col md:grid-cols-2 md:gap-4 col-span-1 md:col-span-2">
                       <FormInput v-model="user.password" label="Password" :required="true" inputType="password" :maxlength="14" field="password" :min="8" 
                         placeholder="Enter password" :invalidMessage="invalidMessage.password" className="itbms-password" @disabledButton="handleDisabledButton"/>
-                    
                       <FormInput v-model="user.confirmPassword" label="Confirm Password" :required="true" inputType="password" :maxlength="14" field="confirmPassword"
                         placeholder="Confirm your password" :propsInvalid="isCorrectConfirmPassword" :invalidMessage="invalidMessage.confirmPassword" @disabledButton="handleDisabledButton"/>
                     </div>
@@ -225,8 +223,7 @@ const handleClick = async () => {
                     <span class="underline cursor-pointer text-[#6F879C]" @click="router.push({ name: 'SignIn' })">Log in</span>
                 </p>
             </div>
-        </div>
-    </div> 
+        </div> 
 </div>
 </template>
  
