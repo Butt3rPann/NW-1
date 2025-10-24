@@ -32,15 +32,14 @@ const handleClick = async () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white text-[#332A1E]"> 
-    <div class="flex flex-col items-center justify-center h-screen pb-20 pt-30 px-10 md:px-22 lg:px-25"> 
+<div class="w-full font-rubik bg-white text-[#332A1E] flex flex-col items-center justify-center h-screen md:pb-20 md:py-10 mt-8 md:pt-36 px-10 md:px-22 lg:px-25"> 
         <PopupMessage :message="message" :isShowPopup="isShowPopUp" :isSuccess="true" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
-        <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-130 px-10 space-y-5">
+        <div class="bg-white border border-gray-200 shadow-md rounded-lg w-[98%] md:w-3/4 lg:w-1/2 p-9 md:p-10 md:space-y-5">
             <div class="w-full flex items-center justify-center">
                 <img src="../../assets/images/forgetPass.png" alt="forgetPasswordImg" class="w-48">
             </div>
             <div class="flex flex-col gap-3">
-                <p class="text-3xl font-semibold text-center">Forget your password?</p>
+                <p class="text-2xl md:text-3xl font-semibold text-center">Forget your password?</p>
                 <p class="text-center text-sm text-gray-400">Enter your email so that we can send your password reset link</p>
             </div>
             <div class="flex flex-col">
@@ -51,7 +50,6 @@ const handleClick = async () => {
                 <BaseButton @click="handleClick" text="Send Email" :disabled="disabled" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-signin-button w-full"/>
             </div>
         </div>
-    </div>
 </div>
 </template>
  

@@ -70,11 +70,10 @@ const handleClick = async () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white text-[#332A1E]"> 
-    <div class="flex flex-col items-center justify-center h-screen pb-20 pt-30 px-10 md:px-22 lg:px-25"> 
+<div class="w-full font-rubik bg-white text-[#332A1E] flex flex-col items-center justify-center h-screen pb-20 pt-40 px-10 md:px-22 lg:px-25"> 
         <PopupMessage :message="errorMessage" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
-        <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-120 px-10 space-y-5">
-            <p class="text-3xl font-semibold text-center">Log in</p>
+        <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-[98%] md:w-3/4 lg:w-1/2 px-7 md:px-9 lg:px-10 space-y-5">
+            <p class="text-2xl md:text-3xl font-semibold text-center">Log in</p>
             <div class="flex flex-col">
                 <FormInput v-model="user.email" label="Email" :required="true" inputType="text" field="email" :trim="false" inputmode="email" pattern="^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$"
                     placeholder="Enter email" className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
@@ -90,7 +89,6 @@ const handleClick = async () => {
                 <span class="underline cursor-pointer text-[#6F879C]" @click="router.push({ name: 'Registers' })">Sign up</span>
             </p>
         </div>
-    </div>
 </div>
 </template>
  
