@@ -43,6 +43,13 @@ async function getSellerOrders() {
         }
         totalPage.value = response.value.totalPages
         orders.value = response.value.content
+        orders.value.forEach(order => {
+            order.orderItems.forEach(item => {
+                if (item.image) {
+                    item.image = `${import.meta.env.VITE_APP_URL}/v1/files/${item.image}?t=${Date.now()}`
+                }
+            })
+        }) 
     } catch (error) {
         console.log(error)
     }

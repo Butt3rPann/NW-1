@@ -35,6 +35,8 @@ public class OrderService {
     private ListMapper listMapper;
     @Autowired
     private CartItemRepository cartItemRepository;
+    @Autowired
+    private FileService fileService;
 
     public PageDto<OrderResponseDto> getOrdersByBuyer(Integer buyerId, Integer page, Integer size, String tab) {
         if (!userRepository.existsById(buyerId)) {
@@ -54,7 +56,14 @@ public class OrderService {
                     .orElseThrow(() -> new ResourceNotFoundException("Seller not found for this order"));
             dto.setBuyerId(order.getUser().getId());
             dto.setSeller(modelMapper.map(seller, UserDto.class));
-            dto.getOrderItems().forEach(item -> item.setNo(order.getId()));
+            for (OrderItemDto itemDto : dto.getOrderItems()) {
+                Integer saleItemId = itemDto.getSaleItemId();
+                List<SaleItemImageDto> images = fileService.getSaleItemImages(saleItemId);
+                if(!images.isEmpty()) {
+                    itemDto.setImage(images.get(0).getFileName());
+                }
+                itemDto.setNo(order.getId());
+            }
         }
         return dtos;
     }
@@ -150,7 +159,14 @@ public class OrderService {
 
         dto.setSeller(sellerDto);
         dto.setBuyerId(order.getUser().getId());
-        dto.getOrderItems().forEach(item -> item.setNo(order.getId()));
+        dto.getOrderItems().forEach(itemDto -> {
+            Integer saleItemId = itemDto.getSaleItemId();
+            List<SaleItemImageDto> images = fileService.getSaleItemImages(saleItemId);
+            if(!images.isEmpty()) {
+                itemDto.setImage(images.get(0).getFileName());
+            }
+            itemDto.setNo(order.getId());
+        });
 
         return dto;
     }
@@ -173,7 +189,14 @@ public class OrderService {
         PageDto<SellerOrdersResponseDto> response = listMapper.toPageDto(orders, SellerOrdersResponseDto.class, modelMapper);
         response.getContent().forEach(order -> {
             order.setSellerId(sid);
-            order.getOrderItems().forEach(item -> item.setNo(order.getId()));
+            order.getOrderItems().forEach(itemDto -> {
+                Integer saleItemId = itemDto.getSaleItemId();
+                List<SaleItemImageDto> images = fileService.getSaleItemImages(saleItemId);
+                if (!images.isEmpty()) {
+                    itemDto.setImage(images.get(0).getFileName());
+                }
+                itemDto.setNo(order.getId());
+            });
         });
         return response;
     }
