@@ -78,7 +78,8 @@ function goToOrderDetail(orderId) {
             >
               <div class="flex items-center justify-between w-full text-sm sm:text-base mb-3 sm:mb-0">
                 <div class="bg-[#FAF6F5] rounded-sm w-20 h-15 sm:w-25 sm:h-20 flex justify-center items-center">
-                  <img src="/saleItemImage/demoImg1.png" class="max-w-10 max-h-13 sm:max-w-12 sm:max-h-15"/>
+                  <p v-if="!item.image" class="text-[#332A1E] text-[0.74em] md:text-sm xl:text-base">No Picture</p>
+                  <img v-else :src="item.image" alt="SaleItem Image" class="max-w-10 max-h-13 sm:max-w-12 sm:max-h-15"/>
                 </div>
                 <div class="flex flex-col sm:flex-row flex-grow sm:items-center items-start sm:justify-between ml-3 gap-y-2">
                   <div class="flex">

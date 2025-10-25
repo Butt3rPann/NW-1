@@ -11,7 +11,6 @@ const userStore = useUserStore()
 const { getUserId, getAccessToken } = userStore
 const route = useRoute()
 const router = useRouter()
-const id = ref(0)
 const orders = ref([])
 const response = ref({})
 const currentPage = ref(1)
@@ -36,7 +35,13 @@ async function getAllOrders() {
         )
         orders.value = response.value.content
         totalPage.value = response.value.totalPages
-        
+        orders.value.forEach(order => {
+            order.orderItems.forEach(item => {
+                if (item.image) {
+                    item.image = `${import.meta.env.VITE_APP_URL}/v1/files/${item.image}?t=${Date.now()}`
+                }
+            })
+        }) 
     } catch (error) {
         console.log(error)
     }

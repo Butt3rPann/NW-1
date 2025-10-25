@@ -21,7 +21,12 @@ onMounted(() => {
 
 onMounted(async () => {
     try {
-       selectedOrder.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/orders`, orderId, getAccessToken()) 
+       selectedOrder.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v2/orders`, orderId, getAccessToken())
+       selectedOrder.value.orderItems.forEach(item => {
+            if (item.image) {
+                item.image = `${import.meta.env.VITE_APP_URL}/v1/files/${item.image}?t=${Date.now()}`
+            }
+        })
     } catch(error) {
         console.log(error)
     }
@@ -67,7 +72,8 @@ const totalPrice = (order) => {
                     >
                         <div class="flex items-start sm:items-center gap-3 flex-1 min-w-0">
                             <div class="bg-[#FAF6F5] rounded-sm w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 flex justify-center items-center">
-                                <img src="/saleItemImage/demoImg1.png" class="max-w-12 max-h-15"/>
+                                <p v-if="!item.image" class="text-[#332A1E] text-[0.74em] md:text-sm xl:text-base">No Picture</p>
+                                <img v-else :src="item.image" alt="SaleItem Image" class="max-w-10 max-h-13 sm:max-w-12 sm:max-h-15"/>
                             </div>
                             <div class="flex flex-col ml-3 min-w-0 flex-1">
                                 <p class="itbms-item-description text-sm sm:text-base">{{ item.description }} <span class="ml-1">(x<span class="itbms-item-quantity">{{ item.quantity }}</span>)</span></p>

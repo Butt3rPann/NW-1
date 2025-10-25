@@ -21,6 +21,8 @@ public class OrderItemDto {
     @NotNull
     private String description;
 
+    private String image;
+
     @JsonIgnore
     private Order order;
 
