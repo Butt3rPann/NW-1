@@ -35,11 +35,11 @@ function goToOrderDetail(orderId) {
 </script>
  
 <template>
-<div class="rounded-lg text-[#332A1E] p-5 border space-y-5 border-gray-300 cursor-pointer transition duration-200">
-    <div v-for="(order, index) in orders" :key="index" class="itbms-row itbms-view-button rounded-lg p-5 border border-gray-300 cursor-pointer hover:shadow-lg transition duration-200 bg-white">
+<div class="rounded-lg text-[#332A1E] p-3 sm:p-5 border space-y-5 border-gray-300 cursor-pointer transition duration-200">
+    <div v-for="(order, index) in orders" :key="index" class="itbms-row itbms-view-button rounded-lg p-4 sm:p-5 border border-gray-300 cursor-pointer hover:shadow-lg transition duration-200 bg-white">
       <div @click="goToOrderDetail(order.orderItems[0].no)">
         <div class="border-b border-[#ABBCC9]">
-          <div class="flex justify-between items-center mb-3">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
             <div>
               <p class="font-bold text-lg">Order # <span class="itbms-order-id">{{ order.orderItems[0].no }}</span></p>
               <div class="flex items-center mb-3 mt-2">
@@ -51,17 +51,17 @@ function goToOrderDetail(orderId) {
               </div>              
             </div>
             <div>
-              <div class="flex justify-end items-center">
-                <img :src="calendar" alt="calendarIcon" class="w-4">
+              <div class="flex sm:justify-end items-center text-[0.8rem] sm:text-base">
+                <img :src="calendar" alt="calendarIcon" class="w-3 sm:w-4">
                 <p class="mr-1 ml-2">Order Date:</p>
-                <p class="itbms-order-date text-sm text-gray-500">
+                <p class="itbms-order-date text-[0.8rem] sm:text-sm text-gray-500">
                   {{ new Date(order.orderDate).toLocaleDateString() }}
                 </p>
               </div>
-              <div class="flex justify-end items-center">
-                <img :src="creditcard" alt="cresitcardIcon" class="w-5">
+              <div class="flex sm:justify-end items-center text-[0.8rem] sm:text-base">
+                <img :src="creditcard" alt="cresitcardIcon" class="w-4 sm:w-5">
                 <p class="mr-1 ml-2">Payment Date:</p>
-                <p class="itbms-payment-date text-sm text-gray-500">
+                <p class="itbms-payment-date text-[0.8rem] sm:text-sm text-gray-500">
                   {{ new Date(order.paymentDate).toLocaleDateString() }}
                 </p>          
               </div>            
@@ -74,16 +74,20 @@ function goToOrderDetail(orderId) {
             <li
               v-for="(item, index) in order.orderItems"
               :key="index"
-              class="itbms-item-row flex justify-between text-base"
+              class="itbms-item-row flex flex-col sm:flex-row sm:justify-between text-base"
             >
-              <div class="flex items-center">
-                <div class="bg-[#FAF6F5] rounded-sm w-25 h-20 flex justify-center items-center">
-                  <img src="/saleItemImage/demoImg1.png" class="max-w-12 max-h-15"/>
+              <div class="flex items-center justify-between w-full text-sm sm:text-base mb-3 sm:mb-0">
+                <div class="bg-[#FAF6F5] rounded-sm w-20 h-15 sm:w-25 sm:h-20 flex justify-center items-center">
+                  <img src="/saleItemImage/demoImg1.png" class="max-w-10 max-h-13 sm:max-w-12 sm:max-h-15"/>
                 </div>
-                <p class="itbms-item-description ml-3">{{ item.description }}</p>
-                <p class="ml-1">(x<span class="itbms-item-quantity">{{ item.quantity }}</span>)</p>
+                <div class="flex flex-col sm:flex-row flex-grow sm:items-center items-start sm:justify-between ml-3 gap-y-2">
+                  <div class="flex">
+                    <p class="itbms-item-description sm:ml-3">{{ item.description }}</p>
+                    <p class="ml-1">(x<span class="itbms-item-quantity">{{ item.quantity }}</span>)</p>                     
+                  </div>
+                  <p>฿ <span class="itbms-item-total-price font-semibold">{{ (item.price * item.quantity).toLocaleString() }}</span></p>                                   
+                </div>
               </div>
-              <p>฿ <span class="itbms-item-total-price">{{ (item.price * item.quantity).toLocaleString() }}</span></p>
             </li>
           </ul>
         </div>
@@ -98,7 +102,7 @@ function goToOrderDetail(orderId) {
           >
             {{ order.orderStatus }}
           </p>
-          <p class="font-bold text-lg" :class="order.orderStatus === 'COMPLETED' ? 'text-green-700' : 'text-yellow-700' ">
+          <p class="font-bold text-md sm:text-lg" :class="order.orderStatus === 'COMPLETED' ? 'text-green-700' : 'text-yellow-700' ">
             ฿
             <span class="itbms-total-order-price">
               {{ totalPrice(order).toLocaleString() }}

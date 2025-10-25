@@ -69,17 +69,17 @@ async function changeTab(tab) {
 </script>
  
 <template>
-<div class="w-full min-h-screen font-rubik bg-white p-12 pl-20 pr-20 text-[#332A1E]">
-    <p class="font-extrabold text-4xl mt-20 mb-5">All Seller Orders</p>
+<div class="w-full min-h-screen font-rubik bg-white pl-7 pr-7 pb-10 sm:p-10 sm:pl-12 sm:pr-12 lg:p-12 lg:pl-20 lg:pr-20 text-[#332A1E]">
+    <p class="font-extrabold text-2xl sm:text-3xl md:text-4xl mt-20 mb-5">All Seller Orders</p>
     <div class="flex justify-between items-center mb-5">
-        <div>
+        <div class="flex flex-wrap sm:flex-nowrap">
             <button v-for="tab in tabs" :key="tab" @click="changeTab(tab)"
             :class="[
-            'relative pb-2 mr-10 font-semibold transition duration-200',
+            'relative pb-2 mr-5 sm:mr-10 font-semibold transition duration-200 text-[0.68rem] sm:text-base',
             currentTab === tab ? 'border-b-4 border-[#332A1E]' : 'text-gray-400 hover:text-[#332A1E]',
             tab === 'new' ? 'itbms-new-orders-button' : tab === 'canceled' ? 'itbms-canceled-orders-button' : 'itbms-all-orders-button'
             ]">
-                <p v-if="sellerOrdersCount > 0 && tab === 'new'" class="font-normal itbms-bag-quantity absolute -top-2.5 -right-4.5 px-[0.50rem] py-[0.15rem] rounded-full bg-[#D27B7B] text-[#F0EDEC] text-xs">{{ sellerOrdersCount }}</p>
+                <p v-if="sellerOrdersCount > 0 && tab === 'new'" class="font-normal itbms-bag-quantity absolute -top-2 -right-3.5 sm:-top-2.5 sm:-right-4.5 px-[0.30rem] py-[0.001rem] sm:px-[0.50rem] sm:py-[0.15rem] rounded-full bg-[#D27B7B] text-[#F0EDEC] text-xs">{{ sellerOrdersCount }}</p>
                 {{ tab === 'new' ? 'New Orders' : tab === 'canceled' ? 'Canceled Orders': 'All Orders' }}
             </button>            
         </div>
