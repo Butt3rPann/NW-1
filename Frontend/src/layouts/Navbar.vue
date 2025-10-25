@@ -17,8 +17,7 @@ const navItems = [
     { name: 'Home', pathname: 'Homepage' },
     { name: 'Products', pathname: 'SaleItems' },
     { name: 'Orders', pathname: 'OrderList' },
-    { name: 'About Us', pathname: '' },
-    { name: 'Contact Us', pathname: '' }
+    { name: 'Contact Us', pathname: 'ContactUs' }
 ]
 
 const isMenuOpen = ref(false)
