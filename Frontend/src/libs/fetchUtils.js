@@ -129,6 +129,7 @@ async function postData(url, data, access_token) {
     const res = await fetch(url, {
       method: 'POST',
       headers,
+      credentials: 'include',
       body: JSON.stringify(data)
     })
     if (res.status === 204) {

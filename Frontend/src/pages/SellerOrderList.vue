@@ -76,7 +76,7 @@ async function changeTab(tab) {
 </script>
  
 <template>
-<div class="w-full min-h-screen font-rubik bg-white pl-7 pr-7 pb-10 sm:p-10 sm:pl-12 sm:pr-12 lg:p-12 lg:pl-20 lg:pr-20 text-[#332A1E]">
+<div class="font-rubik px-7 md:px-13 lg:px-19 xl:px-26 pb-15 space-y-7 min-h-screen text-[#332A1E] pt-4 md:pt-8 lg:pt-12 bg-white">
     <p class="font-extrabold text-2xl sm:text-3xl md:text-4xl mt-20 mb-5">All Seller Orders</p>
     <div class="flex justify-between items-center mb-5">
         <div class="flex flex-wrap sm:flex-nowrap">

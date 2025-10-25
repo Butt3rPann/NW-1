@@ -2,6 +2,7 @@ package sit.integrated.backend.controllers.v2;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -40,6 +41,9 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Value("${app.cookie.secure}")
+    private boolean cookieSecure;
+
     @PostMapping("/auth/register")
     public ResponseEntity<UserResponseDto> createUser(@Valid @ModelAttribute UserRequestDto user) {
         UserResponseDto userDto = userService.createUser(user);
@@ -74,7 +78,7 @@ public class AuthController {
         Map<String, Object> tokens = authService.authenticateUser(userSignInDto);
         ResponseCookie cookie = ResponseCookie.from("refresh_token", tokens.get("refresh_token").toString())
                 .httpOnly(true)
-                .secure(true)
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(60 * 60 * 24)
                 .sameSite("Strict")
@@ -86,7 +90,7 @@ public class AuthController {
     public ResponseEntity<Void> logout() {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", "")
                 .httpOnly(true)
-                .secure(true)
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(0)
                 .sameSite("Strict")

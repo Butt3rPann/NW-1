@@ -2,13 +2,13 @@
 import OrderCard from '@/components/order/OrderCard.vue'
 import { getItemByIdWithToken } from '@/libs/fetchUtils'
 import { useUserStore } from '@/stores/UserStore'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import emptyOrdersImg from '@/assets/images/emptySaleItems.png'
 import Pagination from '@/components/elements/Pagination.vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const userStore = useUserStore()
-const { getUserId, getAccessToken } = userStore
+const { getUserId, getAccessToken, isLoggedIn } = userStore
 const route = useRoute()
 const router = useRouter()
 const orders = ref([])
@@ -25,6 +25,8 @@ const goToPage = async (page) => {
 }
 
 async function getAllOrders() {
+    if (!isLoggedIn()) return
+    
     try {
         response.value = await getItemByIdWithToken(
             `${import.meta.env.VITE_APP_URL}/v2/users/${getUserId()}/orders`, 
@@ -68,16 +70,16 @@ async function changeTab(tab) {
 </script>
  
 <template>
-<div class="w-full min-h-screen font-rubik bg-white pl-7 pr-7 pb-10 sm:p-10 sm:pl-12 sm:pr-12 lg:p-12 lg:pl-20 lg:pr-20 text-[#332A1E]">
-    <p class="font-extrabold text-2xl md:text-4xl mt-20 mb-5">All orders</p>
+<div class="font-rubik px-7 md:px-13 lg:px-19 xl:px-26 pb-15 space-y-7 min-h-screen text-[#332A1E] pt-4 md:pt-8 lg:pt-12 bg-white">
+    <p class="font-bold text-2xl md:text-4xl mt-20 mb-5">All orders</p>
     <div>
         <button v-for="tab in tabs" :key="tab" @click="changeTab(tab)"
         :class="[
-        'pb-2 mr-6 mb-5 font-semibold transition duration-200 text-sm sm:text-base',
+        'pb-2 mr-6 font-semibold transition duration-200 text-sm sm:text-base',
         currentTab === tab ? 'border-b-4 border-[#332A1E]' : 'text-gray-400 hover:text-[#332A1E]',
         tab === 'completed' ? 'itbms-completed-orders-button' :  'itbms-canceled-orders-button'
         ]">
-            {{ tab === 'completed' ? 'All Orders': 'Canceled Orders' }}
+            {{ tab === 'completed' ? 'Completed': 'Canceled' }}
         </button>
     </div>
     <OrderCard v-if="orders.length" :orders="orders" :tab="currentTab"/>

@@ -107,27 +107,23 @@ const cancel = () => {
 </script>
 
 <template>
-    <div class="w-full min-h-screen font-rubik bg-white">
+    <div class="font-rubik text-[#332A1E] bg-white w-full flex flex-col items-center justify-center h-screen px-10 md:px-22 lg:px-25">
         <PopupMessage :isSuccess="isSuccess" :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-        <div class="flex flex-col justify-center items-center h-full pb-5 pt-20 md:pt-23 px-10 md:px-22 lg:px-25">
-            <div class="bg-white border border-gray-200 shadow-md w-full max-w-140 flex h-fit rounded-lg overflow-hidden">
-                <div class="w-full px-7 my-7 text-[#332A1E]">
-                    <div class="flex flex-col items-center gap-2 mb-3">
-                        <p class="text-3xl font-semibold">{{form === 'change' ? 'Change Password' : 'Reset Password'}}</p>
-                    </div>
-                    <div class="space-y-4 py-3 pt-3">
-                        <FormInput v-if="form === 'change'" v-model="passwordForm.oldPassword" label="Old Password" :required="true" inputType="password" :maxlength="14" field="oldPassword"
-                            placeholder="Enter current password" :invalidMessage="invalidMessage.oldPassword" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="passwordForm.newPassword" label="New Password" :required="true" inputType="password" :min="8" :maxlength="14" field="newPassword"
-                            placeholder="Enter new password" :invalidMessage="invalidMessage.newPassword" @disabledButton="handleDisabledButton"/>
-                        <FormInput v-model="passwordForm.confirmPassword" label="Confirm Password" :required="true" inputType="password" :min="8" :maxlength="14" field="confirmPassword"
-                            placeholder="Enter confirm password" :invalidMessage="invalidMessage.confirmPassword" @disabledButton="handleDisabledButton"/>  
-                    </div>
-                    <div class="flex justify-center gap-4 mt-1">
-                        <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
-                        <BaseButton @click="handleSubmit" text="Submit" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
-                    </div>
-                </div>
+        <div class="border border-gray-200 shadow-md rounded-lg py-10 w-full max-w-130 mx-auto px-7 md:px-10 space-y-5">
+            <div class="flex flex-col items-center gap-2 mb-3">
+                <p class="text-3xl font-semibold">{{form === 'change' ? 'Change Password' : 'Reset Password'}}</p>
+            </div>
+            <div class="space-y-4 py-3 pt-3">
+                <FormInput v-if="form === 'change'" v-model="passwordForm.oldPassword" label="Old Password" :required="true" inputType="password" :maxlength="14" field="oldPassword"
+                    placeholder="Enter current password" :invalidMessage="invalidMessage.oldPassword" @disabledButton="handleDisabledButton"/>
+                <FormInput v-model="passwordForm.newPassword" label="New Password" :required="true" inputType="password" :min="8" :maxlength="14" field="newPassword"
+                    placeholder="Enter new password" :invalidMessage="invalidMessage.newPassword" @disabledButton="handleDisabledButton"/>
+                <FormInput v-model="passwordForm.confirmPassword" label="Confirm Password" :required="true" inputType="password" :min="8" :maxlength="14" field="confirmPassword"
+                    placeholder="Enter confirm password" :invalidMessage="invalidMessage.confirmPassword" @disabledButton="handleDisabledButton"/>  
+            </div>
+            <div class="flex justify-center gap-4 mt-1">
+                <BaseButton @click="cancel" text="Cancel" class="itbms-cancel-button w-full"/>
+                <BaseButton @click="handleSubmit" text="Submit" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-save-button w-full" :disabled="disabled"/>
             </div>
         </div>
     </div>

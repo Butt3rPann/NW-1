@@ -150,7 +150,7 @@ const addItemToCart = async () => {
                         </div>
                         <p class="itbms-description text-[#6F879C] text-sm md:text-base lg:text-lg font-light">{{ selectedItem.description }}</p>
                     </div>
-                    <div class="flex justify-between border-b-3 py-5 gap-3 border-[#E5E8F4] flex-col lg:flex-row">
+                    <div class="flex justify-between border-b-3 py-5 gap-3 border-[#E5E8F4] flex-col xl:flex-row">
                         <p class="text-[#6F879C] font-bold text-2xl md:text-2xl lg:text-3xl xl:text-4xl">
                             <span class="itbms-price-unit pr-2">Bath</span>
                             <span class="itbms-price">{{ selectedItem.price?.toLocaleString() }}</span>
