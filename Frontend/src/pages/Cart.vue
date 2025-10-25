@@ -196,6 +196,8 @@ watch(address, (newValue) => {
 watch(note, (newValue) => {
   localStorage.setItem('cartNote', newValue)
 })
+
+const baseUrl = import.meta.env.VITE_APP_URL
 </script>
  
 <template>
@@ -243,7 +245,8 @@ watch(note, (newValue) => {
                                     </div>
                                 </label>
                                 <div class="bg-[#FAF6F5] rounded-sm w-25 h-20 flex justify-center items-center">
-                                    <img src="/saleItemImage/demoImg1.png" class="max-w-12 max-h-15"/>
+                                    <img v-if="item?.saleItemImg?.[0]" :src="`${baseUrl}/v1/files/${item?.saleItemImg?.[0]}`" class="max-w-22 max-h-17"/>
+                                    <p v-else class="text-sm">No Picture</p>
                                 </div>
                                 <div class="w-full min-h-20 flex flex-col justify-between text-xs lg:text-sm xl:text-base gap-2">
                                     <p class="itbms-item-description break-words">

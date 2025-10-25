@@ -2,6 +2,8 @@ package sit.integrated.backend.dtos;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CartItemDto {
     private Integer id;
@@ -13,4 +15,5 @@ public class CartItemDto {
     private Integer quantity;
     private Integer maxQuantity;
     private Integer priceEach;
+    private List<String> saleItemImg;
 }

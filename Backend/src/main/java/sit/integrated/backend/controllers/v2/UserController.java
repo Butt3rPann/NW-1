@@ -27,6 +27,8 @@ public class UserController {
     private PasswordResetService passwordResetService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("/users/{id}")
     public ResponseEntity<BuyerResponseDto> getUserProfile(@PathVariable Integer id) {
@@ -70,7 +72,9 @@ public class UserController {
 
     @GetMapping("/users/{id}/carts")
     public ResponseEntity<List<CartSellerWithItemsDto>> getCartItems(@PathVariable Integer id) {
-        return ResponseEntity.ok(cartItemService.getAllCartItem(id));
+        List<CartSellerWithItemsDto> dtos = cartItemService.getAllCartItem(id);
+        dtos.forEach(dto -> dto.getCartItems().forEach(item -> item.setSaleItemImg(fileService.getMatchedFiles(item.getSaleItemId() + ".1*"))));
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping("/users/forgot-password")
