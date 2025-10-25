@@ -21,6 +21,7 @@ import SellerOrderList from "@/pages/SellerOrderList.vue";
 import ChangePasswordForm from "@/components/form/ChangePasswordForm.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import ForgetPasswordForm from "@/components/form/ForgetPasswordForm.vue";
+import ContactUs from "@/pages/ContactUs.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -163,6 +164,11 @@ const routes = [
           next('/forget-password')
         }
       }
+    },
+    {
+        path: '/contact-us',
+        name: 'ContactUs',
+        component: ContactUs
     }
 ]
 const router = createRouter({history,routes})
