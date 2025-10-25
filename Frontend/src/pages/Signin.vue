@@ -70,25 +70,25 @@ const handleClick = async () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white text-[#332A1E] flex flex-col items-center justify-center h-screen pb-20 pt-40 px-10 md:px-22 lg:px-25"> 
-        <PopupMessage :message="errorMessage" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
-        <div class="bg-white border border-gray-200 shadow-md rounded-lg py-10 w-[98%] md:w-3/4 lg:w-1/2 px-7 md:px-9 lg:px-10 space-y-5">
-            <p class="text-2xl md:text-3xl font-semibold text-center">Log in</p>
-            <div class="flex flex-col">
-                <FormInput v-model="user.email" label="Email" :required="true" inputType="text" field="email" :trim="false" inputmode="email" pattern="^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$"
-                    placeholder="Enter email" className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
-                <FormInput v-model="user.password" label="Password" :required="true" inputType="password" field="password" :trim="false" class="pt-3"
-                    placeholder="Enter password" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
-                <p @click="router.push({ name : 'ForgetPassword'})" class="text-right text-sm text-[#6F879C] cursor-pointer">Forget Password?</p>
-            </div>
-            <div class="flex justify-center gap-4 pt-2">
-                <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-signin-button w-full"/>
-            </div>
-            <p class="text-center text-sm sm:text-base lg:text-lg">
-                Don't have an account? 
-                <span class="underline cursor-pointer text-[#6F879C]" @click="router.push({ name: 'Registers' })">Sign up</span>
-            </p>
+<div class="font-rubik text-[#332A1E] bg-white w-full flex flex-col items-center justify-center h-screen px-10 md:px-22 lg:px-25"> 
+    <PopupMessage :message="errorMessage" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
+    <div class=" border border-gray-200 shadow-md rounded-lg py-10 w-full max-w-130 mx-auto px-7 md:px-10 space-y-5">
+        <p class="text-2xl md:text-3xl font-semibold text-center">Log in</p>
+        <div class="flex flex-col">
+            <FormInput v-model="user.email" label="Email" :required="true" inputType="text" field="email" :trim="false" inputmode="email" pattern="^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$"
+                placeholder="Enter email" className="itbms-email" :invalidMessage="invalidMessage.email" @disabledButton="handleDisabledButton"/>
+            <FormInput v-model="user.password" label="Password" :required="true" inputType="password" field="password" :trim="false" class="pt-3"
+                placeholder="Enter password" className="itbms-password" :invalidMessage="invalidMessage.password" @disabledButton="handleDisabledButton"/>
+            <p @click="router.push({ name : 'ForgetPassword'})" class="w-fit ml-auto text-sm text-[#6F879C] cursor-pointer">Forget Password?</p>
         </div>
+        <div class="flex justify-center gap-4 pt-2">
+            <BaseButton @click="handleClick" text="Login" :disabled="disabled" bgColor="bg-[#4bbd80] border-transparent" textColor="text-white" class="itbms-signin-button w-full"/>
+        </div>
+        <p class="text-center text-sm sm:text-base lg:text-lg">
+            Don't have an account? 
+            <span class="underline cursor-pointer text-[#6F879C]" @click="router.push({ name: 'Registers' })">Sign up</span>
+        </p>
+    </div>
 </div>
 </template>
  

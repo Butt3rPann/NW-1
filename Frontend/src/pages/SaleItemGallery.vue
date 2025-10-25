@@ -106,6 +106,11 @@ const applyCustomPriceFilter = () => {
     currentUpperPriceFilter.value = maxPrice.value
 }
 
+const closeFilterOption = () => {
+    showBrandFilter.value = false
+    showPriceFilter.value = false
+    showStorageFilter.value = false
+}
 
 const searchKeyword = ref('')
 
@@ -279,7 +284,7 @@ watch(searchKeyword, () => {
 <template>
 <div @click="showFilter = false" class="bg-white text-[#332A1E]">
     <PopupMessage :message="message" :isShowPopup="isShowPopup" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-    <div class="font-rubik px-7 md:px-13 lg:px-19 xl:px-26 pb-15 space-y-7 pt-22 md:pt-30">
+    <div @click="closeFilterOption" class="font-rubik px-7 md:px-13 lg:px-19 xl:px-26 pb-15 space-y-5 md:space-y-7 pt-22 md:pt-30">
         <div class="flex flex-col md:flex-row md:justify-between md:items-center">
             <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#332A1E] mb-3 md:mb-0">Products</p>
             <router-link :to="{ name: 'AddSaleItem' }" class="w-fit" v-if="getUserType() === 'SELLER'">
@@ -318,61 +323,61 @@ watch(searchKeyword, () => {
                 </div>
             </div>
         </div>
-        <div>
-            <div class="relative bg-white border border-[#332A1E]/10 rounded-md shadow-sm py-3 w-full grid grid-cols-16 items-center h-23">
-                <div @click.stop="showBrandFilter = !showBrandFilter" class="itbms-brand-filter col-span-5 space-y-2 px-3 border-r border-[#332A1E]/20">
-                    <div class="font-bold text-sm md:text-base text-center">Brand</div>
+        <div class="relative flex flex-col gap-1">
+            <button @click.stop="clearFilter" class="ml-auto w-fit itbms-filter-clear cursor-pointer text-[0.7rem] md:text-sm text-gray-400">Clear Filter</button>
+            <div class="bg-white border border-[#332A1E]/10 rounded-md shadow-sm py-3 md:py-5 w-full grid grid-cols-12 md:grid-cols-15 items-center">
+                <div @click.stop="showBrandFilter = !showBrandFilter" class="itbms-brand-filter col-span-4 md:col-span-5 space-y-2 px-2 md:px-3 border-r border-[#332A1E]/20">
+                    <div class="font-bold text-xs md:text-base text-center">Brand</div>
                     <div class="w-full flex items-center gap-2">
-                        <div class="w-full flex overflow-auto gap-2" style="scrollbar-width: none;"> 
-                            <p v-if="!currentBrandFilter.length" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Filter by brand(s)</p>
-                            <div v-for="(filterBrand, index) in currentBrandFilter" class="itbms-brand-item whitespace-nowrap inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
+                        <div class="w-full flex overflow-auto gap-1 md:gap-2" style="scrollbar-width: none;"> 
+                            <p v-if="!currentBrandFilter.length" class="text-[#AEAAA6] text-[0.7rem] md:text-sm lg:text-base mx-auto">Filter by brand(s)</p>
+                            <div v-for="(filterBrand, index) in currentBrandFilter" class="itbms-brand-item whitespace-nowrap inline-flex items-center w-fit border border-[#ABBCC9] px-2 md:px-4 py-1 rounded-3xl text-[0.5rem] md:text-sm lg:text-base">
                                 {{ filterBrand }}
-                                <button @click.stop="deleteBrandFilter(index)" class="itbms-brand-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
+                                <button @click.stop="deleteBrandFilter(index)" class="itbms-brand-item-clear ml-1 md:ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-[0.5rem] md:text-xs">
                                     ✕
                                 </button>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <div @click.stop="showPriceFilter = !showPriceFilter" class="itbms-price-filter col-span-5 space-y-2 px-3 border-r border-[#332A1E]/20">
-                    <div class="font-bold text-sm md:text-base text-center">Price</div>
+                <div @click.stop="showPriceFilter = !showPriceFilter" class="itbms-price-filter col-span-4 md:col-span-5 space-y-2 px-2 md:px-3 border-r border-[#332A1E]/20">
+                    <div class="font-bold text-xs md:text-base text-center">Price</div>
                     <div class="w-full flex items-center gap-2">
                         <div class="w-full flex overflow-auto" style="scrollbar-width: none;"> 
-                            <p v-if="((currentLowerPriceFilter === null || currentLowerPriceFilter === '') && (currentUpperPriceFilter === null || currentUpperPriceFilter === '')) || (currentUpperPriceFilter !== '' && currentUpperPriceFilter !== null && currentLowerPriceFilter > currentUpperPriceFilter )" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Price Range</p>
-                            <div v-else class="itbms-price-item inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
+                            <p v-if="((currentLowerPriceFilter === null || currentLowerPriceFilter === '') && (currentUpperPriceFilter === null || currentUpperPriceFilter === '')) || (currentUpperPriceFilter !== '' && currentUpperPriceFilter !== null && currentLowerPriceFilter > currentUpperPriceFilter )" class="text-[#AEAAA6] text-[0.7rem] md:text-sm lg:text-base mx-auto">Price Range</p>
+                            <div v-else class="itbms-price-item inline-flex items-center w-fit border border-[#ABBCC9] px-2 md:px-4 py-1 rounded-3xl text-[0.5rem] md:text-sm lg:text-base">
                                 <p>
                                     <span v-if="currentLowerPriceFilter !== null && currentLowerPriceFilter !== ''">{{ currentLowerPriceFilter.toLocaleString() }}</span>
                                     <span v-else-if="currentUpperPriceFilter !== null && currentUpperPriceFilter !== ''">0</span>
                                     <span v-if="currentUpperPriceFilter !== null && currentUpperPriceFilter !== '' && currentUpperPriceFilter !== currentLowerPriceFilter"> {{ ` - ${currentUpperPriceFilter.toLocaleString()}` }} </span>
                                 </p>
-                                <button @click.stop="deletePriceFilter" class="itbms-price-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
+                                <button @click.stop="deletePriceFilter" class="itbms-price-item-clear ml-1 md:ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-[0.5rem] md:text-xs">
                                     ✕
                                 </button>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <div @click.stop="showStorageFilter = !showStorageFilter" class="itbms-storage-size-filter px-3 space-y-2 col-span-5">
-                    <div class="font-bold text-sm md:text-base text-center">Storage</div>
+                <div @click.stop="showStorageFilter = !showStorageFilter" class="itbms-storage-size-filter px-2 md:px-3 space-y-2 col-span-4 md:col-span-5">
+                    <div class="font-bold text-xs md:text-base text-center">Storage</div>
                     <div class="w-full flex items-center gap-2">
-                        <div class="w-full flex overflow-auto gap-2" style="scrollbar-width: none;"> 
-                            <p v-if="!currentStorageFilter.length" class="text-[#AEAAA6] text-sm md:text-base mx-auto">Storage size(s)</p>
-                            <div v-for="(filterStorage, index) in currentStorageFilter" class="itbms-storage-size-item whitespace-nowrap inline-flex items-center w-fit border border-[#ABBCC9] px-4 py-1 rounded-3xl text-sm md:text-base">
+                        <div class="w-full flex overflow-auto gap-1 md:gap-2" style="scrollbar-width: none;"> 
+                            <p v-if="!currentStorageFilter.length" class="text-[#AEAAA6] text-[0.7rem] md:text-sm lg:text-base mx-auto">Storage size(s)</p>
+                            <div v-for="(filterStorage, index) in currentStorageFilter" class="itbms-storage-size-item whitespace-nowrap inline-flex items-center w-fit border border-[#ABBCC9] px-2 md:px-4 py-1 rounded-3xl text-[0.5rem] md:text-sm lg:text-base">
                                 {{ filterStorage ? `${filterStorage}Gb` : 'Not specified' }}
-                                <button @click.stop="deleteStorageFilter(index)" class="itbms-storage-size-item-clear ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-xs">
+                                <button @click.stop="deleteStorageFilter(index)" class="itbms-storage-size-item-clear ml-1 md:ml-2 text-[#ABBCC9] hover:text-[#6F879C] font-bold text-[0.5rem] md:text-xs">
                                     ✕
                                 </button>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <button @click.stop="clearFilter(index)" class="itbms-filter-clear cursor-pointer bg-[#ABBCC9] hover:bg-[#6F879C] text-white rounded-md h-fit w-fit px-3 py-1.5">✕</button>
             </div>
-            <div class="w-full grid grid-cols-16">
-                <div @click.stop v-if="showBrandFilter" class="h-50 col-span-5 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm text-sm lg:text-base">
-                    <label v-for="brand in brands" :key="brand.name" class="flex items-center gap-4 py-1.5 cursor-pointer">
+            <div class="absolute top-full w-full z-10 grid grid-cols-12 md:grid-cols-15">
+                <div @click.stop v-if="showBrandFilter" class="h-50 col-span-4 md:col-span-5 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-3 md:px-5 py-3 shadow-sm text-[0.5rem] md:text-sm lg:text-base">
+                    <label v-for="brand in brands" :key="brand.name" class="flex items-center gap-2 md:gap-4 py-1.5 cursor-pointer">
                         <input type="checkbox" v-model="currentBrandFilter" :value="brand.name" class="hidden peer">
-                        <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
+                        <div class="w-3 h-3 md:w-4 md:h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
                             <svg v-if="currentBrandFilter.includes(brand.name)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                 <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                             </svg>
@@ -380,24 +385,24 @@ watch(searchKeyword, () => {
                         <span class="itbms-brand-item">{{ brand.name }}</span>
                     </label>
                 </div>
-                <div @click.stop v-if="showPriceFilter" class="h-50 col-span-5 col-start-6 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm text-sm lg:text-base">
+                <div @click.stop v-if="showPriceFilter" class="h-50 col-span-4 col-start-5 md:col-span-5 md:col-start-6 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-3 md:px-5 py-3 shadow-sm text-[0.5rem] md:text-sm lg:text-base">
                     <label @click="choosePriceFilter(price)" v-for="(price, index) in priceFilterOptions" :key="index" class="itbms-price-item flex justify-center items-center gap-4 py-1.5 hover:bg-[#e7edf2] cursor-pointer">
                         <span class="itbms-filter-item">{{ `${price.lower.toLocaleString()} - ${price.upper.toLocaleString()} Baht` }}</span>
                     </label>
-                    <div class="flex flex-col items-center">
-                        <div class="flex gap-3 justify-center items-center py-1.5">
-                            <input type="number" v-model="minPrice" placeholder="Min Price" class="itbms-price-item-min shadow-sm border border-[#332A1E]/10 md:w-15 lg:w-20 xl:w-30 placeholder:text-xs lg:placeholder:text-sm p-1">
-                            <input type="number" v-model="maxPrice" placeholder="Max Price" class="itbms-price-item-max shadow-sm border border-[#332A1E]/10 md:w-15 lg:w-20 xl:w-30 placeholder:text-xs lg:placeholder:text-sm p-1" :class="showPriceFilterWarning ? 'border border-red-400' : ''">
-                            <p>Baht</p>
+                    <div class="flex flex-col items-center md:mt-2">
+                        <div class="flex flex-col md:flex-row gap-2 md:gap-3 justify-center items-center py-1.5">
+                            <input type="number" v-model="minPrice" placeholder="Min Price" class="itbms-price-item-min shadow-sm border border-[#332A1E]/10 w-full md:w-15 lg:w-20 xl:w-30 placeholder:text-[0.5rem] lg:placeholder:text-sm p-1">
+                            <input type="number" v-model="maxPrice" placeholder="Max Price" class="itbms-price-item-max shadow-sm border border-[#332A1E]/10 w-full md:w-15 lg:w-20 xl:w-30 placeholder:text-[0.5rem] lg:placeholder:text-sm p-1" :class="showPriceFilterWarning ? 'border border-red-400' : ''">
+                            <p class="hidden md:block">Baht</p>
                         </div>
                         <p v-if="showPriceFilterWarning" class="text-sm text-red-400">Max price should be greater than or equal to Min price.</p>
-                        <button @click="applyCustomPriceFilter" class="bg-[#e7edf2] hover:bg-[#ABBCC9] py-2 px-4 rounded-md mt-2">Apply</button>
+                        <button @click="applyCustomPriceFilter" class="bg-[#e7edf2] hover:bg-[#ABBCC9] py-1.5 px-4 w-full rounded-md mt-2 text-[#6F879C]">Apply</button>
                     </div>
                 </div>
-                <div @click.stop v-if="showStorageFilter" class="h-50 col-span-5 col-start-11 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-5 py-3 shadow-sm text-sm lg:text-base">
-                    <label v-for="(storage, index) in storages" :key="index" class="flex items-center gap-4 py-1.5 cursor-pointer">
+                <div @click.stop v-if="showStorageFilter" class="h-50 col-span-5 col-start-9 md:col-span-5 md:col-start-11 overflow-scroll bg-white border border-[#332A1E]/10 rounded-md px-3 md:px-5 py-3 shadow-sm text-[0.5rem] md:text-sm lg:text-base">
+                    <label v-for="(storage, index) in storages" :key="index" class="flex items-center gap-2 md:gap-4 py-1.5 cursor-pointer">
                         <input type="checkbox" v-model="currentStorageFilter" :value="storage?.storageGb ?? null" class="hidden peer">
-                        <div class="w-4 h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
+                        <div class="w-3 h-3 md:w-4 md:h-4 flex-shrink-0 rounded-sm border border-[#ABBCC9] peer-checked:bg-[#6F879C] peer-checked:border-[#6F879C] flex items-center justify-center transition">
                             <svg v-if="currentStorageFilter.includes(storage?.storageGb) || currentStorageFilter.includes(null)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F2EDEC" class="w-3.5 h-3.5">
                                 <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.9 9.9-4.242-4.243a1 1 0 0 0-1.415 1.414l4.95 4.95a1 1 0 0 0 1.414 0l10.607-10.603z"/>
                             </svg>

@@ -22,6 +22,7 @@ import ChangePasswordForm from "@/components/form/ChangePasswordForm.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import ForgetPasswordForm from "@/components/form/ForgetPasswordForm.vue";
 import ContactUs from "@/pages/ContactUs.vue";
+import PageNotFound from "@/pages/PageNotFound.vue";
 
 const history = createWebHistory('/nw1/')
 const routes = [
@@ -78,17 +79,35 @@ const routes = [
     {
         path: '/brands',
         name: 'BrandList',
-        component: BrandList
+        component: BrandList,
+        beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (userStore.getUserType() !== "SELLER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path: '/brands/add',
         name: 'AddBrand',
-        component: AddBrandForm
+        component: AddBrandForm,
+                beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (userStore.getUserType() !== "SELLER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path: '/brands/:id/edit',
         name: 'EditBrand',
-        component: EditBrandForm
+        component: EditBrandForm,
+                beforeEnter: (to, from) => {
+            const userStore = useUserStore()
+            if (userStore.getUserType() !== "SELLER") {
+                return { name: 'SaleItems' }
+            }
+        }
     },
     {
         path : '/registers',
@@ -169,6 +188,11 @@ const routes = [
         path: '/contact-us',
         name: 'ContactUs',
         component: ContactUs
+    },
+    {
+        path: '/:catchNotMatchPath(.*)',
+        name: 'PageNotFound',
+        component: PageNotFound
     }
 ]
 const router = createRouter({history,routes})
@@ -177,7 +201,8 @@ router.beforeEach((to, from) => {
     const isLoggedIn = !!localStorage.getItem('access_token')
     if (!isLoggedIn && (to.name === 'Profile' || 
                         to.name === 'Cart' ||
-                        to.name === 'EditProfile')) {
+                        to.name === 'EditProfile' ||
+                        to.name === 'ChangePassword')) {
         return { name: 'SignIn' }
     }
 })

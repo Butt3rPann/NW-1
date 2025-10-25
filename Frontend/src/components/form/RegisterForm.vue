@@ -146,11 +146,11 @@ const handleClick = async () => {
 </script>
  
 <template>
-<div class="w-full font-rubik bg-white flex flex-col items-center h-fit pb-15 pt-20 md:pt-30 px-10 md:px-22 lg:px-25"> 
+<div class="w-full font-rubik bg-white flex flex-col items-center justify-center min-h-screen pb-15 pt-20 md:pt-30 px-10 md:px-22 lg:px-25"> 
         <PopupMessage message="Email already exists" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25"/>
-        <div class="bg-white border border-gray-200 shadow-md w-full max-w-300 flex h-fit rounded-lg overflow-hidden">  
-            <div class="hidden flex w-5/12 lg:flex items-center justify-center" :class="user.userType == 'BUYER' ? 'bg-[#91B3FA]/60' : 'bg-[#C4C3F7]'">
-                <img :src="user.userType == 'BUYER' ? registerBuyer : registerSeller" alt="registerImg" class="w-85">
+        <div class="bg-white border border-gray-200 shadow-md w-full max-w-300 flex rounded-lg overflow-hidden">  
+            <div class="hidden w-5/12 lg:flex items-center justify-center" :class="user.userType == 'BUYER' ? 'bg-[#91B3FA]/60' : 'bg-[#C4C3F7]'">
+                <img :src="user.userType == 'BUYER' ? registerBuyer : registerSeller" alt="registerImg" class="w-full px-15">
             </div> 
             <div class="w-full lg:w-7/12 px-7 my-7 text-[#332A1E]">
                 <div class="flex flex-col items-center gap-1 md:gap-2 mb-2 md:mb-3">
@@ -196,19 +196,19 @@ const handleClick = async () => {
                 <template v-if="user.userType == 'SELLER'">
                     <p class="text-[#332A1E] font-medium text-sm sm:text-base lg:text-lg mb-2">National Card Photo<span class="text-red-700">*</span></p>
                     <div class="flex gap-6">
-                        <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
+                        <label class="flex items-center justify-center w-40 h-28 border rounded-md cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
                             <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-front" @change="handleFrontUpload" />
                             <div v-if="!frontPreview" class="flex flex-col justify-center items-center">
-                                <img :src="upload" alt="upload" class="w-5">
-                                <span class="text-sm md:text-md lg:text-lg text-gray-700">Front side</span>   
+                                <img :src="upload" alt="upload" class="w-5 opacity-50">
+                                <span class="text-sm md:text-md lg:text-lg text-gray-700/70">Front side</span>   
                             </div>
                             <img v-if="frontPreview" :src="frontPreview" alt="Front preview" class="w-full h-full object-cover rounded"/>
                         </label>
-                        <label class="flex items-center justify-center w-40 h-28 border rounded-2xl cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
+                        <label class="flex items-center justify-center w-40 h-28 border rounded-md cursor-pointer hover:bg-gray-200 border-[#6F879C] overflow-hidden">
                             <input type="file" accept=".jpg,.jpeg,.png" class="hidden itbms-card-photo-back" @change="handleBackUpload" />
                             <div v-if="!backPreview" class="flex flex-col justify-center items-center">
-                                <img :src="upload" alt="upload" class="w-5">
-                                <span class="text-sm md:text-md lg:text-lg text-gray-700">Back side</span>  
+                                <img :src="upload" alt="upload" class="w-5 opacity-50">
+                                <span class="text-sm md:text-md lg:text-lg text-gray-700/70">Back side</span>  
                             </div>                           
                             <img v-if="backPreview" :src="backPreview" alt="Back preview" class="w-full h-full object-cover rounded"/>
                         </label>

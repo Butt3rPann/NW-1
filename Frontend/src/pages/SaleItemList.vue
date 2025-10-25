@@ -31,7 +31,7 @@ onMounted(async () => {
     try {
         loadFromSessionStorage()
         await getSaleItems()
-        await getSellerOrders()
+        // await getSellerOrders()
     } catch (error) {
         console.log(error);
     }
