@@ -76,10 +76,6 @@ public class CartItemService {
         return cartItem;
     }
 
-    public CartItem getCartItemById(Integer cartItemId) {
-        return cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
-    }
-
     @Transactional
     public void deleteCartItem(Integer cartItemId) {
         if (!cartItemRepository.existsById(cartItemId)) {

@@ -128,6 +128,9 @@ if (route.query.added === 'true') {
     message.value = "Registered successfully, please check the verification email."
     router.replace({ query: { } })
     isShowPopup.value = true
+} else if (route.query.brand) {
+    sessionStorage.setItem('brandFilter', JSON.stringify([route.query.brand]))
+    router.replace({ query: { } })
 }
 
 const prevPath = router.options.history.state.back

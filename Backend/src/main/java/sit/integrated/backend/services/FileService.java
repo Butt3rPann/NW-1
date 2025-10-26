@@ -227,19 +227,4 @@ public class FileService {
         }
         storeSaleItem(newFiles, id);
     }
-
-    public List<String> getSellerPhotos(Integer Id) {
-        List<String> photos = new ArrayList<>();
-        String frontPattern = Id + ".front.*";
-        String backPattern = Id + ".back.*";
-        List<String> frontFiles = getMatchedFiles(frontPattern);
-        List<String> backFiles = getMatchedFiles(backPattern);
-        if (!frontFiles.isEmpty()){
-            photos.add(frontFiles.get(0));
-        }
-        if (!backFiles.isEmpty()){
-            photos.add(backFiles.get(0));
-        }
-        return photos;
-    }
 }
