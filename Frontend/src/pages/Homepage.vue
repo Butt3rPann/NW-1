@@ -37,7 +37,7 @@ const filterByBrand = (brand) => {
 </script>
  
 <template>
-    <div class="w-full font-rubik bg-white">
+    <div class="w-full font-rubik bg-white text-[#332A1E]">
         <div class="relative max-w-screen mx-auto bg-white h-65 md:h-105 lg:h-135 xl:h-145 pt-20 md:pt-30 lg:pt-32 xl:pt-35 px-5 md:px-9 lg:px-12 xl:px-22">
             <div class="absolute right-0 bottom-0 w-full bg-no-repeat bg-[url('@/assets/images/phoneBanner.png')] bg-contain bg-right grayscale pointer-events-none h-35 md:h-63 md:bg-contain lg:h-95 xl:h-110"></div>
             <div class="flex flex-col gap-2 md:gap-4 xl:gap-6 text-[#332A1E]">
