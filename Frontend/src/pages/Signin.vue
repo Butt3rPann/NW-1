@@ -1,6 +1,6 @@
 <script setup>
 import { ref , computed  } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import FormInput from '@/components/elements/FormInput.vue'
 import BaseButton from '@/components/elements/BaseButton.vue'
 import PopupMessage from '../components/elements/PopupMessage.vue'
@@ -10,7 +10,7 @@ import { jwtDecode } from 'jwt-decode'
 
 const userStore = useUserStore()
 const { storeAccessToken, getUserType } = userStore
-
+const route = useRoute()
 const router = useRouter()
 
 const user = ref({
@@ -41,7 +41,16 @@ const disabled = computed(() => {
     return anyInvalid || hasEmptyField
 })
 
-const errorMessage = ref('')
+const message = ref('')
+const isSuccess = ref(false)
+
+if (route.query.updated === 'true') {
+  message.value = 'Password is updated successfully.'
+  router.replace({ query: { } })
+  isSuccess.value = true
+  isShowPopUp.value = true
+  setTimeout(() => isShowPopUp.value = false , 1500)
+}
 
 const handleClick = async () => {
     isShowPopUp.value = false
@@ -55,13 +64,16 @@ const handleClick = async () => {
 	        router.push({ name: getUserType() === 'SELLER' ? 'SaleItemsList' : 'SaleItems' })
         } else if (loginUser.status === 401 || loginUser.status === 400) {
             isShowPopUp.value = true
-            errorMessage.value = 'Email or Password is incorrect.'
+            isSuccess.value = false
+            message.value = 'Email or Password is incorrect.'
         } else if (loginUser.status === 403) {
             isShowPopUp.value = true
-            errorMessage.value = 'You need to activate your accout before signing in.'
+            isSuccess.value = false
+            message.value = 'You need to activate your accout before signing in.'
         } else {
             isShowPopUp.value = true
-            errorMessage.value = 'There is a problem. Please try again later.'
+            isSuccess.value = false
+            message.value = 'There is a problem. Please try again later.'
         }
     } catch (error) {
         console.log(error)
@@ -71,7 +83,7 @@ const handleClick = async () => {
  
 <template>
 <div class="font-rubik text-[#332A1E] bg-white w-full flex flex-col items-center justify-center h-screen px-10 md:px-22 lg:px-25"> 
-    <PopupMessage :message="errorMessage" :isShowPopup="isShowPopUp" :isSuccess="false" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
+    <PopupMessage :message="message" :isShowPopup="isShowPopUp" :isSuccess="isSuccess" class="fixed mx-3 md:mx-0 mt-18 md:mt-22 lg:mt-25" />
     <div class=" border border-gray-200 shadow-md rounded-lg py-10 w-full max-w-130 mx-auto px-7 md:px-10 space-y-5">
         <p class="text-2xl md:text-3xl font-semibold text-center">Log in</p>
         <div class="flex flex-col">
