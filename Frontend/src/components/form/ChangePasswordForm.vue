@@ -85,11 +85,7 @@ const handleSubmit = async () => {
           : await postData(`${import.meta.env.VITE_APP_URL}/v2/users/reset-password`, { token : prop.resetToken, newPassword: passwordForm.value.newPassword, confirmPassword: passwordForm.value.confirmPassword });
         
         if (response.status === 204) {
-            isShowPopup.value = true
-            isSuccess.value = true
-            message.value = 'Your password has been updated successfully.'
-            setTimeout(() => router.push({ name: 'Profile', query: { added: 'true' } }), 1200)
-            
+            router.push({ name: 'Profile', query: { added: 'true' } })
         } else {
             isShowPopup.value = true
             isSuccess.value = false
