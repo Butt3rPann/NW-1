@@ -9,7 +9,7 @@ import { getItemByIdWithToken, postData } from '@/libs/fetchUtils'
 import router from '@/router'
 
 const userStore = useUserStore()
-const { getUserId, getAccessToken, getCartItemCount, getUserType, setSellerOrdersCount, isLoggedIn, removeAccessToken } = userStore
+const { getNickname, getUserId, getAccessToken, getCartItemCount, getUserType, setSellerOrdersCount, isLoggedIn, removeAccessToken } = userStore
 const { nickName, cart, sellerOrdersCount } = storeToRefs(userStore)
 
 const route = useRoute()
@@ -24,6 +24,7 @@ const navItems = [
 const isMenuOpen = ref(false)
 
 onMounted(async () => {
+    getNickname()
     try {
         const isLoggedIn = !!localStorage.getItem('access_token')
         if (isLoggedIn) {

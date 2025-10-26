@@ -65,7 +65,7 @@ public class EmailService {
 
     private void sendResetPasswordEmail(String to, String token, String subject, String path, String message) {
         try {
-            String url = baseUrl + path + "?token=" + token; // ใช้ชื่อ param เป็น token
+            String url = baseUrl + path + "?token=" + token;
 
             String content = """
             <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
