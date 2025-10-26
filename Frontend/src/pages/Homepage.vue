@@ -20,8 +20,8 @@ const { getUserType } = userStore
 
 onMounted(async () => {
     try {
-        saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
-        saleItems.value = saleItems.value.slice(-8).reverse()
+        const response = await getItems(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, 'id', 'desc', null, null, null, null, null, 0, 8)
+        saleItems.value = response.content
         saleItemImgs.value = saleItems.value.map(item => item.saleItemImages[0]?.fileName)
         
     } catch (error) {
