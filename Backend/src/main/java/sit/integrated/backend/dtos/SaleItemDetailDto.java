@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 public class SaleItemDetailDto {
@@ -17,6 +18,10 @@ public class SaleItemDetailDto {
     private Integer quantity;
     private Integer storageGb;
     private String color;
+    private UserDto seller;
+    private List<SaleItemImageDto> saleItemImages;
     private Instant createdOn;
     private Instant updatedOn;
 }
+
+

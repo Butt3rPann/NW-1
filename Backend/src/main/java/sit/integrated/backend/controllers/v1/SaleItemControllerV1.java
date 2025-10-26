@@ -1,5 +1,6 @@
 package sit.integrated.backend.controllers.v1;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import sit.integrated.backend.dtos.SaleItemDetailDto;
 import sit.integrated.backend.dtos.SaleItemDto;
 import sit.integrated.backend.dtos.SaleItemFormDto;
 import sit.integrated.backend.entities.SaleItem;
+import sit.integrated.backend.services.FileService;
 import sit.integrated.backend.services.SaleItemService;
 import java.util.List;
 import sit.integrated.backend.utils.ListMapper;
@@ -22,11 +24,15 @@ public class SaleItemControllerV1 {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
+    @Autowired
+    FileService fileService;
 
     @GetMapping("/sale-items")
     public ResponseEntity<List<SaleItemDto>> getSaleItem() {
         List<SaleItem> saleItems = saleItemService.getSaleItems();
-        return ResponseEntity.ok(listMapper.mapList(saleItems, SaleItemDto.class, modelMapper));
+        List<SaleItemDto> dtos = listMapper.mapList(saleItems, SaleItemDto.class, modelMapper);
+        dtos.forEach(item -> item.setSaleItemImages(fileService.getSaleItemImages(item.getId())));
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/sale-items/{id}")
@@ -36,12 +42,13 @@ public class SaleItemControllerV1 {
     }
 
     @PostMapping("/sale-items")
-    public ResponseEntity<SaleItemDetailDto> createSaleItem(@RequestBody SaleItemFormDto formDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(saleItemService.createSaleItem(formDto));
+    public ResponseEntity<SaleItemDetailDto> createSaleItem(@Valid @RequestBody SaleItemFormDto formDto) {
+        SaleItemDetailDto saleItem = saleItemService.createSaleItem(formDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saleItem);
     }
 
     @PutMapping("/sale-items/{id}")
-    public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemFormDto formDto) {
+    public ResponseEntity<SaleItemDetailDto> updateSaleItem(@PathVariable Integer id, @Valid @RequestBody SaleItemFormDto formDto) {
         SaleItemDetailDto updatedItem = saleItemService.updateSaleItem(id, formDto);
         return ResponseEntity.ok(updatedItem);
     }

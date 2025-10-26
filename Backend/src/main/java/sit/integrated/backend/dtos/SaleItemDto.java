@@ -2,6 +2,8 @@ package sit.integrated.backend.dtos;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SaleItemDto {
     private Integer id;
@@ -11,4 +13,5 @@ public class SaleItemDto {
     private Integer ramGb;
     private Integer storageGb;
     private String color;
+    private List<SaleItemImageDto> saleItemImages;
 }

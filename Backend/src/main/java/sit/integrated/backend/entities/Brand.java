@@ -16,11 +16,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "brand")
+@Table(name = "brands")
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "brand_id", nullable = false)
     private Integer id;
 
     @Size(max = 30)
@@ -29,7 +29,7 @@ public class Brand {
     private String name;
 
     @Size(max = 40)
-    @Column(name = "websiteUrl", length = 40)
+    @Column(name = "website_url", length = 40)
     private String websiteUrl;
 
     @ColumnDefault("1")
@@ -37,7 +37,7 @@ public class Brand {
     private Boolean isActive;
 
     @Size(max = 80)
-    @Column(name = "countryOfOrigin", length = 80)
+    @Column(name = "country_of_origin", length = 80)
     private String countryOfOrigin;
 
     @CreationTimestamp
@@ -45,7 +45,7 @@ public class Brand {
     private Instant createdOn;
 
     @UpdateTimestamp
-    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = false)
+    @Column(name = "updatedOn", nullable = false, insertable = false, updatable = true)
     private Instant updatedOn;
 
     @OneToMany(mappedBy = "brand")

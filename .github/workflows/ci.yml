@@ -1,0 +1,30 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Allow git to use /NW-1
+        run: git config --global --add safe.directory /NW-1
+      
+      - name: checkout & pull
+        working-directory: /NW-1
+        run: |
+          git fetch --all --prune
+          git checkout -B main origin/main
+
+      - name: docker compose
+        working-directory: /NW-1
+        run: |
+          docker compose down -v
+          docker compose up -d --build -d
+          sleep 20

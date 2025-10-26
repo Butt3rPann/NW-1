@@ -1,4 +1,4 @@
-FROM maven AS builder
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 WORKDIR /backend
 COPY . .
 RUN mvn clean install -DskipTests

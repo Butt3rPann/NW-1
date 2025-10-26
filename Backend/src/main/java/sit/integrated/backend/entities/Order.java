@@ -1,0 +1,60 @@
+package sit.integrated.backend.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import sit.integrated.backend.utils.OrderStatus;
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "orders")
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id", nullable = false)
+    private Integer id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @NotNull
+    @Column(name = "order_date", nullable = false)
+    private Instant orderDate;
+
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "shipping_address")
+    private String shippingAddress;
+
+    @Lob
+    @Column(name = "order_note")
+    private String orderNote;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false)
+    private OrderStatus orderStatus;
+
+    @ColumnDefault("0")
+    @Column(name = "seller_view_status")
+    private Boolean sellerViewStatus;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderItem> orderItems = new LinkedHashSet<>();
+
+    @CreationTimestamp
+    @Column(name = "createdOn", nullable = false, insertable = false, updatable = false)
+    private Instant createdOn;
+
+}

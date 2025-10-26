@@ -3,8 +3,10 @@ import { editItem, getItemById} from '@/libs/fetchUtils'
 import BrandForm from '@/components/form/BrandForm.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
+import productNotFound from '@/assets/images/product-not-found.png'
+import { useUserStore } from '@/stores/UserStore'
 
 const router = useRouter()
 const { params: { id } } = useRoute()
@@ -12,10 +14,11 @@ const brand = ref({})
 const message = ref('')
 const isShowPopup = ref(false)
 const isSuccess = ref(true)
+const userStore = useUserStore()
 
 onMounted(async () => {
     try {
-        brand.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id)
+        brand.value = await getItemById(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, userStore.getAccessToken())
     } catch (error) {
         console.log(error);
     }
@@ -29,7 +32,7 @@ const handleEditBrand = async (editedBrand) => {
         }
     })
     try {
-        const edited = await editItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, editedItem)
+        const edited = await editItem(`${import.meta.env.VITE_APP_URL}/v1/brands`, id, editedItem, userStore.getAccessToken())
         if (edited.status === 400 || edited.status === 500) {
             throw new Error(edited.message)
         }
@@ -50,7 +53,10 @@ const handleEditBrand = async (editedBrand) => {
         <p class="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-rubik text-[#332A1E] text-center leading-tight">Edit Brand</p> 
         <BrandForm @submitAction="handleEditBrand" pathName="BrandList" :brandData="brand" class="max-w-150"/>   
     </div>
-    <ItemNotFound v-else title="Brand" description="The brand does not exist." backPathName="BrandList"/>
+    <ErrorMessage v-else title="Brand" description="The brand does not exist." backPathName="BrandList" :img="productNotFound">
+        <span>Brand</span><br/>
+        <span>Not Found</span>
+    </ErrorMessage>
 </template>
  
 <style scoped></style>

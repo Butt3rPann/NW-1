@@ -1,0 +1,63 @@
+package sit.integrated.backend.configs;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import sit.integrated.backend.filters.JwtAuthFilter;
+import sit.integrated.backend.services.JwtUserDetailsService;
+
+@EnableWebSecurity
+@Configuration
+public class WebSecurityConfig {
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
+    @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(crsf -> crsf.disable())
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.GET, "/v2/sale-items", "/v2/sale-items/*", "/v2/brands", "/v2/brands/*").permitAll()
+                        .requestMatchers("/v2/sale-items", "/v2/sale-items/*", "/v2/brands", "/v2/brands/*").hasAnyAuthority("SELLER")
+                        .requestMatchers("/v2/sellers/**").hasAnyAuthority("SELLER")
+                        .requestMatchers("/v2/users/forgot-password", "/v2/users/verify-reset-token", "/v2/users/reset-password").permitAll()
+                        .requestMatchers("/v2/users/**", "/v2/orders/**").hasAnyAuthority("SELLER", "BUYER")
+                        .anyRequest().permitAll())
+                .authenticationProvider(authenticationProvider(jwtUserDetailsService))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(JwtUserDetailsService jwtUserDetailsService) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(jwtUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+    }
+}

@@ -1,25 +1,58 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { deleteItemById, getItems } from '@/libs/fetchUtils'
+import { onMounted, ref, watch } from 'vue'
+import { deleteItemById, getItemByIdWithToken } from '@/libs/fetchUtils'
 import DeleteConfirmation from '@/components/elements/DeleteConfirmation.vue'
 import PopupMessage from '@/components/elements/PopupMessage.vue'
 import addIcon from '@/assets/images/add.png'
 import BaseButton from '@/components/elements/BaseButton.vue'
-import ItemNotFound from '@/components/elements/ItemNotFound.vue'
+import ErrorMessage from '@/components/elements/ErrorMessage.vue'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import emptySaleItemsImg from '@/assets/images/emptySaleItems.png'
+import { useUserStore } from '@/stores/UserStore'
+import productNotFound from '@/assets/images/product-not-found.png'
+import Pagination from '@/components/elements/Pagination.vue'
 
 const route = useRoute()
+const userStore = useUserStore()
+const { getUserId, getAccessToken } = userStore
+
+const currentPage = ref(1)
+
+const goToPage = async (page) => {
+    currentPage.value = page
+}
+
+const response = ref({})
 const saleItems = ref([])
+const totalPage = ref(0)
 
 onMounted(async () => {
     try {
-        saleItems.value = await getItems(`${import.meta.env.VITE_APP_URL}/v1/sale-items`)
+        loadFromSessionStorage()
+        await getSaleItems()
+        // await getSellerOrders()
     } catch (error) {
         console.log(error);
     }
 })
+
+async function getSaleItems() {
+    try {
+        response.value = await getItemByIdWithToken(`${import.meta.env.VITE_APP_URL}/v2/sellers/${getUserId()}/sale-items`, getAccessToken(), currentPage.value - 1)
+        saleItems.value = response.value.content
+        totalPage.value = response.value.totalPages
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+function loadFromSessionStorage() {
+    const pageStore = sessionStorage.getItem('page')
+    if (pageStore) {
+        currentPage.value = Number(pageStore)
+    }
+}
 
 const isShowPopup = ref(false)
 const message = ref('')
@@ -27,6 +60,7 @@ const message = ref('')
 if (route.query.added === 'true') {
     message.value = "The sale item has been successfully added."
     router.replace({ query: { } })
+    sessionStorage.setItem('page', 1)
     isShowPopup.value = true
     setTimeout(() => isShowPopup.value = false, 2500)
 } else if(route.query.edited === 'true'){
@@ -52,11 +86,11 @@ function closeDelConfirm() {
 
 async function deleteSaleItem(){
     try {
-        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v1/sale-items`, deletedId.value)
+        const status = await deleteItemById(`${import.meta.env.VITE_APP_URL}/v2/sale-items`, deletedId.value, userStore.getAccessToken())
         if (status === 404) {
             showNotFound.value = true
         } else {
-            saleItems.value = saleItems.value.filter(item => item.id !== deletedId.value)
+            currentPage.value = 1
             message.value = "The sale item has been deleted."
             showDelConfirm.value = false
             isShowPopup.value = true
@@ -66,6 +100,13 @@ async function deleteSaleItem(){
         console.log(error);  
     }
 }
+
+watch(currentPage, async () => {
+    if (currentPage.value !== Number(sessionStorage.getItem('page'))) {
+        sessionStorage.setItem('page', currentPage.value)
+        await getSaleItems()
+    }
+})
 </script>
  
 <template>
@@ -74,7 +115,9 @@ async function deleteSaleItem(){
     <div v-if="!showNotFound">
         <div class="mx-auto px-7 pb-15 pt-22 md:pt-30 max-w-300">
             <div class="flex flex-col gap-3 sm:flex-row justify-between mb-7">
-                <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#332A1E]">Sale Items</p>
+                <div class="flex items-center justify-center">
+                    <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#332A1E]">Sale Items</p>
+                </div>
                 <div class="flex items-center gap-3">
                     <router-link :to="{ name: 'AddSaleItem' }">
                         <BaseButton :icon="addIcon" text="Add Sale Item" textColor="text-[#F2EDEC]" bgColor="bg-[#6F879C]" class="itbms-sale-item-add"/>
@@ -127,10 +170,14 @@ async function deleteSaleItem(){
                     <p class="text-xl text-[#ABBCC9]">no sale item</p>
                 </div>
             </div>
+            <Pagination :totalPage="totalPage" :currentPage="currentPage" @changePage="goToPage"/>
         </div>
         <DeleteConfirmation v-if="showDelConfirm" @close="closeDelConfirm" message="Do you want to delete this sale item?" @delete="deleteSaleItem"/>
     </div>
-    <ItemNotFound title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItemsList" v-else/>
+    <ErrorMessage title="Sale Item" description="The requested sale item does not exist." backPathName="SaleItemsList" v-else :img="productNotFound">
+        <span>Sale Item</span><br/>
+        <span>Not Found</span>
+    </ErrorMessage>
 </div>
 </template>
  
