@@ -20,7 +20,7 @@ jobs:
         working-directory: /NW-1
         run: |
           git fetch --all --prune
-          git checkout -B release/2.0.0 origin/release/2.0.0
+          git checkout -B main origin/main
 
       - name: docker compose
         working-directory: /NW-1
